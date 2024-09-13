@@ -35,6 +35,8 @@ HRESULT CFont_Manager::Render(const _wstring & strFontTag, const _tchar * pText,
 	if (nullptr == pFont)
 		return E_FAIL;
 
+	m_pContext->GSSetShader(nullptr, nullptr, 0);
+
 	return pFont->Render(pText, vPosition, vColor, fRadian, vPivot, fScale);	
 }
 

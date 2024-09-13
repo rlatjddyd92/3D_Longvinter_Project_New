@@ -133,9 +133,6 @@
     <Filter Include="01.Utility\08.Font">
       <UniqueIdentifier>{04f3cc10-c7a2-4721-bc89-c5ea9c1efbaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\09.ShaderFiles">
-      <UniqueIdentifier>{171f573e-f902-4ce1-920d-0e50596abe32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\08.Font\FontManager">
       <UniqueIdentifier>{94549aab-fac6-46a2-82ce-e9a556a2f931}</UniqueIdentifier>
     </Filter>
@@ -144,6 +141,15 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\VIBuffer\Rect3D">
       <UniqueIdentifier>{653ac08f-e9a5-45a2-830c-e17757647850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\98.ShaderFiles">
+      <UniqueIdentifier>{171f573e-f902-4ce1-920d-0e50596abe32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\09.RenderTergets">
+      <UniqueIdentifier>{3646a49b-e9fb-4133-8fb5-0972e583706b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\09.RenderTergets\Manager">
+      <UniqueIdentifier>{264821df-021f-4f9c-aff5-4bd9272c5948}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +284,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Rect3D.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Rect3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Target_Manager.cpp">
+      <Filter>01.Utility\09.RenderTergets\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RenderTarget.cpp">
+      <Filter>01.Utility\09.RenderTergets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,15 +437,21 @@
     <ClInclude Include="..\Public\VIBuffer_Rect3D.h">
       <Filter>01.Utility\03.Components\VIBuffer\Rect3D</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RenderTarget.h">
+      <Filter>01.Utility\09.RenderTergets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Target_Manager.h">
+      <Filter>01.Utility\09.RenderTergets\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Cell.hlsl">
-      <Filter>01.Utility\09.ShaderFiles</Filter>
+      <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Client\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">
-      <Filter>01.Utility\09.ShaderFiles</Filter>
+      <Filter>01.Utility\98.ShaderFiles</Filter>
     </None>
   </ItemGroup>
 </Project>
