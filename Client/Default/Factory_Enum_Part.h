@@ -1,0 +1,9 @@
+#pragma once
+
+enum class PART_TYPE
+{
+	PTYPE_BODY_HUMAN,
+	PTYPE_TOOL_EMPTY,
+	PTYPE_TOOL_SHOTGUN,
+	PTYPE_END
+};

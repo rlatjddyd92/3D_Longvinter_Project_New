@@ -1,0 +1,7 @@
+#pragma once
+
+enum class CON_ANIMAL
+{
+	CONTAINER_ANIMAL_WOLF,
+	CONTAINER_ANIMAL_END,
+};

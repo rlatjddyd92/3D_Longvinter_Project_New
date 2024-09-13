@@ -1,0 +1,7 @@
+#pragma once
+
+enum class CON_INTER
+{
+	CONTAINER_INTER_BULLET,
+	CONTAINER_INTER_END,
+};

@@ -1,0 +1,7 @@
+#pragma once
+
+enum class CON_ENEMY
+{
+	CONTAINER_ENEMY_RED,
+	CONTAINER_ENEMY_END,
+};

@@ -1,0 +1,7 @@
+#pragma once
+
+enum class CON_ITEM
+{
+	CONTAINER_ITEM_SHOTGUN,
+	CONTAINER_ITEM_END,
+};

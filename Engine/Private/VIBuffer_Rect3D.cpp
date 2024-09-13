@@ -1,0 +1,169 @@
+#include "..\Public\VIBuffer_Rect3D.h"
+#include "GameInstance.h"
+
+CVIBuffer_Rect3D::CVIBuffer_Rect3D(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CVIBuffer{ pDevice, pContext }
+{
+}
+
+CVIBuffer_Rect3D::CVIBuffer_Rect3D(const CVIBuffer_Rect3D& Prototype)
+	: CVIBuffer{ Prototype }
+{
+}
+
+HRESULT CVIBuffer_Rect3D::Initialize_Prototype()
+{
+	m_iNumVertexBuffers = 1;
+	m_iNumVertices = 4;
+	m_pVerticesPos = new _float3[m_iNumVertices];
+	m_iVertexStride = sizeof(VTXNORTEX);
+	m_iNumIndices = 6;
+	m_iIndexStride = 2;
+	m_eIndexFormat = DXGI_FORMAT_R16_UINT;
+	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+#pragma region VERTEX_BUFFER
+	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
+	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
+	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT; /* 정적버퍼로 생성한다. */
+	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	m_BufferDesc.CPUAccessFlags = 0;
+	m_BufferDesc.MiscFlags = 0;
+	m_BufferDesc.StructureByteStride = m_iVertexStride;
+
+
+	/* 정점버퍼에 채워줄 값들을 만들기위해서 임시적으로 공간을 할당한다. */
+	VTXNORTEX* pVertices = new VTXNORTEX[m_iNumVertices];
+	ZeroMemory(pVertices, sizeof(VTXNORTEX) * m_iNumVertices);
+
+	pVertices[0].vPosition = m_pVerticesPos[0] = _float3(-0.5f, 0.5f, 0.f);
+	pVertices[0].vNormal = _float3(0.f, 0.f, 0.f);
+	pVertices[0].vTexcoord = _float2(0.f, 0.f);
+
+	pVertices[1].vPosition = m_pVerticesPos[1] = _float3(0.5f, 0.5f, 0.f);
+	pVertices[1].vNormal = _float3(0.f, 0.f, 0.f);
+	pVertices[1].vTexcoord = _float2(1.f, 0.f);
+
+	pVertices[2].vPosition = m_pVerticesPos[2] = _float3(0.5f, -0.5f, 0.f);
+	pVertices[2].vNormal = _float3(0.f, 0.f, 0.f);
+	pVertices[2].vTexcoord = _float2(1.f, 1.f);
+
+	pVertices[3].vPosition = m_pVerticesPos[3] = _float3(-0.5f, -0.5f, 0.f);
+	pVertices[3].vNormal = _float3(0.f, 0.f, 0.f);
+	pVertices[3].vTexcoord = _float2(0.f, 1.f);
+
+	ZeroMemory(&m_InitialData, sizeof m_InitialData);
+	m_InitialData.pSysMem = pVertices;
+
+	/* 정점버퍼를 생성한다. */
+	if (FAILED(__super::Create_Buffer(&m_pVB)))
+		return E_FAIL;
+
+	Safe_Delete_Array(pVertices);
+
+#pragma endregion
+
+#pragma region INDEX_BUFFER
+	/* 인덱스버퍼의 내용을 채워주곡 */
+	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
+	m_BufferDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
+	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT; /* 정적버퍼로 생성한다. */
+	m_BufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	m_BufferDesc.CPUAccessFlags = 0;
+	m_BufferDesc.MiscFlags = 0;
+	m_BufferDesc.StructureByteStride = m_iIndexStride;
+
+	_ushort* pIndices = new _ushort[m_iNumIndices];
+	ZeroMemory(pIndices, sizeof(_ushort) * m_iNumIndices);
+
+	pIndices[0] = 0;
+	pIndices[1] = 1;
+	pIndices[2] = 2;
+
+	pIndices[3] = 0;
+	pIndices[4] = 2;
+	pIndices[5] = 3;
+
+	ZeroMemory(&m_InitialData, sizeof m_InitialData);
+	m_InitialData.pSysMem = pIndices;
+
+	/* 인덱스버퍼를 생성한다. */
+	if (FAILED(__super::Create_Buffer(&m_pIB)))
+		return E_FAIL;
+
+	Safe_Delete_Array(pIndices);
+
+#pragma endregion
+
+
+	return S_OK;
+}
+
+HRESULT CVIBuffer_Rect3D::Initialize(void* pArg)
+{
+	return S_OK;
+}
+
+_bool CVIBuffer_Rect3D::isPicking(const _float4x4& WorldMatrix, _float3* pOut)
+{
+	m_pGameInstance->Transform_MouseRay_ToLocalSpace(WorldMatrix);
+
+	if (true == m_pGameInstance->isPicked_InLocalSpace(m_pVerticesPos[0],
+		m_pVerticesPos[1],
+		m_pVerticesPos[2],
+		pOut))
+		goto Compute_WorldPos;
+
+
+	/* 왼쪽 아래 삼각형 */
+	if (true == m_pGameInstance->isPicked_InLocalSpace(m_pVerticesPos[0],
+		m_pVerticesPos[2],
+		m_pVerticesPos[3],
+		pOut))
+		goto Compute_WorldPos;
+
+	return false;
+
+Compute_WorldPos:
+	XMVECTOR TempVec = XMLoadFloat3(pOut);
+	XMMATRIX TempMat = XMLoadFloat4x4(&WorldMatrix);
+
+	TempVec = XMVector3TransformCoord(TempVec, TempMat);
+	*pOut = { TempVec.m128_f32[0],TempVec.m128_f32[1] ,TempVec.m128_f32[2] };
+
+	return true;
+}
+
+CVIBuffer_Rect3D* CVIBuffer_Rect3D::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CVIBuffer_Rect3D* pInstance = new CVIBuffer_Rect3D(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CVIBuffer_Rect3D"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+
+
+CComponent* CVIBuffer_Rect3D::Clone(void* pArg)
+{
+	CVIBuffer_Rect3D* pInstance = new CVIBuffer_Rect3D(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CVIBuffer_Rect3D"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CVIBuffer_Rect3D::Free()
+{
+	__super::Free();
+
+}

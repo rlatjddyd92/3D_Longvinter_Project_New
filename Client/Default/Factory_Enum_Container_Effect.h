@@ -1,0 +1,7 @@
+#pragma once
+
+enum class CON_EFFECT
+{
+	CONTAINER_EFFECT_FIRE,
+	CONTAINER_EFFECT_END,
+};
