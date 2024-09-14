@@ -21,7 +21,6 @@ public:
 		BUTTON_END
 	};
 
-
 public:
 	typedef struct : public CUIObject::UI_DESC
 	{

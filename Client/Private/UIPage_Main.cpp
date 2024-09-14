@@ -40,6 +40,8 @@ HRESULT CUIPage_Main::Initialize(void* pArg)
 
 	Ready_UIPart();
 
+	
+
 	return S_OK;
 }
 
@@ -61,21 +63,38 @@ void CUIPage_Main::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	if (GET_INSTANCE->GetNowLevel() != LEVELID::LEVEL_LOGO)
 		__super::SetOff(true);
+	else 
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 HRESULT CUIPage_Main::Render()
 {
+	_vector vTemp = { 0.f,0.f,0.f,0.f };
 
+	vTemp.m128_f32[0] = (g_iWinSizeX >> 1);
+	vTemp.m128_f32[1] = _float(g_iWinSizeY) * _float(2.f / 3.f);
+
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Game Start"), vTemp, 1.f, true);
+
+	vTemp.m128_f32[0] = (g_iWinSizeX >> 1);
+	vTemp.m128_f32[1] = _float(g_iWinSizeY) * _float(2.f / 3.f) + 60.f;
+
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Map Editor"), vTemp, 1.f, true);
 
 	return S_OK;
 }
 
 void CUIPage_Main::AddRender_UIPage()
 {
+	
+	m_pPicture_BGA->AddRender_UIPart();
 	m_pPicture_MainLogo->AddRender_UIPart();
 	m_pButton_Ingame->AddRender_UIPart();
 	m_pButton_Editor->AddRender_UIPart();
-	m_pPicture_BGA->AddRender_UIPart();
+	
+
+	
+
 }
 
 void CUIPage_Main::Ready_UIPart()

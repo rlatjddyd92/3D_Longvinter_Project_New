@@ -77,10 +77,11 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 private: // <- 프로토타입 제작
 #pragma region Program_Start
 	HRESULT Ready_Prototype_Texture();
+	HRESULT Ready_Prototype_Font();
 	HRESULT Ready_Prototype_Part();
 	HRESULT Ready_Prototype_Container();
 	HRESULT Ready_Prototype_Shader();
-	HRESULT Ready_Prototype_Buffer(); 
+	HRESULT Ready_Prototype_Buffer();
 	HRESULT Ready_Prototype_UIPart();
 	HRESULT Ready_Prototype_UIPage();
 

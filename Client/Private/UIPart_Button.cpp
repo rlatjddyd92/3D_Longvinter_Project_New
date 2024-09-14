@@ -73,7 +73,11 @@ void CUIPart_Button::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Button::Render()
 {
+	
+
 	__super::Render();
+
+	
 
 	return S_OK;
 }

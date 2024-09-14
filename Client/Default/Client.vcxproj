@@ -196,6 +196,7 @@
     <ClInclude Include="..\Public\UIPart_Back.h" />
     <ClInclude Include="..\Public\UIPart_Button.h" />
     <ClInclude Include="..\Public\UIPart_Picture.h" />
+    <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Struct.h" />
     <ClInclude Include="Enum_Terrain.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="..\private\UIPart_Back.cpp" />
     <ClCompile Include="..\Private\UIPart_Button.cpp" />
     <ClCompile Include="..\Private\UIPart_Picture.cpp" />
+    <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

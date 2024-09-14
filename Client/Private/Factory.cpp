@@ -15,6 +15,7 @@ HRESULT CFactory::Setting_Program_Start()
 	Ready_Prototype_Shader();
 	Ready_Prototype_Buffer();
 	Ready_Prototype_Texture();
+	Ready_Prototype_Font();
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
@@ -101,6 +102,17 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_UI_Back"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Back/UI_Back.dds"), 1))))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CFactory::Ready_Prototype_Font()
+{
+	m_pGameInstance->Add_Font(TEXT("Font_Test1"), TEXT("../Bin/Resources/Fonts/140.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Test2"), TEXT("../Bin/Resources/Fonts/142.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Test3"), TEXT("../Bin/Resources/Fonts/142ex.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Test4"), TEXT("../Bin/Resources/Fonts/143.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Test5"), TEXT("../Bin/Resources/Fonts/143ex.spritefont"));
 
 	return S_OK;
 }
