@@ -67,6 +67,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	// UI_Page
 	CUIPage_Main* MakeUIPage_Main() { return m_pFactory->MakeUIPage_Main(); }
+	CUIPage_Test* MakeUIPage_Test() { return m_pFactory->MakeUIPage_Test(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER

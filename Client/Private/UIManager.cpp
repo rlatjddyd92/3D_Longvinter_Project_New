@@ -47,8 +47,12 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		m_pPage_Main->AddRender_UIPage();
 	}
 
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_O))
+			m_pPage_Test->SetOn();
 
-
+	if (!m_pPage_Test->GetOff())
+		m_pPage_Test->AddRender_UIPage();
 	
 
 }
@@ -72,6 +76,9 @@ void CUIManager::Ready_UIPage()
 {
 	m_pPage_Main = GET_INSTANCE->MakeUIPage_Main();
 	Safe_AddRef(m_pPage_Main);
+
+	m_pPage_Test = GET_INSTANCE->MakeUIPage_Test();
+	Safe_AddRef(m_pPage_Test);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -105,4 +112,5 @@ void CUIManager::Free()
 	__super::Free();
 
 	Safe_Release(m_pPage_Main);
+	Safe_Release(m_pPage_Test);
 }

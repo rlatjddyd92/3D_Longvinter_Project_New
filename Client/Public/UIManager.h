@@ -52,6 +52,7 @@ private:
 
 private:
 	CUIPage_Main* m_pPage_Main = { nullptr };
+	CUIPage_Test* m_pPage_Test = { nullptr };
 	
 
 public:

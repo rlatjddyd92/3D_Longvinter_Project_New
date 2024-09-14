@@ -18,6 +18,7 @@ public:
 	{
 		BUTTON_INGAME,
 		BUTTON_EDITOR,
+		BUTTON_CLOSE,
 		BUTTON_END
 	};
 

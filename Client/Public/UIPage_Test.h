@@ -27,8 +27,9 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual void AddRender_UIPage_Test();
-	virtual void Ready_UIPart();
+	virtual void AddRender_UIPage() override;
+	virtual void Ready_UIPart() override;
+	virtual _bool Check_Cursor() override;
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -38,7 +39,9 @@ public:
 private:
 	HRESULT Ready_Components();
 
-
+	CUIPart_Button* m_pButton_Close = { nullptr };
+	CUIPart_Back* m_pBack_Window = { nullptr };
+	CUIPart_Back* m_pBack_Window_Header = { nullptr };
 
 public:
 	static CUIPage_Test* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

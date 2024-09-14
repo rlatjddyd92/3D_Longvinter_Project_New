@@ -2,6 +2,7 @@
 #include "..\Public\UIPage_Test.h"
 
 #include "GameInstance.h"
+#include "ClientInstance.h"
 
 CUIPage_Test::CUIPage_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -37,6 +38,14 @@ HRESULT CUIPage_Test::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_fX = 400.f;
+	m_fY = 300.f;
+
+	m_fSizeX = 300.f;
+	m_fSizeY = 300.f;
+
+	__super::SetOff(true);
+
 	Ready_UIPart();
 
 	return S_OK;
@@ -45,11 +54,15 @@ HRESULT CUIPage_Test::Initialize(void* pArg)
 void CUIPage_Test::Priority_Update(_float fTimeDelta)
 {
 
+
+
 	int a = 10;
 }
 
 void CUIPage_Test::Update(_float fTimeDelta)
 {
+	if (m_pButton_Close->IsPushed())
+		__super::SetOff(true);
 	int a = 10;
 }
 
@@ -66,12 +79,24 @@ HRESULT CUIPage_Test::Render()
 	return S_OK;
 }
 
-void CUIPage_Test::AddRender_UIPage_Test()
+void CUIPage_Test::AddRender_UIPage()
 {
+	m_pButton_Close->AddRender_UIPart();
+	m_pBack_Window_Header->AddRender_UIPart();
+	m_pBack_Window->AddRender_UIPart();
 }
 
 void CUIPage_Test::Ready_UIPart()
 {
+	m_pButton_Close = GET_INSTANCE->MakeUIPart_Button(CUIPart_Button::BUTTON_CLOSE, m_fX + (m_fSizeY / 2) - 25.f, m_fY - (m_fSizeY / 2) + 25.f, 20.f, 20.f);
+	m_pBack_Window = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW, m_fX, m_fY, m_fSizeX, m_fSizeY);
+	m_pBack_Window_Header = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW_HEADER, m_fX, m_fY - (m_fSizeY / 2) + 25.f, m_fSizeX - 20.f, 30.f);
+
+}
+
+_bool CUIPage_Test::Check_Cursor()
+{
+	return _bool();
 }
 
 HRESULT CUIPage_Test::Ready_Components()

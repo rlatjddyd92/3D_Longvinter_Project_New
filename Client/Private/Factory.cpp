@@ -103,6 +103,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Back/UI_Back.dds"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Button_Close"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Button/CloseIcon.dds"), 1))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -214,6 +218,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Main"), CUIPage_Main::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Test"), CUIPage_Test::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -302,6 +309,13 @@ CUIPage_Main* CFactory::MakeUIPage_Main()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), TEXT("Prototype_UIPage_Main"));
 
 	return static_cast<CUIPage_Main*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), -1));
+}
+
+CUIPage_Test* CFactory::MakeUIPage_Test()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Test"), TEXT("Prototype_UIPage_Test"));
+
+	return static_cast<CUIPage_Test*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Test"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)
