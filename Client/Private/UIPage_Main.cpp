@@ -54,6 +54,21 @@ void CUIPage_Main::Priority_Update(_float fTimeDelta)
 
 void CUIPage_Main::Update(_float fTimeDelta)
 {
+	if (m_pButton_Ingame->IsPushed())
+	{
+		if (FAILED(GET_INSTANCE->ChangeLevel(LEVELID::LEVEL_GAMEPLAY)))
+			return;
+
+		m_bOff = true;
+	}
+	else if (m_pButton_Editor->IsPushed())
+	{
+		if (FAILED(GET_INSTANCE->ChangeLevel(LEVELID::LEVEL_EDITOR)))
+			return;
+
+		m_bOff = true;
+	}
+
 	int a = 10;
 }
 
@@ -61,36 +76,29 @@ void CUIPage_Main::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
-	if (GET_INSTANCE->GetNowLevel() != LEVELID::LEVEL_LOGO)
-		__super::SetOff(true);
-	else 
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+
 }
 
 HRESULT CUIPage_Main::Render()
 {
-	_vector vTemp = { 0.f,0.f,0.f,0.f };
-
-	vTemp.m128_f32[0] = (g_iWinSizeX >> 1);
-	vTemp.m128_f32[1] = _float(g_iWinSizeY) * _float(2.f / 3.f);
-
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Game Start"), vTemp, 1.f, true);
-
-	vTemp.m128_f32[0] = (g_iWinSizeX >> 1);
-	vTemp.m128_f32[1] = _float(g_iWinSizeY) * _float(2.f / 3.f) + 60.f;
-
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Map Editor"), vTemp, 1.f, true);
+	
 
 	return S_OK;
 }
 
 void CUIPage_Main::AddRender_UIPage()
 {
+	if (GET_INSTANCE->GetNowLevel() != LEVELID::LEVEL_LOGO)
+		__super::SetOff(true);
+	else
+	{
+		m_pPicture_MainLogo->AddRender_UIPart();
+		m_pButton_Ingame->AddRender_UIPart();
+		m_pButton_Editor->AddRender_UIPart();
+		m_pPicture_BGA->AddRender_UIPart();
+	}
+		
 	
-	m_pPicture_BGA->AddRender_UIPart();
-	m_pPicture_MainLogo->AddRender_UIPart();
-	m_pButton_Ingame->AddRender_UIPart();
-	m_pButton_Editor->AddRender_UIPart();
 	
 
 	
@@ -103,6 +111,11 @@ void CUIPage_Main::Ready_UIPart()
 	m_pButton_Ingame = GET_INSTANCE->MakeUIPart_Button(CUIPart_Button::BUTTON_INGAME, g_iWinSizeX >> 1, _float(g_iWinSizeY) * _float(2.f / 3.f), 250.f, 50.f);
 	m_pButton_Editor = GET_INSTANCE->MakeUIPart_Button(CUIPart_Button::BUTTON_EDITOR, g_iWinSizeX >> 1, _float(g_iWinSizeY) * _float(2.f / 3.f) + 60.f, 250.f, 50.f);
 	m_pPicture_BGA = GET_INSTANCE->MakeUIPart_Picture(CUIPart_Picture::PICTUER_BGA, g_iWinSizeX >> 1, g_iWinSizeY >> 1, g_iWinSizeX, g_iWinSizeY);
+}
+
+_bool CUIPage_Main::Check_Cursor()
+{
+	return _bool();
 }
 
 HRESULT CUIPage_Main::Ready_Components()
