@@ -37,7 +37,7 @@ public:
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
-private:
+protected:
 	HRESULT Ready_Components();
 	_uint m_iTextureIndex = 0;
 

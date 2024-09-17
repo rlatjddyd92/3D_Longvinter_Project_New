@@ -30,6 +30,7 @@ public:
 public:
 	virtual void AddRender_UIPage();
 	virtual void Ready_UIPart();
+	virtual _bool Check_Cursor();
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

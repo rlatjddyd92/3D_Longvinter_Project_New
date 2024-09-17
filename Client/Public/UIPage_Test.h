@@ -27,8 +27,9 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual void AddRender_UIPage_Test();
-	virtual void Ready_UIPart();
+	virtual void AddRender_UIPage() override;
+	virtual void Ready_UIPart() override;
+	virtual _bool Check_Cursor() override;
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

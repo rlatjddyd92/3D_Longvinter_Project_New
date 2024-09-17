@@ -66,12 +66,17 @@ HRESULT CUIPage_Test::Render()
 	return S_OK;
 }
 
-void CUIPage_Test::AddRender_UIPage_Test()
+void CUIPage_Test::AddRender_UIPage()
 {
 }
 
 void CUIPage_Test::Ready_UIPart()
 {
+}
+
+_bool CUIPage_Test::Check_Cursor()
+{
+	return _bool();
 }
 
 HRESULT CUIPage_Test::Ready_Components()

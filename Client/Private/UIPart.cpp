@@ -34,6 +34,8 @@ void CUIPart::Priority_Update(_float fTimeDelta)
 {
 	
 
+
+
 	int a = 10;
 }
 

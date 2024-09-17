@@ -54,7 +54,20 @@ HRESULT CUIPart_Button::Initialize(void* pArg)
 
 void CUIPart_Button::Priority_Update(_float fTimeDelta)
 {
-	
+	m_bPushed[0] = m_bPushed[1];
+	m_bOnCursor = false;
+	POINT mousePos{};
+
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	if (((m_fX - m_fSizeX) < mousePos.x) + ((m_fX + m_fSizeX) > mousePos.x) == 2)
+		if (((m_fY - m_fSizeY) < mousePos.y) + ((m_fY + m_fSizeY) > mousePos.y) == 2)
+		{
+			m_bOnCursor = true;
+			if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, true))
+				m_bPushed[1] = true;
+		}
 
 	int a = 10;
 }
@@ -73,12 +86,15 @@ void CUIPart_Button::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Button::Render()
 {
-	
-
 	__super::Render();
 
 	
 
+
+	
+
+	
+	
 	return S_OK;
 }
 

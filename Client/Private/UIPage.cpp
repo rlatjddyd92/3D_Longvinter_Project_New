@@ -72,6 +72,11 @@ void CUIPage::Ready_UIPart()
 {
 }
 
+_bool CUIPage::Check_Cursor()
+{
+	return _bool();
+}
+
 HRESULT CUIPage::Ready_Components()
 {
 	
