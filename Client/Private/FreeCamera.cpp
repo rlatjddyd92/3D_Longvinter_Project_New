@@ -53,7 +53,12 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
 		vPosition += {m_fCamera_Third.x, m_fCamera_Third.y, m_fCamera_Third.z, 0.f};
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-
+		_vector vLook = { 0.f, -0.7f, 0.7f, 0.f };
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
+		_vector vRight = { 1.f, 0.f, 0.f, 0.f };
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, vRight);
+		_vector vUp = { 0.f, 0.7f, 0.7f, 0.f };
+		m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
 
 	}
 	else if (m_eCameraMode == CAMERA_EDITOR)
@@ -137,6 +142,9 @@ void CFreeCamera::SetThirdCamera()
 	_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
 	vPosition += {m_fCamera_Third.x, m_fCamera_Third.y, m_fCamera_Third.z, 0.f};
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+
+	
+
 }
 
 void CFreeCamera::SetEditorCamera()
