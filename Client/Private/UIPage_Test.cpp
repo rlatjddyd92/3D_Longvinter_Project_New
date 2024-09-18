@@ -99,6 +99,11 @@ _bool CUIPage_Test::Check_Cursor()
 	return _bool();
 }
 
+_bool CUIPage_Test::Check_Cursor()
+{
+	return _bool();
+}
+
 HRESULT CUIPage_Test::Ready_Components()
 {
 
