@@ -33,7 +33,7 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
-	m_iNewPage = 0;
+
 }
 
 void CUIManager::Update(_float fTimeDelta)
@@ -62,11 +62,10 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
-		if (m_pGameInstance->Get_DIKeyState(DIK_O))
+		if (m_pGameInstance->Get_DIKeyState(DIK_T))
 			if (m_pPage_Test->GetOff())
 		{
 			m_pPage_Test->SetOn();
-			++m_iNewPage;
 			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Test));
 		}
 
@@ -75,9 +74,32 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Inven->GetOff())
 		{
 			m_pPage_Inven->SetOn();
-			++m_iNewPage;
 			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Inven));
 		}
+
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_P))
+			if (m_pPage_Equip->GetOff())
+			{
+				m_pPage_Equip->SetOn();
+				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Equip));
+			}
+
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_K))
+			if (m_pPage_Crafting->GetOff())
+			{
+				m_pPage_Crafting->SetOn();
+				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Crafting));
+			}
+
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_O))
+			if (m_pPage_Option->GetOff())
+			{
+				m_pPage_Option->SetOn();
+				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Option));
+			}
 			
 	for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();)
 	{
@@ -116,6 +138,15 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_Inven = GET_INSTANCE->MakeUIPage_Inven();
 	Safe_AddRef(m_pPage_Inven);
+
+	m_pPage_Equip = GET_INSTANCE->MakeUIPage_Equip();
+	Safe_AddRef(m_pPage_Equip);
+
+	m_pPage_Crafting = GET_INSTANCE->MakeUIPage_Crafting();
+	Safe_AddRef(m_pPage_Crafting);
+
+	m_pPage_Option = GET_INSTANCE->MakeUIPage_Option();
+	Safe_AddRef(m_pPage_Option);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -151,7 +182,9 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Main);
 	Safe_Release(m_pPage_Test);
 	Safe_Release(m_pPage_Inven);
-	
+	Safe_Release(m_pPage_Equip);
+	Safe_Release(m_pPage_Crafting);
+	Safe_Release(m_pPage_Option);
 
 	m_Pagelist.clear();
 }

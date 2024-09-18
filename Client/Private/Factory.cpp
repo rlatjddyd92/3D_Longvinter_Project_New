@@ -107,6 +107,12 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Button/CloseIcon.dds"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cell_InvenEmpty"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cell/InvenCell_Empty.dds"), 1))))
+		return E_FAIL;
+
+	
+
 	return S_OK;
 }
 
@@ -209,6 +215,9 @@ HRESULT CFactory::Ready_Prototype_UIPart()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Picture"), CUIPart_Picture::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Cell"), CUIPart_Cell::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -222,6 +231,15 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Inven"), CUIPage_Inven::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Equip"), CUIPage_Equip::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Crafting"), CUIPage_Crafting::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Option"), CUIPage_Option::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -307,6 +325,19 @@ CUIPart_Picture* CFactory::MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eT
 	return static_cast<CUIPart_Picture*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Picture"), -1));
 }
 
+CUIPart_Cell* CFactory::MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY)
+{
+	CUIPart_Cell::UICell_DESC		pTemp{};
+	pTemp.eType = eType;
+	pTemp.fX = fX;
+	pTemp.fY = fY;
+	pTemp.fSizeX = fSizeX;
+	pTemp.fSizeY = fSizeY;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Cell"), TEXT("Prototype_UIPart_Cell"), &pTemp);
+
+	return static_cast<CUIPart_Cell*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Cell"), -1));
+}
+
 CUIPage_Main* CFactory::MakeUIPage_Main()
 {
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), TEXT("Prototype_UIPage_Main"));
@@ -326,6 +357,27 @@ CUIPage_Inven* CFactory::MakeUIPage_Inven()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Inven"), TEXT("Prototype_UIPage_Inven"));
 
 	return static_cast<CUIPage_Inven*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Inven"), -1));
+}
+
+CUIPage_Equip* CFactory::MakeUIPage_Equip()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Equip"), TEXT("Prototype_UIPage_Equip"));
+
+	return static_cast<CUIPage_Equip*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Equip"), -1));
+}
+
+CUIPage_Crafting* CFactory::MakeUIPage_Crafting()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Crafting"), TEXT("Prototype_UIPage_Crafting"));
+
+	return static_cast<CUIPage_Crafting*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Crafting"), -1));
+}
+
+CUIPage_Option* CFactory::MakeUIPage_Option()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), TEXT("Prototype_UIPage_Option"));
+
+	return static_cast<CUIPage_Option*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

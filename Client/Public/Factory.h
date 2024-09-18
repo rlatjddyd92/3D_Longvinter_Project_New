@@ -36,6 +36,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	
 #pragma endregion
 
@@ -43,6 +44,9 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_Main* MakeUIPage_Main();
 	CUIPage_Test* MakeUIPage_Test();
 	CUIPage_Inven* MakeUIPage_Inven();
+	CUIPage_Equip* MakeUIPage_Equip();
+	CUIPage_Crafting* MakeUIPage_Crafting();
+	CUIPage_Option* MakeUIPage_Option();
 #pragma endregion
 
 
