@@ -33,10 +33,24 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	m_iNewPage = 0;
 }
 
 void CUIManager::Update(_float fTimeDelta)
 {
+	for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();++iter)
+	{
+		if (!(*iter)->GetOff())
+			if ((*iter)->Key_Action())
+			{
+				CUIPage* pTemp = (*iter);
+
+				m_Pagelist.erase(iter);
+				m_Pagelist.push_front(pTemp);
+				break;
+			}
+				
+	}
 }
 
 void CUIManager::Late_Update(_float fTimeDelta)
@@ -47,10 +61,34 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		m_pPage_Main->AddRender_UIPage();
 	}
 
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_O))
+			if (m_pPage_Test->GetOff())
+		{
+			m_pPage_Test->SetOn();
+			++m_iNewPage;
+			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Test));
+		}
 
-
-	
-
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (m_pGameInstance->Get_DIKeyState(DIK_I))
+			if (m_pPage_Inven->GetOff())
+		{
+			m_pPage_Inven->SetOn();
+			++m_iNewPage;
+			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Inven));
+		}
+			
+	for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();)
+	{
+		if (!(*iter)->GetOff())
+		{
+			(*iter)->AddRender_UIPage();
+			++iter;
+		}
+		else
+			iter = m_Pagelist.erase(iter);
+	}
 }
 
 HRESULT CUIManager::Render()
@@ -72,6 +110,12 @@ void CUIManager::Ready_UIPage()
 {
 	m_pPage_Main = GET_INSTANCE->MakeUIPage_Main();
 	Safe_AddRef(m_pPage_Main);
+
+	m_pPage_Test = GET_INSTANCE->MakeUIPage_Test();
+	Safe_AddRef(m_pPage_Test);
+
+	m_pPage_Inven = GET_INSTANCE->MakeUIPage_Inven();
+	Safe_AddRef(m_pPage_Inven);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -105,4 +149,9 @@ void CUIManager::Free()
 	__super::Free();
 
 	Safe_Release(m_pPage_Main);
+	Safe_Release(m_pPage_Test);
+	Safe_Release(m_pPage_Inven);
+	
+
+	m_Pagelist.clear();
 }

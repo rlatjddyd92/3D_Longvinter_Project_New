@@ -27,6 +27,21 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
+	if (m_eType == BACK_INGAME_WINDOW)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 255.f / 255.f;
+		m_fRGB[1] = 222.f / 255.f;
+		m_fRGB[2] = 173.f / 255.f;
+	}
+	if (m_eType == BACK_INGAME_WINDOW_HEADER)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 210.f / 255.f;
+		m_fRGB[1] = 180.f / 255.f;
+		m_fRGB[2] = 140.f / 255.f;
+	}
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(Desc)))
 		return E_FAIL;
@@ -39,7 +54,21 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 
 void CUIPart_Back::Priority_Update(_float fTimeDelta)
 {
+	m_bPushed[0] = m_bPushed[1];
+	m_bPushed[1] = false;
+	m_bOnCursor = false;
+	POINT mousePos{};
 
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	if (((m_fX - m_fSizeX / 2.f) < mousePos.x) + ((m_fX + m_fSizeX / 2.f) > mousePos.x) == 2)
+		if (((m_fY - m_fSizeY / 2.f) < mousePos.y) + ((m_fY + m_fSizeY / 2.f) > mousePos.y) == 2)
+		{
+			m_bOnCursor = true;
+			if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, true))
+				m_bPushed[1] = true;
+		}
 
 	int a = 10;
 }
@@ -67,7 +96,7 @@ HRESULT CUIPart_Back::Ready_Components()
 {
 
 	/* FOR.Com_Texture */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_UIPart_Back"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Button_Base"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 

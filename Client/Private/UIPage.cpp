@@ -72,9 +72,9 @@ void CUIPage::Ready_UIPart()
 {
 }
 
-_bool CUIPage::Check_Cursor()
+_bool CUIPage::Key_Action()
 {
-	return _bool();
+	return true;
 }
 
 HRESULT CUIPage::Ready_Components()

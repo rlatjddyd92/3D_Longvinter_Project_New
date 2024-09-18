@@ -30,7 +30,12 @@ public:
 public:
 	virtual void AddRender_UIPage();
 	virtual void Ready_UIPart();
-	virtual _bool Check_Cursor();
+
+	virtual _bool Key_Action();
+	
+	_bool IsOnCursor() { return m_bOnCursor; }
+	_bool IsPushed() { return m_bPushed[1]; }
+	_bool IsPressing() { return m_bPushed[0] * m_bPushed[1]; }
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -40,6 +45,9 @@ public:
 private:
 	HRESULT Ready_Components();
 
+protected:
+	_bool m_bOnCursor = false; // <- 마우스 위치와 겹침 
+	_bool m_bPushed[2] = { false,false }; // <- 마우스, 키로 작동시킴 [0] : 이전 프레임, [1] : 현재 프레임 <- 둘 다 true인 경우 Pressing
 
 
 public:

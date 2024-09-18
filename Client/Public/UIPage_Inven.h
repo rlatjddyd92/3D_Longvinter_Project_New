@@ -11,12 +11,12 @@ END
 
 BEGIN(Client)
 
-class CUIPage_Test : public CUIPage
+class CUIPage_Inven : public CUIPage
 {
 protected:
-	CUIPage_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUIPage_Test(const CUIPage_Test& Prototype);
-	virtual ~CUIPage_Test() = default;
+	CUIPage_Inven(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIPage_Inven(const CUIPage_Inven& Prototype);
+	virtual ~CUIPage_Inven() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -51,7 +51,7 @@ private:
 	_float m_fBeforeY = 0.f;
 
 public:
-	static CUIPage_Test* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

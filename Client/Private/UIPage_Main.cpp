@@ -113,10 +113,22 @@ void CUIPage_Main::Ready_UIPart()
 	m_pPicture_BGA = GET_INSTANCE->MakeUIPart_Picture(CUIPart_Picture::PICTUER_BGA, g_iWinSizeX >> 1, g_iWinSizeY >> 1, g_iWinSizeX, g_iWinSizeY);
 }
 
-_bool CUIPage_Main::Check_Cursor()
+_bool CUIPage_Main::Key_Action()
 {
-	return _bool();
+	_int Check = 0;
+
+	Check += m_pPicture_MainLogo->IsPushed();
+	Check += m_pButton_Ingame->IsPushed();
+	Check += m_pButton_Editor->IsPushed();
+	Check += m_pPicture_BGA->IsPushed();
+
+	if (Check == 0)
+		return false;
+
+
+	return true;
 }
+
 
 HRESULT CUIPage_Main::Ready_Components()
 {

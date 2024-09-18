@@ -41,6 +41,13 @@ HRESULT CUIPart_Button::Initialize(void* pArg)
 		m_fRGB[1] = 000.f / 255.f;
 		m_fRGB[2] = 000.f / 255.f;
 	}
+	if (m_eType == BUTTON_CLOSE)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 100.f / 255.f;
+		m_fRGB[1] = 100.f / 255.f;
+		m_fRGB[2] = 100.f / 255.f;
+	}
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(Desc)))
@@ -55,6 +62,7 @@ HRESULT CUIPart_Button::Initialize(void* pArg)
 void CUIPart_Button::Priority_Update(_float fTimeDelta)
 {
 	m_bPushed[0] = m_bPushed[1];
+	m_bPushed[1] = false;
 	m_bOnCursor = false;
 	POINT mousePos{};
 
@@ -102,7 +110,13 @@ HRESULT CUIPart_Button::Ready_Components()
 {
 
 	/* FOR.Com_Texture */
+	if ((m_eType == BUTTON_EDITOR) || (m_eType == BUTTON_INGAME))
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Button_Base"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		return E_FAIL;
+
+	if (m_eType == BUTTON_CLOSE)
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Button_Close"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
