@@ -54,7 +54,21 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 
 void CUIPart_Back::Priority_Update(_float fTimeDelta)
 {
+	m_bPushed[0] = m_bPushed[1];
+	m_bPushed[1] = false;
+	m_bOnCursor = false;
+	POINT mousePos{};
 
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	if (((m_fX - m_fSizeX / 2.f) < mousePos.x) + ((m_fX + m_fSizeX / 2.f) > mousePos.x) == 2)
+		if (((m_fY - m_fSizeY / 2.f) < mousePos.y) + ((m_fY + m_fSizeY / 2.f) > mousePos.y) == 2)
+		{
+			m_bOnCursor = true;
+			if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, true))
+				m_bPushed[1] = true;
+		}
 
 	int a = 10;
 }

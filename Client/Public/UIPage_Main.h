@@ -29,7 +29,9 @@ public:
 public:
 	virtual void AddRender_UIPage() override;
 	virtual void Ready_UIPart() override;
-	virtual _bool Check_Cursor() override;
+
+	virtual _bool Key_Action() override;
+
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

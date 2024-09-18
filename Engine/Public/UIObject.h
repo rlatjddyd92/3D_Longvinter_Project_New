@@ -27,6 +27,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Set_UIPosition(_float fX, _float fY) { m_fX = fX; m_fY = fY; }
+	void Move_UI(_float fX, _float fY) { m_fX += fX; m_fY += fY; }
+	void Set_UISize(_float fSizeX, _float fSizeY) { m_fSizeX = fSizeX;  m_fSizeY = fSizeY; }
+
 protected:
 	_float				m_fX{}, m_fY{}, m_fSizeX{}, m_fSizeY{};
 	_float4x4			m_ViewMatrix{}, m_ProjMatrix{};

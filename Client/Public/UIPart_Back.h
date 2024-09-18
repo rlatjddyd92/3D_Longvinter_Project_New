@@ -49,8 +49,6 @@ protected:
 private:
 	HRESULT Ready_Components();
 
-
-
 public:
 	static CUIPart_Back* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

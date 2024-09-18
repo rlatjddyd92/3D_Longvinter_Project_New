@@ -139,6 +139,12 @@
     <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test">
       <UniqueIdentifier>{fed7e3ec-34b6-4796-bbbe-239d83edc8b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven">
+      <UniqueIdentifier>{24a85a78-8d01-493d-be26-3d12171bd6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip">
+      <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -282,6 +288,9 @@
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UIPage_Inven.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -376,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Inven.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

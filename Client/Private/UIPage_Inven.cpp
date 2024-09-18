@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "..\Public\UIPage_Test.h"
+#include "..\Public\UIPage_Inven.h"
 
 #include "GameInstance.h"
 #include "ClientInstance.h"
 
-CUIPage_Test::CUIPage_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_Inven::CUIPage_Inven(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
 }
 
-CUIPage_Test::CUIPage_Test(const CUIPage_Test& Prototype)
+CUIPage_Inven::CUIPage_Inven(const CUIPage_Inven& Prototype)
 	: CUIPage{ Prototype }
 {
 }
 
-HRESULT CUIPage_Test::Initialize_Prototype()
+HRESULT CUIPage_Inven::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CUIPage_Test::Initialize(void* pArg)
+HRESULT CUIPage_Inven::Initialize(void* pArg)
 {
 	UI_DESC			Desc{};
 
@@ -51,7 +51,7 @@ HRESULT CUIPage_Test::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CUIPage_Test::Priority_Update(_float fTimeDelta)
+void CUIPage_Inven::Priority_Update(_float fTimeDelta)
 {
 
 
@@ -59,32 +59,32 @@ void CUIPage_Test::Priority_Update(_float fTimeDelta)
 	int a = 10;
 }
 
-void CUIPage_Test::Update(_float fTimeDelta)
+void CUIPage_Inven::Update(_float fTimeDelta)
 {
-	
+
 	int a = 10;
 }
 
-void CUIPage_Test::Late_Update(_float fTimeDelta)
+void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 }
 
-HRESULT CUIPage_Test::Render()
+HRESULT CUIPage_Inven::Render()
 {
 
 	return S_OK;
 }
 
-void CUIPage_Test::AddRender_UIPage()
+void CUIPage_Inven::AddRender_UIPage()
 {
 	m_pButton_Close->AddRender_UIPart();
 	m_pBack_Window_Header->AddRender_UIPart();
 	m_pBack_Window->AddRender_UIPart();
 }
 
-void CUIPage_Test::Ready_UIPart()
+void CUIPage_Inven::Ready_UIPart()
 {
 	m_pButton_Close = GET_INSTANCE->MakeUIPart_Button(CUIPart_Button::BUTTON_CLOSE, m_fX + (m_fSizeY / 2) - 25.f, m_fY - (m_fSizeY / 2) + 25.f, 20.f, 20.f);
 	m_pBack_Window = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW, m_fX, m_fY, m_fSizeX, m_fSizeY);
@@ -92,7 +92,7 @@ void CUIPage_Test::Ready_UIPart()
 
 }
 
-_bool CUIPage_Test::Key_Action()
+_bool CUIPage_Inven::Key_Action()
 {
 
 	if (m_pButton_Close->IsPushed())
@@ -138,20 +138,20 @@ _bool CUIPage_Test::Key_Action()
 
 
 
-HRESULT CUIPage_Test::Ready_Components()
+HRESULT CUIPage_Inven::Ready_Components()
 {
 
 
 	return S_OK;
 }
 
-CUIPage_Test* CUIPage_Test::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_Inven* CUIPage_Inven::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_Test* pInstance = new CUIPage_Test(pDevice, pContext);
+	CUIPage_Inven* pInstance = new CUIPage_Inven(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CUIPage_Test"));
+		MSG_BOX(TEXT("Failed to Created : CUIPage_Inven"));
 		Safe_Release(pInstance);
 	}
 
@@ -160,20 +160,20 @@ CUIPage_Test* CUIPage_Test::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 
 
-CGameObject* CUIPage_Test::Clone(void* pArg)
+CGameObject* CUIPage_Inven::Clone(void* pArg)
 {
-	CUIPage_Test* pInstance = new CUIPage_Test(*this);
+	CUIPage_Inven* pInstance = new CUIPage_Inven(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Test"));
+		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Inven"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUIPage_Test::Free()
+void CUIPage_Inven::Free()
 {
 	__super::Free();
 

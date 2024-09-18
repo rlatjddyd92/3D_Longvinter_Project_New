@@ -191,6 +191,7 @@
     <ClInclude Include="..\Public\Tool_ShotGun.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
+    <ClInclude Include="..\public\UIPage_Inven.h" />
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="..\Private\Tool_ShotGun.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\private\UIPage.cpp" />
+    <ClCompile Include="..\Private\UIPage_Inven.cpp" />
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
