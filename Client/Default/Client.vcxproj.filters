@@ -145,6 +145,21 @@
     <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip">
       <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop">
+      <UniqueIdentifier>{c4bd10d3-86c1-47c1-96a8-51b4c108ef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting">
+      <UniqueIdentifier>{33de20ef-9ac0-42ad-9302-00e46efdedd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option">
+      <UniqueIdentifier>{6baa500a-8939-460d-8021-791c5b579454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell">
+      <UniqueIdentifier>{c39db73d-c9d4-43e4-802e-0c37d730aec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\09.ItemManager">
+      <UniqueIdentifier>{b625aefd-3a0c-4cdf-8d3e-b067b6745f09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -291,6 +306,27 @@
     <ClInclude Include="..\public\UIPage_Inven.h">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Equip.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Crfting.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Option.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Shop.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_Cell.h">
+      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ItemManager.h">
+      <Filter>02.ClientInstance\09.ItemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_Item.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -388,6 +424,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inven.cpp">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Equip.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Crfting.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Option.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Shop.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_Cell.cpp">
+      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemManager.cpp">
+      <Filter>02.ClientInstance\09.ItemManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

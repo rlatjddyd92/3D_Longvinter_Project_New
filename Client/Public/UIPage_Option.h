@@ -11,12 +11,12 @@ END
 
 BEGIN(Client)
 
-class CUIPage_Inven : public CUIPage
+class CUIPage_Option : public CUIPage
 {
 protected:
-	CUIPage_Inven(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUIPage_Inven(const CUIPage_Inven& Prototype);
-	virtual ~CUIPage_Inven() = default;
+	CUIPage_Option(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIPage_Option(const CUIPage_Option& Prototype);
+	virtual ~CUIPage_Option() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -44,22 +44,14 @@ private:
 	CUIPart_Back* m_pBack_Window = { nullptr };
 	CUIPart_Back* m_pBack_Window_Header = { nullptr };
 
-	vector<CUIPart_Cell*> m_vecInvenCell;
-
 private:
 	// 창 이동, 크기 조절 관련 변수 
 	_bool m_bMoving = false;
 	_float m_fBeforeX = 0.f;
 	_float m_fBeforeY = 0.f;
 
-	// Inven 설정 
-	_float m_fInvenCellSize = 50.f;
-	_int m_iInvenCol = 10;
-	_int m_iInvenRow = 5;
-
-
 public:
-	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUIPage_Option* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

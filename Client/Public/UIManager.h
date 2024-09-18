@@ -52,11 +52,13 @@ private:
 
 private:
 	list<CUIPage*> m_Pagelist;
-	_int m_iNewPage = 0;
 
 	CUIPage_Main* m_pPage_Main = { nullptr };
 	CUIPage_Test* m_pPage_Test = { nullptr };
 	CUIPage_Inven* m_pPage_Inven = { nullptr };
+	CUIPage_Equip* m_pPage_Equip = { nullptr };
+	CUIPage_Crafting* m_pPage_Crafting = { nullptr };
+	CUIPage_Option* m_pPage_Option = { nullptr };
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "..\Public\UIPage_Inven.h"
+#include "..\Public\UIPage_Equip.h"
 
 #include "GameInstance.h"
 #include "ClientInstance.h"
 
-CUIPage_Inven::CUIPage_Inven(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_Equip::CUIPage_Equip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
 }
 
-CUIPage_Inven::CUIPage_Inven(const CUIPage_Inven& Prototype)
+CUIPage_Equip::CUIPage_Equip(const CUIPage_Equip& Prototype)
 	: CUIPage{ Prototype }
 {
 }
 
-HRESULT CUIPage_Inven::Initialize_Prototype()
+HRESULT CUIPage_Equip::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CUIPage_Inven::Initialize(void* pArg)
+HRESULT CUIPage_Equip::Initialize(void* pArg)
 {
 	UI_DESC			Desc{};
 
@@ -41,8 +41,8 @@ HRESULT CUIPage_Inven::Initialize(void* pArg)
 	m_fX = 400.f;
 	m_fY = 300.f;
 
-	m_fSizeX = ((m_fInvenCellSize * 1.0f) * _float(m_iInvenCol)) + 20.f;
-	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(m_iInvenRow)) + 60.f;
+	m_fSizeX = 300.f;
+	m_fSizeY = 300.f;
 
 	__super::SetOff(true);
 
@@ -51,7 +51,7 @@ HRESULT CUIPage_Inven::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CUIPage_Inven::Priority_Update(_float fTimeDelta)
+void CUIPage_Equip::Priority_Update(_float fTimeDelta)
 {
 
 
@@ -59,54 +59,40 @@ void CUIPage_Inven::Priority_Update(_float fTimeDelta)
 	int a = 10;
 }
 
-void CUIPage_Inven::Update(_float fTimeDelta)
+void CUIPage_Equip::Update(_float fTimeDelta)
 {
 
 	int a = 10;
 }
 
-void CUIPage_Inven::Late_Update(_float fTimeDelta)
+void CUIPage_Equip::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 }
 
-HRESULT CUIPage_Inven::Render()
+HRESULT CUIPage_Equip::Render()
 {
 
 	return S_OK;
 }
 
-void CUIPage_Inven::AddRender_UIPage()
+void CUIPage_Equip::AddRender_UIPage()
 {
 	m_pButton_Close->AddRender_UIPart();
 	m_pBack_Window_Header->AddRender_UIPart();
-
-	for (auto& iter : m_vecInvenCell)
-		iter->AddRender_UIPart();
-
 	m_pBack_Window->AddRender_UIPart();
 }
 
-void CUIPage_Inven::Ready_UIPart()
+void CUIPage_Equip::Ready_UIPart()
 {
 	m_pButton_Close = GET_INSTANCE->MakeUIPart_Button(CUIPart_Button::BUTTON_CLOSE, m_fX + (m_fSizeX / 2) - 25.f, m_fY - (m_fSizeY / 2) + 25.f, 20.f, 20.f);
 	m_pBack_Window = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW, m_fX, m_fY, m_fSizeX, m_fSizeY);
 	m_pBack_Window_Header = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW_HEADER, m_fX, m_fY - (m_fSizeY / 2) + 25.f, m_fSizeX - 20.f, 30.f);
 
-	m_vecInvenCell.resize(m_iInvenCol * m_iInvenRow);
-
-	_float fStartX = m_fX - (m_fSizeX / 2) + 10 + (m_fInvenCellSize * 0.5f);
-	_float fStartY = m_fY - (m_fSizeY / 2) + 50 + (m_fInvenCellSize * 0.5f);
-
-	for (_int i = 0; i < m_iInvenRow; ++i)
-		for (_int j = 0; j < m_iInvenCol; ++j)
-		{
-			m_vecInvenCell[(i * m_iInvenCol)+j] = GET_INSTANCE->MakeUIPart_Cell(CUIPart_Cell::CELL_INVEN, fStartX + (m_fInvenCellSize * 1.f * j), fStartY + (m_fInvenCellSize * 1.f * i), m_fInvenCellSize, m_fInvenCellSize);
-		}
 }
 
-_bool CUIPage_Inven::Key_Action()
+_bool CUIPage_Equip::Key_Action()
 {
 
 	if (m_pButton_Close->IsPushed())
@@ -117,8 +103,6 @@ _bool CUIPage_Inven::Key_Action()
 	Check += m_pButton_Close->IsPushed();
 	Check += m_pBack_Window->IsPushed();
 	Check += m_pBack_Window_Header->IsPushed();
-	for (auto& iter : m_vecInvenCell)
-		Check += iter->IsPushed();
 
 	if (Check == 0)
 		return false;
@@ -147,8 +131,6 @@ _bool CUIPage_Inven::Key_Action()
 		m_pButton_Close->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window_Header->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window->Move_UI(fMovingX, fMovingY);
-		for (auto& iter : m_vecInvenCell)
-			iter->Move_UI(fMovingX, fMovingY);
 	}
 
 	return true;
@@ -156,20 +138,20 @@ _bool CUIPage_Inven::Key_Action()
 
 
 
-HRESULT CUIPage_Inven::Ready_Components()
+HRESULT CUIPage_Equip::Ready_Components()
 {
 
 
 	return S_OK;
 }
 
-CUIPage_Inven* CUIPage_Inven::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_Equip* CUIPage_Equip::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_Inven* pInstance = new CUIPage_Inven(pDevice, pContext);
+	CUIPage_Equip* pInstance = new CUIPage_Equip(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CUIPage_Inven"));
+		MSG_BOX(TEXT("Failed to Created : CUIPage_Equip"));
 		Safe_Release(pInstance);
 	}
 
@@ -178,29 +160,24 @@ CUIPage_Inven* CUIPage_Inven::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 
 
 
-CGameObject* CUIPage_Inven::Clone(void* pArg)
+CGameObject* CUIPage_Equip::Clone(void* pArg)
 {
-	CUIPage_Inven* pInstance = new CUIPage_Inven(*this);
+	CUIPage_Equip* pInstance = new CUIPage_Equip(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Inven"));
+		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Equip"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUIPage_Inven::Free()
+void CUIPage_Equip::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
-
-	for (auto& iter : m_vecInvenCell)
-		Safe_Release(iter);
-
-	m_vecInvenCell.clear();
 }
