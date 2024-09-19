@@ -50,6 +50,7 @@ private:
 	_float				m_fCameraUp_First = 1.f; // <- 1인칭 모드에서 카메라 위치 조정 
 
 	_float3				m_fCamera_Third = { 0.f,10.f,-10.f }; 
+	_float3				m_fCamera_Third_Look = { 0.f,0.f,0.f };
 
 
 public:

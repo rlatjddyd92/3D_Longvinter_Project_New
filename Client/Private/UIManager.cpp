@@ -62,7 +62,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
-		if (m_pGameInstance->Get_DIKeyState(DIK_T))
+		if (m_pGameInstance->Get_DIKeyState(DIK_L))
 			if (m_pPage_Test->GetOff())
 		{
 			m_pPage_Test->SetOn();
