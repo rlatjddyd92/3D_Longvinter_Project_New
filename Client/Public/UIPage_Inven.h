@@ -54,8 +54,8 @@ private:
 
 	// Inven ¼³Á¤ 
 	_float m_fInvenCellSize = 50.f;
-	_int m_iInvenCol = 10;
-	_int m_iInvenRow = 5;
+	_int m_iInvenCol = INVEN_COL;
+	_int m_iInvenRow = INVEN_ROW;
 
 
 public:

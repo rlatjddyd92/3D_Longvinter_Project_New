@@ -25,6 +25,8 @@ namespace Client
 #define TERRAINERROR	{-1.f,-1.f,-1.f}
 #define GAPFROMTERRAIN	0.01f
 #define GRAVITY_ACCELE  9.8f
+#define INVEN_ROW		5
+#define INVEN_COL		10
 
 	using namespace std;
 

@@ -2,6 +2,7 @@
 #include "..\Public\UIPart_Back.h"
 
 #include "GameInstance.h"
+#include "ClientInstance.h"
 
 CUIPart_Back::CUIPart_Back(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPart{ pDevice, pContext }
@@ -62,10 +63,12 @@ void CUIPart_Back::Priority_Update(_float fTimeDelta)
 	GetCursorPos(&mousePos);
 	ScreenToClient(g_hWnd, &mousePos);
 
-	if (((m_fX - m_fSizeX / 2.f) < mousePos.x) + ((m_fX + m_fSizeX / 2.f) > mousePos.x) == 2)
-		if (((m_fY - m_fSizeY / 2.f) < mousePos.y) + ((m_fY + m_fSizeY / 2.f) > mousePos.y) == 2)
+	if (((m_fX - _float(m_fSizeX / 2.f)) < mousePos.x) + ((m_fX + _float(m_fSizeX / 2.f)) > mousePos.x) == 2)
+		if (((m_fY - _float(m_fSizeY / 2.f)) < mousePos.y) + ((m_fY + _float(m_fSizeY / 2.f)) > mousePos.y) == 2)
 		{
 			m_bOnCursor = true;
+			if (m_eType == BACK_INGAME_WINDOW_HEADER)
+				GET_INSTANCE->ActivateCursor();
 			if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, true))
 				m_bPushed[1] = true;
 		}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "UIObject.h"
 #include "../Default/UIPage_Defines.h"
 
 // [UIManager]
@@ -29,7 +29,7 @@
 
 BEGIN(Client)
 
-class CUIManager : public CGameObject
+class CUIManager : public CUIObject
 {
 protected:
 	CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -44,13 +44,22 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	void ActivateCursor() { m_iTextureIndex = 2; }
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 
 	void Ready_UIPage();
 
+public:
+	class CShader* m_pShaderCom = { nullptr };
+	class CTexture* m_pTextureCom = { nullptr };
+	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+
 private:
+	_uint m_iTextureIndex = 0;
+
 	list<CUIPage*> m_Pagelist;
 
 	CUIPage_Main* m_pPage_Main = { nullptr };

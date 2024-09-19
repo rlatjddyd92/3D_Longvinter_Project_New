@@ -68,7 +68,6 @@ HRESULT CUIPart::Render()
 	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
-
 	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
 		return E_FAIL;
 	if (FAILED(m_pVIBufferCom->Render()))
