@@ -60,8 +60,9 @@ void CUIPart_Cell::Priority_Update(_float fTimeDelta)
 		if (((m_fY - m_fSizeY) < mousePos.y) + ((m_fY + m_fSizeY) > mousePos.y) == 2)
 		{
 			m_bOnCursor = true;
-			if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, true))
-				m_bPushed[1] = true;
+			if (m_eType == CELL_INVEN)
+				if (m_pGameInstance->Get_DIMouseState(DIMK_LBUTTON, false))
+					m_bPushed[1] = true;
 		}
 
 	int a = 10;
