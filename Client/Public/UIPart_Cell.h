@@ -70,6 +70,17 @@ public:
 		m_iItemIndex = -1;
 	}
 
+	void Set_Picked(_bool bIsPicked) 
+	{ 
+		if (m_iItemIndex == -1)
+			return;
+
+		m_bPicked = bIsPicked;
+		if (m_bPicked)
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		else 
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = false;
+	}
 
 
 
@@ -81,7 +92,7 @@ protected:
 private:
 	HRESULT Ready_Components();
 	_int m_iItemIndex = -1; // <- -1은 비어 있는 상태 
-
+	_bool m_bPicked = false;
 
 public:
 	static CUIPart_Cell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

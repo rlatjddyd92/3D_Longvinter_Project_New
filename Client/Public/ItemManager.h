@@ -26,18 +26,33 @@ public:
 		_bool bIsTool = false; // <- true인 경우 장착을 위한 모델이 있어야 한다 
 
 		ITEMTYPE eType = ITEMTYPE::ITEM_TYPE_END;
-		_bool bStack = true; // 스택 가능한 아이템 여부 
-		_float fHp = 100.f; // 아이템 내구도 
+		_bool bStack = true; // 스택 가능한 아이템 여부
 
+
+		// 아래는 변동 가능한 수치 
+		_float fHp = 100.f; // 아이템 내구도 
 		_int iPrice = 100; // 아이템 가격
 		_float fAttack = 10.f;
 		_float fDefence = 1.f;
+
+		_int iCount = 1;
+		_bool bPicked = false;
+
 	}TINFO;
 
 	typedef struct ShopInfo
 	{
 		vector<TINFO> vecGoods; // <- 상점 혹은 상자가 보유한 아이템 목록 
 	}SINFO;
+
+	enum ITEMARRAY
+	{
+		ARRAY_INFO, 
+		ARRAY_INVEN,
+		ARRAY_EQUIP,
+		ARRAY_SHOP,
+		ARRAY_END
+	};
 
 protected:
 	CItemManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -99,14 +114,17 @@ public: // <- 아이템 매니저 초반 세팅용 함수
 
 
 
-public:  
+public:  // <- 아이템 집기, 이동을 위한 함수 
+	const TINFO PickItem(ITEMARRAY eArray, _int iIndex);
+	void CancelPick();
+	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex);
 
+	ITEMINDEX GetPickedItemIndex() { return m_tPickedItem.eIndex; }
 
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
-	CGameInstance* m_pGameInstance = { nullptr };
 
 
 private: // <- 아이템 관련 변수
@@ -124,6 +142,13 @@ private: // <- 아이템 관련 변수
 private: // <- 상점, 상자 관련 변수
 	_int m_iNowKey = 1; // <- 상점, 상자 생성 시, 키를 배정하기 위한 변수, 사용할 때 마다 증가하며 이미 사용한 키는 재사용하지 않는다 
 	map<_int, SINFO> m_mapShopInfo; // <- 상점 NPC, 자판기, 상자의 정보 -> 키로 접근한다  
+
+
+	TINFO m_tPickedItem{}; // <- 지금 마우스로 집어올린 아이템의 정보
+	ITEMARRAY m_eBeforeArray = ITEMARRAY::ARRAY_END; // <- 집은 아이템이 이전에 있었던 배열
+	_int m_iBeforeShopKey = -1; // <- 상점에서 집어온 경우 해당 상점의 Key
+	_int m_iBeforeIndex = -1; // <- 아이템이 배열에서 어느 지점에 있었는 지 작성 
+
 
 public:
 	static CItemManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

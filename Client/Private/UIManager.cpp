@@ -151,8 +151,28 @@ HRESULT CUIManager::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_Texture", m_iTextureIndex)))
-		return E_FAIL;
+
+	ITEMINDEX eNow = GET_INSTANCE->GetPickedItemIndex();
+
+	if (eNow == ITEMINDEX::ITEM_END)
+	{
+		m_fSizeX = 20.f;
+		m_fSizeY = 20.f;
+		if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_Texture", m_iTextureIndex)))
+			return E_FAIL;
+	}
+	else
+	{
+		m_fSizeX = 30.f;
+		m_fSizeY = 30.f;
+		CTexture* pItemTexture = GET_INSTANCE->GetItemInvenTexture(eNow);
+		if (FAILED(pItemTexture->Bind_ShadeResource(m_pShaderCom, "g_Texture", m_iTextureIndex)))
+			return E_FAIL;
+	}
+
+
+
+
 	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
 		return E_FAIL;
 

@@ -44,6 +44,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public: // 커서 관련 함수
 	void ActivateCursor() { m_iTextureIndex = 2; }
 
 private:
