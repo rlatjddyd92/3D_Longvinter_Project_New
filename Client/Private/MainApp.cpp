@@ -59,11 +59,12 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Draw_Engine();
 
-	//m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("TEST"), _vector{ 100.f,100.f,0.f,0.f });
+	if (m_pGameInstance->Get_DIKeyState(DIK_0, true))
+		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("TEST"), _vector{ 100.f,100.f,0.f,0.f });
 
 	m_pGameInstance->Render_End();
 
-	
+
 
 	
 

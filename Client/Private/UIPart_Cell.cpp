@@ -2,6 +2,7 @@
 #include "..\Public\UIPart_Cell.h"
 
 #include "GameInstance.h"
+#include "ClientInstance.h"
 
 CUIPart_Cell::CUIPart_Cell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPart{ pDevice, pContext }
@@ -73,6 +74,13 @@ void CUIPart_Cell::Update(_float fTimeDelta)
 
 void CUIPart_Cell::Late_Update(_float fTimeDelta)
 {
+	if ((m_eType == CELL_INVEN) || (m_iItemIndex != -1))
+	{
+		m_fSizeX = INVEN_TEXTURE;
+		m_fSizeY = INVEN_TEXTURE;
+	}
+
+
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
@@ -80,7 +88,39 @@ void CUIPart_Cell::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Cell::Render()
 {
-	__super::Render();
+	if ((!m_eType == CELL_INVEN) || (m_iItemIndex == -1))
+		__super::Render();
+	else
+		Inven_Render();
+
+	return S_OK;
+}
+
+HRESULT CUIPart_Cell::Inven_Render()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	CTexture* pTemp = GET_INSTANCE->GetItemInvenTexture(ITEMINDEX(m_iItemIndex));
+	if (pTemp == nullptr)
+		return E_FAIL;
+
+	if (FAILED(pTemp->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+		return E_FAIL;
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
 
 	return S_OK;
 }

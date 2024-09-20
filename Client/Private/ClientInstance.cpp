@@ -71,6 +71,16 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 	m_pUIManager = dynamic_cast<CUIManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIManager"), -1));
 
 
+	// ItemManager
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ItemManager"), CItemManager::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_ItemManager"), TEXT("Prototype_GameObject_ItemManager"))))
+		return E_FAIL;
+	m_pItemManager = dynamic_cast<CItemManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_ItemManager"), -1));
+
+
 	return S_OK;
 }
 

@@ -44,22 +44,45 @@ HRESULT CItemManager::Render()
 	return S_OK;
 }
 
-void CItemManager::Setting_ItemInfo()
+HRESULT CItemManager::Setting_ItemInfo()
 {
 	m_vecItemInfo.resize(_int(ITEMINDEX::ITEM_END));
+	m_vecInvenInfo.resize(INVEN_COL * INVEN_ROW);
+	m_vecItemInvenTexture.resize(_int(ITEMINDEX::ITEM_END));
+	m_vecTool.resize(_int(ITEMINDEX::ITEM_END));
 
-	// º¶∞«
-	m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN)] =
-	{ ITEMINDEX::ITEM_SHOTGUN, TEXT("ShotGun"), TEXT("Weapon"), false, TEXT(""), TEXT("Prototype_Component_Texture_ShotGun"), ITEMTYPE::ITEM_TYPE_WEAPON, false, 100.f, 100, 100.f, 1.f };
+
+
+	// ≈∫»Ø
+	m_vecItemInfo[_int(ITEMINDEX::ITEM_AMMO)] =
+	{ ITEMINDEX::ITEM_AMMO, TEXT("Gun_Ammo"), TEXT("Ammo"), false,  ITEMTYPE::ITEM_TYPE_AMMO, false, 100.f, 100, 100.f, 1.f };
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Ammo"),
+		TEXT("Com_Texture_0"), reinterpret_cast<CComponent**>(&m_vecItemInvenTexture[_int(ITEMINDEX::ITEM_AMMO)]))))
+		return E_FAIL;
 	
 	// º¶∞« ≈∞∆Æ
 	m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN_KIT)] =
-	{ ITEMINDEX::ITEM_SHOTGUN_KIT, TEXT("ShotGun_Kit"), TEXT("Kit"), false, TEXT(""), TEXT("Prototype_Component_Texture_ShotGun"), ITEMTYPE::ITEM_TYPE_ETC, false, 100.f, 100, 100.f, 1.f };
+	{ ITEMINDEX::ITEM_SHOTGUN_KIT, TEXT("ShotGun_Kit"), TEXT("Kit"), false, ITEMTYPE::ITEM_TYPE_ETC, false, 100.f, 100, 100.f, 1.f };
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ShotGun_Kit"),
+		TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_vecItemInvenTexture[_int(ITEMINDEX::ITEM_SHOTGUN_KIT)]))))
+		return E_FAIL;
 	
-	// ≈∫»Ø
-	m_vecItemInfo[_int(ITEMINDEX::ITEM_AMMO)] =
-	{ ITEMINDEX::ITEM_AMMO, TEXT("Gun_Ammo"), TEXT("Ammo"), false, TEXT(""), TEXT("Prototype_Component_Texture_ShotGun"), ITEMTYPE::ITEM_TYPE_AMMO, false, 100.f, 100, 100.f, 1.f };
+	// º¶∞«
+	m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN)] =
+	{ ITEMINDEX::ITEM_SHOTGUN, TEXT("ShotGun"), TEXT("Weapon"), false, ITEMTYPE::ITEM_TYPE_WEAPON, false, 100.f, 100, 100.f, 1.f };
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ShotGun"),
+		TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_vecItemInvenTexture[_int(ITEMINDEX::ITEM_SHOTGUN)]))))
+		return E_FAIL;
+	
 
+
+	// ¿Œ∫• √ ±‚ ºº∆√ 
+
+	m_vecInvenInfo[0] = m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN)];
+	m_vecInvenInfo[1] = m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN_KIT)];
+	m_vecInvenInfo[2] = m_vecItemInfo[_int(ITEMINDEX::ITEM_AMMO)];
+
+	return S_OK;
 }
 
 CItemManager* CItemManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -92,5 +115,15 @@ void CItemManager::Free()
 {
 	__super::Free();
 
-	
+	m_vecItemInfo.clear();
+	m_vecInvenInfo.clear();
+
+	m_vecInvenSelectBuffer.clear();
+	m_vecEquipInfo.clear();
+
+	m_vecTool.clear();
+
+	for (auto& iter : m_vecItemInvenTexture)
+		Safe_Release(iter);
+	m_vecItemInvenTexture.clear();
 }

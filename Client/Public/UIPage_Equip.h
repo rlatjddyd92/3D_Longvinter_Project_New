@@ -44,11 +44,17 @@ private:
 	CUIPart_Back* m_pBack_Window = { nullptr };
 	CUIPart_Back* m_pBack_Window_Header = { nullptr };
 
+	vector<CUIPart_Cell*> m_vecEquipCell;
+
 private:
 	// 창 이동, 크기 조절 관련 변수 
 	_bool m_bMoving = false;
 	_float m_fBeforeX = 0.f;
 	_float m_fBeforeY = 0.f;
+
+	// Equip 설정 
+	_float m_fInvenCellSize = 50.f;
+
 
 public:
 	static CUIPage_Equip* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -2,8 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
-
-
+#include "Tool.h"
 
 // [아이템 매니저] 
 // 1. 모든 아이템의 정보, 텍스쳐(인벤)을 저장한다 
@@ -25,8 +24,6 @@ public:
 		wstring strItemName = TEXT("ITEM_DEFALUT_NAME");
 		wstring strItemDescription = TEXT("ITEM_DEFAULT_description"); // <- 아이템 툴팁 
 		_bool bIsTool = false; // <- true인 경우 장착을 위한 모델이 있어야 한다 
-		wstring strItemModelName = TEXT("Prototype_GameObject_Tool_Empty");
-		wstring strItemInvenTexture = TEXT("Prototype_Component_Texture_"); // <- 인벤토리, 상점 등에 들어가 있는 경우 노출해야 하는 텍스쳐 
 
 		ITEMTYPE eType = ITEMTYPE::ITEM_TYPE_END;
 		_bool bStack = true; // 스택 가능한 아이템 여부 
@@ -71,17 +68,25 @@ public:
 		else
 			return m_vecInvenInfo[iInvenNum];
 	}
-	const TINFO& GetEquipInfo(_uint iInvenNum)
+	const TINFO& GetEquipInfo(_uint iEquipNum)
 	{
-		if (iInvenNum >= INVEN_ROW * INVEN_COL)
+		if (iEquipNum >= 5)
 		{
 			TINFO tFali;
 			return tFali;
 			// 실패값을 반환 시, 초기화 된 값을 가진 TINFO 반환, 해당 구조체의 ITEMINDEX는 END이므로 구분 가능  
 		}
 
-		return m_vecEquipInfo[iInvenNum];
+		return m_vecEquipInfo[iEquipNum];
 	}
+	CTexture* GetItemInvenTexture(ITEMINDEX eIndex)
+	{
+		if (_int(eIndex) >= _int(ITEMINDEX::ITEM_END))
+			return nullptr;
+
+		return m_vecItemInvenTexture[_int(eIndex)];
+	}
+
 
 
 
@@ -89,7 +94,7 @@ public:
 public: // <- 아이템 매니저 초반 세팅용 함수 
 
 	// 1. 아이템 정보 세팅 
-	void Setting_ItemInfo();
+	HRESULT Setting_ItemInfo();
 
 
 
@@ -112,6 +117,9 @@ private: // <- 아이템 관련 변수
 	vector<TINFO> m_vecInvenSelectBuffer; // <- 아이템 검색, 혹은 특정 조건의 아이템만 노출 시 사용
 	vector<TINFO> m_vecEquipInfo; // <- 유저가 장착한 아이템 정보 
 
+
+	vector<CTool*> m_vecTool; // <- 유저, 적의 모델에 붙어 있는 파트 오브젝트 목록, 아이템 인덱스로 접근 
+	vector<CTexture*> m_vecItemInvenTexture; 
 
 private: // <- 상점, 상자 관련 변수
 	_int m_iNowKey = 1; // <- 상점, 상자 생성 시, 키를 배정하기 위한 변수, 사용할 때 마다 증가하며 이미 사용한 키는 재사용하지 않는다 

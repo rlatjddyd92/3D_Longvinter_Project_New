@@ -67,6 +67,19 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
+	for (_int i = 0; i < INVEN_COL * INVEN_ROW; ++i)
+	{
+		CItemManager::TINFO tInfo = GET_INSTANCE->GetInvenInfo(i);
+
+		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
+			m_vecInvenCell[i]->Empty_Cell();
+		else
+			m_vecInvenCell[i]->Input_Item(_int(tInfo.eIndex));
+	}
+
+
+
+
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 }
