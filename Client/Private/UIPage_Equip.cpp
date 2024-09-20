@@ -41,8 +41,8 @@ HRESULT CUIPage_Equip::Initialize(void* pArg)
 	m_fX = 400.f;
 	m_fY = 300.f;
 
-	m_fSizeX = 300.f;
-	m_fSizeY = 300.f;
+	m_fSizeX = 500.f;
+	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(5)) + 60.f;
 
 	__super::SetOff(true);
 
@@ -81,6 +81,10 @@ void CUIPage_Equip::AddRender_UIPage()
 {
 	m_pButton_Close->AddRender_UIPart();
 	m_pBack_Window_Header->AddRender_UIPart();
+
+	for (auto& iter : m_vecEquipCell)
+		iter->AddRender_UIPart();
+
 	m_pBack_Window->AddRender_UIPart();
 }
 
@@ -90,6 +94,13 @@ void CUIPage_Equip::Ready_UIPart()
 	m_pBack_Window = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW, m_fX, m_fY, m_fSizeX, m_fSizeY);
 	m_pBack_Window_Header = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW_HEADER, m_fX, m_fY - (m_fSizeY / 2) + 25.f, m_fSizeX - 20.f, 30.f);
 
+	m_vecEquipCell.resize(5);
+
+	_float fStartX = m_fX - (m_fSizeX / 2) + 10 + (m_fInvenCellSize * 0.5f);
+	_float fStartY = m_fY - (m_fSizeY / 2) + 50 + (m_fInvenCellSize * 0.5f);
+
+	for (_int i = 0; i < 5; ++i)
+			m_vecEquipCell[i] = GET_INSTANCE->MakeUIPart_Cell(CUIPart_Cell::CELL_INVEN, fStartX, fStartY + (m_fInvenCellSize * 1.f * i), m_fInvenCellSize, m_fInvenCellSize);
 }
 
 _bool CUIPage_Equip::Key_Action()
@@ -103,6 +114,8 @@ _bool CUIPage_Equip::Key_Action()
 	Check += m_pButton_Close->IsPushed();
 	Check += m_pBack_Window->IsPushed();
 	Check += m_pBack_Window_Header->IsPushed();
+	for (auto& iter : m_vecEquipCell)
+		Check += iter->IsPushed();
 
 	if (Check == 0)
 		return false;
@@ -131,6 +144,8 @@ _bool CUIPage_Equip::Key_Action()
 		m_pButton_Close->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window_Header->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window->Move_UI(fMovingX, fMovingY);
+		for (auto& iter : m_vecEquipCell)
+			iter->Move_UI(fMovingX, fMovingY);
 	}
 
 	return true;
@@ -180,4 +195,9 @@ void CUIPage_Equip::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
+
+	for (auto& iter : m_vecEquipCell)
+		Safe_Release(iter);
+
+	m_vecEquipCell.clear();
 }

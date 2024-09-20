@@ -62,6 +62,8 @@ HRESULT CUIPart_Picture::Render()
 {
 	__super::Render();
 
+	
+
 	return S_OK;
 }
 

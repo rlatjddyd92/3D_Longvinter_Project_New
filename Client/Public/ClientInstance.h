@@ -11,6 +11,7 @@
 #include "Controller.h"
 #include "PhysicsManager.h"
 #include "UIManager.h"
+#include "ItemManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -146,6 +147,15 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
 #pragma endregion
 
+
+
+#pragma region ITEM
+	const CItemManager::TINFO& GetItemInfo(ITEMINDEX eIndex) { return m_pItemManager->GetItemInfo(eIndex); }
+	const CItemManager::TINFO& GetInvenInfo(_uint iInvenNum) { return m_pItemManager->GetInvenInfo(iInvenNum); }
+	const CItemManager::TINFO& GetEquipInfo(_uint iEquipNum) { return m_pItemManager->GetEquipInfo(iEquipNum); }
+	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
+#pragma endregion
+
 private: // <- 보유 중인 포인터 목록 
 	CGameInstance*			m_pGameInstance = { nullptr };
 	CFreeCamera*			m_pCamera = { nullptr };
@@ -156,6 +166,7 @@ private: // <- 보유 중인 포인터 목록
 	CContainer_Player*		m_pPlayer = { nullptr };
 	CPhysicsManager*		m_pPhysicsManager = { nullptr };
 	CUIManager*				m_pUIManager = { nullptr };
+	CItemManager*			m_pItemManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;

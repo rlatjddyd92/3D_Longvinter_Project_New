@@ -42,12 +42,45 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	void Input_Item(_int iItemIndex)
+	{
+		if (m_eType != CELL_INVEN)
+			return;
+
+		if (m_iItemIndex == -1)
+		{
+			m_fSizeX = INVEN_TEXTURE;
+			m_fSizeY = INVEN_TEXTURE;
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = false;
+		}
+		m_iItemIndex = iItemIndex;
+	}
+
+	void Empty_Cell()
+	{
+		if (m_eType != CELL_INVEN)
+			return;
+
+		if (m_iItemIndex != -1)
+		{
+			m_fSizeX = INVEN_CELLSIZE;
+			m_fSizeY = INVEN_CELLSIZE;
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		}
+		m_iItemIndex = -1;
+	}
+
+
+
+
 protected:
 	UICELL_TYPE m_eType = UICELL_TYPE::CELL_END;
 
+	HRESULT Inven_Render();
+
 private:
 	HRESULT Ready_Components();
-
+	_int m_iItemIndex = -1; // <- -1은 비어 있는 상태 
 
 
 public:

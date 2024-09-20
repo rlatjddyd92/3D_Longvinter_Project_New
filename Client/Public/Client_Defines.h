@@ -27,6 +27,8 @@ namespace Client
 #define GRAVITY_ACCELE  9.8f
 #define INVEN_ROW		5
 #define INVEN_COL		10
+#define INVEN_CELLSIZE	50.f
+#define INVEN_TEXTURE	45.f
 
 	using namespace std;
 
