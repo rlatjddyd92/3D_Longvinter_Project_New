@@ -3,12 +3,12 @@
 #include "ClientInstance.h"
 
 CUIManager::CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject{ pDevice ,pContext }
+	: CUIObject{ pDevice ,pContext }
 {
 }
 
 CUIManager::CUIManager(const CUIManager& Prototype)
-	: CGameObject{ Prototype }
+	: CUIObject{ Prototype }
 {
 }
 
@@ -19,8 +19,19 @@ HRESULT CUIManager::Initialize_Prototype()
 
 HRESULT CUIManager::Initialize(void* pArg)
 {
+	UI_DESC			Desc{};
+
+	Desc.fX = g_iWinSizeX >> 1;
+	Desc.fY = g_iWinSizeY >> 1;
+	Desc.fSizeX = 20.f;
+	Desc.fSizeY = 20.f;
+
+	Desc.fSpeedPerSec = 10.f;
+	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
+
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -33,7 +44,15 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	m_iTextureIndex = 0;
 
+	POINT mousePos{};
+
+	GetCursorPos(&mousePos);
+	ScreenToClient(g_hWnd, &mousePos);
+
+	m_fX = mousePos.x + (m_fSizeX * 0.5f);
+	m_fY = mousePos.y + (m_fSizeY * 0.5f);
 }
 
 void CUIManager::Update(_float fTimeDelta)
@@ -55,6 +74,10 @@ void CUIManager::Update(_float fTimeDelta)
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_LOGO)
 	{
 		m_pPage_Main->SetOn();
@@ -100,6 +123,11 @@ void CUIManager::Late_Update(_float fTimeDelta)
 				m_pPage_Option->SetOn();
 				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Option));
 			}
+
+
+	// 렌더링 준비 
+
+	
 			
 	for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();)
 	{
@@ -111,15 +139,53 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		else
 			iter = m_Pagelist.erase(iter);
 	}
+
+	
 }
 
 HRESULT CUIManager::Render()
 {
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_Texture", m_iTextureIndex)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+		return E_FAIL;
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+	return S_OK;
+
+
 	return S_OK;
 }
 
 HRESULT CUIManager::Ready_Components()
 {
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cursor"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -185,6 +251,10 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Equip);
 	Safe_Release(m_pPage_Crafting);
 	Safe_Release(m_pPage_Option);
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pVIBufferCom);
 
 	m_Pagelist.clear();
 }

@@ -23,7 +23,6 @@ HRESULT CCustomFont::Render(const _tchar * pText, _fvector vPosition, _fvector v
 	m_pFont->DrawString(m_pBatch, pText, vPosition, vColor, fRadian, vPivot, fScale);
 
 	m_pBatch->End();
-
 	return S_OK;
 }
 
@@ -34,7 +33,6 @@ HRESULT CCustomFont::Render_Center(const _tchar* pText, _fvector vPosition, _fve
 	_vector vAdjustPosition = (vPosition - vTextSpace / 2.f);
 	m_pFont->DrawString(m_pBatch, pText, vAdjustPosition, vColor, fRadian, vPivot, fScale);
 	m_pBatch->End();
-
 	return S_OK;
 }
 

@@ -142,6 +142,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void CheckTerrainCollision(CPhysicsManager::P_RESULT* tResult, _bool IsSlideControl) { m_pPhysicsManager->CheckTerrainCollision(tResult, IsSlideControl); } // 지형 충돌만 계산 
 #pragma endregion
 
+#pragma region UIMANAGER
+	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
+#pragma endregion
+
 private: // <- 보유 중인 포인터 목록 
 	CGameInstance*			m_pGameInstance = { nullptr };
 	CFreeCamera*			m_pCamera = { nullptr };
