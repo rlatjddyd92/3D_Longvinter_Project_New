@@ -154,6 +154,12 @@ public: // <- 싱글톤을 통한 외부 접근용
 	const CItemManager::TINFO& GetInvenInfo(_uint iInvenNum) { return m_pItemManager->GetInvenInfo(iInvenNum); }
 	const CItemManager::TINFO& GetEquipInfo(_uint iEquipNum) { return m_pItemManager->GetEquipInfo(iEquipNum); }
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
+
+	const CItemManager::TINFO PickItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
+	void CancelPick() { m_pItemManager->CancelPick(); }
+	HRESULT PutInItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
+
+	ITEMINDEX GetPickedItemIndex() { return m_pItemManager->GetPickedItemIndex(); }
 #pragma endregion
 
 private: // <- 보유 중인 포인터 목록 

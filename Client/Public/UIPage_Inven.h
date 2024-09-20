@@ -56,8 +56,6 @@ private:
 	_float m_fInvenCellSize = INVEN_CELLSIZE;
 	_int m_iInvenCol = INVEN_COL;
 	_int m_iInvenRow = INVEN_ROW;
-
-
 public:
 	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

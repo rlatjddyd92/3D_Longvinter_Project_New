@@ -75,6 +75,9 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 			m_vecInvenCell[i]->Empty_Cell();
 		else
 			m_vecInvenCell[i]->Input_Item(_int(tInfo.eIndex));
+
+		if (!tInfo.bPicked)
+			m_vecInvenCell[i]->Set_Picked(false);
 	}
 
 
@@ -125,19 +128,12 @@ _bool CUIPage_Inven::Key_Action()
 	if (m_pButton_Close->IsPushed())
 		__super::SetOff(true);
 
-	_int Check = 0;
-
-	Check += m_pButton_Close->IsPushed();
-	Check += m_pBack_Window->IsPushed();
-	Check += m_pBack_Window_Header->IsPushed();
-	for (auto& iter : m_vecInvenCell)
-		Check += iter->IsPushed();
-
-	if (Check == 0)
-		return false;
+	_bool Check = false;
 
 	if ((m_pBack_Window_Header->IsPushed()) && (!m_pBack_Window_Header->IsPressing()))
 	{
+		Check = true;
+
 		m_bMoving = true;
 		POINT			ptMouse{};
 		GetCursorPos(&ptMouse);
@@ -147,6 +143,8 @@ _bool CUIPage_Inven::Key_Action()
 	}
 	if ((m_bMoving) && (m_pBack_Window_Header->IsPressing()))
 	{
+		Check = true;
+
 		POINT			ptMouse{};
 		GetCursorPos(&ptMouse);
 
@@ -163,8 +161,16 @@ _bool CUIPage_Inven::Key_Action()
 		for (auto& iter : m_vecInvenCell)
 			iter->Move_UI(fMovingX, fMovingY);
 	}
+	for (_int i = 0; i < INVEN_COL*INVEN_ROW; ++i)
+		if (m_vecInvenCell[i]->IsPushed())
+		{
+			Check = true;
+			GET_INSTANCE->PickItem(CItemManager::ARRAY_INVEN, i);
 
-	return true;
+			m_vecInvenCell[i]->Set_Picked(true);
+		}
+
+	return Check;
 }
 
 
