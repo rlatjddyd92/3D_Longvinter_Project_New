@@ -59,30 +59,30 @@ void CContainer_Player::Update(_float fTimeDelta)
 	{
 		m_pTransformCom->Go_Backward(fTimeDelta);
 
-		if (m_iState ^ 24)
+		/*if (m_iState ^ 24)
 		{
 			m_iState = STATE_RESET;
 		}
 			
 
-		m_iState = 24;
+		m_iState = 24;*/
 	}
 	else if (m_pGameInstance->Get_DIKeyState(DIK_UP, true) & 0x80)
 	{
 		m_pTransformCom->Go_Straight(fTimeDelta);
 
-		if (m_iState ^ 24)
+		/*if (m_iState ^ 24)
 		{
 			m_iState ^= STATE_RESET;
 		}
 			
 
-		m_iState = 24;
+		m_iState = 24;*/
 	}
 	else
 	{
-		m_iState = STATE_RESET;
-		m_iState |= 13;
+		/*m_iState = STATE_RESET;
+		m_iState |= 13;*/
 	}
 
 
@@ -103,10 +103,10 @@ void CContainer_Player::Update(_float fTimeDelta)
 
 	
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_P) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
 		++m_iState;
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_O) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
 		m_iState = 0;
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_F) & 0x80)
@@ -164,6 +164,8 @@ HRESULT CContainer_Player::Ready_PartObjects()
 	CTool::TOOL_DESC		ToolDesc{};
 	ToolDesc.pParentState = &m_iState;
 	ToolDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+
+
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("BackpackSocket");
 
 	if (FAILED(__super::Add_PartObject(PART_BACKPACK, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
@@ -187,6 +189,16 @@ HRESULT CContainer_Player::Ready_PartObjects()
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("MCH-thigh_parent_socket_R");
 
 	if (FAILED(__super::Add_PartObject(PART_LEG_RIGHT, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
+		return E_FAIL;
+
+	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Left_end");
+
+	if (FAILED(__super::Add_PartObject(PART_HAND_LEFT, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
+		return E_FAIL;
+
+	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("rightHand");
+
+	if (FAILED(__super::Add_PartObject(PART_HAND_RIGHT, TEXT("Prototype_GameObject_Tool_ShotGun"), &ToolDesc)))
 		return E_FAIL;
 
 

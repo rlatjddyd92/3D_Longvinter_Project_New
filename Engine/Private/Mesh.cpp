@@ -13,7 +13,7 @@ CMesh::CMesh(const CMesh& Prototype)
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
+HRESULT CMesh::Initialize_Prototype(const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix, _bool bTexture)
 {
 	strcpy_s(m_szName, pAIMesh->mName.data);
 	m_iMaterialIndex = pAIMesh->mMaterialIndex;
@@ -24,9 +24,12 @@ HRESULT CMesh::Initialize_Prototype(const CModel* pModel, const aiMesh* pAIMesh,
 	m_eIndexFormat = DXGI_FORMAT_R32_UINT;
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
+	m_bTexture = bTexture;
+
 #pragma region VERTEX_BUFFER
 
 	HRESULT hr = pModel->Get_ModelType() == CModel::TYPE_NONANIM ? Ready_VertexBuffer_NonAnim(PreTransformMatrix, pAIMesh) : Ready_VertexBuffer_Anim(pModel, pAIMesh);
+	eType = pModel->Get_ModelType();
 	if (FAILED(hr))
 		return E_FAIL;
 
@@ -101,7 +104,7 @@ void CMesh::SaveModel(HANDLE hHandle, DWORD* byte)
 	WriteFile(hHandle, &m_iNumVertices, sizeof(_uint), byte, nullptr);
 	WriteFile(hHandle, &m_iNumIndices, sizeof(_uint), byte, nullptr);
 
-	if (eType = CModel::TYPE::TYPE_NONANIM)
+	if (eType == CModel::TYPE::TYPE_NONANIM)
 		Save_VertexBuffer_NonAnim(hHandle, byte);
 	else 
 		Save_VertexBuffer_Anim(hHandle, byte);
@@ -110,7 +113,7 @@ void CMesh::SaveModel(HANDLE hHandle, DWORD* byte)
 		WriteFile(hHandle, &m_iIndices_Origin[i], sizeof(_uint), byte, nullptr);
 }
 
-HRESULT CMesh::LoadModel(HANDLE hHandle, DWORD* byte, const CModel* pModel, _fmatrix PreTransformMatrix)
+HRESULT CMesh::LoadModel(HANDLE hHandle, DWORD* byte, const CModel* pModel, _fmatrix PreTransformMatrix, _bool bTexture)
 {
 	for (_uint i = 0; i < 260; ++i)
 		ReadFile(hHandle, &m_szName[i], sizeof(_char), byte, nullptr);
@@ -122,6 +125,8 @@ HRESULT CMesh::LoadModel(HANDLE hHandle, DWORD* byte, const CModel* pModel, _fma
 	m_iIndexStride = 4;
 	m_eIndexFormat = DXGI_FORMAT_R32_UINT;
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_bTexture = bTexture;
 
 #pragma region VERTEX_BUFFER
 
@@ -170,7 +175,10 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiM
 {
 	eType = CModel::TYPE::TYPE_NONANIM;
 
-	m_iVertexStride = sizeof(VTXMESH);
+	if (!m_bTexture)
+		m_iVertexStride = sizeof(VTXMESH_NONTEX);
+	else
+		m_iVertexStride = sizeof(VTXMESH);
 
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
@@ -181,10 +189,13 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiM
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
 	/* 정점버퍼에 채워줄 값들을 만들기위해서 임시적으로 공간을 할당한다. */
-	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
 
-	vecOrigin.resize(m_iNumVertices);
+	if (m_bTexture)
+	{
+		VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
+		ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
+
+		vecOrigin.resize(m_iNumVertices);
 
 		for (size_t i = 0; i < m_iNumVertices; i++)
 		{
@@ -198,18 +209,58 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiM
 
 			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
 			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
-			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y,};
+			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
 			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
 		}
 
-	ZeroMemory(&m_InitialData, sizeof m_InitialData);
-	m_InitialData.pSysMem = pVertices;
+		ZeroMemory(&m_InitialData, sizeof m_InitialData);
+		m_InitialData.pSysMem = pVertices;
 
-	/* 정점버퍼를 생성한다. */
-	if (FAILED(__super::Create_Buffer(&m_pVB)))
-		return E_FAIL;
+		/* 정점버퍼를 생성한다. */
+		if (FAILED(__super::Create_Buffer(&m_pVB)))
+			return E_FAIL;
 
-	Safe_Delete_Array(pVertices);
+		Safe_Delete_Array(pVertices);
+	}
+	else
+	{
+		VTXMESH_NONTEX* pVertices = new VTXMESH_NONTEX[m_iNumVertices];
+		ZeroMemory(pVertices, sizeof(VTXMESH_NONTEX) * m_iNumVertices);
+
+		vecOrigin.resize(m_iNumVertices);
+		vecOrigin_Color.resize(m_iNumVertices);
+
+		for (size_t i = 0; i < m_iNumVertices; i++)
+		{
+			memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
+			m_vecOriginPosition.push_back(pVertices[i].vPosition);
+			XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
+
+			memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
+			memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
+			memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+			//memcpy(&pVertices[i].vColor, &pAIMesh->mColors[0][i], sizeof(_float4));
+
+			pVertices[i].vColor = {1.f, 1.f,1.f ,1.f };
+
+			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
+			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
+			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
+			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
+			vecOrigin_Color[i] = { pVertices[i].vColor.x, pVertices[i].vColor.y,pVertices[i].vColor.z , pVertices[i].vColor.w };
+		}
+
+		ZeroMemory(&m_InitialData, sizeof m_InitialData);
+		m_InitialData.pSysMem = pVertices;
+
+		/* 정점버퍼를 생성한다. */
+		if (FAILED(__super::Create_Buffer(&m_pVB)))
+			return E_FAIL;
+
+		Safe_Delete_Array(pVertices);
+	}
+
+	
 
 	return S_OK;
 }
@@ -343,9 +394,10 @@ HRESULT CMesh::Save_VertexBuffer_NonAnim(HANDLE hHandle, DWORD* byte)
 		WriteFile(hHandle, &vecOrigin[i].vNormal, sizeof(_float3), byte, nullptr);
 		WriteFile(hHandle, &vecOrigin[i].vTexcoord, sizeof(_float2), byte, nullptr);
 		WriteFile(hHandle, &vecOrigin[i].vTangent, sizeof(_float3), byte, nullptr);
-	}
 
-	
+		if (!m_bTexture)
+			WriteFile(hHandle, &vecOrigin_Color[i], sizeof(_float4), byte, nullptr);
+	}
 
 	return S_OK;
 }
@@ -397,34 +449,73 @@ HRESULT CMesh::Load_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, HANDLE hHa
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
 	/* 정점버퍼에 채워줄 값들을 만들기위해서 임시적으로 공간을 할당한다. */
-	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
 
-	vecOrigin.resize(m_iNumVertices);
-
-	for (size_t i = 0; i < m_iNumVertices; i++)
+	if (m_bTexture)
 	{
-		ReadFile(hHandle, &pVertices[i].vPosition, sizeof(XMFLOAT3), byte, nullptr);
-		vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
-		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
+		VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
+		ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
 
-		ReadFile(hHandle, &pVertices[i].vNormal, sizeof(XMFLOAT3), byte, nullptr);
-		ReadFile(hHandle, &pVertices[i].vTexcoord, sizeof(XMFLOAT2), byte, nullptr);
-		ReadFile(hHandle, &pVertices[i].vTangent, sizeof(XMFLOAT3), byte, nullptr);
+		vecOrigin.resize(m_iNumVertices);
 
-		vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
-		vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
-		vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
+		for (size_t i = 0; i < m_iNumVertices; i++)
+		{
+			ReadFile(hHandle, &pVertices[i].vPosition, sizeof(XMFLOAT3), byte, nullptr);
+			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
+			XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
+
+			ReadFile(hHandle, &pVertices[i].vNormal, sizeof(XMFLOAT3), byte, nullptr);
+			ReadFile(hHandle, &pVertices[i].vTexcoord, sizeof(XMFLOAT2), byte, nullptr);
+			ReadFile(hHandle, &pVertices[i].vTangent, sizeof(XMFLOAT3), byte, nullptr);
+
+			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
+			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
+			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
+		}
+
+		ZeroMemory(&m_InitialData, sizeof m_InitialData);
+		m_InitialData.pSysMem = pVertices;
+
+		/* 정점버퍼를 생성한다. */
+		if (FAILED(__super::Create_Buffer(&m_pVB)))
+			return E_FAIL;
+
+		Safe_Delete_Array(pVertices);
 	}
+	else
+	{
+		VTXMESH_NONTEX* pVertices = new VTXMESH_NONTEX[m_iNumVertices];
+		ZeroMemory(pVertices, sizeof(VTXMESH_NONTEX) * m_iNumVertices);
 
-	ZeroMemory(&m_InitialData, sizeof m_InitialData);
-	m_InitialData.pSysMem = pVertices;
+		vecOrigin.resize(m_iNumVertices);
+		vecOrigin_Color.resize(m_iNumVertices);
 
-	/* 정점버퍼를 생성한다. */
-	if (FAILED(__super::Create_Buffer(&m_pVB)))
-		return E_FAIL;
+		for (size_t i = 0; i < m_iNumVertices; i++)
+		{
+			ReadFile(hHandle, &pVertices[i].vPosition, sizeof(XMFLOAT3), byte, nullptr);
+			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
+			XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
 
-	Safe_Delete_Array(pVertices);
+			ReadFile(hHandle, &pVertices[i].vNormal, sizeof(XMFLOAT3), byte, nullptr);
+			ReadFile(hHandle, &pVertices[i].vTexcoord, sizeof(XMFLOAT2), byte, nullptr);
+			ReadFile(hHandle, &pVertices[i].vTangent, sizeof(XMFLOAT3), byte, nullptr);
+			ReadFile(hHandle, &pVertices[i].vColor, sizeof(XMFLOAT4), byte, nullptr);
+
+			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
+			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
+			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
+			vecOrigin_Color[i] = { pVertices[i].vColor.x, pVertices[i].vColor.y,pVertices[i].vColor.z , pVertices[i].vColor.w };
+		}
+
+		ZeroMemory(&m_InitialData, sizeof m_InitialData);
+		m_InitialData.pSysMem = pVertices;
+
+		/* 정점버퍼를 생성한다. */
+		if (FAILED(__super::Create_Buffer(&m_pVB)))
+			return E_FAIL;
+
+		Safe_Delete_Array(pVertices);
+	}
+	
 
 	return S_OK;
 }
@@ -544,11 +635,11 @@ HRESULT CMesh::Load_VertexBuffer_Anim(const CModel* pModel, HANDLE hHandle, DWOR
 	return S_OK;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix, _bool bTexture)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pModel, pAIMesh, PreTransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(pModel, pAIMesh, PreTransformMatrix, bTexture)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);
@@ -557,11 +648,11 @@ CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const
 	return pInstance;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, HANDLE hHandle, DWORD* byte, _fmatrix PreTransformMatrix)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, HANDLE hHandle, DWORD* byte, _fmatrix PreTransformMatrix, _bool bTexture)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->LoadModel(hHandle, byte, pModel, PreTransformMatrix)))
+	if (FAILED(pInstance->LoadModel(hHandle, byte, pModel, PreTransformMatrix, bTexture)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);
@@ -599,4 +690,5 @@ void CMesh::Free()
 	m_vecWeight_Origin.clear();
 	Safe_Delete_Array(m_Vertices_Origin);
 	Safe_Delete_Array(m_Vertices_Origin_Anim);
+	vecOrigin_Color.clear();
 }

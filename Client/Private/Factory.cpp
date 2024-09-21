@@ -24,10 +24,15 @@ HRESULT CFactory::Setting_Program_Start()
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	/* For. Prototype_Component_Model_Player*/
-
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, TEXT("Prototype_Component_Model_Player"), "../Bin/Resources/Models/Player/Player", PreTransformMatrix)))
+	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Player"), "../Bin/Resources/Models/Player/Player", PreTransformMatrix)))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Shotgun*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Shotgun"), "../Bin/Resources/Models/Shotgun/Shotgun", PreTransformMatrix)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Prototype_Part()))
@@ -152,6 +157,10 @@ HRESULT CFactory::Ready_Prototype_Part()
 		CTool_Empty::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tool_ShotGun"),
+		CTool_ShotGun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -182,6 +191,10 @@ HRESULT CFactory::Ready_Prototype_Shader()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_NonTexture.hlsl"), VTXMESH_NONTEX::Elements, VTXMESH_NONTEX::iNumElements))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
@@ -199,6 +212,8 @@ HRESULT CFactory::Ready_Prototype_Shader()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxRectInstance"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxRectInstance.hlsl"), VTXRECTINSTANCE::Elements, VTXRECTINSTANCE::iNumElements))))
 		return E_FAIL;
+
+	
 
 	return S_OK;
 }
@@ -259,7 +274,7 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	return S_OK;
 }
 
-HRESULT CFactory::Ready_Prototype_Model(CModel::TYPE eType, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix)
+HRESULT CFactory::Ready_Prototype_Model(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix)
 {
 	string strType = ".dat";
 	string strTemp = {};
@@ -273,12 +288,12 @@ HRESULT CFactory::Ready_Prototype_Model(CModel::TYPE eType, const _wstring strTa
 
 	string strPath = strTemp + strType;
 
-	CModel* pNew = CModel::Create(m_pDevice, m_pContext, eType, strPath.c_str(), PreTransformMatrix, true);
+	CModel* pNew = CModel::Create(m_pDevice, m_pContext, eType, bTexture, strPath.c_str(), PreTransformMatrix, true);
 	if (pNew == nullptr)
 	{
 		strType = ".fbx";
 		strPath = strTemp + strType;
-		pNew = CModel::Create(m_pDevice, m_pContext, eType, strPath.c_str(), PreTransformMatrix);
+		pNew = CModel::Create(m_pDevice, m_pContext, eType, bTexture, strPath.c_str(), PreTransformMatrix);
 
 		m_ModelPrototypelist.push_back(pNew);
 		if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), strTag, pNew)))

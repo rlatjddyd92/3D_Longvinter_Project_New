@@ -20,6 +20,8 @@ public:
 		PART_ARM_RIGHT, // MCH-upper_arm_parent_socket_R
 		PART_LEG_LEFT, // MCH-thigh_parent_socket_L
 		PART_LEG_RIGHT, //MCH-thigh_parent_socket_R
+		PART_HAND_LEFT, // Hand_Left
+		PART_HAND_RIGHT, // Hand_Right
 		PART_END
 	};
 	enum STATE {

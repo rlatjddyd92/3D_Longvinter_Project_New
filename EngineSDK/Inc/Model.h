@@ -32,12 +32,12 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool bIsLoad = false);
+	virtual HRESULT Initialize_Prototype(TYPE eType, _bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool bIsLoad = false);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 
 	void SaveModel(const _char* pModelFilePath);
-	HRESULT LoadModel(const _char* pModelFilePath, TYPE eType, _fmatrix PreTransformMatrix);
+	HRESULT LoadModel(const _char* pModelFilePath, TYPE eType, _bool bTexture, _fmatrix PreTransformMatrix);
 
 public:
 	void SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false)
@@ -88,13 +88,13 @@ private:
 	_float							m_fAnimSpeed = 1.f; // <- 애니메이션 속도 조절 (1은 정상속도 0에 가까울 수록 느려지며 0이되면 재생 안됨, 아마 음수 넣으면 반대로 움직일 듯) 
 
 public:
-	HRESULT	Ready_Meshes();
+	HRESULT	Ready_Meshes(_bool bTexture);
 	HRESULT Ready_Materials(const _char* pModelFilePath);
 	HRESULT Ready_Bones(const aiNode* pAIBone, _int iParentBoneIndex);
 	HRESULT Ready_Animations();
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool bIsLoad = false);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType,_bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool bIsLoad = false);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };
