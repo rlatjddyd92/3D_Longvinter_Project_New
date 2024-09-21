@@ -50,6 +50,7 @@ HRESULT CItemManager::Setting_ItemInfo()
 {
 	m_vecItemInfo.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecInvenInfo.resize(INVEN_COL * INVEN_ROW);
+	m_vecEquipInfo.resize(5);
 	m_vecItemInvenTexture.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecTool.resize(_int(ITEMINDEX::ITEM_END));
 
@@ -165,6 +166,7 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 				if (iter.eIndex == m_tPickedItem.eIndex)
 				{
 					iter.iCount += m_tPickedItem.iCount;
+					CancelPick();
 					bPlus = true;
 					break;
 				}
@@ -172,17 +174,46 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 			
 		if ((!m_tPickedItem.bStack) || (!bPlus))
 		{
-			m_vecInvenInfo[iIndex] = m_tPickedItem;
+			TINFO tTemp = m_tPickedItem;
+			_int iBefore = m_iBeforeIndex;
+			ITEMARRAY eBefore = m_eBeforeArray;
 			PickItem(eArray, iIndex);
+
+			if (eBefore == ITEMARRAY::ARRAY_INVEN)
+				if (m_vecInvenInfo[iBefore].bPicked)
+					m_vecInvenInfo[iBefore].eIndex = ITEMINDEX::ITEM_END;
+
+			if (eBefore == ITEMARRAY::ARRAY_EQUIP)
+				if (m_vecEquipInfo[iBefore].bPicked)
+					m_vecEquipInfo[iBefore].eIndex = ITEMINDEX::ITEM_END;
+
+			m_vecInvenInfo[iIndex] = tTemp;
+			m_vecInvenInfo[iIndex].bPicked = false;
 		}
 	}
 	if (eArray == ITEMARRAY::ARRAY_EQUIP)
 	{
 		if (!m_tPickedItem.bIsTool)
+		{
 			CancelPick();
+			return E_FAIL;
+		}
+			
 
-		m_vecEquipInfo[iIndex] = m_tPickedItem;
+		TINFO tTemp = m_tPickedItem;
+		_int iBefore = m_iBeforeIndex;
+		ITEMARRAY eBefore = m_eBeforeArray;
 		PickItem(eArray, iIndex);
+
+		if (eBefore == ITEMARRAY::ARRAY_INVEN)
+			if (m_vecInvenInfo[iBefore].bPicked)
+				m_vecInvenInfo[iBefore].eIndex = ITEMINDEX::ITEM_END;
+
+		if (eBefore == ITEMARRAY::ARRAY_EQUIP)
+			if (m_vecEquipInfo[iBefore].bPicked)
+				m_vecEquipInfo[iBefore].eIndex = ITEMINDEX::ITEM_END;
+		m_vecEquipInfo[iIndex] = tTemp;
+		m_vecEquipInfo[iIndex].bPicked = false;
 	}
 
 

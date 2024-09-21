@@ -41,7 +41,7 @@ HRESULT CUIPage_Equip::Initialize(void* pArg)
 	m_fX = 400.f;
 	m_fY = 300.f;
 
-	m_fSizeX = 500.f;
+	m_fSizeX = 200.f;
 	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(5)) + 60.f;
 
 	__super::SetOff(true);
@@ -69,12 +69,14 @@ void CUIPage_Equip::Late_Update(_float fTimeDelta)
 {
 	for (_int i = 0; i < 5; ++i)
 	{
-		CItemManager::TINFO tInfo = GET_INSTANCE->GetInvenInfo(i);
+		CItemManager::TINFO tInfo = GET_INSTANCE->GetEquipInfo(i);
 
 		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
 			m_vecEquipCell[i]->Empty_Cell();
 		else
 			m_vecEquipCell[i]->Input_Item(_int(tInfo.eIndex));
+
+		m_vecEquipCell[i]->Set_Picked(tInfo.bPicked);
 	}
 
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
@@ -115,23 +117,15 @@ void CUIPage_Equip::Ready_UIPart()
 
 _bool CUIPage_Equip::Key_Action()
 {
-
 	if (m_pButton_Close->IsPushed())
 		__super::SetOff(true);
 
-	_int Check = 0;
-
-	Check += m_pButton_Close->IsPushed();
-	Check += m_pBack_Window->IsPushed();
-	Check += m_pBack_Window_Header->IsPushed();
-	for (auto& iter : m_vecEquipCell)
-		Check += iter->IsPushed();
-
-	if (Check == 0)
-		return false;
+	_bool Check = false;
 
 	if ((m_pBack_Window_Header->IsPushed()) && (!m_pBack_Window_Header->IsPressing()))
 	{
+		Check = true;
+
 		m_bMoving = true;
 		POINT			ptMouse{};
 		GetCursorPos(&ptMouse);
@@ -139,8 +133,10 @@ _bool CUIPage_Equip::Key_Action()
 		m_fBeforeX = ptMouse.x;
 		m_fBeforeY = ptMouse.y;
 	}
-	if ((m_bMoving) && (m_pBack_Window_Header->IsPressing()))
+	else if ((m_bMoving) && (m_pBack_Window_Header->IsPressing()))
 	{
+		Check = true;
+
 		POINT			ptMouse{};
 		GetCursorPos(&ptMouse);
 
@@ -157,8 +153,35 @@ _bool CUIPage_Equip::Key_Action()
 		for (auto& iter : m_vecEquipCell)
 			iter->Move_UI(fMovingX, fMovingY);
 	}
+	else
+	{
+		_bool bInput = false;
 
-	return true;
+		if (GET_INSTANCE->GetPickedItemIndex() != ITEMINDEX::ITEM_END)
+			bInput = true;
+
+
+		for (_int i = 0; i < 5; ++i)
+			if (m_vecEquipCell[i]->IsPushed())
+			{
+				Check = true;
+
+				if (bInput)
+				{
+					GET_INSTANCE->PutInItem(CItemManager::ARRAY_EQUIP, i);
+				}
+				else
+				{
+					GET_INSTANCE->PickItem(CItemManager::ARRAY_EQUIP, i);
+					m_vecEquipCell[i]->Set_Picked(true);
+				}
+
+				break;
+			}
+	}
+
+
+	return Check;
 }
 
 
