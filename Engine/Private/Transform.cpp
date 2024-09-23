@@ -193,8 +193,21 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
 
-void CTransform::Rotation(_float fX, _float fY, _float fZ, _float fRadian)
+void CTransform::Rotation(_float fX, _float fY, _float fZ)
 {
+	_float3		vScaled = Get_Scaled();
+
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScaled.x;
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScaled.y;
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScaled.z;
+
+	XMVECTOR	vAngle = { fX , fY,fZ, 0.f };
+
+	_matrix		RotationMatrix = XMMatrixRotationRollPitchYawFromVector(vAngle);
+
+	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
+	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
+	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, void * pArg)

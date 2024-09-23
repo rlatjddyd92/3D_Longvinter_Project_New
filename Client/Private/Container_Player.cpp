@@ -103,10 +103,10 @@ void CContainer_Player::Update(_float fTimeDelta)
 
 	
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 		++m_iState;
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_6) & 0x80)
 		m_iState = 0;
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_F) & 0x80)

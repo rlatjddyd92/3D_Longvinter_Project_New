@@ -39,11 +39,15 @@ HRESULT CTool_ShotGun::Initialize(void* pArg)
 
 	m_pTransformCom->Set_RotationPerSec(1.f);
 
+	//m_pTransformCom->Rotation({ false,true,false }, XMConvertToRadians(180.f));
+	
+
 	return S_OK;
 }
 
 void CTool_ShotGun::Priority_Update(_float fTimeDelta)
 {
+	m_pTransformCom->Rotation(14.6963120f, 30.0189304f, 7.91829014f);
 	int a = 10;
 }
 
@@ -55,6 +59,46 @@ void CTool_ShotGun::Update(_float fTimeDelta)
 	{
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_X, true))
+	{
+		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
+			m_fTest_X -= fTimeDelta * 5.f;
+		else
+			m_fTest_X += fTimeDelta * 5.f;
+		if (m_fTest_X >= 360.f)
+			m_fTest_X = 0;
+	}
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_Y, true))
+		{
+			if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
+				m_fTest_Y -= fTimeDelta * 5.f;
+			else
+				m_fTest_Y += fTimeDelta * 5.f;
+			if (m_fTest_Y >= 360.f)
+				m_fTest_Y = 0;
+		}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_Z, true))
+			{
+				if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
+					m_fTest_Z -= fTimeDelta * 5.f;
+				else
+					m_fTest_Z += fTimeDelta * 5.f;
+				if (m_fTest_Z >= 360.f)
+					m_fTest_Z = 0;
+			}
+	
+
+	
+			//m_pTransformCom->Rotation(m_fTest_X, m_fTest_Y, m_fTest_Z);
+	
+
+	
+
+
+
 
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
