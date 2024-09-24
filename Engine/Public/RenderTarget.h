@@ -19,6 +19,7 @@ public:
 	HRESULT Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 	void Clear();
+	HRESULT Copy(ID3D11Texture2D* pTexture);
 
 #ifdef _DEBUG
 public:
@@ -29,11 +30,11 @@ public:
 
 
 private:
-	ID3D11Device*				m_pDevice = { nullptr };
-	ID3D11DeviceContext*		m_pContext = { nullptr };
-	ID3D11Texture2D*			m_pTexture2D = { nullptr };
-	ID3D11RenderTargetView*		m_pRTV = { nullptr };
-	ID3D11ShaderResourceView*	m_pSRV = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+	ID3D11Texture2D* m_pTexture2D = { nullptr };
+	ID3D11RenderTargetView* m_pRTV = { nullptr };
+	ID3D11ShaderResourceView* m_pSRV = { nullptr };
 	_float4						m_vClearColor = {};
 
 #ifdef _DEBUG

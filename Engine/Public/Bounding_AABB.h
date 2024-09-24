@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bounding.h"
+#include "DebugDraw.h"
 
 BEGIN(Engine)
 
@@ -16,11 +17,21 @@ private:
 	virtual ~CBounding_AABB() = default;
 
 public:
+	const BoundingBox* Get_Desc() const {
+		return m_pBoundingDesc;
+	}
+
+public:
 	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc) override;
 	virtual void Update(_fmatrix WorldMatrix) override;
 	virtual HRESULT Render(PrimitiveBatch<VertexPositionColor>* pBatch) override;
 
+public:
+	virtual _bool Intersect(CCollider::TYPE eColliderType, CBounding* pBounding) override;
 
+private:
+	BoundingBox* m_pOriginalBoundingDesc = { nullptr };
+	BoundingBox* m_pBoundingDesc = { nullptr };
 
 
 

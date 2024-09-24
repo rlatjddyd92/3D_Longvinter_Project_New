@@ -1,5 +1,8 @@
 #include "..\Public\Bounding_AABB.h"
 
+#include "Bounding_OBB.h"
+#include "Bounding_Sphere.h"
+
 CBounding_AABB::CBounding_AABB(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CBounding { pDevice, pContext }
 {
@@ -36,6 +39,28 @@ HRESULT CBounding_AABB::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 	return S_OK;
 }
 
+_bool CBounding_AABB::Intersect(CCollider::TYPE eColliderType, CBounding* pBounding)
+{
+	m_isColl = false;
+
+	switch (eColliderType)
+	{
+	case CCollider::TYPE_AABB:
+		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_AABB*>(pBounding)->Get_Desc()));
+		break;
+
+	case CCollider::TYPE_OBB:
+		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_OBB*>(pBounding)->Get_Desc()));
+		break;
+
+	case CCollider::TYPE_SPHERE:
+		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_Sphere*>(pBounding)->Get_Desc()));
+		break;
+	}
+
+	return m_isColl;
+}
+
 CBounding_AABB * CBounding_AABB::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, CBounding::BOUNDING_DESC * pBoundingDesc)
 {
 	CBounding_AABB*		pInstance = new CBounding_AABB(pDevice, pContext);
@@ -53,5 +78,6 @@ void CBounding_AABB::Free()
 {
 	__super::Free();
 
-
+	Safe_Delete(m_pBoundingDesc);
+	Safe_Delete(m_pOriginalBoundingDesc);
 }

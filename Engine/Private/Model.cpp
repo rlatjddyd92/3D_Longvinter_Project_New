@@ -21,7 +21,9 @@ CModel::CModel(const CModel& Prototype)
 	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
 	, m_iCurrentAnimIndex{ Prototype.m_iCurrentAnimIndex }
 	, m_iNumAnimations{ Prototype.m_iNumAnimations }
-	// , m_Animations { Prototype.m_Animations }
+	//, m_Animations { Prototype.m_Animations }
+	, m_CurrentTrackPosition{ Prototype.m_CurrentTrackPosition }
+	, m_KeyFrameIndices{ Prototype.m_KeyFrameIndices }
 {
 
 	for (auto& pPrototypeAnimation : Prototype.m_Animations)

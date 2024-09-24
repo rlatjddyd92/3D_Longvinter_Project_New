@@ -3,15 +3,15 @@
 #include "Shader.h"
 #include "VIBuffer_Rect.h"
 
-CRenderTarget::CRenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: m_pDevice { pDevice }
-	, m_pContext { pContext }
+CRenderTarget::CRenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: m_pDevice{ pDevice }
+	, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
 }
 
-HRESULT CRenderTarget::Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor)
+HRESULT CRenderTarget::Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
 {
 	m_vClearColor = vClearColor;
 
@@ -46,7 +46,7 @@ HRESULT CRenderTarget::Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixe
 	return S_OK;
 }
 
-HRESULT CRenderTarget::Bind_ShaderResource(CShader * pShader, const _char * pConstantName)
+HRESULT CRenderTarget::Bind_ShaderResource(CShader* pShader, const _char* pConstantName)
 {
 	return pShader->Bind_SRV(pConstantName, m_pSRV);
 }
@@ -56,13 +56,20 @@ void CRenderTarget::Clear()
 	m_pContext->ClearRenderTargetView(m_pRTV, (_float*)&m_vClearColor);
 }
 
+HRESULT CRenderTarget::Copy(ID3D11Texture2D* pTexture)
+{
+	m_pContext->CopyResource(pTexture, m_pTexture2D);
+
+	return S_OK;
+}
+
 #ifdef _DEBUG
 
 HRESULT CRenderTarget::Initialize_Debug(_float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	_uint		iNumViewport = { 1 };
 	D3D11_VIEWPORT		ViewportDesc{};
-	
+
 	m_pContext->RSGetViewports(&iNumViewport, &ViewportDesc);
 
 	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
@@ -76,7 +83,7 @@ HRESULT CRenderTarget::Initialize_Debug(_float fX, _float fY, _float fSizeX, _fl
 	return S_OK;
 }
 
-HRESULT CRenderTarget::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CRenderTarget::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
 	if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -95,9 +102,9 @@ HRESULT CRenderTarget::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 
 #endif
 
-CRenderTarget * CRenderTarget::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
+CRenderTarget* CRenderTarget::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
 {
-	CRenderTarget*		pInstance = new CRenderTarget(pDevice, pContext);
+	CRenderTarget* pInstance = new CRenderTarget(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize(iWidth, iHeight, ePixelFormat, vClearColor)))
 	{
@@ -110,7 +117,7 @@ CRenderTarget * CRenderTarget::Create(ID3D11Device * pDevice, ID3D11DeviceContex
 
 void CRenderTarget::Free()
 {
-	__super::Free();	
+	__super::Free();
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

@@ -5,12 +5,12 @@ CLight_Manager::CLight_Manager()
 {
 }
 
-const LIGHT_DESC * CLight_Manager::Get_LightDesc(_uint iIndex) const
+const LIGHT_DESC* CLight_Manager::Get_LightDesc(_uint iIndex) const
 {
 	auto	iter = m_Lights.begin();
 
 	for (size_t i = 0; i < iIndex; i++)
-		++iter;	
+		++iter;
 
 	return (*iter)->Get_LightDesc();
 }
@@ -21,9 +21,9 @@ HRESULT CLight_Manager::Initialize()
 	return S_OK;
 }
 
-HRESULT CLight_Manager::Add_Light(const LIGHT_DESC & LightDesc)
+HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
 {
-	CLight*		pLight = CLight::Create(LightDesc);
+	CLight* pLight = CLight::Create(LightDesc);
 	if (nullptr == pLight)
 		return E_FAIL;
 
@@ -32,7 +32,7 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC & LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight_Manager::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CLight_Manager::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
 	for (auto& pLight : m_Lights)
 		pLight->Render(pShader, pVIBuffer);
@@ -40,9 +40,9 @@ HRESULT CLight_Manager::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 	return S_OK;
 }
 
-CLight_Manager * CLight_Manager::Create()
+CLight_Manager* CLight_Manager::Create()
 {
-	CLight_Manager*		pInstance = new CLight_Manager();
+	CLight_Manager* pInstance = new CLight_Manager();
 
 	if (FAILED(pInstance->Initialize()))
 	{
@@ -61,5 +61,5 @@ void CLight_Manager::Free()
 	for (auto& pLight : m_Lights)
 		Safe_Release(pLight);
 
-	m_Lights.clear();	
+	m_Lights.clear();
 }

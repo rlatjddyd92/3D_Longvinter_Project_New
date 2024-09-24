@@ -2,6 +2,7 @@
 
 #include "Base.h"
 #include "DebugDraw.h"
+#include "Collider.h"
 
 BEGIN(Engine)
 
@@ -22,6 +23,9 @@ public:
 	virtual HRESULT Render(PrimitiveBatch<VertexPositionColor>* pBatch);
 
 public:
+	virtual _bool Intersect(CCollider::TYPE eColliderType, CBounding* pBounding) = 0;
+
+public:
 	_float3 GetBoundingCenter()
 	{
 		if (m_pBoundingDesc_AABB)
@@ -37,6 +41,17 @@ public:
 			return m_pBoundingDesc_AABB->Extents;
 		else if (m_pBoundingDesc_OBB)
 			return m_pBoundingDesc_OBB->Extents;
+		else if (m_pBoundingDesc_Sphere)
+		{
+			XMFLOAT3 tResult{};
+			_float fRadius = GetBoundingRadius_Sphere();
+
+			tResult.x = fRadius;
+			tResult.y = fRadius;
+			tResult.z = fRadius;
+
+			return tResult;
+		}
 	}
 	_float GetBoundingRadius_Sphere() { return m_pBoundingDesc_Sphere->Radius; }
 

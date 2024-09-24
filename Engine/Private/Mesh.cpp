@@ -200,14 +200,14 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiM
 		for (size_t i = 0; i < m_iNumVertices; i++)
 		{
 			memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
-			m_vecOriginPosition.push_back(pVertices[i].vPosition);
+			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
 			XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
 
 			memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
 			memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 			memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
 
-			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
+			
 			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
 			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
 			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };
@@ -233,17 +233,17 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiM
 		for (size_t i = 0; i < m_iNumVertices; i++)
 		{
 			memcpy(&pVertices[i].vPosition, &pAIMesh->mVertices[i], sizeof(_float3));
-			m_vecOriginPosition.push_back(pVertices[i].vPosition);
+			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
 			XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PreTransformMatrix));
 
 			memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
 			memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 			memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
-			//memcpy(&pVertices[i].vColor, &pAIMesh->mColors[0][i], sizeof(_float4));
+			memcpy(&pVertices[i].vColor, &pAIMesh->mColors[0][i], sizeof(_float4));
 
-			pVertices[i].vColor = {1.f, 1.f,1.f ,1.f };
+			//pVertices[i].vColor = {1.f, 1.f,1.f ,1.f };
 
-			vecOrigin[i].vPosition = { pVertices[i].vPosition.x, pVertices[i].vPosition.y,pVertices[i].vPosition.z };
+			
 			vecOrigin[i].vNormal = { pVertices[i].vNormal.x, pVertices[i].vNormal.y,pVertices[i].vNormal.z };
 			vecOrigin[i].vTexcoord = { pVertices[i].vTexcoord.x, pVertices[i].vTexcoord.y, };
 			vecOrigin[i].vTangent = { pVertices[i].vTangent.x, pVertices[i].vTangent.y,pVertices[i].vTangent.z };

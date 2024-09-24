@@ -87,6 +87,13 @@ private:
 	vector<class CAnimation*>		m_Animations;
 	_float							m_fAnimSpeed = 1.f; // <- 애니메이션 속도 조절 (1은 정상속도 0에 가까울 수록 느려지며 0이되면 재생 안됨, 아마 음수 넣으면 반대로 움직일 듯) 
 
+	/* 현재 애니메이션의 재생 위치. */
+	_double							m_CurrentTrackPosition = {};
+	// _double							m_CurrentTrackPosition = {};
+
+	/* 각 애니메이션당 각 채널들의 현재 키프레임인덱스 */
+	vector<vector<_uint>>			m_KeyFrameIndices;
+
 public:
 	HRESULT	Ready_Meshes(_bool bTexture);
 	HRESULT Ready_Materials(const _char* pModelFilePath);

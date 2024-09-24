@@ -255,6 +255,12 @@ HRESULT CGameInstance::Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, C
 {
 	return m_pRenderer->Add_RenderObject(eRenderGroupID, pRenderObject);
 }
+#ifdef _DEBUG
+HRESULT CGameInstance::Add_DebugObject(CComponent* pDebugObject)
+{
+	return m_pRenderer->Add_DebugObject(pDebugObject);
+}
+#endif
 #pragma endregion
 
 #pragma region PIPELINE
@@ -340,6 +346,11 @@ HRESULT CGameInstance::End_MRT()
 HRESULT CGameInstance::Bind_RT_ShaderResource(CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName)
 {
 	return m_pTarget_Manager->Bind_ShaderResource(pShader, strTargetTag, pConstantName);
+}
+
+HRESULT CGameInstance::Copy_RenderTarget(const _wstring& strTargetTag, ID3D11Texture2D* pTexture)
+{
+	return m_pTarget_Manager->Copy_RenderTarget(strTargetTag, pTexture);
 }
 
 #ifdef _DEBUG

@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include "Bounding_AABB.h"
-#include "Bounding_OBB.h"
-#include "Bounding_Sphere.h"
 
 BEGIN(Engine)
 
@@ -23,9 +20,9 @@ public:
 	virtual HRESULT Render();
 
 public:
-	_float3 GetBoundingCenter() { return m_pBounding->GetBoundingCenter(); }
-	_float3 GetBoundingExtents() { return m_pBounding->GetBoundingExtents(); }
-	_float GetBoundingRadius_Sphere() { return m_pBounding->GetBoundingRadius_Sphere(); }
+	_float3 GetBoundingCenter(); //{ return m_pBounding->GetBoundingCenter(); }
+	_float3 GetBoundingExtents(); //{ return m_pBounding->GetBoundingExtents(); }
+	_float GetBoundingRadius_Sphere(); //{ return m_pBounding->GetBoundingRadius_Sphere(); }
 
 private:
 	class CBounding*				m_pBounding = { nullptr };
