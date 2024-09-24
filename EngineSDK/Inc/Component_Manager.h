@@ -1,15 +1,21 @@
 #pragma once
 
 
+#include "VIBuffer_Point_Instance.h"
+#include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Terrain.h"
 #include "VIBuffer_Rect.h"
-#include "VIBuffer_Rect3D.h"
-//#include "VIBuffer_Cube.h"
-//#include "Transform.h"
+#include "VIBuffer_Cube.h"
+//#include "Navigation.h"
+#include "Collider.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Model.h"
-#include "Collider.h"
+
+
+#include "Bounding_AABB.h"
+#include "Bounding_OBB.h"
+#include "Bounding_Sphere.h"
 
 
 /* 컴포넌트의 원형을 레벨별로 보관한다. */

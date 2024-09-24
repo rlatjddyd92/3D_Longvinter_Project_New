@@ -9,7 +9,7 @@ class ENGINE_DLL CTransform final : public CComponent
 public:
 	typedef struct
 	{
-		_float		fSpeedPerSec{}, fRotationPerSec{ };
+		_float		fSpeedPerSec{30.f}, fRotationPerSec{30.f};
 		_float3		fRight{ -1,-1,-1 };
 		_float3		fUp{ -1,-1,-1 };
 		_float3		fLook{ -1,-1,-1 };
@@ -63,18 +63,16 @@ public:
 public:
 	void Set_Scaled(_float fX, _float fY, _float fZ);
 	void LookAt(_fvector vAt);
-	void Go_Straight(_float fTimeDelta);
-	void Go_Backward(_float fTimeDelta);
-	void Go_Left(_float fTimeDelta);
-	void Go_Right(_float fTimeDelta);
+	void Go_Straight(_float fTimeDelta, _bool bHorizonal = false);
+	void Go_Backward(_float fTimeDelta, _bool bHorizonal = false);
+	void Go_Left(_float fTimeDelta, _bool bHorizonal = false);
+	void Go_Right(_float fTimeDelta, _bool bHorizonal = false);
 	void Go_Up(_float fTimeDelta);
 	void Go_Down(_float fTimeDelta);
 	void Turn(_fvector vAxis, _float fTimeDelta);	
 	void Turn(_bool isRotationX, _bool isRotationY, _bool isRotationZ, _float fTimeDelta);
 	void Rotation(_fvector vAxis, _float fRadian);
-	void Rotation(_float fX, _float fY, _float fZ, _float fRadian);
-
-
+	void Rotation(_float fX, _float fY, _float fZ);
 
 public: // Physics
 	void Save_BeforePosition() 
@@ -101,6 +99,8 @@ public: // Physics
 	void Set_Pushed_Power(_float3 Dir, _float Power) { m_tPhysics.fPushedDirection = Dir; m_tPhysics.fPushedPower = Power; }
 	void Set_Pushed_PowerDecrease(_float Power) { m_tPhysics.fPushedPowerDecrease = Power; }
 
+	void Set_RotationPerSec(_float fSpeed) { m_fRotationPerSec = fSpeed; }
+	void Set_SpeedPerSec(_float fSpeed) { m_fSpeedPerSec = fSpeed; }
 	
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);

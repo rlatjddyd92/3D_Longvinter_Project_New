@@ -57,14 +57,14 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype(const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix, _bool bTexture);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	HRESULT Bind_BoneMatrices(const CModel* pModel, class CShader* pShader, const _char* pConstantName);
 
 	void SaveModel(HANDLE hHandle, DWORD* byte);
-	HRESULT LoadModel(HANDLE hHandle, DWORD* byte, const CModel* pModel, _fmatrix PreTransformMatrix);
+	HRESULT LoadModel(HANDLE hHandle, DWORD* byte, const CModel* pModel, _fmatrix PreTransformMatrix, _bool bTexture);
 
 private:
 	_char				m_szName[MAX_PATH] = {};
@@ -97,9 +97,10 @@ private:
 	VTXANIMMESH* m_Vertices_Origin_Anim = { nullptr };
 
 	vector<Vertices_Origin> vecOrigin;
+	vector<_float4> vecOrigin_Color;
 
 	CModel::TYPE eType = CModel::TYPE::TYPE_END;
-
+	_bool m_bTexture = true; 
 
 private:
 	HRESULT	Ready_VertexBuffer_NonAnim(_fmatrix PreTransformMatrix, const aiMesh* pAIMesh);
@@ -112,8 +113,8 @@ private:
 	HRESULT	Load_VertexBuffer_Anim(const CModel* pModel, HANDLE hHandle, DWORD* byte);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix);
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, HANDLE hHandle, DWORD* byte, _fmatrix PreTransformMatrix);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, const aiMesh* pAIMesh, _fmatrix PreTransformMatrix, _bool bTexture);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CModel* pModel, HANDLE hHandle, DWORD* byte, _fmatrix PreTransformMatrix, _bool bTexture);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

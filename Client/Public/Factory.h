@@ -27,7 +27,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	void Save_Prototype_Model_Data(); // <- Model을 Data 파일로 저장 
 #pragma endregion
 #pragma region Model_Load
-	HRESULT Ready_Prototype_Model(CModel::TYPE eType, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
+	HRESULT Ready_Prototype_Model(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 #pragma endregion
 
 

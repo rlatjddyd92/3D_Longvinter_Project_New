@@ -21,7 +21,9 @@ CModel::CModel(const CModel& Prototype)
 	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
 	, m_iCurrentAnimIndex{ Prototype.m_iCurrentAnimIndex }
 	, m_iNumAnimations{ Prototype.m_iNumAnimations }
-	// , m_Animations { Prototype.m_Animations }
+	//, m_Animations { Prototype.m_Animations }
+	, m_CurrentTrackPosition{ Prototype.m_CurrentTrackPosition }
+	, m_KeyFrameIndices{ Prototype.m_KeyFrameIndices }
 {
 
 	for (auto& pPrototypeAnimation : Prototype.m_Animations)
@@ -61,14 +63,14 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool bIsLoad)
+HRESULT CModel::Initialize_Prototype(TYPE eType, _bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool bIsLoad)
 {
 
 	
 
 	if (bIsLoad == true)
 	{
-		if (FAILED(LoadModel(pModelFilePath, eType, PreTransformMatrix)))
+		if (FAILED(LoadModel(pModelFilePath, eType, bTexture, PreTransformMatrix)))
 			return E_FAIL;
 
 		return S_OK;
@@ -99,7 +101,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 	if (FAILED(Ready_Bones(m_pAIScene->mRootNode, -1)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Meshes()))
+	if (FAILED(Ready_Meshes(bTexture)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Materials(pModelFilePath)))
@@ -172,7 +174,7 @@ void CModel::SaveModel(const _char* pModelFilePath)
 	CloseHandle(hFile);
 }
 
-HRESULT CModel::LoadModel(const _char* pModelFilePath, TYPE eType, _fmatrix PreTransformMatrix)
+HRESULT CModel::LoadModel(const _char* pModelFilePath, TYPE eType, _bool bTexture, _fmatrix PreTransformMatrix)
 {
 	string fileName = pModelFilePath;
 	WCHAR* TempName = new WCHAR[fileName.size() + 1];
@@ -196,7 +198,7 @@ HRESULT CModel::LoadModel(const _char* pModelFilePath, TYPE eType, _fmatrix PreT
 	ReadFile(hFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 	for (_int i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, hFile, &dwByte, XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, hFile, &dwByte, XMLoadFloat4x4(&m_PreTransformMatrix), bTexture);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -281,13 +283,13 @@ HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantNa
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Meshes()
+HRESULT CModel::Ready_Meshes(_bool bTexture)
 {
 	m_iNumMeshes = m_pAIScene->mNumMeshes;
 
 	for (size_t i = 0; i < m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, this, m_pAIScene->mMeshes[i], XMLoadFloat4x4(&m_PreTransformMatrix), bTexture);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -388,11 +390,11 @@ HRESULT CModel::Ready_Animations()
 }
 
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool IsLoad)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, _bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool IsLoad)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, IsLoad)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, bTexture, pModelFilePath, PreTransformMatrix, IsLoad)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);

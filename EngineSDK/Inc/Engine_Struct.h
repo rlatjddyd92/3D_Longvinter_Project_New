@@ -48,6 +48,15 @@ namespace Engine
 	typedef struct ENGINE_DLL
 	{
 		XMFLOAT3		vPosition;
+		XMFLOAT2		vPSize;
+
+		static const unsigned int	iNumElements = 2;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXPOINT;
+
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
 		XMFLOAT2		vTexcoord;
 
 		static const unsigned int	iNumElements = 2;
@@ -90,6 +99,18 @@ namespace Engine
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexcoord;
 		XMFLOAT3		vTangent;
+		XMFLOAT4		vColor;
+
+		static const unsigned int	iNumElements = 5;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXMESH_NONTEX;
+
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
 		XMUINT4			vBlendIndices; /* 이 정점은 어떤 뼈(최대 4개 뼈의 인덱스)의 상태를 따라가야하는가? */
 		XMFLOAT4		vBlendWeights; /* 위에서 정의한 네개의 뼈가 이 정점에게 각각 몇 퍼센트(0.f ~ 1.f)나 영향을 주는지? */
 
@@ -109,9 +130,27 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
-		static const unsigned int	iNumElements = 6;
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vTranslation;
+		XMFLOAT2		vLifeTime;
+
+		static const unsigned int	iNumElements = 7;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+
 	}VTXRECTINSTANCE;
 
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vTranslation;
+		XMFLOAT2		vLifeTime;
 
+		static const unsigned int	iNumElements = 7;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+
+	}VTXPOINTINSTANCE;
 }

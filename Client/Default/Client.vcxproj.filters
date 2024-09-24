@@ -160,6 +160,9 @@
     <Filter Include="02.ClientInstance\09.ItemManager">
       <UniqueIdentifier>{b625aefd-3a0c-4cdf-8d3e-b067b6745f09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.Defines\00.Factory\01.Part">
+      <UniqueIdentifier>{5605e5f2-14da-4fee-a04b-2469e358809f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -236,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Level_Editor.h">
       <Filter>01.Levels\03.Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Part.h">
-      <Filter>99.Defines\00.Factory</Filter>
     </ClInclude>
     <ClInclude Include="Factory_Header.h">
       <Filter>99.Defines\00.Factory</Filter>
@@ -326,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="Enum_Item.h">
       <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory_Enum_Part.h">
+      <Filter>99.Defines\00.Factory\01.Part</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -482,6 +485,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader_VtxModel_NonTexture.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -94,6 +94,21 @@ HRESULT CCollider::Render()
 	return S_OK;
 }
 
+_float3 CCollider::GetBoundingCenter()
+{
+	return m_pBounding->GetBoundingCenter();
+}
+
+_float3 CCollider::GetBoundingExtents()
+{
+	return m_pBounding->GetBoundingExtents();
+}
+
+_float CCollider::GetBoundingRadius_Sphere()
+{
+	return m_pBounding->GetBoundingRadius_Sphere();
+}
+
 CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eColliderType)
 {
 	CCollider*		pInstance = new CCollider(pDevice, pContext);

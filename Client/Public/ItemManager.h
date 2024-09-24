@@ -54,6 +54,16 @@ public:
 		ARRAY_END
 	};
 
+	enum EQUIPSLOT
+	{
+		SLOT_BACKPACK,
+		SLOT_LEFTARM,
+		SLOT_RIGHTARM,
+		SLOT_LEFTLEG,
+		SLOT_RIGHTLEG,
+		SLOT_END
+	};
+
 protected:
 	CItemManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CItemManager(const CItemManager& Prototype);
