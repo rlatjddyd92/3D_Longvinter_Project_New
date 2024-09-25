@@ -1,0 +1,111 @@
+{
+  "Textures": {
+    "T_SimpleNoise1024": "Longvinter/Content/Materials/Textures/T_SimpleNoise1024.T_SimpleNoise1024",
+    "T_Character02": "Longvinter/Content/Character/Materials/T_Character02.T_Character02",
+    "T_Character_Opacity_nohat": "Longvinter/Content/Character/Materials/T_Character_Opacity_nohat.T_Character_Opacity_nohat",
+    "T_Character_Sking_mask": "Longvinter/Content/Character/Materials/T_Character_Sking_mask.T_Character_Sking_mask",
+    "T_Character_Hair_Mask": "Longvinter/Content/Character/Materials/T_Character_Hair_Mask.T_Character_Hair_Mask",
+    "CharacterTexture": "Longvinter/Content/Character/Materials/T_Character02.T_Character02"
+  },
+  "Parameters": {
+    "BlendMode": 1,
+    "ShadingModel": 0,
+    "Colors": {
+      "FresnelColor": {
+        "R": 0.319275,
+        "G": 0.277936,
+        "B": 1.0,
+        "A": 0.0,
+        "Hex": "9990FF"
+      },
+      "SkinColor": {
+        "R": 0.862745,
+        "G": 0.4,
+        "B": 0.258824,
+        "A": 1.0,
+        "Hex": "EFAA8B"
+      },
+      "hairColor": {
+        "R": 0.097587,
+        "G": 0.066626,
+        "B": 0.049707,
+        "A": 1.0,
+        "Hex": "58493F"
+      },
+      "FlashColor": {
+        "R": 1.0,
+        "G": 1.0,
+        "B": 1.0,
+        "A": 0.0,
+        "Hex": "FFFFFF"
+      }
+    },
+    "Scalars": {
+      "Roughness": 1.0,
+      "Metallic": 0.0,
+      "FresnelMult": 1.0,
+      "Power": 1.0,
+      "DamageFlash": 1.0,
+      "Multiply": 1.0,
+      "SnowCover": -1.0,
+      "FresnelAmount": 8.0,
+      "DisableHat": 0.0
+    },
+    "Switches": {},
+    "Properties": {
+      "Metallic": {
+        "Expression": null,
+        "OutputIndex": 0,
+        "InputName": "None",
+        "Mask": 0,
+        "MaskR": 0,
+        "MaskG": 0,
+        "MaskB": 0,
+        "MaskA": 0,
+        "ExpressionName": "MaterialExpressionScalarParameter_1",
+        "UseConstant": false,
+        "Constant": 0.0
+      },
+      "Specular": {
+        "Expression": null,
+        "OutputIndex": 0,
+        "InputName": "None",
+        "Mask": 0,
+        "MaskR": 0,
+        "MaskG": 0,
+        "MaskB": 0,
+        "MaskA": 0,
+        "ExpressionName": "MaterialExpressionConstant_1",
+        "UseConstant": false,
+        "Constant": 0.5
+      },
+      "EmissiveColor": {
+        "Expression": null,
+        "OutputIndex": 0,
+        "InputName": "None",
+        "Mask": 0,
+        "MaskR": 0,
+        "MaskG": 0,
+        "MaskB": 0,
+        "MaskA": 0,
+        "ExpressionName": "MaterialExpressionMultiply_6",
+        "UseConstant": false,
+        "Constant": {
+          "B": 0,
+          "G": 0,
+          "R": 0,
+          "A": 0,
+          "Hex": "000000"
+        }
+      },
+      "bUsedWithSkeletalMesh": true,
+      "StateId": "196B92A7-4C4D3A51-308A2181-46F6DBDD"
+    },
+    "HasTopDiffuse": false,
+    "HasTopNormals": false,
+    "HasTopSpecularMasks": false,
+    "HasTopEmissive": false,
+    "IsTranslucent": false,
+    "IsNull": false
+  }
+}
