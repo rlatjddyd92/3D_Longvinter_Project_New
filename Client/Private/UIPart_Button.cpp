@@ -98,8 +98,15 @@ HRESULT CUIPart_Button::Render()
 {
 	__super::Render();
 
-	
 
+	_float fScale = 0.8f;
+	if (m_bOnCursor)
+		fScale = 1.f;
+
+	if (m_eType == BUTTON_INGAME)
+		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Game Start"), _vector{ m_fX,m_fY,0.f,0.f }, fScale, true);
+	if (m_eType == BUTTON_EDITOR)
+		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Map Editor"), _vector{ m_fX,m_fY,0.f,0.f }, fScale, true);
 
 	
 

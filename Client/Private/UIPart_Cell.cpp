@@ -123,6 +123,9 @@ HRESULT CUIPart_Cell::Inven_Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
+	//if (m_bPicked)
+	//	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Picked"), _vector{ m_fX,m_fY,0.f,0.f }, 0.5f, true);
+
 	return S_OK;
 }
 
