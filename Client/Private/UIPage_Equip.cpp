@@ -91,13 +91,18 @@ HRESULT CUIPage_Equip::Render()
 
 void CUIPage_Equip::AddRender_UIPage()
 {
-	m_pButton_Close->AddRender_UIPart();
-	m_pBack_Window_Header->AddRender_UIPart();
+	
+	
+
+	
+
+	m_pBack_Window->AddRender_UIPart();
 
 	for (auto& iter : m_vecEquipCell)
 		iter->AddRender_UIPart();
 
-	m_pBack_Window->AddRender_UIPart();
+	m_pBack_Window_Header->AddRender_UIPart();
+	m_pButton_Close->AddRender_UIPart();
 }
 
 void CUIPage_Equip::Ready_UIPart()
