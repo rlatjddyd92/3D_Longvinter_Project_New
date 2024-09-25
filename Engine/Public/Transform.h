@@ -44,6 +44,11 @@ public:
 		return m_WorldMatrix;
 	}
 
+	void Set_WorldMatrix(_float4x4& vMat)
+	{
+		memcpy(&m_WorldMatrix, &vMat, sizeof(_float4x4));
+	}
+
 	_float3 Get_Scaled() const;
 
 	_matrix Get_WorldMatrix_Inverse() const {

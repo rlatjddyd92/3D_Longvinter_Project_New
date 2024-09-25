@@ -63,7 +63,7 @@ struct PS_OUT
     vector vDiffuse : SV_TARGET0;
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
-    vector vPickDepth : SV_TARGET3;
+    //vector vPickDepth : SV_TARGET3;
 };
 
 
@@ -79,7 +79,7 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vDiffuse = vMtrlDiffuse;
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
-    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);
+    //Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);
 
     return Out;
 }
