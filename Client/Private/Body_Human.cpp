@@ -76,7 +76,7 @@ HRESULT CBody_Human::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Player"),
+	if (FAILED(__super::Add_Component(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Human"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
