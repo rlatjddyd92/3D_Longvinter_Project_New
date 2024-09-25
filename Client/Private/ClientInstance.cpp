@@ -81,6 +81,7 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 	m_pItemManager = dynamic_cast<CItemManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_ItemManager"), -1));
 
 
+
 	return S_OK;
 }
 
@@ -95,6 +96,41 @@ HRESULT CClientInstance::Setting_Ingame_Start()
 	m_pTerrainManager->LoadMap("../Bin/Resources/MapData/Map_1.dat");
 
 	m_pCamera->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_THIRD);
+
+	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
+	LIGHT_DESC			LightDesc{};
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(10.f, 3.f, 10.f, 1.f);
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(20.f, 3.f, 10.f, 1.f);
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+	LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 }
 
 HRESULT CClientInstance::Setting_Editor_Start()
@@ -130,6 +166,41 @@ HRESULT CClientInstance::Setting_Editor_Start()
 		return E_FAIL;
 	else
 		m_pImguiManager = dynamic_cast<CImguiManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_EDITOR), TEXT("Layer_ImguiManager"), -1));
+
+	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
+	LIGHT_DESC			LightDesc{};
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(10.f, 3.f, 10.f, 1.f);
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(20.f, 3.f, 10.f, 1.f);
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+	LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

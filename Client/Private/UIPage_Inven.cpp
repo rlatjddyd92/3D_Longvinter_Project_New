@@ -94,13 +94,18 @@ HRESULT CUIPage_Inven::Render()
 
 void CUIPage_Inven::AddRender_UIPage()
 {
-	m_pButton_Close->AddRender_UIPart();
-	m_pBack_Window_Header->AddRender_UIPart();
+	
+	
+
+	
+
+	m_pBack_Window->AddRender_UIPart();
 
 	for (auto& iter : m_vecInvenCell)
 		iter->AddRender_UIPart();
 
-	m_pBack_Window->AddRender_UIPart();
+	m_pBack_Window_Header->AddRender_UIPart();
+	m_pButton_Close->AddRender_UIPart();
 }
 
 void CUIPage_Inven::Ready_UIPart()

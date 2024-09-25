@@ -36,6 +36,12 @@ HRESULT CLayer::Update(_float fTimeDelta)
 
 HRESULT CLayer::Late_Update(_float fTimeDelta)
 {
+    for (auto& pGameObject : m_GameObjects)
+    {
+        if (!pGameObject->GetOff())
+            pGameObject->Late_Update(fTimeDelta);
+    }
+
     for (list<CGameObject*>::iterator iter = m_GameObjects.begin(); iter != m_GameObjects.end();)
     {
         if ((*iter)->GetDead() == true)
@@ -43,12 +49,7 @@ HRESULT CLayer::Late_Update(_float fTimeDelta)
             Safe_Release(*iter);
             iter = m_GameObjects.erase(iter);
         }
-        else if (!(*iter)->GetOff())
-        {
-            (*iter)->Late_Update(fTimeDelta);
-            ++iter;
-        }
-        else 
+        else
             ++iter;
     }
 

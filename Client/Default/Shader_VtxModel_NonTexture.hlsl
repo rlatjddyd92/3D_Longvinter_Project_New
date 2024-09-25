@@ -17,7 +17,7 @@ struct VS_IN
     float3 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
     float3 vTangent : TANGENT;
-   vector Color : COLOR;
+    vector Color : COLOR;
 };
 
 struct VS_OUT
@@ -48,7 +48,6 @@ struct PS_IN
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
-    vector vColor : COLOR;
 };
 
 struct PS_OUT
@@ -57,10 +56,10 @@ struct PS_OUT
 };
 
 
-PS_OUT PS_MAIN(PS_IN In)
+PS_OUT PS_MAIN(PS_IN In, VS_OUT VsOut)
 {
     PS_OUT Out = (PS_OUT) 0;
-    Out.vColor = In.vColor;
+    Out.vColor = VsOut.Color;
     
     //Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 	

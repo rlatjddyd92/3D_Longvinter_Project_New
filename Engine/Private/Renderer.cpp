@@ -121,8 +121,9 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(Render_Debug()))
-		return E_FAIL;
+	if (m_pGameInstance->Get_DIKeyState(DIK_F1, true))
+		if (FAILED(Render_Debug()))
+			return E_FAIL;
 #endif	
 
 	return S_OK;
@@ -267,7 +268,7 @@ HRESULT CRenderer::Render_Blend()
 
 HRESULT CRenderer::Render_UI()
 {
-	/*m_RenderObjects[RG_UI].sort();*/
+	//m_RenderObjects[RG_UI].sort();
 
 	for (auto& pGameObject : m_RenderObjects[RG_UI])
 	{
@@ -281,6 +282,8 @@ HRESULT CRenderer::Render_UI()
 
 	return S_OK;
 }
+
+#ifdef _DEBUG
 
 HRESULT CRenderer::Render_Debug()
 {
@@ -303,6 +306,8 @@ HRESULT CRenderer::Render_Debug()
 
 	return S_OK;
 }
+
+#endif
 
 CRenderer * CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

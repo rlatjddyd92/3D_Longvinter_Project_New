@@ -92,10 +92,13 @@ void CUIPage_Main::AddRender_UIPage()
 		__super::SetOff(true);
 	else
 	{
-		m_pPicture_MainLogo->AddRender_UIPart();
-		m_pButton_Ingame->AddRender_UIPart();
-		m_pButton_Editor->AddRender_UIPart();
+		
+		
+		
 		m_pPicture_BGA->AddRender_UIPart();
+		m_pButton_Editor->AddRender_UIPart();
+		m_pButton_Ingame->AddRender_UIPart();
+		m_pPicture_MainLogo->AddRender_UIPart();
 	}
 		
 	

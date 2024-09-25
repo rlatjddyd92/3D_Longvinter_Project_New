@@ -57,26 +57,54 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 
 void CUIManager::Update(_float fTimeDelta)
 {
-	for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();++iter)
+	if (!m_Pagelist.empty())
 	{
-		if (!(*iter)->GetOff())
-			if ((*iter)->Key_Action())
-			{
-				CUIPage* pTemp = (*iter);
+		list<CUIPage*>::iterator iter = m_Pagelist.end();
+		--iter;
 
-				m_Pagelist.erase(iter);
-				m_Pagelist.push_front(pTemp);
+		while (1)
+		{
+			if (!(*iter)->GetOff())
+				if ((*iter)->Key_Action())
+				{
+					CUIPage* pTemp = (*iter);
+
+					m_Pagelist.erase(iter);
+					m_Pagelist.push_back(pTemp);
+					break;
+				}
+
+			if (iter == m_Pagelist.begin())
 				break;
-			}
-				
+			else
+				--iter;
+		}
 	}
+
+
+
+
+
+	//for (list<CUIPage*>::iterator iter = m_Pagelist.begin(); iter != m_Pagelist.end();++iter)
+	//{
+	//	if (!(*iter)->GetOff())
+	//		if ((*iter)->Key_Action())
+	//		{
+	//			CUIPage* pTemp = (*iter);
+
+	//			m_Pagelist.erase(iter);
+	//			m_Pagelist.push_back(pTemp);
+	//			break;
+	//		}
+	//			
+	//}
 }
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+	
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_LOGO)
 	{
@@ -89,7 +117,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Test->GetOff())
 		{
 			m_pPage_Test->SetOn();
-			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Test));
+			m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Test));
 		}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
@@ -97,7 +125,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Inven->GetOff())
 		{
 			m_pPage_Inven->SetOn();
-			m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Inven));
+			m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Inven));
 		}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
@@ -105,7 +133,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Equip->GetOff())
 			{
 				m_pPage_Equip->SetOn();
-				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Equip));
+				m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Equip));
 			}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
@@ -113,7 +141,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Crafting->GetOff())
 			{
 				m_pPage_Crafting->SetOn();
-				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Crafting));
+				m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Crafting));
 			}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
@@ -121,7 +149,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			if (m_pPage_Option->GetOff())
 			{
 				m_pPage_Option->SetOn();
-				m_Pagelist.push_front(static_cast<CUIPage*>(m_pPage_Option));
+				m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Option));
 			}
 
 
@@ -139,8 +167,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		else
 			iter = m_Pagelist.erase(iter);
 	}
-
-	
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 HRESULT CUIManager::Render()

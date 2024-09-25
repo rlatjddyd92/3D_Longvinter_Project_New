@@ -163,6 +163,18 @@
     <Filter Include="99.Defines\00.Factory\01.Part">
       <UniqueIdentifier>{5605e5f2-14da-4fee-a04b-2469e358809f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager">
+      <UniqueIdentifier>{6963eeeb-b867-466a-af0d-f7a3e68568bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction">
+      <UniqueIdentifier>{a4f5b98b-cfe5-49d7-8228-64897aa37935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee">
+      <UniqueIdentifier>{6829cee5-7793-4022-a9e3-eb9565ccb3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile">
+      <UniqueIdentifier>{e16a3aca-d4b1-4c3b-b3ad-188302bbcf12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
