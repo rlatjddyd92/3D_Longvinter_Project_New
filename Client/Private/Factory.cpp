@@ -29,6 +29,12 @@ HRESULT CFactory::Setting_Program_Start()
 	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Player"), "../Bin/Resources/Models/Player/Player", PreTransformMatrix)))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Model_Human*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Human"), "../Bin/Resources/Models/Human/Human1", PreTransformMatrix)))
+		return E_FAIL;
+
 	/* For. Prototype_Component_Model_Shotgun*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
