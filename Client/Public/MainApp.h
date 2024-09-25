@@ -26,6 +26,8 @@ private:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 
+	_float					m_fFPS = 0.f;
+
 private:	
 	HRESULT Ready_Prototype_Component_Static();
 	HRESULT Open_Level(LEVELID eStartLevelID);

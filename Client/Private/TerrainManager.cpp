@@ -62,12 +62,72 @@ void CTerrainManager::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_PRIORITY, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CTerrainManager::Render()
 {
-	
+	for (auto& iter : m_mapInstancing_SurFace)
+	{
+		_vector vCamera = GET_INSTANCE->GetCameraPosition();
+
+		_float3 fLook{};
+
+		fLook.x = vCamera.m128_f32[0] - iter.second->m_vMat.m[3][0];
+		fLook.y = vCamera.m128_f32[1] - iter.second->m_vMat.m[3][1];
+		fLook.z = vCamera.m128_f32[2] - iter.second->m_vMat.m[3][2];
+
+		LCUBEDIRECION Direc = LCUBEDIRECION(iter.first[iter.first.size() - 1] - '0');
+
+		if (Direc == LCUBEDIRECION::LDIREC_BOTTOM)
+			if (fLook.y > 0)
+				continue;
+
+		if (Direc == LCUBEDIRECION::LDIREC_TOP)
+			if (fLook.y < 0)
+				continue;
+
+		if (Direc == LCUBEDIRECION::LDIREC_EAST)
+			if (fLook.x < 0)
+				continue;
+
+		if (Direc == LCUBEDIRECION::LDIREC_WEST)
+			if (fLook.x > 0)
+				continue;
+
+		if (Direc == LCUBEDIRECION::LDIREC_NORTH)
+			if (fLook.z < 0)
+				continue;
+
+		if (Direc == LCUBEDIRECION::LDIREC_SOUTH)
+			if (fLook.z > 0)
+				continue;
+
+
+
+
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter.second->m_vMat)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", iter.second->m_iTextureNum)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+
+		if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+			return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+
+	}
+
 	return S_OK;
 }
 
@@ -319,6 +379,57 @@ void CTerrainManager::InterpretKey(_wstring Key, _int* iX, _int* iY, _int* iZ, L
 	*eDirec = LCUBEDIRECION((Key[iIndex] - '0'));
 }
 
+void CTerrainManager::SetPosition_Surface(_int iX, _int iY, _int iZ, LCUBEDIRECION eDirec, _float4x4* fSurface)
+{
+	XMVECTOR NewPosition = { LCUBESIZE * 0.5f,  LCUBESIZE * 0.5f ,  LCUBESIZE * 0.5f };
+	NewPosition += {iX* LCUBESIZE, iY* LCUBESIZE, iZ* LCUBESIZE};
+
+	if (eDirec == LCUBEDIRECION::LDIREC_TOP)
+	{
+		m_pTransformCom->Rotation(_fvector({ 1.f, 0.f, 0.f }), _float(XMConvertToRadians(90.f)));
+		NewPosition += { 0, LCUBESIZE * 0.5f, 0 };
+	}
+	else if (eDirec == LCUBEDIRECION::LDIREC_BOTTOM)
+	{
+		m_pTransformCom->Rotation(_fvector({ -1.f, 0.f, 0.f }), _float(XMConvertToRadians(90.f)));
+		NewPosition += { 0, -LCUBESIZE * 0.5f, 0 };
+	}
+	else if (eDirec == LCUBEDIRECION::LDIREC_WEST)
+	{
+		m_pTransformCom->Rotation(_fvector({ 0.f, 1.f, 0.f }), _float(XMConvertToRadians(90.f)));
+		NewPosition += { -LCUBESIZE * 0.5f, 0, 0 };
+	}
+	else if (eDirec == LCUBEDIRECION::LDIREC_EAST)
+	{
+		m_pTransformCom->Rotation(_fvector({ 0.f, -1.f, 0.f }), _float(XMConvertToRadians(90.f)));
+		NewPosition += { LCUBESIZE * 0.5f, 0, 0 };
+	}
+	else if (eDirec == LCUBEDIRECION::LDIREC_NORTH)
+	{
+		m_pTransformCom->Rotation(_fvector({ 0.f, -1.f, 0.f }), _float(XMConvertToRadians(180.f)));
+		NewPosition += { 0, 0, LCUBESIZE * 0.5f };
+	}
+	else if (eDirec == LCUBEDIRECION::LDIREC_SOUTH)
+	{
+		NewPosition += { 0, 0, -LCUBESIZE * 0.5f };
+	}
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, NewPosition);
+
+	memcpy(fSurface, &m_pTransformCom->Get_WorldMatrix(), sizeof(_float4x4));
+	_float4x4 vTemp{};
+	XMStoreFloat4x4(&vTemp, XMMatrixIdentity());
+	m_pTransformCom->Set_WorldMatrix(vTemp);
+}
+
+_float3 CTerrainManager::IsPicking_Instancing(SURFACE* pSurface)
+{
+	_float3 vPickPos{ -1,-1,-1 };
+
+	m_pVIBufferCom->isPicking(pSurface->m_vMat, &vPickPos);
+	return vPickPos;
+}
+
 _float3 CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
 {
 	_float3 vCenter = fCenter;
@@ -543,6 +654,15 @@ HRESULT CTerrainManager::Ready_Components()
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxSurFace"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -596,14 +716,27 @@ void CTerrainManager::ChangeLandInfo_Normal()
 			{
 				LCUBEDIRECION eNow = queueNew.front();
 				queueNew.pop();
-				m_pGameInstance->Add_CloneObject_ToLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), TEXT("Prototype_GameObject_SurFace"));
-				CSurFace* pNew = dynamic_cast<CSurFace*>(m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), -1));
-				pNew->SetPosition(iter.m_vIndex[0], iter.m_vIndex[1], iter.m_vIndex[2], eNow, m_pTextureCom);
-				pNew->SetTextureIndex(iter.m_iTextureNum[_int(eNow)]);
+				// 인스턴싱 
+				SURFACE* pNew = new SURFACE;
+				SetPosition_Surface(iter.m_vIndex[0], iter.m_vIndex[1], iter.m_vIndex[2], eNow, &pNew->m_vMat);
+				pNew->m_iTextureNum = iter.m_iTextureNum[_int(eNow)];
 
 				strKey[strKey.size() - 1] = _int(eNow) + '0';
-				m_mapSurFace.insert({ strKey ,pNew });
-				Safe_AddRef(pNew);
+
+				m_mapInstancing_SurFace.insert({ strKey ,pNew });
+
+
+
+
+				//// 기존 방식 
+				//m_pGameInstance->Add_CloneObject_ToLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), TEXT("Prototype_GameObject_SurFace"));
+				//CSurFace* pNew = dynamic_cast<CSurFace*>(m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), -1));
+				//pNew->SetPosition(iter.m_vIndex[0], iter.m_vIndex[1], iter.m_vIndex[2], eNow, m_pTextureCom);
+				//pNew->SetTextureIndex(iter.m_iTextureNum[_int(eNow)]);
+
+				//strKey[strKey.size() - 1] = _int(eNow) + '0';
+				//m_mapSurFace.insert({ strKey ,pNew });
+				//Safe_AddRef(pNew);
 			}
 
 			while (!queueDelete.empty())
@@ -622,12 +755,20 @@ void CTerrainManager::ChangeLandInfo_Normal()
 					iZ = eNow == LCUBEDIRECION::LDIREC_NORTH ? -1 : 0;
 
 				strKey = MakeKey(iter.m_vIndex[0] + iX, iter.m_vIndex[1] + iY, iter.m_vIndex[2] + iZ, eNow);
-				if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
+
+				if (m_mapInstancing_SurFace.find(strKey) != m_mapInstancing_SurFace.end())
+				{
+					Safe_Delete(m_mapInstancing_SurFace.find(strKey)->second);
+					m_mapInstancing_SurFace.erase(m_mapInstancing_SurFace.find(strKey));
+				}
+
+
+				/*if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
 				{
 					m_mapSurFace.find(strKey)->second->RemoveSurFace();
 					Safe_Release(m_mapSurFace.find(strKey)->second);
 					m_mapSurFace.erase(m_mapSurFace.find(strKey));
-				}
+				}*/
 			}
 		}
 
@@ -637,12 +778,19 @@ void CTerrainManager::ChangeLandInfo_Normal()
 			for (_int i = 0; i < 6; ++i)
 			{
 				strKey[strKey.size() - 1] = strKey[strKey.size() - 1] + 1;
-				if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
+
+				if (m_mapInstancing_SurFace.find(strKey) != m_mapInstancing_SurFace.end())
+				{
+					Safe_Delete(m_mapInstancing_SurFace.find(strKey)->second);
+					m_mapInstancing_SurFace.erase(m_mapInstancing_SurFace.find(strKey));
+				}
+
+				/*if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
 				{
 					m_mapSurFace.find(strKey)->second->RemoveSurFace();
 					Safe_Release(m_mapSurFace.find(strKey)->second);
 					m_mapSurFace.erase(m_mapSurFace.find(strKey));
-				}
+				}*/
 			}
 					
 			queue<LCUBEDIRECION> queueNew;
@@ -676,12 +824,18 @@ void CTerrainManager::ChangeLandInfo_Normal()
 
 				strKey = MakeKey(iter.m_vIndex[0] + iX, iter.m_vIndex[1] + iY, iter.m_vIndex[2] + iZ, eNow);
 
-				m_pGameInstance->Add_CloneObject_ToLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), TEXT("Prototype_GameObject_SurFace"));
+				// 인스턴싱 
+				SURFACE* pNew = new SURFACE;
+				SetPosition_Surface(iter.m_vIndex[0] + iX, iter.m_vIndex[1] + iY, iter.m_vIndex[2] + iZ, eNow, &pNew->m_vMat);
+				pNew->m_iTextureNum = iter.m_iTextureNum[_int(eNow)];
+				m_mapInstancing_SurFace.insert({ strKey ,pNew });
+
+				/*m_pGameInstance->Add_CloneObject_ToLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), TEXT("Prototype_GameObject_SurFace"));
 				CSurFace* pNew = dynamic_cast<CSurFace*>(m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_SINGLE), TEXT("Layer_SurFace"), -1));
 				pNew->SetPosition(iter.m_vIndex[0] + iX, iter.m_vIndex[1] + iY, iter.m_vIndex[2] + iZ, eNow, m_pTextureCom);
 				pNew->SetTextureIndex(iter.m_iTextureNum[_int(eNow)]);
 				m_mapSurFace.insert({ strKey ,pNew });
-				Safe_AddRef(pNew);
+				Safe_AddRef(pNew);*/
 			}
 
 		}
@@ -693,8 +847,14 @@ void CTerrainManager::ChangeLandInfo_Normal()
 				if (iter.m_iTextureNum[i] == -1)
 					continue;
 				_wstring strKey = MakeKey(iter.m_vIndex[0], iter.m_vIndex[1], iter.m_vIndex[2], LCUBEDIRECION(i));
-				if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
-					m_mapSurFace.find(strKey)->second->SetTextureIndex(iter.m_iTextureNum[i]);
+
+				if (m_mapInstancing_SurFace.find(strKey) != m_mapInstancing_SurFace.end())
+					m_mapInstancing_SurFace.find(strKey)->second->m_iTextureNum = iter.m_iTextureNum[i];
+
+
+
+				/*if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
+					m_mapSurFace.find(strKey)->second->SetTextureIndex(iter.m_iTextureNum[i]);*/
 			}
 		}
 	}
@@ -714,7 +874,24 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 	_wstring strKey = {};
 	_float3 fResult{ -1,-1,-1 };
 
-	for (auto& pair : m_mapSurFace)
+	for (auto& pair : m_mapInstancing_SurFace)
+	{
+		_float3 fTempResult = IsPicking_Instancing(pair.second);
+		if (fTempResult.x == -1)
+			continue;
+
+		_vector fTemp = vCamera - XMLoadFloat3(&fTempResult);
+		_double dTempDistance = sqrt((pow(fTemp.m128_f32[0], 2) + pow(fTemp.m128_f32[1], 2) + pow(fTemp.m128_f32[2], 2)));
+
+		if ((fDistance == -1.f) || (fDistance > dTempDistance))
+		{
+			fDistance = dTempDistance;
+			strKey = pair.first;
+			fResult = fTempResult;
+		}
+	}
+
+	/*for (auto& pair : m_mapSurFace)
 	{
 		_float3 fTempResult = pair.second->IsPicking();
 		if (fTempResult.x == -1)
@@ -730,7 +907,7 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 			fResult = fTempResult;
 		}
 			
-	}
+	}*/
 
 	if (fDistance == -1)
 		return fResult;
@@ -790,6 +967,9 @@ void CTerrainManager::Free()
 	for (auto& pair : m_mapSurFace)
 		Safe_Release(pair.second);
 
+	for (auto& pair : m_mapInstancing_SurFace)
+		Safe_Delete(pair.second);
+
 	for (auto& iter : m_CommandStack)
 		iter.clear();
 
@@ -798,6 +978,8 @@ void CTerrainManager::Free()
 	m_CommandBuffer.clear();
 
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pVIBufferCom);
 
 	for (auto& iterX : m_vecLcubeInfo)
 	{

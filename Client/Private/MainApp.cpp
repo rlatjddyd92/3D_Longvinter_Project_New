@@ -48,6 +48,7 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Update(_float fTimeDelta)
 {
 	m_pGameInstance->Update_Engine(fTimeDelta);
+	m_fFPS = fTimeDelta;
 }
 
 HRESULT CMainApp::Render()
@@ -59,12 +60,22 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Draw_Engine();
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_0, true))
-		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("TEST"), _vector{ 100.f,100.f,0.f,0.f });
+	m_fFPS = 1.f / m_fFPS;
+	_int iFPS = m_fFPS / 1;
+	_tchar* tTemp = new _tchar[5];
+
+	swprintf(tTemp, 5, L"%d", iFPS);
+	
+	XMVECTOR vFPSColor = { 0.f,0.f,0.f,1.f };
+
+	if (iFPS < 30)
+		vFPSColor = { 220.f / 255.f,20.f / 255.f,60.f / 255.f,1.f };
+
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), tTemp, _vector{ 1200.f,100.f,0.f,0.f }, 0.8f, false, vFPSColor);
 
 	m_pGameInstance->Render_End();
 
-
+	Safe_Delete_Array(tTemp);
 
 	
 

@@ -41,6 +41,12 @@ public:
 		_int m_iTextureNum[int(LCUBEDIRECION::LDIREC_END)] = { 0 , };
 	}LCOMMAND;
 
+	typedef struct SURFACE
+	{
+		_float4x4 m_vMat; // <- Surface의 위치
+		_int m_iTextureNum = int(LCUBEDIRECION::LDIREC_END);
+	};
+
 	typedef struct MAKEOBJ
 	{
 		MAKEOBJ(CONTAINER eType, _float3 Position) { eCon_Type = eType; fPosition = Position; }
@@ -121,6 +127,9 @@ private:
 	_wstring MakeKey(_int iX, _int iY, _int iZ, LCUBEDIRECION eDirec);
 	void InterpretKey(_wstring Key, _int* iX, _int* iY, _int* iZ, LCUBEDIRECION* eDirec);
 
+	void SetPosition_Surface(_int iX, _int iY, _int iZ, LCUBEDIRECION eDirec, _float4x4* fSurface);
+	_float3 IsPicking_Instancing(SURFACE* pSurface);
+
 private:
 	
 
@@ -138,6 +147,9 @@ private:
 	vector<vector<vector<LCUBE>>> m_vecLcubeInfo; // <- 맵의 모든 정보 저장 
 	map<_wstring, CSurFace*> m_mapSurFace; // <- 표면 렌더용 객체 
 
+	// 표면 렌더 인스턴싱
+	map<_wstring, SURFACE*> m_mapInstancing_SurFace;
+
 	// 객체 정보 저장 
 	list<MAKEOBJ> m_vecObjInfo;
 
@@ -147,6 +159,7 @@ private:
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
+	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
 public:
 	static CTerrainManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
