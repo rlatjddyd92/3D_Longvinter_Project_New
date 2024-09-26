@@ -306,12 +306,57 @@ void CTerrainManager::Make_NewCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY
 	
 }
 
-void CTerrainManager::Make_DeleteCube(_float3 fSize)
+void CTerrainManager::Make_DeleteCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY, _int iCZ)
 {
+	_int iMaxX = min(LMAX_X - 1, iX + iCX);
+	_int iMaxY = min(LMAX_Y - 1, iY + iCY);
+	_int iMaxZ = min(LMAX_Z - 1, iZ + iCZ);
+
+	for (_int i = iX; i < iMaxX; ++i)
+		for (_int j = iY; j < iMaxY; ++j)
+			for (_int k = iZ; k < iMaxZ; ++k)
+				if (m_vecLcubeInfo[i][j][k].m_bLand == true)
+				{
+					LCOMMAND tTemp = {};
+					tTemp.m_eType = LANDCOMMAND::LCOMMAND_REMOVE_LAND;
+					tTemp.m_vIndex[0] = i;
+					tTemp.m_vIndex[1] = j;
+					tTemp.m_vIndex[2] = k;
+					m_CommandBuffer.push_back(tTemp);
+				}
 }
 
 void CTerrainManager::Change_Surface(_bool bLinked)
 {
+}
+
+void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius)
+{
+	_uint iMinX = (fPosition.x - fRadius) / LCUBESIZE;
+	_uint iMaxX = (fPosition.x + fRadius) / LCUBESIZE;
+	_uint iMinY = (fPosition.y - fRadius) / LCUBESIZE;
+	_uint iMaxY = (fPosition.y + fRadius) / LCUBESIZE;
+	_uint iMinZ = (fPosition.z - fRadius) / LCUBESIZE;
+	_uint iMaxZ = (fPosition.z + fRadius) / LCUBESIZE;
+
+	for (_int i = iMinX; i <= iMaxX;++i)
+		for (_int j = iMinY; j <= iMaxY; ++j)
+			for (_int k = iMinZ; k <= iMaxZ; ++k)
+				if (m_vecLcubeInfo[i][j][k].m_bLand == true)
+				{
+					_float3 fCubePosition = { i + 0.5f, j + 0.5f, k + 0.5f };
+					_float fDistance = sqrt(pow(fCubePosition.x - fPosition.x, 2) + pow(fCubePosition.y - fPosition.y, 2) + pow(fCubePosition.z - fPosition.z, 2));
+
+					if (fDistance < fRadius)
+					{
+						LCOMMAND tTemp = {};
+						tTemp.m_eType = LANDCOMMAND::LCOMMAND_REMOVE_LAND;
+						tTemp.m_vIndex[0] = i;
+						tTemp.m_vIndex[1] = j;
+						tTemp.m_vIndex[2] = k;
+						m_CommandBuffer.push_back(tTemp);
+					}
+				}
 }
 
 void CTerrainManager::Set_Object()
@@ -777,13 +822,15 @@ void CTerrainManager::ChangeLandInfo_Normal()
 			_wstring strKey = MakeKey(iter.m_vIndex[0], iter.m_vIndex[1], iter.m_vIndex[2],LCUBEDIRECION::LDIREC_TOP);
 			for (_int i = 0; i < 6; ++i)
 			{
-				strKey[strKey.size() - 1] = strKey[strKey.size() - 1] + 1;
+				
 
 				if (m_mapInstancing_SurFace.find(strKey) != m_mapInstancing_SurFace.end())
 				{
 					Safe_Delete(m_mapInstancing_SurFace.find(strKey)->second);
 					m_mapInstancing_SurFace.erase(m_mapInstancing_SurFace.find(strKey));
 				}
+
+				strKey[strKey.size() - 1] = strKey[strKey.size() - 1] + 1;
 
 				/*if (m_mapSurFace.find(strKey) != m_mapSurFace.end())
 				{
@@ -920,7 +967,13 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 					_int iIndex[3] = { 0, };
 					LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_TOP;
 					InterpretKey(strKey, &iIndex[0], &iIndex[1], &iIndex[2], &eDirec);
-					Make_NewCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ, m_iTextureIndex);
+
+					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON))
+						Make_NewCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ, m_iTextureIndex);
+					else
+						Make_DeleteCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ);
+
+					
 				}
 				if (iMode == 1)
 				{

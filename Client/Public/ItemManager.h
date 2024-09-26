@@ -56,11 +56,11 @@ public:
 
 	enum EQUIPSLOT
 	{
+		SLOT_HEAD,
 		SLOT_BACKPACK,
-		SLOT_LEFTARM,
-		SLOT_RIGHTARM,
-		SLOT_LEFTLEG,
-		SLOT_RIGHTLEG,
+		SLOT_MAINWEAPON,
+		SLOT_SUBWEAPON,
+		SLOT_THROW,
 		SLOT_END
 	};
 
@@ -93,16 +93,16 @@ public:
 		else
 			return m_vecInvenInfo[iInvenNum];
 	}
-	const TINFO& GetEquipInfo(_uint iEquipNum)
+	const TINFO& GetEquipInfo(EQUIPSLOT eSlot)
 	{
-		if (iEquipNum >= 5)
+		if (_int(eSlot) >= _int(SLOT_END))
 		{
 			TINFO tFali;
 			return tFali;
 			// 실패값을 반환 시, 초기화 된 값을 가진 TINFO 반환, 해당 구조체의 ITEMINDEX는 END이므로 구분 가능  
 		}
 
-		return m_vecEquipInfo[iEquipNum];
+		return m_vecEquipInfo[_int(eSlot)];
 	}
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex)
 	{

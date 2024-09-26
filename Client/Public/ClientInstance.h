@@ -87,7 +87,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void HighLight_NewCube(_float3 fSize) { m_pTerrainManager->HighLight_NewCube(fSize); }
 	void HighLight_DeleteCube(_float3 fSize) { m_pTerrainManager->HighLight_DeleteCube(fSize); }
 	void Make_NewCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY, _int iCZ, _int TextureIndex) { m_pTerrainManager->Make_NewCube(iX, iY, iZ, iCX, iCY, iCZ, TextureIndex); }
-	void Make_DeleteCube(_float3 fSize) { m_pTerrainManager->Make_DeleteCube(fSize); }
+	void Make_DeleteCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY, _int iCZ) { m_pTerrainManager->Make_DeleteCube(iX, iY, iZ, iCX, iCY, iCZ); }
 	void Change_Surface(_bool bLinked) { m_pTerrainManager->Change_Surface(bLinked); } // <- bLinked가 true인 경우 텍스쳐 번호가 같고 같은 표면으로 연결된 모든 표면의 텍스쳐를 교체 
 
 	void Set_Object() { m_pTerrainManager->Set_Object(); }
@@ -152,7 +152,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region ITEM
 	const CItemManager::TINFO& GetItemInfo(ITEMINDEX eIndex) { return m_pItemManager->GetItemInfo(eIndex); }
 	const CItemManager::TINFO& GetInvenInfo(_uint iInvenNum) { return m_pItemManager->GetInvenInfo(iInvenNum); }
-	const CItemManager::TINFO& GetEquipInfo(_uint iEquipNum) { return m_pItemManager->GetEquipInfo(iEquipNum); }
+	const CItemManager::TINFO& GetEquipInfo(CItemManager::EQUIPSLOT eSlot) { return m_pItemManager->GetEquipInfo(eSlot); }
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
 
 	const CItemManager::TINFO PickItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }

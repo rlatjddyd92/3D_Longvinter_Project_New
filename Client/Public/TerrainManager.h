@@ -85,9 +85,11 @@ public:
 	void HighLight_NewCube(_float3 fSize);
 	void HighLight_DeleteCube(_float3 fSize);
 	void Make_NewCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY, _int iCZ, _int TextureIndex);
-	void Make_DeleteCube(_float3 fSize);
+	void Make_DeleteCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY, _int iCZ);
 	void Change_Surface(_bool bLinked); // <- bLinked가 true인 경우 텍스쳐 번호가 같고 같은 표면으로 연결된 모든 표면의 텍스쳐를 교체 
 	
+	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius);
+
 	void Set_Object();
 	void Delete_Object();
 
