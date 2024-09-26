@@ -166,6 +166,13 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 
 		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop);
 	}
+
+	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
+	{
+		_bool bTop = m_iSelectMode == 1;
+
+		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop);
+	}
 }
 
 void CImguiManager::Update(_float fTimeDelta)

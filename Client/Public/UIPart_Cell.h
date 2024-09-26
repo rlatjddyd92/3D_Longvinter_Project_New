@@ -70,19 +70,17 @@ public:
 		m_iItemIndex = -1;
 	}
 
-	void Set_Picked(_bool bIsPicked) 
-	{ 
+	void Set_Picked(_bool bIsPicked)
+	{
 		if (m_iItemIndex == -1)
 			return;
 
 		m_bPicked = bIsPicked;
 		if (m_bPicked)
 			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
-		else 
+		else
 			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = false;
 	}
-
-
 
 protected:
 	UICELL_TYPE m_eType = UICELL_TYPE::CELL_END;

@@ -50,7 +50,7 @@ HRESULT CItemManager::Setting_ItemInfo()
 {
 	m_vecItemInfo.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecInvenInfo.resize(INVEN_COL * INVEN_ROW);
-	m_vecEquipInfo.resize(5);
+	m_vecEquipInfo.resize(SLOT_END);
 	m_vecItemInvenTexture.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecTool.resize(_int(ITEMINDEX::ITEM_END));
 
@@ -96,7 +96,7 @@ const CItemManager::TINFO CItemManager::PickItem(ITEMARRAY eArray, _int iIndex)
 		return tFail;
 	if ((eArray == ITEMARRAY::ARRAY_INVEN) && (iIndex >= _int(INVEN_COL * INVEN_ROW)))
 		return tFail;
-	if ((eArray == ITEMARRAY::ARRAY_EQUIP) && (iIndex >= _int(5)))
+	if ((eArray == ITEMARRAY::ARRAY_EQUIP) && (iIndex >= _int(SLOT_END)))
 		return tFail;
 
 	m_eBeforeArray = eArray;

@@ -32,6 +32,8 @@ public:
 
 	virtual _bool Key_Action() override;
 
+	
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
