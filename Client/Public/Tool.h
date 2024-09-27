@@ -33,6 +33,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void SetParentState(_uint* iParent) { m_pParentState = iParent; }
+	void SetSocketMatrix(const _float4x4* Matrix) { m_pSocketMatrix = Matrix; }
+	void SetRenderMatrix(_float4x4& Matrix) { memcpy(&m_RenderMatrix, &Matrix, sizeof(_float4x4)); }
+
 protected:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
@@ -43,6 +48,8 @@ protected:
 	const _uint* m_pParentState = { nullptr };
 
 	_bool m_bEmptyPart = false;
+
+	_float4x4 m_RenderMatrix{};
 
 protected:
 	HRESULT Ready_Components();
