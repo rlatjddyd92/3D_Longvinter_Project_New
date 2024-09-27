@@ -39,10 +39,31 @@ void CItemManager::Update(_float fTimeDelta)
 
 void CItemManager::Late_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CItemManager::Render()
 {
+	while (!m_Render_Model_list.empty())
+	{
+		RENDERINFO tTemp = m_Render_Model_list.front();
+		m_Render_Model_list.pop_front();
+
+		if (tTemp.eIndex == ITEMINDEX::ITEM_END)
+			continue;
+
+		if (m_vecTool[_int(tTemp.eIndex)] == nullptr)
+			continue;
+
+		m_vecTool[_int(tTemp.eIndex)]->SetParentState(tTemp.pParentState);
+		m_vecTool[_int(tTemp.eIndex)]->SetSocketMatrix(tTemp.pSocketMatrix);
+		m_vecTool[_int(tTemp.eIndex)]->SetRenderMatrix(tTemp.pParentMatrix);
+
+		m_vecTool[_int(tTemp.eIndex)]->Render();
+	}
+
+	m_Render_Model_list.clear();
+
 	return S_OK;
 }
 
@@ -55,6 +76,10 @@ HRESULT CItemManager::Setting_ItemInfo()
 	m_vecTool.resize(_int(ITEMINDEX::ITEM_END));
 
 
+	_uint iTemp = 0;
+	CTool::TOOL_DESC		ToolDesc{};
+	ToolDesc.pParentState = &iTemp;
+	ToolDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
 	// 탄환
 	m_vecItemInfo[_int(ITEMINDEX::ITEM_AMMO)] =
@@ -77,8 +102,10 @@ HRESULT CItemManager::Setting_ItemInfo()
 		TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_vecItemInvenTexture[_int(ITEMINDEX::ITEM_SHOTGUN)]))))
 		return E_FAIL;
 	
-
-
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_ShotGun"), TEXT("Prototype_GameObject_Tool_ShotGun"), &ToolDesc);
+	m_vecTool[_int(ITEMINDEX::ITEM_SHOTGUN)] = static_cast<CTool*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_ShotGun"), -1));
+	
+	
 	// 인벤 초기 세팅 
 
 	m_vecInvenInfo[0] = m_vecItemInfo[_int(ITEMINDEX::ITEM_SHOTGUN)];
@@ -156,6 +183,13 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 {
 	if (m_tPickedItem.eIndex == ITEMINDEX::ITEM_END)
 		return E_FAIL;
+
+	if ((m_eBeforeArray == eArray) && (m_iBeforeIndex == iIndex))
+	{
+		CancelPick();
+		return E_FAIL;
+	}
+		
 
 	if (eArray == ITEMARRAY::ARRAY_INVEN)
 	{
@@ -261,4 +295,13 @@ void CItemManager::Free()
 	for (auto& iter : m_vecItemInvenTexture)
 		Safe_Release(iter);
 	m_vecItemInvenTexture.clear();
+
+	for (auto& iter : m_Render_Model_list)
+	{
+		Safe_Delete(iter.pParentState);
+		Safe_Delete(iter.pSocketMatrix);
+	}
+		
+	m_Render_Model_list.clear();
+	
 }

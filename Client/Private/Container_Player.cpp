@@ -101,7 +101,17 @@ void CContainer_Player::Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_DIKeyState(DIK_M, true) & 0x80)
 		m_pTransformCom->Go_Down(fTimeDelta);
 
-	
+	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
+		m_eWeaponType = WEAPON_MAIN;
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
+		m_eWeaponType = WEAPON_SUB;
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
+		m_eWeaponType = WEAPON_THROW;
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
+		m_eWeaponType = WEAPON_END;
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 		++m_iState;
@@ -115,6 +125,13 @@ void CContainer_Player::Update(_float fTimeDelta)
 		GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERA_EDITOR);
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 		GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERA_THIRD);
+
+
+
+
+
+
+
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
@@ -133,6 +150,18 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 		pPartObject->Late_Update(fTimeDelta);
 
 	m_pTransformCom->Save_BeforePosition();
+
+	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
+	
+
+	if (m_eWeaponType == WEAPON_MAIN)
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+	else if (m_eWeaponType == WEAPON_SUB)
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+	else if (m_eWeaponType == WEAPON_THROW)
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
@@ -193,7 +222,7 @@ HRESULT CContainer_Player::Ready_PartObjects()
 
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
 
-	if (FAILED(__super::Add_PartObject(PART_ARM_RIGHT, TEXT("Prototype_GameObject_Tool_ShotGun"), &ToolDesc)))
+	if (FAILED(__super::Add_PartObject(PART_ARM_RIGHT, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
 		return E_FAIL;
 
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("ik_foot_l");

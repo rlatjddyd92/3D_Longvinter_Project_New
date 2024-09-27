@@ -36,6 +36,13 @@ public:
 		//STATE_ATTACK = 0x00000080,	// 1000 0000
 		STATE_END = 0xffffffff,
 	};
+	enum WEAPON_TYPE
+	{
+		WEAPON_MAIN,
+		WEAPON_SUB,
+		WEAPON_THROW,
+		WEAPON_END
+	};
 private:
 	CContainer_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CContainer_Player(const CContainer_Player& Prototype);
@@ -59,7 +66,7 @@ private:
 	HRESULT Ready_PartObjects();
 
 	CCollider* m_pColliderCom = { nullptr };
-
+	WEAPON_TYPE m_eWeaponType = WEAPON_TYPE::WEAPON_END;
 
 public:
 	static CContainer_Player* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

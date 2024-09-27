@@ -160,6 +160,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	HRESULT PutInItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
 
 	ITEMINDEX GetPickedItemIndex() { return m_pItemManager->GetPickedItemIndex(); }
+
+	void InputRenderlist(ITEMINDEX eIndex, _uint* pParentState, const _float4x4* pMatrix, _float4x4& pParent) { return m_pItemManager->InputRenderlist(eIndex, pParentState, pMatrix, pParent); }
 #pragma endregion
 
 private: // <- 보유 중인 포인터 목록 

@@ -45,6 +45,14 @@ public:
 		vector<TINFO> vecGoods; // <- 상점 혹은 상자가 보유한 아이템 목록 
 	}SINFO;
 
+	typedef struct RENDERINFO
+	{
+		ITEMINDEX eIndex;
+		_uint* pParentState = { nullptr };
+		const _float4x4* pSocketMatrix = { nullptr };
+		_float4x4 pParentMatrix{};
+	};
+
 	enum ITEMARRAY
 	{
 		ARRAY_INFO, 
@@ -131,6 +139,18 @@ public:  // <- 아이템 집기, 이동을 위한 함수
 
 	ITEMINDEX GetPickedItemIndex() { return m_tPickedItem.eIndex; }
 
+public: 
+	void InputRenderlist(ITEMINDEX eIndex, _uint* pParentState, const _float4x4* pMatrix, _float4x4& pParent)
+	{ 
+		RENDERINFO tTemp{};
+		tTemp.eIndex = eIndex;
+		tTemp.pParentState = pParentState;
+		tTemp.pSocketMatrix = pMatrix;
+		tTemp.pParentMatrix = pParent;
+
+		m_Render_Model_list.push_back(tTemp);
+	}
+
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };
@@ -158,6 +178,9 @@ private: // <- 상점, 상자 관련 변수
 	ITEMARRAY m_eBeforeArray = ITEMARRAY::ARRAY_END; // <- 집은 아이템이 이전에 있었던 배열
 	_int m_iBeforeShopKey = -1; // <- 상점에서 집어온 경우 해당 상점의 Key
 	_int m_iBeforeIndex = -1; // <- 아이템이 배열에서 어느 지점에 있었는 지 작성 
+
+private: // <- 파츠 모델 렌더를 위한 변수 
+	list<RENDERINFO> m_Render_Model_list;
 
 
 public:

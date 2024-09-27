@@ -37,6 +37,8 @@ HRESULT CTool::Initialize(void* pArg)
 	//m_pTransformCom->Rotation(0.0f, XMConvertToRadians(90.0f), 0.1f);
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.5f, 0.f, 0.f, 1.f));
 
+	SetOff(true);
+
 	return S_OK;
 }
 
@@ -69,7 +71,7 @@ void CTool::Late_Update(_float fTimeDelta)
 
 
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CTool::Render()

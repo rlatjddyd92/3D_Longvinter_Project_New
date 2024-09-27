@@ -47,18 +47,13 @@ HRESULT CTool_ShotGun::Initialize(void* pArg)
 
 void CTool_ShotGun::Priority_Update(_float fTimeDelta)
 {
-	m_pTransformCom->Rotation(14.6963120f, 30.0189304f, 7.91829014f);
+	
 	int a = 10;
 }
 
 void CTool_ShotGun::Update(_float fTimeDelta)
 {
-	_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
-	}
+	
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_X, true))
 	{
@@ -89,21 +84,6 @@ void CTool_ShotGun::Update(_float fTimeDelta)
 				if (m_fTest_Z >= 360.f)
 					m_fTest_Z = 0;
 			}
-	
-
-	
-			//m_pTransformCom->Rotation(m_fTest_X, m_fTest_Y, m_fTest_Z);
-	
-
-	
-
-
-
-
-	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
-
-
-	//m_pColliderCom->Update(&m_WorldMatrix);
 }
 
 void CTool_ShotGun::Late_Update(_float fTimeDelta)
@@ -121,6 +101,19 @@ void CTool_ShotGun::Late_Update(_float fTimeDelta)
 
 HRESULT CTool_ShotGun::Render()
 {
+	m_pTransformCom->Rotation(14.6963120f, 30.0189304f, 7.91829014f);
+
+	_matrix		SocketMatrix = XMLoadFloat4x4(m_pSocketMatrix);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+	}
+
+	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(&m_RenderMatrix));
+
+	//__super::Render();
+
 	if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
