@@ -175,6 +175,21 @@
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile">
       <UniqueIdentifier>{e16a3aca-d4b1-4c3b-b3ad-188302bbcf12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
+      <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight">
+      <UniqueIdentifier>{1a703c10-54f5-4fe0-a575-dbeadd316793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Bullet_Parabola">
+      <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\01.%28보류%29">
+      <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal">
+      <UniqueIdentifier>{f2c4d3e9-7e94-4478-be60-8eaf6f5ad956}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -342,6 +357,27 @@
     <ClInclude Include="Factory_Enum_Part.h">
       <Filter>99.Defines\00.Factory\01.Part</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\InterAction.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Missile.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Explosion.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Melee.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\InterActionManager.h">
+      <Filter>02.ClientInstance\03.InterActionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bullet_Straight.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Explosion_Normal.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -457,6 +493,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\ItemManager.cpp">
       <Filter>02.ClientInstance\09.ItemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InterAction.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Missile.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Explosion.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Melee.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InterActionManager.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bullet_Straight.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Explosion_Normal.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
