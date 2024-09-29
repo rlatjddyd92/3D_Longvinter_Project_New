@@ -12,33 +12,31 @@ CFactory::CFactory(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameIn
 
 HRESULT CFactory::Setting_Program_Start()
 {
-	Ready_Prototype_Shader();
-	Ready_Prototype_Buffer();
-	Ready_Prototype_Texture();
-	Ready_Prototype_Font();
+	if (FAILED(Ready_Prototype_Shader()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Prototype_Buffer()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Prototype_Texture()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Prototype_Font()))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 		return E_FAIL;
 
-	_matrix		PreTransformMatrix = XMMatrixIdentity();
-
-	/* For. Prototype_Component_Model_Player*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Player"), "../Bin/Resources/Models/Player/Player", PreTransformMatrix)))
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_OBB"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Model_Human*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(Ready_Prototype_Model(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Human"), "../Bin/Resources/Models/Human/Human1", PreTransformMatrix)))
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_Sphere"),
+		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Model_Shotgun*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(Ready_Prototype_Model(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Shotgun"), "../Bin/Resources/Models/Shotgun/Shotgun", PreTransformMatrix)))
+	if (FAILED(Ready_Prototype_Model()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Prototype_Part()))
@@ -54,6 +52,10 @@ HRESULT CFactory::Setting_Program_Start()
 		return E_FAIL;
 	if (FAILED(Ready_Prototype_UIPage()))
 		return E_FAIL;
+
+	if (FAILED(Ready_Prototype_InterAction()))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -80,7 +82,6 @@ void CFactory::Save_Prototype_Model_Data()
 		++iterModel;
 		++iterFile;
 	}
-
 }
 
 void CFactory::Make_Container_Player(_float3 Position)
@@ -176,6 +177,37 @@ HRESULT CFactory::Ready_Prototype_Container()
 	/* For. Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_Player"),
 		CContainer_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CFactory::Ready_Prototype_Model()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Model_Player*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Player"), "../Bin/Resources/Models/Player/Player", PreTransformMatrix)))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Human*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_ANIM, true, TEXT("Prototype_Component_Model_Human"), "../Bin/Resources/Models/Human/Human1", PreTransformMatrix)))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Shotgun*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Shotgun"), "../Bin/Resources/Models/Shotgun/Shotgun", PreTransformMatrix)))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Bullet*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bullet_Normal"), "../Bin/Resources/Particle/Bullet_Normal", PreTransformMatrix)))
 		return E_FAIL;
 
 	return S_OK;
@@ -283,7 +315,18 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	return S_OK;
 }
 
-HRESULT CFactory::Ready_Prototype_Model(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix)
+HRESULT CFactory::Ready_Prototype_InterAction()
+{
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Bullet_Straight"), CBullet_Straight::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
+
+	return S_OK;
+}
+
+HRESULT CFactory::Ready_Prototype_Model_Single(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix)
 {
 	string strType = ".dat";
 	string strTemp = {};

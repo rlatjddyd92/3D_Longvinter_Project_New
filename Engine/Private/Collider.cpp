@@ -128,7 +128,20 @@ CComponent * CCollider::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CShader"));
+		MSG_BOX(TEXT("Failed to Cloned : CCollider"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CCollider* CCollider::Clone_Collider(void* pArg)
+{
+	CCollider* pInstance = new CCollider(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CCollider"));
 		Safe_Release(pInstance);
 	}
 

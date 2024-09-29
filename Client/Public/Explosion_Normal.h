@@ -4,7 +4,8 @@
 #include "Explosion.h"
 
 BEGIN(Engine)
-
+class CShader;
+class CModel;
 END
 
 BEGIN(Client)
@@ -29,10 +30,9 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 
-
-
 private:
-
+	class CShader* m_pShaderCom = { nullptr };
+	class CModel* m_pModelCom = { nullptr };
 
 
 

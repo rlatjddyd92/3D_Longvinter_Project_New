@@ -4,13 +4,18 @@
 #include "Missile.h"
 
 BEGIN(Engine)
-
+class CShader;
+class CModel;
 END
 
 BEGIN(Client)
 
 class CBullet_Straight : public CMissile
 {
+
+
+
+
 private:
 	CBullet_Straight(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CBullet_Straight(const CBullet_Straight& Prototype);
@@ -31,10 +36,13 @@ private:
 
 
 
+
+
 private:
+	class CShader* m_pShaderCom = { nullptr };
+	class CModel* m_pModelCom = { nullptr };
 
-
-
+	
 
 
 

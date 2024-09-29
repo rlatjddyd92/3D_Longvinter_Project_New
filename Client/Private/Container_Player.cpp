@@ -6,12 +6,12 @@
 #include "Tool.h"
 
 CContainer_Player::CContainer_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CContainerObject{ pDevice, pContext }
+	: CLongvinter_Container{ pDevice, pContext }
 {
 }
 
 CContainer_Player::CContainer_Player(const CContainer_Player& Prototype)
-	: CContainerObject{ Prototype }
+	: CLongvinter_Container{ Prototype }
 {
 }
 
@@ -126,7 +126,28 @@ void CContainer_Player::Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 		GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERA_THIRD);
 
+	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON) & 0x80)
+	{
+		ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
 
+		if (m_eWeaponType == WEAPON_MAIN)
+			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex;
+		if (m_eWeaponType == WEAPON_SUB)
+			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex;
+		if (m_eWeaponType == WEAPON_THROW)
+			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex;
+
+		if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
+		{
+			_float3 fStartPostion{};
+			_float3 fPushedDirec{};
+			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f;
+			XMStoreFloat3(&fStartPostion, vStartPosition);
+			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+			GET_INSTANCE->Input_ActionInfo(INTERACTION::INTER_BULLET_STRAIGHT, this, fStartPostion, fPushedDirec, 1.f, 0.f,0.2f, CCollider::TYPE_SPHERE, CInterAction::ACTION_EXPLOSION);
+		}
+	}
 
 
 

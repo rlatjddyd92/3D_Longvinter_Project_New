@@ -14,12 +14,23 @@ CMissile::CMissile(const CMissile& Prototype)
 
 HRESULT CMissile::Initialize_Prototype()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMissile::Initialize(void* pArg)
 {
-	return E_NOTIMPL;
+	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_PartObjects()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 void CMissile::Priority_Update(_float fTimeDelta)
@@ -36,29 +47,46 @@ void CMissile::Late_Update(_float fTimeDelta)
 
 HRESULT CMissile::Render()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMissile::Ready_Components()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMissile::Ready_PartObjects()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 CMissile* CMissile::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	return nullptr;
+	CMissile* pInstance = new CMissile(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CMissile"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CGameObject* CMissile::Clone(void* pArg)
 {
-	return nullptr;
+	CMissile* pInstance = new CMissile(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CMissile"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CMissile::Free()
 {
+	__super::Free();
 }

@@ -40,6 +40,7 @@ private:
 public:
 	static CCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eColliderType);
 	virtual CComponent* Clone(void* pArg) override;
+	CCollider* Clone_Collider(void* pArg);
 	virtual void Free() override;
 };
 

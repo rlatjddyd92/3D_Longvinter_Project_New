@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "ContainerObject.h"
+#include "Longvinter_Container.h"
 
 BEGIN(Engine)
 class CCollider;
@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CContainer_Player final : public CContainerObject
+class CContainer_Player : public CLongvinter_Container
 {
 public:
 	enum PARTID 
