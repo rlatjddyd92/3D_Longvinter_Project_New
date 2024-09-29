@@ -74,6 +74,7 @@ CPhysicsManager::P_RESULT CPhysicsManager::Make_P_Result(CTransform& Transform, 
 	pResult.fBeforePosition = Transform.Get_BeforePosition();
 	pResult.fCollider_Center = Collder.GetBoundingCenter();
 	pResult.fCollider_Extents = Collder.GetBoundingExtents();
+	pResult.fPushed_Power_Decrease = Transform.Get_Pushed_PowerDecrease();
 	//pResult.fCollider_Radius = Collder.GetBoundingRadius_Sphere();
 
 	return pResult;
@@ -85,7 +86,6 @@ void CPhysicsManager::Update_By_P_Result(CTransform* Transform, CCollider* Colld
 	Transform->Set_State(CTransform::STATE_UP, { tResult.fWorld._21,tResult.fWorld._22, tResult.fWorld._23,tResult.fWorld._24 });
 	Transform->Set_State(CTransform::STATE_LOOK, { tResult.fWorld._31,tResult.fWorld._32, tResult.fWorld._33,tResult.fWorld._34 });
 	Transform->Set_State(CTransform::STATE_POSITION, { tResult.fWorld._41,tResult.fWorld._42, tResult.fWorld._43,tResult.fWorld._44 });
-	Transform->Save_BeforePosition();
 	Transform->Set_Pushed_Power(tResult.fPushed_Power_Dir, tResult.fPushed_Power);
 	Collder->Update(Transform->Get_WorldMatrix_Ptr());
 }
@@ -113,7 +113,7 @@ void CPhysicsManager::PushedPower(P_RESULT* tResult, _float fTimeDelta)
 	tResult->fCollider_Center.x += fAdjust.x;
 	tResult->fCollider_Center.y += fAdjust.y;
 	tResult->fCollider_Center.z += fAdjust.z;
-	tResult->fPushed_Power -= m_fPushedPower_Decrease;
+	tResult->fPushed_Power -= tResult->fPushed_Power_Decrease;
 	if (tResult->fPushed_Power < 0)
 		tResult->fPushed_Power = 0;
 }

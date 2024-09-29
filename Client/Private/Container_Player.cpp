@@ -38,7 +38,7 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 
 	GET_INSTANCE->Set_Player_Pointer(this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-	m_pTransformCom->Set_Pushed_PowerDecrease(0.01f);
+	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	return S_OK;
 }
 
@@ -141,11 +141,11 @@ void CContainer_Player::Update(_float fTimeDelta)
 		{
 			_float3 fStartPostion{};
 			_float3 fPushedDirec{};
-			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f;
+			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
 			XMStoreFloat3(&fStartPostion, vStartPosition);
 			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
-			GET_INSTANCE->Input_ActionInfo(INTERACTION::INTER_BULLET_STRAIGHT, this, fStartPostion, fPushedDirec, 1.f, 0.f,0.2f, CCollider::TYPE_SPHERE, CInterAction::ACTION_EXPLOSION);
+			GET_INSTANCE->Input_ActionInfo(INTERACTION::INTER_BULLET_STRAIGHT, this, fStartPostion, fPushedDirec, 4.f, 0.2f,0.f, CCollider::TYPE_SPHERE, CInterAction::ACTION_EXPLOSION);
 		}
 	}
 
@@ -265,7 +265,7 @@ HRESULT CContainer_Player::Ready_PartObjects()
 	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.0f, ColliderDesc.vExtents.y, 0.0f);
 
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 

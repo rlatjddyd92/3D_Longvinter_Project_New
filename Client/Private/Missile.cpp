@@ -47,6 +47,8 @@ void CMissile::Late_Update(_float fTimeDelta)
 
 HRESULT CMissile::Render()
 {
+	__super::Render();
+
 	return S_OK;
 }
 

@@ -24,15 +24,15 @@ HRESULT CFactory::Setting_Program_Start()
 	if (FAILED(Ready_Prototype_Font()))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_OBB"),
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_OBB"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_SINGLE), TEXT("Prototype_Component_Collider_Sphere"),
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_Sphere"),
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 

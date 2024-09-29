@@ -50,7 +50,9 @@ public:
 
 public:
 	void Add_ActionInfo(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END);
-	
+
+protected:
+	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
 
 
 private:
@@ -61,7 +63,7 @@ private:
 
 protected:
 	list<INTERACTION_INFO*> m_Actionlist;
-
+	_float4x4				m_WorldMatrix = {};
 
 public:
 	static CInterAction* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

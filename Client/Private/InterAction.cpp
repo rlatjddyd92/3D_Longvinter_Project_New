@@ -59,7 +59,7 @@ void CInterAction::Add_ActionInfo(CLongvinter_Container* pHost, _float3 fPositio
 	Safe_AddRef(pNew->pHost);
 
 	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
-	Safe_AddRef(pNew->pTransform);
+	//Safe_AddRef(pNew->pTransform);
 	pNew->pTransform->Set_State(CTransform::STATE_POSITION, { fPosition.x, fPosition.y,fPosition.z });
 
 	pNew->pTransform->Set_Pushed_Power(fPushedDirec, fPushedPower);
@@ -71,31 +71,36 @@ void CInterAction::Add_ActionInfo(CLongvinter_Container* pHost, _float3 fPositio
 	{
 		CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
 		ColliderDesc.vExtents = _float3(fExtent, fExtent, fExtent);
-		ColliderDesc.vCenter = fPosition;
-		__super::Add_Component(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&pNew->pCollider));
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB, &ColliderDesc);
 	}
 	else if (eColliderType == CCollider::TYPE_OBB)
 	{
 		CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 		ColliderDesc.vExtents = _float3(fExtent, fExtent, fExtent);
-		ColliderDesc.vCenter = fPosition;
-		__super::Add_Component(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&pNew->pCollider));
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB, &ColliderDesc);
 	}
 	else if (eColliderType == CCollider::TYPE_SPHERE)
 	{
 		CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
 		ColliderDesc.fRadius = fExtent;
-		ColliderDesc.vCenter = fPosition;
-		__super::Add_Component(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"), TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&pNew->pCollider));
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE, &ColliderDesc);
 	}
 	
 
-	Safe_AddRef(pNew->pCollider);
+	//Safe_AddRef(pNew->pCollider);
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
 
 	pNew->eAction = eAction;
 
 	m_Actionlist.push_back(pNew);
+}
+
+HRESULT CInterAction::Bind_WorldMatrix(CShader* pShader, const _char* pContantName)
+{
+	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix); 
 }
 
 HRESULT CInterAction::Ready_Components()

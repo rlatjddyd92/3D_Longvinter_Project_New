@@ -30,5 +30,7 @@ void CBounding::Free()
 	Safe_Delete(m_pBoundingDesc_OBB);
 	Safe_Delete(m_pOriginalBoundingDesc_OBB);
 	Safe_Delete(m_pBoundingDesc_Sphere);
+	Safe_Delete(m_pOriginalBoundingDesc_Sphere);
+	
 
 }
