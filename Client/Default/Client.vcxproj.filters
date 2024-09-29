@@ -190,6 +190,9 @@
     <Filter Include="03.Container\06.Container_Effect">
       <UniqueIdentifier>{196223b7-9a85-41dc-b9ea-19e826ef9f18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip">
+      <UniqueIdentifier>{0333281b-12e4-4e96-82ca-6120a466703f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -384,6 +387,9 @@
     <ClInclude Include="..\Public\InterAction.h">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_ToolTip.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -523,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\InterAction.cpp">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

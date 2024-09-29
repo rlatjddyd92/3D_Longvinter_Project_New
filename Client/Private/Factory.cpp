@@ -139,6 +139,62 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Cursor%d.dds"), 3))))
 		return E_FAIL;
 
+
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Christmas_hat.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Coal_ingot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Coal_ingot.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Coal_ore_chunk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Coal_ore_chunk.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Copper_ingot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Copper_ingot.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Copper_ore_chunk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Copper_ore_chunk.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold_ingot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Gold_ingot.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Gold_ore_chunk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Gold_ore_chunk.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Iron_ingot"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Iron_ingot.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Iron_ore_chunk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Iron_ore_chunk.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_MachinGun_CraftingKit"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/MachinGun_CraftingKit.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_MafiaHat_steam_small"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/MafiaHat_steam_small.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconAnyFish"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconAnyFish.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconAnyMeat"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconAnyMeat.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconChainsaw"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconChainsaw.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconCloudberryJam"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconCloudberryJam.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconArrows10"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconArrows10.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconDoubleShotgun"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconDoubleShotgun.dds"), 1))))
+		return E_FAIL;
+
+	
+
+
 	return S_OK;
 }
 

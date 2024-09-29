@@ -206,6 +206,7 @@
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
+    <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
     <ClInclude Include="..\Public\UIPart_Button.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
     <ClCompile Include="..\Private\UIPart_Button.cpp" />

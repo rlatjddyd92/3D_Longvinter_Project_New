@@ -34,6 +34,7 @@ public:
 		_int iPrice = 100; // 아이템 가격
 		_float fAttack = 10.f;
 		_float fDefence = 1.f;
+		_float fHeal = 0.f;
 
 		_int iCount = 1;
 		_bool bPicked = false;
@@ -168,6 +169,7 @@ private: // <- 아이템 관련 변수
 
 	vector<CTool*> m_vecTool; // <- 유저, 적의 모델에 붙어 있는 파트 오브젝트 목록, 아이템 인덱스로 접근 
 	vector<CTexture*> m_vecItemInvenTexture; 
+	vector<vector<_bool>> m_vecItemTag;
 
 private: // <- 상점, 상자 관련 변수
 	_int m_iNowKey = 1; // <- 상점, 상자 생성 시, 키를 배정하기 위한 변수, 사용할 때 마다 증가하며 이미 사용한 키는 재사용하지 않는다 
