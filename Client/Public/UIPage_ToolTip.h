@@ -32,7 +32,6 @@ public:
 
 	virtual _bool Key_Action() override;
 
-	void ShowInfo(CItemManager::ItemInfo& tInfo);
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

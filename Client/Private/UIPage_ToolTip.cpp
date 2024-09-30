@@ -100,14 +100,6 @@ _bool CUIPage_ToolTip::Key_Action()
 	return true;
 }
 
-void CUIPage_ToolTip::ShowInfo(CItemManager::ItemInfo& tInfo)
-{
-
-
-
-
-}
-
 
 
 HRESULT CUIPage_ToolTip::Ready_Components()
