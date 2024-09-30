@@ -57,6 +57,7 @@ public:
 		_float3 fBeforePosition;
 		_float3 fPushed_Power_Dir; // <- 물리 계산 후 푸시 파워 
 		_float fPushed_Power;
+		_float fPushed_Power_Decrease;
 		_float3 fCollider_Center;
 		_float3 fCollider_Extents;
 		_float fCollider_Radius;

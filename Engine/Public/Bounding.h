@@ -64,6 +64,7 @@ protected: // OBB
 	BoundingOrientedBox* m_pBoundingDesc_OBB = { nullptr };
 
 protected: // Sphere
+	BoundingSphere* m_pOriginalBoundingDesc_Sphere = { nullptr };
 	BoundingSphere* m_pBoundingDesc_Sphere = { nullptr };
 
 protected:

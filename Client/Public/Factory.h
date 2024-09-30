@@ -6,6 +6,7 @@
 #include "../Default/Factory_Header.h"
 #include "../Default/UIPart_Defines.h"
 #include "../Default/UIPage_Defines.h"
+#include "../Default/InterAction_Defines.h"
 
 BEGIN(Engine)
 
@@ -27,7 +28,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	void Save_Prototype_Model_Data(); // <- Model을 Data 파일로 저장 
 #pragma endregion
 #pragma region Model_Load
-	HRESULT Ready_Prototype_Model(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
+	HRESULT Ready_Prototype_Model_Single(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 #pragma endregion
 
 
@@ -86,10 +87,12 @@ private: // <- 프로토타입 제작
 	HRESULT Ready_Prototype_Font();
 	HRESULT Ready_Prototype_Part();
 	HRESULT Ready_Prototype_Container();
+	HRESULT Ready_Prototype_Model();
 	HRESULT Ready_Prototype_Shader();
 	HRESULT Ready_Prototype_Buffer();
 	HRESULT Ready_Prototype_UIPart();
 	HRESULT Ready_Prototype_UIPage();
+	HRESULT Ready_Prototype_InterAction();
 
 #pragma endregion
 

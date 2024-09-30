@@ -12,6 +12,7 @@
 #include "PhysicsManager.h"
 #include "UIManager.h"
 #include "ItemManager.h"
+#include "InterActionManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -113,6 +114,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents, vAdjustVector, eDirec); }
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_OnGround(fCenter, fExtents); }
+	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius) { m_pTerrainManager->Destroy_Terrain_Explosion(fPosition, fRadius); }
 
 #pragma endregion
 
@@ -164,6 +166,14 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void InputRenderlist(ITEMINDEX eIndex, _uint* pParentState, const _float4x4* pMatrix, _float4x4& pParent) { return m_pItemManager->InputRenderlist(eIndex, pParentState, pMatrix, pParent); }
 #pragma endregion
 
+
+#pragma region INTERACTION
+	void Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END)
+	{
+		m_pInterActionManager->Input_ActionInfo(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+	}
+#pragma endregion
+
 private: // <- 보유 중인 포인터 목록 
 	CGameInstance*			m_pGameInstance = { nullptr };
 	CFreeCamera*			m_pCamera = { nullptr };
@@ -175,6 +185,7 @@ private: // <- 보유 중인 포인터 목록
 	CPhysicsManager*		m_pPhysicsManager = { nullptr };
 	CUIManager*				m_pUIManager = { nullptr };
 	CItemManager*			m_pItemManager = { nullptr };
+	CInterActionManager*	m_pInterActionManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;

@@ -80,6 +80,13 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 		return E_FAIL;
 	m_pItemManager = dynamic_cast<CItemManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_ItemManager"), -1));
 
+	// InterActionManager
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InterActionManager"), CInterActionManager::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_InterActionManager"), TEXT("Prototype_GameObject_InterActionManager"))))
+		return E_FAIL;
+	m_pInterActionManager = dynamic_cast<CInterActionManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_InterActionManager"), -1));
 
 
 	return S_OK;

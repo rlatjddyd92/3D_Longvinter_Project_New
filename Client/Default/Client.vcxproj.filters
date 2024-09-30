@@ -16,48 +16,6 @@
     <Filter Include="97.ShaderFiles">
       <UniqueIdentifier>{16251933-5a3e-4bdb-8f5e-4d9b7af0d35d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.MoblieObject">
-      <UniqueIdentifier>{453a7156-296f-4489-9cf9-631799e4287d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container">
-      <UniqueIdentifier>{cf4c0265-cf7a-4753-9681-e591e6c8173f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject">
-      <UniqueIdentifier>{beb8479c-ac1e-4d4e-b0bf-cf2704850a26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject\06.Body">
-      <UniqueIdentifier>{fb7aaade-aa89-41f1-8639-b41bec6a5bab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject\07.Tool">
-      <UniqueIdentifier>{fb2616ba-b571-4da2-82a7-8da38cb8a4a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\00.Container_Player">
-      <UniqueIdentifier>{457a3d5d-d8ce-4c33-8dc9-8530df46d060}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\01.Container_NPC">
-      <UniqueIdentifier>{73e49187-5d17-42b7-abea-4f8d00d292e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\02.Container_Enemy">
-      <UniqueIdentifier>{bcf3b35d-58c2-4d75-a86c-1b0ef91465f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\03.Container_Animal">
-      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\04.Container_Item">
-      <UniqueIdentifier>{c7b38ad9-a92a-4bb1-89cd-1964343b18bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\05.Container_InterAction">
-      <UniqueIdentifier>{9054aa96-bba6-4c47-9b7f-0e52cfb9dfe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\01.Container\06.Container_Effect">
-      <UniqueIdentifier>{196223b7-9a85-41dc-b9ea-19e826ef9f18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject\06.Body\00.Body_Human">
-      <UniqueIdentifier>{faa04b8e-93d8-4594-8647-bda7e3233beb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject\07.Tool\00.Tool_ShotGun">
-      <UniqueIdentifier>{8d5d89fc-7338-4f79-8f1b-d97a0970a293}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance">
       <UniqueIdentifier>{bd09e51d-766a-4343-ad6c-b0e50d2d43cd}</UniqueIdentifier>
     </Filter>
@@ -102,9 +60,6 @@
     </Filter>
     <Filter Include="99.Defines\00.Factory\00.Container">
       <UniqueIdentifier>{06ee658d-55d5-4957-bc07-e2f1f0dd80bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.MoblieObject\02.PartObject\07.Tool\99.Tool_Empty">
-      <UniqueIdentifier>{498e6a6a-4f22-477e-9bac-cc8a81efbaa4}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.ClientInstance\07.PhysicsManager">
       <UniqueIdentifier>{3973ed0c-be1e-4076-a6b0-8e9d0907e158}</UniqueIdentifier>
@@ -166,6 +121,27 @@
     <Filter Include="02.ClientInstance\03.InterActionManager">
       <UniqueIdentifier>{6963eeeb-b867-466a-af0d-f7a3e68568bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99.Defines\02.InterAction">
+      <UniqueIdentifier>{062df20c-80fa-48ce-aa94-b32846fd0eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject">
+      <UniqueIdentifier>{beb8479c-ac1e-4d4e-b0bf-cf2704850a26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\06.Body">
+      <UniqueIdentifier>{fb7aaade-aa89-41f1-8639-b41bec6a5bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\06.Body\00.Body_Human">
+      <UniqueIdentifier>{faa04b8e-93d8-4594-8647-bda7e3233beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool">
+      <UniqueIdentifier>{fb2616ba-b571-4da2-82a7-8da38cb8a4a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\00.Tool_ShotGun">
+      <UniqueIdentifier>{8d5d89fc-7338-4f79-8f1b-d97a0970a293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\99.Tool_Empty">
+      <UniqueIdentifier>{498e6a6a-4f22-477e-9bac-cc8a81efbaa4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction">
       <UniqueIdentifier>{a4f5b98b-cfe5-49d7-8228-64897aa37935}</UniqueIdentifier>
     </Filter>
@@ -175,20 +151,47 @@
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile">
       <UniqueIdentifier>{e16a3aca-d4b1-4c3b-b3ad-188302bbcf12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
-      <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight">
       <UniqueIdentifier>{1a703c10-54f5-4fe0-a575-dbeadd316793}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Bullet_Parabola">
       <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
+      <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\01.%28보류%29">
       <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal">
       <UniqueIdentifier>{f2c4d3e9-7e94-4478-be60-8eaf6f5ad956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container">
+      <UniqueIdentifier>{cf4c0265-cf7a-4753-9681-e591e6c8173f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\00.Container_Player">
+      <UniqueIdentifier>{457a3d5d-d8ce-4c33-8dc9-8530df46d060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\01.Container_NPC">
+      <UniqueIdentifier>{73e49187-5d17-42b7-abea-4f8d00d292e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\02.Container_Enemy">
+      <UniqueIdentifier>{bcf3b35d-58c2-4d75-a86c-1b0ef91465f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\03.Container_Animal">
+      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\04.Container_Item">
+      <UniqueIdentifier>{c7b38ad9-a92a-4bb1-89cd-1964343b18bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\05.Container_InterAction">
+      <UniqueIdentifier>{9054aa96-bba6-4c47-9b7f-0e52cfb9dfe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\06.Container_Effect">
+      <UniqueIdentifier>{196223b7-9a85-41dc-b9ea-19e826ef9f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip">
+      <UniqueIdentifier>{0333281b-12e4-4e96-82ca-6120a466703f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -241,19 +244,19 @@
       <Filter>02.ClientInstance\06.TerrainManager\00.SurFace</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Body.h">
-      <Filter>03.MoblieObject\02.PartObject\06.Body</Filter>
+      <Filter>02.PartObject\06.Body</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tool.h">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool</Filter>
+      <Filter>02.PartObject\07.Tool</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Container_Player.h">
-      <Filter>03.MoblieObject\01.Container\00.Container_Player</Filter>
+      <Filter>03.Container\00.Container_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Body_Human.h">
-      <Filter>03.MoblieObject\02.PartObject\06.Body\00.Body_Human</Filter>
+      <Filter>02.PartObject\06.Body\00.Body_Human</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tool_ShotGun.h">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool\00.Tool_ShotGun</Filter>
+      <Filter>02.PartObject\07.Tool\00.Tool_ShotGun</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ClientInstance.h">
       <Filter>02.ClientInstance</Filter>
@@ -292,7 +295,7 @@
       <Filter>99.Defines\00.Factory\00.Container</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tool_Empty.h">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool\99.Tool_Empty</Filter>
+      <Filter>02.PartObject\07.Tool\99.Tool_Empty</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PhysicsManager.h">
       <Filter>02.ClientInstance\07.PhysicsManager</Filter>
@@ -357,9 +360,6 @@
     <ClInclude Include="Factory_Enum_Part.h">
       <Filter>99.Defines\00.Factory\01.Part</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\InterAction.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Missile.h">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
     </ClInclude>
@@ -377,6 +377,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\Explosion_Normal.h">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Longvinter_Container.h">
+      <Filter>03.Container</Filter>
+    </ClInclude>
+    <ClInclude Include="InterAction_Defines.h">
+      <Filter>99.Defines\02.InterAction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\InterAction.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_ToolTip.h">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -417,19 +429,19 @@
       <Filter>02.ClientInstance\06.TerrainManager\00.SurFace</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Body.cpp">
-      <Filter>03.MoblieObject\02.PartObject\06.Body</Filter>
+      <Filter>02.PartObject\06.Body</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Tool.cpp">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool</Filter>
+      <Filter>02.PartObject\07.Tool</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Container_Player.cpp">
-      <Filter>03.MoblieObject\01.Container\00.Container_Player</Filter>
+      <Filter>03.Container\00.Container_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Body_Human.cpp">
-      <Filter>03.MoblieObject\02.PartObject\06.Body\00.Body_Human</Filter>
+      <Filter>02.PartObject\06.Body\00.Body_Human</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Tool_ShotGun.cpp">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool\00.Tool_ShotGun</Filter>
+      <Filter>02.PartObject\07.Tool\00.Tool_ShotGun</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ClientInstance.cpp">
       <Filter>02.ClientInstance</Filter>
@@ -444,7 +456,7 @@
       <Filter>01.Levels\03.Editor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Tool_Empty.cpp">
-      <Filter>03.MoblieObject\02.PartObject\07.Tool\99.Tool_Empty</Filter>
+      <Filter>02.PartObject\07.Tool\99.Tool_Empty</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PhysicsManager.cpp">
       <Filter>02.ClientInstance\07.PhysicsManager</Filter>
@@ -494,9 +506,6 @@
     <ClCompile Include="..\Private\ItemManager.cpp">
       <Filter>02.ClientInstance\09.ItemManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\InterAction.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Missile.cpp">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
     </ClCompile>
@@ -514,6 +523,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Explosion_Normal.cpp">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Longvinter_Container.cpp">
+      <Filter>03.Container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InterAction.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
+      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

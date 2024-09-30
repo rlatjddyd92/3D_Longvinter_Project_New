@@ -16,21 +16,21 @@ HRESULT CBounding_OBB::Initialize(CBounding::BOUNDING_DESC* pBoundingDesc)
 	_float4			vQuaternion = {};
 	XMStoreFloat4(&vQuaternion, XMQuaternionRotationRollPitchYaw(pDesc->vAngles.x, pDesc->vAngles.y, pDesc->vAngles.z));
 
-	m_pBoundingDesc = new BoundingOrientedBox(pDesc->vCenter, pDesc->vExtents, vQuaternion);
-	m_pOriginalBoundingDesc = new BoundingOrientedBox(*m_pBoundingDesc);
+	m_pBoundingDesc_OBB = new BoundingOrientedBox(pDesc->vCenter, pDesc->vExtents, vQuaternion);
+	m_pOriginalBoundingDesc_OBB = new BoundingOrientedBox(*m_pBoundingDesc_OBB);
 
 	return S_OK;
 }
 
 void CBounding_OBB::Update(_fmatrix WorldMatrix)
 {
-	m_pOriginalBoundingDesc->Transform(*m_pBoundingDesc, WorldMatrix);
+	m_pOriginalBoundingDesc_OBB->Transform(*m_pBoundingDesc_OBB, WorldMatrix);
 }
 
 HRESULT CBounding_OBB::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 {
 #ifdef _DEBUG
-	DX::Draw(pBatch, *m_pBoundingDesc, m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f));
+	DX::Draw(pBatch, *m_pBoundingDesc_OBB, m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f));
 #endif
 
 	return S_OK;
@@ -43,15 +43,15 @@ _bool CBounding_OBB::Intersect(CCollider::TYPE eColliderType, CBounding* pBoundi
 	switch (eColliderType)
 	{
 	case CCollider::TYPE_AABB:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_AABB*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_OBB->Intersects(*(dynamic_cast<CBounding_AABB*>(pBounding)->Get_Desc()));
 		break;
 
 	case CCollider::TYPE_OBB:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_OBB*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_OBB->Intersects(*(dynamic_cast<CBounding_OBB*>(pBounding)->Get_Desc()));
 		break;
 
 	case CCollider::TYPE_SPHERE:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_Sphere*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_OBB->Intersects(*(dynamic_cast<CBounding_Sphere*>(pBounding)->Get_Desc()));
 		break;
 	}
 

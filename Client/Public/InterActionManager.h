@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "GameObject.h"
+#include "../Default/InterAction_Defines.h"
 
 BEGIN(Engine)
 
@@ -35,10 +36,14 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 
-	
+public:
+	void Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END);
+
+
 
 private:
-	
+	vector<CInterAction*> m_vecInterAction;
+
 
 public:
 	static CInterActionManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

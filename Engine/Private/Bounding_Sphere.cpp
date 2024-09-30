@@ -13,21 +13,21 @@ HRESULT CBounding_Sphere::Initialize(CBounding::BOUNDING_DESC* pBoundingDesc)
 	/* 기초 로컬에서의 상태. */
 	BOUNDING_SPHERE_DESC* pDesc = static_cast<BOUNDING_SPHERE_DESC*>(pBoundingDesc);
 
-	m_pBoundingDesc = new BoundingSphere(pDesc->vCenter, pDesc->fRadius);
-	m_pOriginalBoundingDesc = new BoundingSphere(*m_pBoundingDesc);
+	m_pBoundingDesc_Sphere = new BoundingSphere(pDesc->vCenter, pDesc->fRadius);
+	m_pOriginalBoundingDesc_Sphere = new BoundingSphere(*m_pBoundingDesc_Sphere);
 
 	return S_OK;
 }
 
 void CBounding_Sphere::Update(_fmatrix WorldMatrix)
 {
-	m_pOriginalBoundingDesc->Transform(*m_pBoundingDesc, WorldMatrix);
+	m_pOriginalBoundingDesc_Sphere->Transform(*m_pBoundingDesc_Sphere, WorldMatrix);
 }
 
 HRESULT CBounding_Sphere::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 {
 #ifdef _DEBUG
-	DX::Draw(pBatch, *m_pBoundingDesc, m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f));
+	DX::Draw(pBatch, *m_pBoundingDesc_Sphere, m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f));
 #endif
 
 	return S_OK;
@@ -40,15 +40,15 @@ _bool CBounding_Sphere::Intersect(CCollider::TYPE eColliderType, CBounding* pBou
 	switch (eColliderType)
 	{
 	case CCollider::TYPE_AABB:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_AABB*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_Sphere->Intersects(*(dynamic_cast<CBounding_AABB*>(pBounding)->Get_Desc()));
 		break;
 
 	case CCollider::TYPE_OBB:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_OBB*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_Sphere->Intersects(*(dynamic_cast<CBounding_OBB*>(pBounding)->Get_Desc()));
 		break;
 
 	case CCollider::TYPE_SPHERE:
-		m_isColl = m_pBoundingDesc->Intersects(*(dynamic_cast<CBounding_Sphere*>(pBounding)->Get_Desc()));
+		m_isColl = m_pBoundingDesc_Sphere->Intersects(*(dynamic_cast<CBounding_Sphere*>(pBounding)->Get_Desc()));
 		break;
 	}
 

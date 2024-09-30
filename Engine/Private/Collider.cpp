@@ -109,13 +109,20 @@ _float CCollider::GetBoundingRadius_Sphere()
 	return m_pBounding->GetBoundingRadius_Sphere();
 }
 
-CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eColliderType)
+CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eColliderType, void* pArg)
 {
 	CCollider*		pInstance = new CCollider(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(eColliderType)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CCollider"));
+		Safe_Release(pInstance);
+	}
+
+	if (pArg != nullptr)
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Created : CTransform"));
 		Safe_Release(pInstance);
 	}
 
@@ -128,7 +135,7 @@ CComponent * CCollider::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CShader"));
+		MSG_BOX(TEXT("Failed to Cloned : CCollider"));
 		Safe_Release(pInstance);
 	}
 
