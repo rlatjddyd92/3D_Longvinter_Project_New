@@ -29,6 +29,7 @@ public:
 
 public:
 	void Set_UIPosition(_float fX, _float fY) { m_fX = fX; m_fY = fY; }
+	void Get_UIPosition(_float* fX, _float* fY) { *fX = m_fX; *fY = m_fY; }
 	void Move_UI(_float fX, _float fY) { m_fX += fX; m_fY += fY; }
 	void Set_UISize(_float fSizeX, _float fSizeY) { m_fSizeX = fSizeX;  m_fSizeY = fSizeY; }
 	void Set_UIShowTime(_float fTime) { m_fShowTime = fTime; }

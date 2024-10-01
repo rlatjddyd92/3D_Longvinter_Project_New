@@ -147,11 +147,11 @@ void CContainer_Player::Update(_float fTimeDelta)
 		ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
 
 		if (m_eWeaponType == WEAPON_MAIN)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex;
 		if (m_eWeaponType == WEAPON_SUB)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex;
 		if (m_eWeaponType == WEAPON_THROW)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex;
 
 		if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
 		{
@@ -192,11 +192,11 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 	
 
 	if (m_eWeaponType == WEAPON_MAIN)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_SUB)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_THROW)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);

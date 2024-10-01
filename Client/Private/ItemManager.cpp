@@ -71,7 +71,7 @@ HRESULT CItemManager::Setting_ItemInfo()
 {
 	m_vecItemInfo.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecInvenInfo.resize(INVEN_COL * INVEN_ROW);
-	m_vecEquipInfo.resize(SLOT_END);
+	m_vecEquipInfo.resize(_int(EQUIPSLOT::SLOT_END));
 	m_vecItemInvenTexture.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecTool.resize(_int(ITEMINDEX::ITEM_END));
 	m_vecItemTag.resize(_int(ITEMINDEX::ITEM_END));
@@ -254,6 +254,29 @@ HRESULT CItemManager::Setting_ItemInfo()
 	m_vecItemTag[_int(ITEMINDEX::ITEM_MEAT)].resize(_int(ITEMTAG::ITEM_TAG_END));
 	m_vecItemTag[_int(ITEMINDEX::ITEM_MEAT)][_int(ITEMTAG::ITEM_TAG_CANROTTEN)] = true;
 
+
+	m_vecTypeName.resize(_int(ITEMTYPE::ITEM_TYPE_END));
+	m_vecTagName.resize(_int(ITEMTAG::ITEM_TAG_END));
+
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_WEAPON)] = TEXT("주무기/보조무기");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_AMMO)] = TEXT("탄약/화살");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_ETC)] = TEXT("기타");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_FOOD)] = TEXT("음식");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_HAT)] = TEXT("모자");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_MINERAL)] = TEXT("재료");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_POTION)] = TEXT("포션");
+	m_vecTypeName[_int(ITEMTYPE::ITEM_TYPE_TOOL)] = TEXT("도구");
+	
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_BURN)] = TEXT("화염");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_CANROTTEN)] = TEXT("부패위험");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_DISH)] = TEXT("요리");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_HEAVYDEMAGE)] = TEXT("강력한 피해");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_HIGHPRICE)] = TEXT("귀중품");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_PUSH)] = TEXT("넉백");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_QUIET)] = TEXT("소음기");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_REFINED)] = TEXT("가공된 재료");
+	m_vecTagName[_int(ITEMTAG::ITEM_TAG_ROTTEN)] = TEXT("부패함");
+	
 	
 	// 인벤 초기 세팅 
 	for (_int i = 0; i < _int(ITEMINDEX::ITEM_END); ++i)
@@ -270,7 +293,7 @@ const CItemManager::TINFO CItemManager::PickItem(ITEMARRAY eArray, _int iIndex)
 		return tFail;
 	if ((eArray == ITEMARRAY::ARRAY_INVEN) && (iIndex >= _int(INVEN_COL * INVEN_ROW)))
 		return tFail;
-	if ((eArray == ITEMARRAY::ARRAY_EQUIP) && (iIndex >= _int(SLOT_END)))
+	if ((eArray == ITEMARRAY::ARRAY_EQUIP) && (iIndex >= _int(EQUIPSLOT::SLOT_END)))
 		return tFail;
 
 	m_eBeforeArray = eArray;
@@ -455,4 +478,6 @@ void CItemManager::Free()
 		iter.clear();
 
 	m_vecItemTag.clear();
+	m_vecTypeName.clear();
+	m_vecTagName.clear();
 }

@@ -174,22 +174,34 @@ _bool CUIPage_Inven::Key_Action()
 
 
 		for (_int i = 0; i < INVEN_COL * INVEN_ROW; ++i)
+		{
 			if (m_vecInvenCell[i]->IsPushed())
 			{
 				Check = true;
 
 				if (bInput)
 				{
-					GET_INSTANCE->PutInItem(CItemManager::ARRAY_INVEN, i);
+					GET_INSTANCE->PutInItem(ITEMARRAY::ARRAY_INVEN, i);
 				}
 				else
 				{
-					GET_INSTANCE->PickItem(CItemManager::ARRAY_INVEN, i);
+					GET_INSTANCE->PickItem(ITEMARRAY::ARRAY_INVEN, i);
 					m_vecInvenCell[i]->Set_Picked(true);
 				}
-				
+
 				break;
 			}
+			else if ((m_vecInvenCell[i]->IsOnCursor()) && (GET_INSTANCE->GetInvenInfo(i).eIndex != ITEMINDEX::ITEM_END))
+			{
+				_float fX = 0.f;
+				_float fY = 0.f;
+				m_vecInvenCell[i]->Get_UIPosition(&fX, &fY);
+				GET_INSTANCE->ShowToolTip(fX, fY, ITEMARRAY::ARRAY_INVEN, i);
+			}
+				
+		}
+			
+		
 	}
 	
 

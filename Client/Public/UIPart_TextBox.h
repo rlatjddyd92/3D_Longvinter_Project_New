@@ -16,6 +16,7 @@ class CUIPart_TextBox final : public CUIPart
 public:
 	enum UITEXTBOX_TYPE
 	{
+		TEXTBOX_NORMAL,
 		TEXTBOX_NOTICE,
 		TEXTBOX_SELECT,
 		TEXTBOX_END

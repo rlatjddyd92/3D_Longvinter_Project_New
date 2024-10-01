@@ -46,6 +46,8 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 {
 	m_iTextureIndex = 0;
 
+	m_bShowTooltip = false;
+
 	POINT mousePos{};
 
 	GetCursorPos(&mousePos);
@@ -168,6 +170,10 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			iter = m_Pagelist.erase(iter);
 	}
 
+	if (m_bShowTooltip)
+		m_pPage_ToolTip->AddRender_UIPage();
+
+
 	_int iInformNum = 0;
 
 	for (list<CUIPart_TextBox*>::iterator iter = m_Informlist.begin(); iter != m_Informlist.end();)
@@ -237,6 +243,7 @@ HRESULT CUIManager::Render()
 
 
 
+
 void CUIManager::ShowInformMessage(wstring Text)
 {
 	while (m_Informlist.size() >= m_iMaxInform)
@@ -249,6 +256,7 @@ void CUIManager::ShowInformMessage(wstring Text)
 	//Safe_AddRef(pNew);
 
 }
+
 
 HRESULT CUIManager::Ready_Components()
 {

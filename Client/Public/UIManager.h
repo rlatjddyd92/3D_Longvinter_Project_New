@@ -46,8 +46,12 @@ public:
 
 public: // 커서 관련 함수
 	void ActivateCursor() { m_iTextureIndex = 2; }
-	//void ShowTooltip(CItemManager::ItemInfo& tInfo, _float fCell_X, _float fCell_Y);
 	void ShowInformMessage(wstring Text);
+
+
+public: // 툴팁 관련 함수 
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_bShowTooltip = true;  m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
+
 
 private:
 	HRESULT Ready_Components();
@@ -75,7 +79,9 @@ private:
 
 	list<CUIPart_TextBox*> m_Informlist;
 
-	_int m_iMaxInform = 5;
+	_int m_iMaxInform = 10;
+
+	_bool m_bShowTooltip = false;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

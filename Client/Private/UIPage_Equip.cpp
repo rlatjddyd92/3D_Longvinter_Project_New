@@ -42,7 +42,7 @@ HRESULT CUIPage_Equip::Initialize(void* pArg)
 	m_fY = 300.f;
 
 	m_fSizeX = 200.f;
-	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(CItemManager::SLOT_END)) + 60.f;
+	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(EQUIPSLOT::SLOT_END)) + 60.f;
 
 	__super::SetOff(true);
 
@@ -67,9 +67,9 @@ void CUIPage_Equip::Update(_float fTimeDelta)
 
 void CUIPage_Equip::Late_Update(_float fTimeDelta)
 {
-	for (_int i = 0; i < _int(CItemManager::SLOT_END); ++i)
+	for (_int i = 0; i < _int(EQUIPSLOT::SLOT_END); ++i)
 	{
-		CItemManager::TINFO tInfo = GET_INSTANCE->GetEquipInfo(CItemManager::EQUIPSLOT(i));
+		CItemManager::TINFO tInfo = GET_INSTANCE->GetEquipInfo(EQUIPSLOT(i));
 
 		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
 			m_vecEquipCell[i]->Empty_Cell();
@@ -120,12 +120,12 @@ void CUIPage_Equip::Ready_UIPart()
 	m_pBack_Window = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW, m_fX, m_fY, m_fSizeX, m_fSizeY);
 	m_pBack_Window_Header = GET_INSTANCE->MakeUIPart_Back(CUIPart_Back::BACK_INGAME_WINDOW_HEADER, m_fX, m_fY - (m_fSizeY / 2) + 25.f, m_fSizeX - 20.f, 30.f);
 
-	m_vecEquipCell.resize(CItemManager::SLOT_END);
+	m_vecEquipCell.resize(_int(EQUIPSLOT::SLOT_END));
 
 	_float fStartX = m_fX - (m_fSizeX / 2) + 10 + (m_fInvenCellSize * 0.5f);
 	_float fStartY = m_fY - (m_fSizeY / 2) + 50 + (m_fInvenCellSize * 0.5f);
 
-	for (_int i = 0; i < _int(CItemManager::SLOT_END); ++i)
+	for (_int i = 0; i < _int(EQUIPSLOT::SLOT_END); ++i)
 			m_vecEquipCell[i] = GET_INSTANCE->MakeUIPart_Cell(CUIPart_Cell::CELL_INVEN, fStartX, fStartY + (m_fInvenCellSize * 1.f * i), m_fInvenCellSize, m_fInvenCellSize);
 }
 
@@ -175,23 +175,33 @@ _bool CUIPage_Equip::Key_Action()
 			bInput = true;
 
 
-		for (_int i = 0; i < _int(CItemManager::SLOT_END); ++i)
+		for (_int i = 0; i < _int(EQUIPSLOT::SLOT_END); ++i)
+		{
 			if (m_vecEquipCell[i]->IsPushed())
 			{
 				Check = true;
 
 				if (bInput)
 				{
-					GET_INSTANCE->PutInItem(CItemManager::ARRAY_EQUIP, i);
+					GET_INSTANCE->PutInItem(ITEMARRAY::ARRAY_EQUIP, i);
 				}
 				else
 				{
-					GET_INSTANCE->PickItem(CItemManager::ARRAY_EQUIP, i);
+					GET_INSTANCE->PickItem(ITEMARRAY::ARRAY_EQUIP, i);
 					m_vecEquipCell[i]->Set_Picked(true);
 				}
 
 				break;
 			}
+			else if ((m_vecEquipCell[i]->IsOnCursor()) && (GET_INSTANCE->GetInvenInfo(i).eIndex != ITEMINDEX::ITEM_END))
+			{
+				_float fX = 0.f;
+				_float fY = 0.f;
+				m_vecEquipCell[i]->Get_UIPosition(&fX, &fY);
+				GET_INSTANCE->ShowToolTip(fX, fY, ITEMARRAY::ARRAY_EQUIP, i);
+			}
+		}
+			
 	}
 
 

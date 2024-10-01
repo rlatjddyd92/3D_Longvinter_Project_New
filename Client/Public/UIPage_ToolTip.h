@@ -14,23 +14,23 @@ BEGIN(Client)
 class CUIPage_ToolTip : public CUIPage
 {
 public:
-	enum TOOLTIP_TEXT
+	
+
+	enum TOOLTIP_COLOR
 	{
-		TEXT_ITEMNAME,
-		TEXT_DESCRIPTION,
-		TEXT_TYPE,
-		TEXT_HP,
-		TEXT_PRICE,
-		TEXT_ATTACK,
-		TEXT_DEFENCE,
-		TEXT_HEAL,
-		TEXT_TAG_1,
-		TEXT_TAG_2,
-		TEXT_TAG_3,
-		TEXT_TAG_4,
-		TEXT_TAG_5,
-		TEXT_END
+		COLOR_NORMAL,
+		COLOR_PLUS,
+		COLOR_MINUS,
+		COLOR_END
 	};
+
+	typedef struct PART_SIZE
+	{
+		_float m_fSize = 0.f;
+		_float m_fTextScale = 0.f;
+		_float m_fGap = 0.f;
+	}P_SIZE;
+
 
 
 protected:
@@ -52,7 +52,8 @@ public:
 
 	virtual _bool Key_Action() override;
 
-	//void ShowTooltip(CItemManager::ItemInfo& tInfo, _float fCell_X, _float fCell_Y);
+
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex);
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -71,6 +72,24 @@ private:
 	_float m_fBeforeX = 0.f;
 	_float m_fBeforeY = 0.f;
 
+
+
+private: // 툴팁 디자인 관련 변수 
+	_float m_fGap_Top = 10.f;
+	_float m_fGap_Left = 10.f;
+
+	vector<PART_SIZE> m_vecSize;
+
+	_int m_iTagNum = 1;
+	_int m_iTagMaxNum = (_int(TOOLTIP_TEXT::TEXT_TAG_10) - _int(TOOLTIP_TEXT::TEXT_TAG_1)) + 1;
+
+	_float m_fSizeY_NoneTag = 0.f;
+
+	ITEMARRAY m_eNowArray = ITEMARRAY::ARRAY_END;
+	_int m_iNowIndex = -1;
+
+
+	
 public:
 	static CUIPage_ToolTip* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

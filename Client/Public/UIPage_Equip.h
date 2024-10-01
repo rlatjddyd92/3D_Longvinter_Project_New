@@ -53,7 +53,7 @@ private:
 	_float m_fBeforeY = 0.f;
 
 	// Equip ¼³Á¤ 
-	_float m_fInvenCellSize = 50.f;
+	_float m_fInvenCellSize = INVEN_CELLSIZE;
 
 
 public:

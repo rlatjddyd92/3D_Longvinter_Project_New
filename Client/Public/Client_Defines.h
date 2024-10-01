@@ -53,9 +53,7 @@ namespace Client
 		CMODE_END
 	};
 
-
-
-
+	
 
 }
 

@@ -152,6 +152,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region UIMANAGER
 	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
 	void ShowInformMessage(wstring Text) { m_pUIManager->ShowInformMessage(Text); }
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 #pragma endregion
 
 
@@ -159,16 +160,21 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region ITEM
 	const CItemManager::TINFO& GetItemInfo(ITEMINDEX eIndex) { return m_pItemManager->GetItemInfo(eIndex); }
 	const CItemManager::TINFO& GetInvenInfo(_uint iInvenNum) { return m_pItemManager->GetInvenInfo(iInvenNum); }
-	const CItemManager::TINFO& GetEquipInfo(CItemManager::EQUIPSLOT eSlot) { return m_pItemManager->GetEquipInfo(eSlot); }
+	const CItemManager::TINFO& GetEquipInfo(EQUIPSLOT eSlot) { return m_pItemManager->GetEquipInfo(eSlot); }
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
 
-	const CItemManager::TINFO PickItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
+	const CItemManager::TINFO PickItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
 	void CancelPick() { m_pItemManager->CancelPick(); }
-	HRESULT PutInItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
+	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
 
 	ITEMINDEX GetPickedItemIndex() { return m_pItemManager->GetPickedItemIndex(); }
 
 	void InputRenderlist(ITEMINDEX eIndex, _uint* pParentState, const _float4x4* pMatrix, _float4x4& pParent) { return m_pItemManager->InputRenderlist(eIndex, pParentState, pMatrix, pParent); }
+
+	wstring Get_TypeName(ITEMTYPE eType) { return m_pItemManager->Get_TypeName(eType); }
+	wstring Get_TagName(ITEMTAG eType) { return m_pItemManager->Get_TagName(eType); }
+	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_pItemManager->Get_TagState(iIndex, eType);}
+
 #pragma endregion
 
 
