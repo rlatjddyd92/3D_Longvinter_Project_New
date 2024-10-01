@@ -26,6 +26,7 @@ public:
 	HRESULT Bind_SRVs(const _char* pConstantName, ID3D11ShaderResourceView** ppSRVs, _uint iNumSRVs);
 	HRESULT Bind_RawValue(const _char* pConstantName, const void* pData, _uint iLength);
 	HRESULT Bind_ChangeColor(const _char* pConstantName_IsChange, const _char* pConstantName_fRGB, _bool* bChange, _float* pRGB);
+	HRESULT Bind_ChangeAlpah(const _char* pConstantName_IsChange, const _char* pConstantName_fAlpah, _bool* bChange, _float* pAlpah);
 
 private:
 	ID3DX11Effect* m_pEffect = { nullptr };

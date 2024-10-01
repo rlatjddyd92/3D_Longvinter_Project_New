@@ -42,6 +42,16 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 		m_fRGB[1] = 180.f / 255.f;
 		m_fRGB[2] = 140.f / 255.f;
 	}
+	if (m_eType == BACK_INGAME_TOOLTIP)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 0.f / 255.f;
+		m_fRGB[1] = 0.f / 255.f;
+		m_fRGB[2] = 0.f / 255.f;
+
+		m_bTransParent = true;
+		m_fAlpah = 0.3f;
+	}
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(Desc)))
@@ -94,6 +104,8 @@ HRESULT CUIPart_Back::Render()
 
 	return S_OK;
 }
+
+
 
 HRESULT CUIPart_Back::Ready_Components()
 {

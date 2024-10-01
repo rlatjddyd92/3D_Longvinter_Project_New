@@ -46,6 +46,8 @@ public:
 
 public: // 커서 관련 함수
 	void ActivateCursor() { m_iTextureIndex = 2; }
+	//void ShowTooltip(CItemManager::ItemInfo& tInfo, _float fCell_X, _float fCell_Y);
+	void ShowInformMessage(wstring Text);
 
 private:
 	HRESULT Ready_Components();
@@ -69,6 +71,11 @@ private:
 	CUIPage_Equip* m_pPage_Equip = { nullptr };
 	CUIPage_Crafting* m_pPage_Crafting = { nullptr };
 	CUIPage_Option* m_pPage_Option = { nullptr };
+	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
+
+	list<CUIPart_TextBox*> m_Informlist;
+
+	_int m_iMaxInform = 5;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

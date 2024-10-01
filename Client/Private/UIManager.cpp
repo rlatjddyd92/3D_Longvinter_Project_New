@@ -167,6 +167,26 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		else
 			iter = m_Pagelist.erase(iter);
 	}
+
+	_int iInformNum = 0;
+
+	for (list<CUIPart_TextBox*>::iterator iter = m_Informlist.begin(); iter != m_Informlist.end();)
+	{
+		if (!(*iter)->GetDead())
+		{
+			
+			(*iter)->Set_UIPosition(g_iWinSizeX >> 1, 70.f + (35.f * iInformNum));
+			(*iter)->AddRender_UIPart();
+			++iInformNum;
+			++iter;
+		}
+		else
+		{
+			//Safe_Release(*iter);
+			iter = m_Informlist.erase(iter);
+		}
+	}
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
@@ -197,9 +217,6 @@ HRESULT CUIManager::Render()
 			return E_FAIL;
 	}
 
-
-
-
 	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
 		return E_FAIL;
 
@@ -215,6 +232,22 @@ HRESULT CUIManager::Render()
 
 
 	return S_OK;
+}
+
+
+
+
+void CUIManager::ShowInformMessage(wstring Text)
+{
+	while (m_Informlist.size() >= m_iMaxInform)
+		m_Informlist.pop_front();
+
+	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_NOTICE, g_iWinSizeX >> 1, 0.f, 500.f, 30.f, true, true, 3.f);
+	pNew->SetText(Text);
+
+	m_Informlist.push_back(pNew);
+	//Safe_AddRef(pNew);
+
 }
 
 HRESULT CUIManager::Ready_Components()
@@ -298,10 +331,16 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Equip);
 	Safe_Release(m_pPage_Crafting);
 	Safe_Release(m_pPage_Option);
+	Safe_Release(m_pPage_ToolTip);
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
+
+	for (auto& iter : m_Informlist)
+		Safe_Release(iter);
+
+	m_Informlist.clear();
 
 	m_Pagelist.clear();
 }

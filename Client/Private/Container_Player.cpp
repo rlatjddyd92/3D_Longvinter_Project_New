@@ -102,16 +102,32 @@ void CContainer_Player::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Down(fTimeDelta);
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
+	{
 		m_eWeaponType = WEAPON_MAIN;
+		GET_INSTANCE->ShowInformMessage(TEXT("주 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
+	{
 		m_eWeaponType = WEAPON_SUB;
+		GET_INSTANCE->ShowInformMessage(TEXT("보조 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
+	{
 		m_eWeaponType = WEAPON_THROW;
+		GET_INSTANCE->ShowInformMessage(TEXT("투척 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
+	{
 		m_eWeaponType = WEAPON_END;
+		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 		++m_iState;

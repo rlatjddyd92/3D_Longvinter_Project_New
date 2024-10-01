@@ -54,6 +54,9 @@ protected:
 	_bool						m_bChangeColor[3] = { false,false,false };
 	_float						m_fRGB[3] = { 0.f,0.f,0.f };
 
+	_bool						m_bTransParent = false;
+	_float						m_fAlpah = 1.f;
+
 protected:
 	map<const _wstring, class CComponent*>			m_Components;
 

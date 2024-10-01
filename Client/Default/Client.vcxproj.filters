@@ -193,6 +193,9 @@
     <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip">
       <UniqueIdentifier>{0333281b-12e4-4e96-82ca-6120a466703f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message">
+      <UniqueIdentifier>{35caf8e6-a375-4b40-82fa-d89598700484}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -390,6 +393,9 @@
     <ClInclude Include="..\Public\UIPage_ToolTip.h">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPart_TextBox.h">
+      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -532,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
       <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_TextBox.cpp">
+      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

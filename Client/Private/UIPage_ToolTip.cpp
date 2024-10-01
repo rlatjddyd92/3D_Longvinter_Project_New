@@ -44,6 +44,8 @@ HRESULT CUIPage_ToolTip::Initialize(void* pArg)
 	m_fSizeX = 300.f;
 	m_fSizeY = 300.f;
 
+	m_vecText.resize(_int(TEXT_END));
+
 	__super::SetOff(true);
 
 	Ready_UIPart();
@@ -99,8 +101,6 @@ _bool CUIPage_ToolTip::Key_Action()
 
 	return true;
 }
-
-
 
 HRESULT CUIPage_ToolTip::Ready_Components()
 {

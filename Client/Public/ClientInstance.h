@@ -67,6 +67,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Button(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Picture(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Cell(eType, fX, fY, fSizeX, fSizeY); }
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f)
+	{
+		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
+	}
 
 	// UI_Page
 	CUIPage_Main* MakeUIPage_Main() { return m_pFactory->MakeUIPage_Main(); }
@@ -147,6 +151,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma region UIMANAGER
 	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
+	void ShowInformMessage(wstring Text) { m_pUIManager->ShowInformMessage(Text); }
 #pragma endregion
 
 

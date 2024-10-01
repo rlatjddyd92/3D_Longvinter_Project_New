@@ -26,6 +26,7 @@ HRESULT CUIObject::Initialize(void * pArg)
 	m_fY = pDesc->fY;
 	m_fSizeX = pDesc->fSizeX;
 	m_fSizeY = pDesc->fSizeY;	
+	m_fShowTime = pDesc->fTime;
 
 	_uint		iNumView = { 1 };
 	D3D11_VIEWPORT		ViewportDesc{};
@@ -50,6 +51,7 @@ HRESULT CUIObject::Initialize(void * pArg)
 
 void CUIObject::Priority_Update(_float fTimeDelta)
 {
+	
 }
 
 void CUIObject::Update(_float fTimeDelta)

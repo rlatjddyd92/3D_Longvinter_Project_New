@@ -13,6 +13,26 @@ BEGIN(Client)
 
 class CUIPage_ToolTip : public CUIPage
 {
+public:
+	enum TOOLTIP_TEXT
+	{
+		TEXT_ITEMNAME,
+		TEXT_DESCRIPTION,
+		TEXT_TYPE,
+		TEXT_HP,
+		TEXT_PRICE,
+		TEXT_ATTACK,
+		TEXT_DEFENCE,
+		TEXT_HEAL,
+		TEXT_TAG_1,
+		TEXT_TAG_2,
+		TEXT_TAG_3,
+		TEXT_TAG_4,
+		TEXT_TAG_5,
+		TEXT_END
+	};
+
+
 protected:
 	CUIPage_ToolTip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIPage_ToolTip(const CUIPage_ToolTip& Prototype);
@@ -32,6 +52,7 @@ public:
 
 	virtual _bool Key_Action() override;
 
+	//void ShowTooltip(CItemManager::ItemInfo& tInfo, _float fCell_X, _float fCell_Y);
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -42,6 +63,7 @@ private:
 	HRESULT Ready_Components();
 
 	CUIPart_Back* m_pBack_Window = { nullptr };
+	vector<CUIPart_TextBox*> m_vecText;
 
 private:
 	// 창 이동, 크기 조절 관련 변수 

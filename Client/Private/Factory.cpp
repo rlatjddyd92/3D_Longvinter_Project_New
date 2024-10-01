@@ -344,6 +344,8 @@ HRESULT CFactory::Ready_Prototype_UIPart()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Cell"), CUIPart_Cell::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_TextBox"), CUIPart_TextBox::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -366,6 +368,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Option"), CUIPage_Option::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_ToolTip"), CUIPage_ToolTip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -475,6 +480,22 @@ CUIPart_Cell* CFactory::MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float 
 	return static_cast<CUIPart_Cell*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Cell"), -1));
 }
 
+CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove, _float fShowTime)
+{
+	CUIPart_TextBox::UITextBox_DESC		pTemp{};
+	pTemp.eType = eType;
+	pTemp.fX = fX;
+	pTemp.fY = fY;
+	pTemp.fSizeX = fSizeX;
+	pTemp.fSizeY = fSizeY;
+	pTemp.fTime = fShowTime;
+	pTemp.AutoRemove = bAutoRemove;
+	pTemp.bCenter = bCenter;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), TEXT("Prototype_UIPart_TextBox"), &pTemp);
+
+	return static_cast<CUIPart_TextBox*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), -1));
+}
+
 CUIPage_Main* CFactory::MakeUIPage_Main()
 {
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), TEXT("Prototype_UIPage_Main"));
@@ -515,6 +536,13 @@ CUIPage_Option* CFactory::MakeUIPage_Option()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), TEXT("Prototype_UIPage_Option"));
 
 	return static_cast<CUIPage_Option*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), -1));
+}
+
+CUIPage_ToolTip* CFactory::MakeUIPage_ToolTip()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), TEXT("Prototype_UIPage_ToolTip"));
+
+	return static_cast<CUIPage_ToolTip*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

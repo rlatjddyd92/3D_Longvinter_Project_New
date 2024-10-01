@@ -19,6 +19,7 @@ public:
 		BACK_DEFAULT,
 		BACK_INGAME_WINDOW, // <- 인게임 기본 윈도우
 		BACK_INGAME_WINDOW_HEADER, // <- 인게임 윈도우 머리 부분
+		BACK_INGAME_TOOLTIP, // 툴팁용 윈도우
 		BACK_END
 	};
 
@@ -42,6 +43,8 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+	
 
 protected:
 	UIBACK_TYPE m_eType = UIBACK_TYPE::BACK_END;

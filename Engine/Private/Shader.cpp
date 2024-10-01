@@ -207,6 +207,33 @@ HRESULT CShader::Bind_ChangeColor(const _char* pConstantName_IsChange, const _ch
 	return S_OK;
 }
 
+HRESULT CShader::Bind_ChangeAlpah(const _char* pConstantName_IsChange, const _char* pConstantName_fAlpah, _bool* bChange, _float* pAlpah)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName_IsChange);
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	ID3DX11EffectScalarVariable* pIsChange = pVariable->AsScalar();
+	if (nullptr == pIsChange)
+		return E_FAIL;
+
+	if (FAILED(pIsChange->SetBool(*bChange)))
+		return E_FAIL;
+
+	ID3DX11EffectVariable* pVariableAlpah = m_pEffect->GetVariableByName(pConstantName_fAlpah);
+	if (nullptr == pVariableAlpah)
+		return E_FAIL;
+
+	ID3DX11EffectScalarVariable* PAlpah = pVariableAlpah->AsScalar();
+	if (nullptr == PAlpah)
+		return E_FAIL;
+
+	if (FAILED(PAlpah->SetFloat(*pAlpah)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 CShader* CShader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
 {
 	CShader* pInstance = new CShader(pDevice, pContext);

@@ -65,6 +65,9 @@ HRESULT CUIPart::Render()
 	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_ChangeAlpah("g_Istransparency", "g_TransAlpah", &m_bTransParent, &m_fAlpah)))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
@@ -79,6 +82,38 @@ HRESULT CUIPart::Render()
 void CUIPart::AddRender_UIPart()
 {
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
+void CUIPart::Change_Back_Color(_float fR, _float fG, _float fB, _float fAlpah)
+{
+	if (fR > 0.f)
+	{
+		m_bChangeColor[0] = true;
+		m_fRGB[0] = fR;
+	}
+	else if (fR == -1)
+		m_bChangeColor[0] = false;
+	if (fG > 0.f)
+	{
+		m_bChangeColor[1] = true;
+		m_fRGB[1] = fG;
+	}
+	else if (fG == -1)
+		m_bChangeColor[1] = false;
+	if (fB > 0.f)
+	{
+		m_bChangeColor[2] = true;
+		m_fRGB[2] = fB;
+	}
+	else if (fB == -1)
+		m_bChangeColor[2] = false;
+	if (fAlpah > 0.f)
+	{
+		m_bTransParent = true;
+		m_fAlpah = fR;
+	}
+	else if (fAlpah == -1)
+		m_bTransParent = false;
 }
 
 HRESULT CUIPart::Ready_Components()

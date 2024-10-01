@@ -38,6 +38,8 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
+
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f);
 	
 #pragma endregion
 
@@ -48,6 +50,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_Equip* MakeUIPage_Equip();
 	CUIPage_Crafting* MakeUIPage_Crafting();
 	CUIPage_Option* MakeUIPage_Option();
+	CUIPage_ToolTip* MakeUIPage_ToolTip();
 #pragma endregion
 
 
