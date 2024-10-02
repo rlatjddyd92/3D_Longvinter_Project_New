@@ -29,8 +29,14 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	void Set_Human_Body(HUMAN_BODY eBody) { m_pModelCom->SetTexture(0, 1, m_vecTexture_HumanBody[_int(eBody)]); }
+	void Set_Human_Face(HUMAN_FACE eBody) { m_pModelCom->SetTexture(1, 1, m_vecTexture_HumanFace[_int(eBody)]); }
+
 private:
 	HRESULT Ready_Components();
+
+	vector<CTexture*> m_vecTexture_HumanBody;
+	vector<CTexture*> m_vecTexture_HumanFace;
 
 public:
 	static CBody_Human* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

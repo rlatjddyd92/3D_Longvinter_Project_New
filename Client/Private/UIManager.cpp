@@ -29,6 +29,7 @@ HRESULT CUIManager::Initialize(void* pArg)
 	Desc.fSpeedPerSec = 10.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 
+	m_bTransParent = false;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
@@ -181,7 +182,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		if (!(*iter)->GetDead())
 		{
 			
-			(*iter)->Set_UIPosition(g_iWinSizeX >> 1, 70.f + (35.f * iInformNum));
+			(*iter)->Set_UIPosition(g_iWinSizeX >> 1, 70.f + (30.f * iInformNum));
 			(*iter)->AddRender_UIPart();
 			++iInformNum;
 			++iter;
@@ -226,6 +227,9 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_ChangeAlpah("g_Istransparency", "g_TransAlpah", &m_bTransParent, &m_fAlpah)))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->Begin(0)))
 		return E_FAIL;
 
@@ -249,8 +253,9 @@ void CUIManager::ShowInformMessage(wstring Text)
 	while (m_Informlist.size() >= m_iMaxInform)
 		m_Informlist.pop_front();
 
-	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_NOTICE, g_iWinSizeX >> 1, 0.f, 500.f, 30.f, true, true, 3.f);
+	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_NOTICE, g_iWinSizeX >> 1, 0.f, 500.f, 25.f, true, true, 3.f);
 	pNew->SetText(Text);
+	pNew->SetSize(0.5f);
 
 	m_Informlist.push_back(pNew);
 	//Safe_AddRef(pNew);

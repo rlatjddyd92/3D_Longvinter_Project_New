@@ -78,7 +78,7 @@ public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false);
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END);
 
 	void SetBedRock(_int iX, _int iY, _int iZ);
 	void HighLight_Surface(_bool bLinked); // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -111,7 +111,7 @@ public:
 		
 	}
 
-	
+	void Set_Render_Length(_float fLength) { m_fRender_Length = fLength; }
 
 #pragma region COLLISION
 	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
@@ -158,8 +158,12 @@ private:
 	// texture
 	_int m_iTextureIndex = 0;
 
+	// 지형 렌더 범위 설정 
+	_float m_fRender_Length = -1.f;
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
+	class CShader* m_pShaderCom_Gray = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 

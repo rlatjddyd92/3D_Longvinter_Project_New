@@ -60,7 +60,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma region FACTORY
 	void Save_Prototype_Model_Data() { m_pFactory->Save_Prototype_Model_Data(); }
+
+	// Container
 	void Make_Container_Player(_float3 Position) { m_pFactory->Make_Container_Player(Position); }
+	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Enemy(Position, eType); }
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
@@ -86,7 +89,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void SaveMap(const _char* pPath) { m_pTerrainManager->SaveMap(pPath); }
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop); }
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -120,6 +123,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents, vAdjustVector, eDirec); }
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_OnGround(fCenter, fExtents); }
 	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius) { m_pTerrainManager->Destroy_Terrain_Explosion(fPosition, fRadius); }
+
+	void Set_Render_Length(_float fLength) { m_pTerrainManager->Set_Render_Length(fLength); }
 
 #pragma endregion
 

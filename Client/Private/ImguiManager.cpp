@@ -79,6 +79,18 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	{
 		GET_INSTANCE->SetBedRock(m_iMax[0], m_iMax[1], m_iMax[2]);
 	}
+
+	if (ImGui::InputInt("RenderLimit", &m_iRenderLimit))
+	{
+
+	}
+
+	if (ImGui::Button("Apply"))
+	{
+		GET_INSTANCE->Set_Render_Length(_float(m_iRenderLimit));
+	}
+
+
 	
 	ImGui::Combo("SelectMode", &m_iSelectMode, szMode, IM_ARRAYSIZE(szMode));
 
@@ -164,14 +176,14 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	{
 		_bool bTop = m_iSelectMode == 1;
 
-		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop);
+		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
 	}
 
 	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
 	{
 		_bool bTop = m_iSelectMode == 1;
 
-		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop);
+		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
 	}
 }
 

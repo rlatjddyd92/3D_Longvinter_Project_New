@@ -154,9 +154,6 @@
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight">
       <UniqueIdentifier>{1a703c10-54f5-4fe0-a575-dbeadd316793}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Bullet_Parabola">
-      <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
       <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
     </Filter>
@@ -195,6 +192,18 @@
     </Filter>
     <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message">
       <UniqueIdentifier>{35caf8e6-a375-4b40-82fa-d89598700484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\02.Container_Enemy\00.AI_Enemy">
+      <UniqueIdentifier>{c144e254-c3c5-418a-aa07-f212c983f894}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal">
+      <UniqueIdentifier>{49c4a00e-2e45-40da-87e8-f4d927efca13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun">
+      <UniqueIdentifier>{aec5e36a-49aa-489e-82db-1b6e9477b0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object">
+      <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +405,27 @@
     <ClInclude Include="..\Public\UIPart_TextBox.h">
       <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Container_Enemy.h">
+      <Filter>03.Container\02.Container_Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AI_Enemy.h">
+      <Filter>03.Container\02.Container_Enemy\00.AI_Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Melee_Normal.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Melee_ShotGun.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Throw_Object.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_Enemy.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_Human.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -542,6 +572,21 @@
     <ClCompile Include="..\Private\UIPart_TextBox.cpp">
       <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Container_Enemy.cpp">
+      <Filter>03.Container\02.Container_Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AI_Enemy.cpp">
+      <Filter>03.Container\02.Container_Enemy\00.AI_Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Melee_Normal.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Melee_ShotGun.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Throw_Object.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -584,6 +629,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="Shader_VtxModel_NonTexture.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxSurFace_Gray.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

@@ -65,7 +65,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 #pragma endregion
 
 #pragma region Container_Enemy
-
+	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType);
 #pragma endregion
 
 #pragma region Container_Animal
@@ -108,6 +108,8 @@ private:
 	CGameInstance* m_pGameInstance = { nullptr };
 	list<CModel*> m_ModelPrototypelist;
 	list<_char*> m_ModelFilePath;
+
+	
 
 public:
 	static CFactory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance);

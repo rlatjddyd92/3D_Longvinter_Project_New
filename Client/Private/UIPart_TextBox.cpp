@@ -53,8 +53,7 @@ void CUIPart_TextBox::Priority_Update(_float fTimeDelta)
 {
 	
 
-	if (fTimeDelta >= 0.05f)
-		cout << fTimeDelta << "\n";
+	
 
 	
 

@@ -2,6 +2,7 @@
 #include "..\Public\Container_Player.h"
 
 #include "Body_Human.h"
+#include "Body.h"
 #include "ClientInstance.h"
 #include "Tool.h"
 
@@ -165,6 +166,24 @@ void CContainer_Player::Update(_float fTimeDelta)
 		}
 	}
 
+	
+	if (m_pGameInstance->Get_DIKeyState(DIK_9, false) & 0x80)
+	{
+		++m_iBody;
+		if (m_iBody >= _int(HUMAN_BODY::BODY_END))
+			m_iBody = 0;
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
+	}
+			
+	if (m_pGameInstance->Get_DIKeyState(DIK_8, false) & 0x80)
+	{
+		++m_iFace;
+		if (m_iFace >= _int(HUMAN_FACE::FACE_END))
+			m_iFace = 0;
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+	}
+
+	
 
 
 
@@ -285,6 +304,8 @@ HRESULT CContainer_Player::Ready_PartObjects()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 	return S_OK;
 }
 

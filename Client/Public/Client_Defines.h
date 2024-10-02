@@ -10,6 +10,8 @@ namespace Client
 #include "../Default/Factory_Enum_Container.h"
 #include "../Default/Client_Struct.h"
 #include "../Default/Enum_Item.h"
+#include "../Default/Enum_Enemy.h"
+#include "../Default/Enum_Human.h"
 
 	const unsigned int			g_iWinSizeX = { 1280 };
 	const unsigned int			g_iWinSizeY = { 720 };

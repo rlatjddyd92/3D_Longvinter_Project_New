@@ -28,6 +28,9 @@
       <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace_Gray.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxModel_NonTexture.cso</FullPath>
     </ContentFile>
   </ContentFiles>

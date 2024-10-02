@@ -11,7 +11,7 @@ BEGIN(Client)
 
 class CMelee : public CInterAction
 {
-private:
+protected:
 	CMelee(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMelee(const CMelee& Prototype);
 	virtual ~CMelee() = default;

@@ -49,8 +49,8 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 		m_fRGB[1] = 0.f / 255.f;
 		m_fRGB[2] = 0.f / 255.f;
 
-		m_bTransParent = true;
-		m_fAlpah = 0.3f;
+		//m_bTransParent = true;
+		//m_fAlpah = 0.3f;
 	}
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */

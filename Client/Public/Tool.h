@@ -2,11 +2,11 @@
 
 #include "Client_Defines.h"
 #include "PartObject.h"
+#include "Model.h"
 
 BEGIN(Engine)
 class CCollider;
 class CShader;
-class CModel;
 END
 
 BEGIN(Client)
@@ -37,6 +37,11 @@ public:
 	void SetParentState(_uint* iParent) { m_pParentState = iParent; }
 	void SetSocketMatrix(const _float4x4* Matrix) { m_pSocketMatrix = Matrix; }
 	void SetRenderMatrix(_float4x4& Matrix) { memcpy(&m_RenderMatrix, &Matrix, sizeof(_float4x4)); }
+	void SetModelTexture(_int iMeterial, _int iType, CTexture* pTexture) 
+	{ 
+		if (m_pModelCom != nullptr)
+			m_pModelCom->SetTexture(iMeterial, iType, pTexture);
+	}
 
 protected:
 	CShader* m_pShaderCom = { nullptr };

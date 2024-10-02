@@ -64,7 +64,7 @@ HRESULT CUIPage_ToolTip::Initialize(void* pArg)
 	for (_int i = 0; i < _int(TOOLTIP_TEXT::TEXT_TAG_1); ++i)
 		m_fSizeY += m_vecSize[i].m_fSize + m_vecSize[i].m_fGap;
 
-	m_fSizeY -= m_vecSize[_int(TOOLTIP_TEXT::TEXT_TAG_1) - 1].m_fGap;
+	//m_fSizeY -= m_vecSize[_int(TOOLTIP_TEXT::TEXT_TAG_1) - 1].m_fGap;
 
 	m_fSizeY += m_fGap_Top;
 

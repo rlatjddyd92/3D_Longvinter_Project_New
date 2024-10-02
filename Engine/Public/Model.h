@@ -58,6 +58,10 @@ public:
 	void SetAnimSpeed(_float fSpeed) { m_fAnimSpeed = fSpeed; } // <- 애니메이션 속도 조절 (1은 정상속도 0에 가까울 수록 느려지며 0이되면 재생 안됨, 아마 음수 넣으면 반대로 움직일 듯) 
 	_float GetAnimSpeed() { return m_fAnimSpeed; }
 
+	void SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture) { m_Materials[iMetarial].pMaterialTextures[iTextureType] = pTexture; }
+
+
+
 private:
 	/* 내가 넣어준 경로에 해당하는 파일의 정보를 읽어서 aiScene객체에 저장해준다. */
 	Assimp::Importer				m_Importer;

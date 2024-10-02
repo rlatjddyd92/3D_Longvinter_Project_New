@@ -85,8 +85,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord); /*vector(1.f, In.vTexcoord.y, 0.f, 1.f);*/
 
-    if (0.1 >= Out.vColor.a)
-        discard;
+   
     
     if (g_IsChange[0])
         Out.vColor.r = g_ChangeColor[0];
@@ -99,6 +98,9 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (g_Istransparency)
         Out.vColor.a = g_TransAlpah;
+    
+    if (0.1 >= Out.vColor.a)
+        discard;
     
     return Out;
 }

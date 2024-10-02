@@ -60,6 +60,11 @@ public:
 
 private:
 	_uint				m_iState = {  };
+
+
+	// test 
+	_int				m_iBody = 0;
+	_int				m_iFace = 0;
 	
 private:
 	HRESULT Ready_Components();

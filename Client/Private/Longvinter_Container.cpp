@@ -22,6 +22,8 @@ HRESULT CLongvinter_Container::Initialize_Prototype()
 
 HRESULT CLongvinter_Container::Initialize(void* pArg)
 {
+	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
