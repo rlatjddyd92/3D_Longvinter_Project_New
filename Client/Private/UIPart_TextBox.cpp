@@ -91,8 +91,8 @@ HRESULT CUIPart_TextBox::Render()
 
 	if (!m_bCenter)
 	{
-		vCenter.m128_f32[0] - m_fSizeX * 0.5f;
-		vCenter.m128_f32[1] - m_fSizeY * 0.5f;
+		vCenter.m128_f32[0] -= m_fSizeX * 0.5f;
+		vCenter.m128_f32[1] -= m_fSizeY * 0.5f;
 	}
 
 	_tchar* strTemp = new _tchar[m_Text.size() + 1];

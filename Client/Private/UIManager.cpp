@@ -301,6 +301,9 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_Option = GET_INSTANCE->MakeUIPage_Option();
 	Safe_AddRef(m_pPage_Option);
+
+	m_pPage_ToolTip = GET_INSTANCE->MakeUIPage_ToolTip();
+	Safe_AddRef(m_pPage_ToolTip);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

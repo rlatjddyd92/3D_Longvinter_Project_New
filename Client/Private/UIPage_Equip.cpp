@@ -193,7 +193,7 @@ _bool CUIPage_Equip::Key_Action()
 
 				break;
 			}
-			else if ((m_vecEquipCell[i]->IsOnCursor()) && (GET_INSTANCE->GetInvenInfo(i).eIndex != ITEMINDEX::ITEM_END))
+			else if ((m_vecEquipCell[i]->IsOnCursor()) && (GET_INSTANCE->GetEquipInfo(EQUIPSLOT(i)).eIndex != ITEMINDEX::ITEM_END))
 			{
 				_float fX = 0.f;
 				_float fY = 0.f;

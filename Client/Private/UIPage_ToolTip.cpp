@@ -49,17 +49,17 @@ HRESULT CUIPage_ToolTip::Initialize(void* pArg)
 	m_fSizeX = 300.f;
 	m_fSizeY = m_fGap_Top;
 
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_ITEMNAME)] = { 20.f , 0.8f ,10.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_TYPE)] = { 15.f , 0.7f ,10.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_DESCRIPTION)] = { 10.f , 0.5f ,10.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_HP)] = { 10.f , 0.5f ,2.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_PRICE)] = { 10.f , 0.5f ,2.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_ATTACK)] = { 10.f , 0.5f ,2.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_DEFENCE)] = { 10.f , 0.5f ,2.f };
-	m_vecSize[_int(TOOLTIP_TEXT::TEXT_HEAL)] = { 10.f , 0.5f ,10.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_ITEMNAME)] = { 20.f , 0.5f ,10.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_TYPE)] = { 15.f , 0.4f ,10.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_DESCRIPTION)] = { 10.f , 0.3f ,10.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_HP)] = { 10.f , 0.3f ,2.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_PRICE)] = { 10.f , 0.3f ,2.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_ATTACK)] = { 10.f , 0.3f ,2.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_DEFENCE)] = { 10.f , 0.3f ,2.f };
+	m_vecSize[_int(TOOLTIP_TEXT::TEXT_HEAL)] = { 10.f , 0.3f ,10.f };
 
 	for (_int i = _int(TOOLTIP_TEXT::TEXT_HEAL) + 1; i < _int(TOOLTIP_TEXT::TEXT_END); ++i)
-		m_vecSize[i] = { 12.f , 2.f ,0.7f };
+		m_vecSize[i] = { 15.f , 0.3f ,2.f };
 
 	for (_int i = 0; i < _int(TOOLTIP_TEXT::TEXT_TAG_1); ++i)
 		m_fSizeY += m_vecSize[i].m_fSize + m_vecSize[i].m_fGap;
@@ -130,6 +130,8 @@ void CUIPage_ToolTip::Ready_UIPart()
 	for (_int i = 0; i < _int(TOOLTIP_TEXT::TEXT_END); ++i)
 	{
 		m_vecText[i] = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_NORMAL, m_fX, fStartY, fSizeX, m_vecSize[i].m_fSize, false);
+		m_vecText[i]->SetSize(m_vecSize[i].m_fTextScale);
+
 
 		if ((i == _int(TOOLTIP_TEXT::TEXT_ITEMNAME)) || (i == _int(TOOLTIP_TEXT::TEXT_TYPE)))
 			m_vecText[i]->SetFont(TEXT("Font_Test1"));
@@ -153,15 +155,6 @@ _bool CUIPage_ToolTip::Key_Action()
 
 void CUIPage_ToolTip::ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex)
 {
-	fCellX += 10.f + (m_fSizeX * 0.5f) + INVEN_CELLSIZE;
-	fCellY += (m_fSizeY * 0.5f);
-
-	_float fMovingX = fCellX - m_fX;
-	_float fMovingY = fCellY - m_fY;
-
-	__super::Move_UI(fMovingX, fMovingY);
-	m_pBack_Window->Move_UI(fMovingX, fMovingY);
-
 	CItemManager::ItemInfo tInfo{};
 
 	if (eArray == ITEMARRAY::ARRAY_INVEN)
@@ -169,6 +162,42 @@ void CUIPage_ToolTip::ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray
 	if (eArray == ITEMARRAY::ARRAY_EQUIP)
 		tInfo = GET_INSTANCE->GetEquipInfo(EQUIPSLOT(iIndex));
 
+	_int iNow = _int(TOOLTIP_TEXT::TEXT_TAG_1);
+
+	for (_int i = 0; i < _int(ITEMTAG::ITEM_TAG_END); ++i)
+		if (GET_INSTANCE->Get_TagState(tInfo.eIndex, ITEMTAG(i)))
+		{
+			m_vecText[iNow]->SetText(GET_INSTANCE->Get_TagName(ITEMTAG(i)));
+			++iNow;
+			if (iNow >= m_vecText.size())
+				break;
+		}
+
+	m_fSizeY = m_fSizeY_NoneTag;
+	m_iTagNum = iNow - _int(TOOLTIP_TEXT::TEXT_TAG_1);
+
+	for (_int i = _int(TOOLTIP_TEXT::TEXT_TAG_1); i < iNow; ++i)
+	{
+		m_fSizeY += m_vecSize[i - 1].m_fGap;
+		m_fSizeY += m_vecSize[i].m_fSize;
+	}
+
+	m_pBack_Window->Set_UISize(m_fSizeX, m_fSizeY);
+
+
+
+	fCellX += 10.f + (m_fSizeX * 0.5f) + INVEN_CELLSIZE;
+	_float fBackY = fCellY + (m_fSizeY * 0.5f);
+	fCellY += (m_fSizeY_NoneTag * 0.5f);
+	
+
+	_float fMovingX = fCellX - m_fX;
+	_float fMovingY = fCellY - m_fY;
+	_float fMovingY_Back = fBackY - m_fY;
+
+	m_pBack_Window->Set_UIPosition(m_fX, m_fY);
+	__super::Move_UI(fMovingX, fMovingY);
+	m_pBack_Window->Move_UI(fMovingX, fMovingY_Back);
 
 	for (auto& iter : m_vecText)
 		iter->Move_UI(fMovingX, fMovingY);
@@ -190,25 +219,7 @@ void CUIPage_ToolTip::ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray
 	 strText = TEXT("È¸º¹·Â | ") + to_wstring(tInfo.fHeal);
 	m_vecText[_int(TOOLTIP_TEXT::TEXT_HEAL)]->SetText(strText);
 	
-	_int iNow = _int(TOOLTIP_TEXT::TEXT_TAG_1);
-
-	for (_int i = 0; i < _int(ITEMTAG::ITEM_TAG_END); ++i)
-		if (GET_INSTANCE->Get_TagState(tInfo.eIndex, ITEMTAG(i)))
-		{
-			m_vecText[iNow]->SetText(GET_INSTANCE->Get_TagName(ITEMTAG(i)));
-			++iNow;
-			if (iNow >= m_vecText.size())
-				break;
-		}
-
-	m_fSizeY = m_fSizeY_NoneTag;
-	m_iTagNum = iNow - _int(TOOLTIP_TEXT::TEXT_TAG_1);
-
-	for (_int i = _int(TOOLTIP_TEXT::TEXT_TAG_1); i < iNow; ++i)
-	{
-		m_fSizeY += m_vecSize[i - 1].m_fGap;
-		m_fSizeY += m_vecSize[i].m_fSize;
-	}
+	
 
 
 }
