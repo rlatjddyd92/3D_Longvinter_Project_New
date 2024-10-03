@@ -89,6 +89,13 @@ HRESULT CBullet_Straight::Render()
 
 	for (auto& iter : m_Actionlist)
 	{
+		_float3 fPosition{};
+		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
+
+		if (!GET_INSTANCE->GetIsLender(fPosition))
+			return S_OK;
+
+
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
 			return E_FAIL;
 
@@ -117,6 +124,20 @@ HRESULT CBullet_Straight::Render()
 
 	return S_OK;
 }
+void CBullet_Straight::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+void CBullet_Straight::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+//
+//void CBullet_Straight::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CBullet_Straight::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CBullet_Straight::Ready_Components()
 {

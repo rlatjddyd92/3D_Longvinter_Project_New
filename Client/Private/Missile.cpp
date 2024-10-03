@@ -51,6 +51,20 @@ HRESULT CMissile::Render()
 
 	return S_OK;
 }
+void CMissile::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+void CMissile::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+//
+//void CMissile::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CMissile::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CMissile::Ready_Components()
 {

@@ -176,9 +176,6 @@ void CTerrainManager::SaveMap(const _char* pPath)
 	for (auto& iter : m_vecObjInfo)
 	{
 		WriteFile(hFile, &iter.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eAnimal, sizeof(CON_ANIMAL), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eEnemy, sizeof(CON_ENEMY), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eNPC, sizeof(CON_NPC), &dwByte, nullptr);
 		WriteFile(hFile, &iter.fPosition, sizeof(_float3), &dwByte, nullptr);
 	}
 		
@@ -241,9 +238,6 @@ void CTerrainManager::LoadMap(const _char* pPath)
 	{
 		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, {0.f,0.f,0.f});
 		ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eAnimal, sizeof(CON_ANIMAL), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eEnemy, sizeof(CON_ENEMY), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eNPC, sizeof(CON_NPC), &dwByte, nullptr);
 		ReadFile(hFile, &tTemp.fPosition, sizeof(_float3), &dwByte, nullptr);
 		m_vecObjInfo.push_back(tTemp);
 

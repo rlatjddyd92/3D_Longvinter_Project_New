@@ -39,6 +39,22 @@ HRESULT CExplosion::Render()
 	return E_NOTIMPL;
 }
 
+void CExplosion::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CExplosion::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
+//void CExplosion::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CExplosion::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
+
 HRESULT CExplosion::Ready_Components()
 {
 	return E_NOTIMPL;

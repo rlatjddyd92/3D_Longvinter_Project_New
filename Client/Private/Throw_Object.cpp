@@ -117,6 +117,20 @@ HRESULT CThrow_Object::Render()
 
 	return S_OK;
 }
+void CThrow_Object::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+//
+//void CThrow_Object::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CThrow_Object::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CThrow_Object::Ready_Components()
 {

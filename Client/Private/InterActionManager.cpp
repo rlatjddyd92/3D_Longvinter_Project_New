@@ -34,7 +34,7 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), TEXT("Prototype_Inter_Bullet_Straight"));
 
 	m_vecInterAction[_int(INTERACTION::INTER_BULLET_STRAIGHT)] = static_cast<CBullet_Straight*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), -1));
-
+	m_vecConInterlist.resize(_int(CONTAINER::CONTAINER_END));
 
 
 	return S_OK;
@@ -52,11 +52,10 @@ void CInterActionManager::Update(_float fTimeDelta)
 
 void CInterActionManager::Late_Update(_float fTimeDelta)
 {
-	// InterActionManager는 모든 InterAction객체보다 먼저 
+	// InterActionManager는 모든 InterAction객체보다 먼저 업데이트가 돌아간다 
 
-
-
-
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
 HRESULT CInterActionManager::Render()
@@ -74,10 +73,40 @@ HRESULT CInterActionManager::Ready_PartObjects()
 	return S_OK;
 }
 
-void CInterActionManager::Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction)
+void CInterActionManager::Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction)
 {
-	m_vecInterAction[_int(eInterType)]->Add_ActionInfo(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
 }
+
+void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider)
+{
+	CON_INTER_INFO* pNew = new CON_INTER_INFO;
+
+	pNew->eType = eContanerType;
+	pNew->pPoint = pHost;
+	pNew->pCollider = pCollider;
+
+	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
+}
+
+void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)
+{
+	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eFirst)]->Get_Actionlist()->end();)
+		for (list<CInterAction::INTERACTION_INFO*>::iterator iterB = m_vecInterAction[_int(eSecond)]->Get_Actionlist()->begin(); iterB != m_vecInterAction[_int(eSecond)]->Get_Actionlist()->end();)
+		{
+			
+		}
+}
+
+void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInter, CONTAINER eContainer)
+{
+}
+
+void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER eSecond)
+{
+}
+
+
 
 CInterActionManager* CInterActionManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -113,5 +142,18 @@ void CInterActionManager::Free()
 		Safe_Release(iter);
 
 	m_vecInterAction.clear();
+
+	for (auto& iter : m_vecConInterlist)
+	{
+		for (auto& iterlist : iter)
+		{
+			Safe_Release(iterlist->pPoint);
+			Safe_Release(iterlist->pCollider);
+			Safe_Delete(iterlist);
+		}
+		iter.clear();
+	}
+		
+	m_vecConInterlist.clear();
 }
 

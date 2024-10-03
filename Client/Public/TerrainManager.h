@@ -50,14 +50,8 @@ public:
 	typedef struct MAKEOBJ
 	{
 		MAKEOBJ(CONTAINER eType, _float3 Position) { eCon_Type = eType; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_ANIMAL Animal, _float3 Position) { eCon_Type = eType; eAnimal = Animal; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_ENEMY Enemy, _float3 Position) { eCon_Type = eType; eEnemy = Enemy; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_NPC NPC, _float3 Position) { eCon_Type = eType; eNPC = NPC; fPosition = Position; }
 
 		CONTAINER eCon_Type = CONTAINER::CONTAINER_END;
-		CON_ANIMAL eAnimal = CON_ANIMAL::CONTAINER_ANIMAL_END;
-		CON_ENEMY eEnemy = CON_ENEMY::CONTAINER_ENEMY_END;
-		CON_NPC eNPC = CON_NPC::CONTAINER_NPC_END;
 		_float3 fPosition = { 0.f,0.f,0.f };
 	}MOBJ;
 

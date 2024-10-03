@@ -36,6 +36,8 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 
 	m_iState = 13; // <-IDLE
 
+	eContainerType = CONTAINER::CONTAINER_PLAYER;
+
 
 	GET_INSTANCE->Set_Player_Pointer(this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -223,10 +225,20 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CContainer_Player::Render()
 {
+
 	m_pColliderCom->Render();
 
 	return S_OK;
 }
+
+void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
 
 HRESULT CContainer_Player::Ready_Components()
 {

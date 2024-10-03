@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Longvinter_Container.h"
+
 #include "GameObject.h"
 #include "Collider.h"
 
@@ -10,6 +10,7 @@ BEGIN(Engine)
 END
 
 BEGIN(Client)
+class CLongvinter_Container;
 
 class CInterAction : public CGameObject
 {
@@ -46,10 +47,13 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex);
+	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex);
 
 public:
-	void Add_ActionInfo(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END);
+	void Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END);
+	list<INTERACTION_INFO*>* Get_Actionlist() {return &m_Actionlist;}
+
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);

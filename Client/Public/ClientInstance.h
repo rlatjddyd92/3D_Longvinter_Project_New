@@ -38,6 +38,32 @@ public: // <- 싱글톤을 통한 외부 접근용
 	HRESULT Setting_Ingame_Start(); // <- 인게임 진입 시
 	HRESULT Setting_Editor_Start(); // <- 에디터 진입 시 
 	void Release_CilentInstance(); // <- 클라 인스턴스 제거 시
+
+
+	void SetLenderLength(_float fLength)
+	{
+		m_pTerrainManager->Set_Render_Length(fLength);
+		m_fRenderLength = fLength;
+	}
+
+	_float GetLenderLength() { return m_fRenderLength; }
+
+	_bool GetIsLender(XMFLOAT3 fPosition)
+	{
+		XMVECTOR vCamera = m_pCamera->GetCameraPosition();
+		vCamera.m128_f32[0] -= fPosition.x;
+		vCamera.m128_f32[1] -= fPosition.y;
+		vCamera.m128_f32[2] -= fPosition.z;
+
+		_float fLength = sqrt(pow(vCamera.m128_f32[0], 2) + pow(vCamera.m128_f32[1], 2) + pow(vCamera.m128_f32[2], 2));
+
+		return fLength <= m_fRenderLength;
+	}
+
+
+
+
+
 #pragma endregion
 
 #pragma region LEVEL
@@ -187,7 +213,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region INTERACTION
 	void Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END)
 	{
-		m_pInterActionManager->Input_ActionInfo(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+		m_pInterActionManager->Add_InterActionObject(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
 	}
 #pragma endregion
 
@@ -207,7 +233,7 @@ private: // <- 보유 중인 포인터 목록
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;
 	LEVELID					m_eLevel = LEVELID::LEVEL_END;
-
+	_float					m_fRenderLength = 35.f;
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };

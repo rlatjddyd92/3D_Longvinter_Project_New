@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "InterAction.h"
 #include "ClientInstance.h"
-
+#include "Longvinter_Container.h"
 
 CInterAction::CInterAction(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -51,7 +51,17 @@ HRESULT CInterAction::Render()
 	return S_OK;
 }
 
-void CInterAction::Add_ActionInfo(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, TERRAIN_ACTION eAction)
+void CInterAction::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
+
+
+void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, TERRAIN_ACTION eAction)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 

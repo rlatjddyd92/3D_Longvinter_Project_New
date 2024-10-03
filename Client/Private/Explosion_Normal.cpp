@@ -39,6 +39,22 @@ HRESULT CExplosion_Normal::Render()
 	return E_NOTIMPL;
 }
 
+void CExplosion_Normal::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CExplosion_Normal::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
+//void CExplosion_Normal::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CExplosion_Normal::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
+
 HRESULT CExplosion_Normal::Ready_Components()
 {
 	return E_NOTIMPL;

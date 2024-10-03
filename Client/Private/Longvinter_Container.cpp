@@ -53,6 +53,14 @@ HRESULT CLongvinter_Container::Render()
 	return S_OK;
 }
 
+void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CLongvinter_Container::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
 CLongvinter_Container* CLongvinter_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CLongvinter_Container* pInstance = new CLongvinter_Container(pDevice, pContext);

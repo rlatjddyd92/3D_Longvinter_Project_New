@@ -58,9 +58,6 @@
     <Filter Include="99.Defines\00.Factory">
       <UniqueIdentifier>{661998ba-32fe-4c4f-8428-f3f359393d3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines\00.Factory\00.Container">
-      <UniqueIdentifier>{06ee658d-55d5-4957-bc07-e2f1f0dd80bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\07.PhysicsManager">
       <UniqueIdentifier>{3973ed0c-be1e-4076-a6b0-8e9d0907e158}</UniqueIdentifier>
     </Filter>
@@ -114,9 +111,6 @@
     </Filter>
     <Filter Include="02.ClientInstance\09.ItemManager">
       <UniqueIdentifier>{b625aefd-3a0c-4cdf-8d3e-b067b6745f09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="99.Defines\00.Factory\01.Part">
-      <UniqueIdentifier>{5605e5f2-14da-4fee-a04b-2469e358809f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager">
       <UniqueIdentifier>{6963eeeb-b867-466a-af0d-f7a3e68568bd}</UniqueIdentifier>
@@ -285,27 +279,6 @@
     <ClInclude Include="Factory_Header.h">
       <Filter>99.Defines\00.Factory</Filter>
     </ClInclude>
-    <ClInclude Include="Factory_Enum_Container.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_Animal.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_Effect.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_Enemy.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_InterAction.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_Item.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
-    <ClInclude Include="Factory_Enum_Container_NPC.h">
-      <Filter>99.Defines\00.Factory\00.Container</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Tool_Empty.h">
       <Filter>02.PartObject\07.Tool\99.Tool_Empty</Filter>
     </ClInclude>
@@ -369,9 +342,6 @@
     <ClInclude Include="Enum_Item.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="Factory_Enum_Part.h">
-      <Filter>99.Defines\00.Factory\01.Part</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Missile.h">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
     </ClInclude>
@@ -424,6 +394,15 @@
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="Enum_Human.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory_Enum_Container.h">
+      <Filter>99.Defines\00.Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Factory_Enum_Part.h">
+      <Filter>99.Defines\00.Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_InterAction.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
   </ItemGroup>

@@ -223,15 +223,10 @@
     <ClInclude Include="Client_Struct.h" />
     <ClInclude Include="Enum_Enemy.h" />
     <ClInclude Include="Enum_Human.h" />
+    <ClInclude Include="Enum_InterAction.h" />
     <ClInclude Include="Enum_Item.h" />
     <ClInclude Include="Enum_Terrain.h" />
     <ClInclude Include="Factory_Enum_Container.h" />
-    <ClInclude Include="Factory_Enum_Container_Animal.h" />
-    <ClInclude Include="Factory_Enum_Container_Effect.h" />
-    <ClInclude Include="Factory_Enum_Container_Enemy.h" />
-    <ClInclude Include="Factory_Enum_Container_InterAction.h" />
-    <ClInclude Include="Factory_Enum_Container_Item.h" />
-    <ClInclude Include="Factory_Enum_Container_NPC.h" />
     <ClInclude Include="Factory_Enum_Part.h" />
     <ClInclude Include="Factory_Header.h" />
     <ClInclude Include="InterAction_Defines.h" />

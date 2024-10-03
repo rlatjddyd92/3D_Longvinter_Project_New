@@ -38,6 +38,20 @@ HRESULT CMelee::Render()
 {
 	return E_NOTIMPL;
 }
+void CMelee::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+void CMelee::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+//
+//void CMelee::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CMelee::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CMelee::Ready_Components()
 {

@@ -101,7 +101,7 @@ HRESULT CClientInstance::Setting_Ingame_Start()
 		return E_FAIL;
 	m_pTerrainManager = dynamic_cast<CTerrainManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_SINGLE), TEXT("Layer_TerrainManager"), -1));
 	m_pTerrainManager->LoadMap("../Bin/Resources/MapData/Map_1.dat");
-
+	m_pTerrainManager->Set_Render_Length(35.f);
 	m_pCamera->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_THIRD);
 
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */

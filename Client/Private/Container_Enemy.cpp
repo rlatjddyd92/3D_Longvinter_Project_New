@@ -91,6 +91,15 @@ HRESULT CContainer_Enemy::Render()
 	return S_OK;
 }
 
+void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex)
+{
+}
+
+void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
+
 HRESULT CContainer_Enemy::Ready_Components()
 {
 

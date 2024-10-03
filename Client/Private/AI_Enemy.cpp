@@ -34,6 +34,10 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
+	eContainerType = CONTAINER::CONTAINER_ENEMY;
+
+
+
 	return S_OK;
 }
 
@@ -59,6 +63,15 @@ HRESULT CAI_Enemy::Render()
 
 	return S_OK;
 }
+
+void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
 
 HRESULT CAI_Enemy::Ready_Components()
 {

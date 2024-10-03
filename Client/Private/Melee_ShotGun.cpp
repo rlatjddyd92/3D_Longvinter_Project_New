@@ -38,6 +38,20 @@ HRESULT CMelee_ShotGun::Render()
 {
 	return E_NOTIMPL;
 }
+void CMelee_ShotGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+void CMelee_ShotGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+//
+//void CMelee_ShotGun::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CMelee_ShotGun::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CMelee_ShotGun::Ready_Components()
 {
