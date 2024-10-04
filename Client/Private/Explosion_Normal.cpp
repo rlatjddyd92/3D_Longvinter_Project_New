@@ -32,6 +32,8 @@ void CExplosion_Normal::Update(_float fTimeDelta)
 
 void CExplosion_Normal::Late_Update(_float fTimeDelta)
 {
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CExplosion_Normal::Render()
@@ -39,12 +41,14 @@ HRESULT CExplosion_Normal::Render()
 	return E_NOTIMPL;
 }
 
-void CExplosion_Normal::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CExplosion_Normal::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
 
-void CExplosion_Normal::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CExplosion_Normal::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
 
 //void CExplosion_Normal::Collision_Reaction_InterAction(CInterAction* pPoint)

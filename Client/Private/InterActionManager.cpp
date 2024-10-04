@@ -37,6 +37,9 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_vecConInterlist.resize(_int(CONTAINER::CONTAINER_END));
 
 
+
+
+
 	return S_OK;
 }
 
@@ -86,6 +89,9 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	pNew->pPoint = pHost;
 	pNew->pCollider = pCollider;
 
+	Safe_AddRef(pNew->pPoint);
+	Safe_AddRef(pNew->pCollider);
+
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
@@ -104,7 +110,11 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 		}
 
 		if ((*iterA)->pHost->GetOff())
+		{
+			++iterA;
 			continue;
+		}
+
 
 		for (list<CInterAction::INTERACTION_INFO*>::iterator iterB = m_vecInterAction[_int(eSecond)]->Get_Actionlist()->begin(); iterB != m_vecInterAction[_int(eSecond)]->Get_Actionlist()->end();)
 		{
@@ -119,14 +129,23 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			}
 
 			if ((*iterB)->pHost->GetOff())
+			{
+				++iterB;
 				continue;
+			}
 
 
+			CCollider::TYPE eType = CCollider::TYPE::TYPE_SPHERE;
+			// 추후 상대방 인터랙션 객체에 따라 값을 변경하는 코드 추가 필요 
 
 
+			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
+			{
+				m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterB)->pHost, eSecond, *iterA);
+				m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterA)->pHost, eFirst, *iterB);
+			}
 
-
-
+			++iterB;
 		}
 
 		++iterA;
@@ -138,19 +157,111 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eInter)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eInter)]->Get_Actionlist()->end();)
 	{
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		{
+			Safe_Release((*iterA)->pCollider);
+			Safe_Release((*iterA)->pHost);
+			Safe_Release((*iterA)->pTransform);
+			Safe_Delete(*iterA);
+			iterA = m_vecInterAction[_int(eInter)]->Get_Actionlist()->erase(iterA);
+			continue;
+		}
+
+		if ((*iterA)->pHost->GetOff())
+		{
+			++iterA;
+			continue;
+		}
+
+
 		for (list<CON_INTER_INFO*>::iterator iterB = m_vecConInterlist[_int(eContainer)].begin(); iterB != m_vecConInterlist[_int(eContainer)].end();)
 		{
+			if (((*iterB)->pPoint == nullptr) + ((*iterB)->pPoint->GetDead()) > 0)
+			{
+				Safe_Release((*iterB)->pCollider);
+				Safe_Release((*iterB)->pPoint);
+				Safe_Delete(*iterB);
+				iterB = m_vecConInterlist[_int(eContainer)].erase(iterB);
+				continue;
+			}
 
+			if ((*iterB)->pPoint->GetOff())
+			{
+				++iterB;
+				continue;
+			}
+				
+
+			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
+			// 추후 상대방 콘테이너 객체에 따라 값을 변경하는 코드 추가 필요 
+
+			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
+			{
+				m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
+				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter);
+			}
+
+			++iterB;
 		}
+
+		++iterA;
 	}
-		
-
-
-
 }
 
 void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER eSecond)
 {
+	for (list<CON_INTER_INFO*>::iterator iterA = m_vecConInterlist[_int(eFirst)].begin(); iterA != m_vecConInterlist[_int(eFirst)].end();)
+	{
+		if (((*iterA)->pPoint == nullptr) + ((*iterA)->pPoint->GetDead()) > 0)
+		{
+			Safe_Release((*iterA)->pCollider);
+			Safe_Release((*iterA)->pPoint);
+			Safe_Delete(*iterA);
+			iterA = m_vecConInterlist[_int(eFirst)].erase(iterA);
+			continue;
+		}
+
+		if ((*iterA)->pPoint->GetOff())
+		{
+			++iterA;
+			continue;
+		}
+
+
+		for (list<CON_INTER_INFO*>::iterator iterB = m_vecConInterlist[_int(eSecond)].begin(); iterB != m_vecConInterlist[_int(eSecond)].end();)
+		{
+			if (((*iterB)->pPoint == nullptr) + ((*iterB)->pPoint->GetDead()) > 0)
+			{
+				Safe_Release((*iterB)->pCollider);
+				Safe_Release((*iterB)->pPoint);
+				Safe_Delete(*iterB);
+				iterB = m_vecConInterlist[_int(eSecond)].erase(iterB);
+				continue;
+			}
+
+			if ((*iterB)->pPoint->GetOff())
+			{
+				++iterB;
+				continue;
+			}
+
+
+			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
+			// 추후 상대방 콘테이너 객체에 따라 값을 변경하는 코드 추가 필요 
+
+			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
+			{
+				(*iterA)->pPoint->Collision_Reaction_Container((*iterB)->pPoint, eSecond);
+				(*iterB)->pPoint->Collision_Reaction_Container((*iterA)->pPoint, eFirst);
+			}
+
+			++iterB;
+		}
+
+		++iterA;
+	}
+
+
 }
 
 

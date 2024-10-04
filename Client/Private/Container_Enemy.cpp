@@ -42,7 +42,9 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 
 void CContainer_Enemy::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 
+	
 
 
 	for (auto& pPartObject : m_Parts)
@@ -53,7 +55,7 @@ void CContainer_Enemy::Priority_Update(_float fTimeDelta)
 
 void CContainer_Enemy::Update(_float fTimeDelta)
 {
-	
+	__super::Update(fTimeDelta);
 
 
 
@@ -73,6 +75,8 @@ void CContainer_Enemy::Update(_float fTimeDelta)
 
 void CContainer_Enemy::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
+
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
 
@@ -93,10 +97,18 @@ HRESULT CContainer_Enemy::Render()
 
 void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex);
+
+}
+
+void CContainer_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+	__super::Collision_Reaction_MadeInterAction(pPoint, eIndex);
 }
 
 void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
 
@@ -178,6 +190,8 @@ HRESULT CContainer_Enemy::Ready_PartObjects()
 
 	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
 	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+
+	GET_INSTANCE->Input_ContainerColliderPointer(eContainerType, static_cast<CLongvinter_Container*>(this), m_pColliderCom);
 
 	return S_OK;
 }

@@ -56,23 +56,15 @@ void CBullet_Straight::Update(_float fTimeDelta)
 		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
 		{
 			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
-			Safe_Release(iter->pHost);
-			Safe_Release(iter->pTransform);
-			Safe_Release(iter->pCollider);
-			Safe_Delete(iter);
+			iter->bDead = true;
 		}
 	}
 }
 
 void CBullet_Straight::Late_Update(_float fTimeDelta)
 {
-	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
-	{
-		if (*iter == nullptr)
-			iter = m_Actionlist.erase(iter);
-		else
-			++iter;
-	}
+
+	__super::Late_Update(fTimeDelta);
 
 	for (auto& iter : m_Actionlist)
 		iter->pTransform->Save_BeforePosition();
@@ -93,7 +85,7 @@ HRESULT CBullet_Straight::Render()
 		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
 
 		if (!GET_INSTANCE->GetIsLender(fPosition))
-			return S_OK;
+			continue;
 
 
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
@@ -124,11 +116,19 @@ HRESULT CBullet_Straight::Render()
 
 	return S_OK;
 }
-void CBullet_Straight::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CBullet_Straight::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CBullet_Straight::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CBullet_Straight::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
+
+	pAction->bDead = true;
+
+
+
+
 }
 //
 //void CBullet_Straight::Collision_Reaction_InterAction(CInterAction* pPoint)

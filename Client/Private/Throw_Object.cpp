@@ -74,6 +74,8 @@ void CThrow_Object::Late_Update(_float fTimeDelta)
 			++iter;
 	}
 
+	__super::Late_Update(fTimeDelta);
+
 	for (auto& iter : m_Actionlist)
 		iter->pTransform->Save_BeforePosition();
 
@@ -117,11 +119,13 @@ HRESULT CThrow_Object::Render()
 
 	return S_OK;
 }
-void CThrow_Object::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CThrow_Object::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
 //
 //void CThrow_Object::Collision_Reaction_InterAction(CInterAction* pPoint)

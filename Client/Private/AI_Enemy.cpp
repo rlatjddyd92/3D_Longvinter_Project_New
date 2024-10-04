@@ -14,6 +14,8 @@ CAI_Enemy::CAI_Enemy(const CAI_Enemy& Prototype)
 
 HRESULT CAI_Enemy::Initialize_Prototype()
 {
+	
+
 	return S_OK;
 }
 
@@ -21,7 +23,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 {
 	AI_Enemy_Desc* pTemp = static_cast<AI_Enemy_Desc*>(pArg);
 
-
+	eContainerType = CONTAINER::CONTAINER_ENEMY;
 
 
 
@@ -34,7 +36,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	eContainerType = CONTAINER::CONTAINER_ENEMY;
+	
 
 
 
@@ -44,6 +46,14 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 void CAI_Enemy::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
+
+	if (m_fActionTimer == 0.f)
+		if (m_iFace == _int(HUMAN_FACE::FACE_SAD))
+		{
+			m_iFace = _int(HUMAN_FACE::FACE_NORMAL);
+			static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+		}
+			
 }
 
 void CAI_Enemy::Update(_float fTimeDelta)
@@ -66,10 +76,27 @@ HRESULT CAI_Enemy::Render()
 
 void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex);
+
+	CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+	if (pOpponent->GetContainerType() == CONTAINER::CONTAINER_PLAYER)
+	{
+		m_fActionTimer = 0.5f;
+
+		m_iFace = _int(HUMAN_FACE::FACE_SAD);
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+	}
+
+}
+
+void CAI_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+	__super::Collision_Reaction_MadeInterAction(pPoint, eIndex);
 }
 
 void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
 

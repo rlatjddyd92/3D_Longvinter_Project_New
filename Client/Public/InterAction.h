@@ -29,6 +29,7 @@ public:
 		CCollider* pCollider{};
 		TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END;
 		CLongvinter_Container* pHost = { nullptr };
+		_bool bDead = false;
 	}INTER_INFO;
 
 	
@@ -47,8 +48,8 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex);
-	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex);
+	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction);
+	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction);
 
 public:
 	void Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END);

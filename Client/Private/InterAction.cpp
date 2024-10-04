@@ -44,6 +44,36 @@ void CInterAction::Update(_float fTimeDelta)
 
 void CInterAction::Late_Update(_float fTimeDelta)
 {
+	
+
+
+
+	for (list<INTERACTION_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end(); )
+	{
+		_vector fPosition = (*iter)->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		if ((fPosition.m128_f32[0] < 0.f) + (fPosition.m128_f32[1] < 0.f) + (fPosition.m128_f32[2] < 0.f) > 0)
+			(*iter)->bDead = true;
+
+		if ((fPosition.m128_f32[0] > LMAX_X * LCUBESIZE) + (fPosition.m128_f32[1] > LMAX_Y * LCUBESIZE) + (fPosition.m128_f32[2] > LMAX_Z * LCUBESIZE) > 0)
+			(*iter)->bDead = true;
+
+
+
+		if ((*iter)->bDead)
+		{
+			Safe_Release((*iter)->pHost);
+			Safe_Release((*iter)->pTransform);
+			Safe_Release((*iter)->pCollider);
+			Safe_Delete((*iter));
+
+			iter = m_Actionlist.erase(iter);
+		}
+		else
+			++iter;
+	}
+		
+
 }
 
 HRESULT CInterAction::Render()
@@ -51,11 +81,11 @@ HRESULT CInterAction::Render()
 	return S_OK;
 }
 
-void CInterAction::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CInterAction::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
 }
 
-void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
 }
 

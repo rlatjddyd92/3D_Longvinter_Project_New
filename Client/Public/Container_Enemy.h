@@ -68,6 +68,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex) override;
+	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
 public:
@@ -77,7 +78,7 @@ protected:
 
 	// test 
 	_int				m_iBody = 2;
-	_int				m_iFace = 0;
+	_int				m_iFace = _int(HUMAN_FACE::FACE_NORMAL);
 
 private:
 	HRESULT Ready_Components();

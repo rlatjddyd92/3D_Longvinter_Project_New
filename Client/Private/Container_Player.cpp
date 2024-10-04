@@ -235,6 +235,10 @@ void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTE
 {
 }
 
+void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
 void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 }

@@ -32,17 +32,21 @@ void CMelee_ShotGun::Update(_float fTimeDelta)
 
 void CMelee_ShotGun::Late_Update(_float fTimeDelta)
 {
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CMelee_ShotGun::Render()
 {
 	return E_NOTIMPL;
 }
-void CMelee_ShotGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CMelee_ShotGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CMelee_ShotGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CMelee_ShotGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
 //
 //void CMelee_ShotGun::Collision_Reaction_InterAction(CInterAction* pPoint)

@@ -26,12 +26,17 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex);
+	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex);
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex);
 
-public:
+	CONTAINER GetContainerType() { return eContainerType; }
+
+protected:
 	CONTAINER eContainerType = CONTAINER::CONTAINER_END;
 
 
+protected:
+	_float m_fActionTimer = 0.f;
 
 
 public:

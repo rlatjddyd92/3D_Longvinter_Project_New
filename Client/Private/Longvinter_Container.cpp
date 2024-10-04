@@ -33,7 +33,15 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 {
+	if (m_fActionTimer > 0.f)
+	{
+		m_fActionTimer -= fTimeDelta;
+		if (m_fActionTimer < 0.f)
+		{
+			m_fActionTimer = 0.f;
+		}
 
+	}
 
 }
 
@@ -54,6 +62,10 @@ HRESULT CLongvinter_Container::Render()
 }
 
 void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CLongvinter_Container::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
 }
 

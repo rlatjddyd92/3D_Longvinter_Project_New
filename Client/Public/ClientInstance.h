@@ -215,6 +215,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		m_pInterActionManager->Add_InterActionObject(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
 	}
+	void Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider)
+	{
+		m_pInterActionManager->Input_ContainerColliderPointer(eContanerType, pHost, pCollider);
+	}
 #pragma endregion
 
 private: // <- 보유 중인 포인터 목록 

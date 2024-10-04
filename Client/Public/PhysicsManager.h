@@ -100,14 +100,6 @@ public:
 	void CheckTerrainCollision(P_RESULT* tResult, _bool IsSlideControl); // 지형 충돌만 계산 
 
 
-	_float Check_Collision(CCollider::TYPE eTypeFirst, CCollider& First, CCollider::TYPE eTypeSecond, CCollider& Second); // 겹치는 깊이까지 구함
-
-	_float Check_Collision_AABB(CCollider& First, CCollider& Second);
-	_float Check_Collision_AABB_OBB(CCollider& First, CCollider& Second);
-	_float Check_Collision_AABB_Sphere(CCollider& First, CCollider& Second);
-	_float Check_Collision_OBB(CCollider& First, CCollider& Second);
-	_float Check_Collision_OBB_Sphere(CCollider& First, CCollider& Second);
-	_float Check_Collision_Sphere(CCollider& First, CCollider& Second);
 
 
 private:
