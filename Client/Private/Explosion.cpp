@@ -14,12 +14,23 @@ CExplosion::CExplosion(const CExplosion& Prototype)
 
 HRESULT CExplosion::Initialize_Prototype()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CExplosion::Initialize(void* pArg)
 {
-	return E_NOTIMPL;
+	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_PartObjects()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 void CExplosion::Priority_Update(_float fTimeDelta)
@@ -34,20 +45,34 @@ void CExplosion::Late_Update(_float fTimeDelta)
 {
 
 	__super::Late_Update(fTimeDelta);
+
+
+
+	m_bDemege = false;
 }
 
 HRESULT CExplosion::Render()
 {
-	return E_NOTIMPL;
+
+
+
+
+	return S_OK;
 }
 
 void CExplosion::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
+	if (!m_bDemege)
+		return;
+
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
 
 void CExplosion::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	if (!m_bDemege)
+		return;
+
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
 

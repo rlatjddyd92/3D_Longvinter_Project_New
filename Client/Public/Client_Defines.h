@@ -56,7 +56,14 @@ namespace Client
 		CMODE_END
 	};
 
-	
+	enum class TERRAIN_MODE
+	{
+		TMODE_SLIDING, // <- 지형 슬라이딩 (플레이어, 인간, 동물에 적용)
+		TMODE_BOUNCE, // <- 지형에 닿으면 튕겨나감
+		TMODE_MINE, // <- 지형 큐브 위쪽에 닿으면 멈춤
+		TMODE_NONE, // <- 지형 통과
+	    TMODE_END,
+	};
 
 }
 

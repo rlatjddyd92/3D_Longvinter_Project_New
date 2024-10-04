@@ -146,11 +146,14 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	}
 
-	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents, vAdjustVector, eDirec); }
+	_float3 Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision_Adjust(fCenter, fExtents, vAdjustVector, eDirec); }
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_OnGround(fCenter, fExtents); }
 	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius) { m_pTerrainManager->Destroy_Terrain_Explosion(fPosition, fRadius); }
 
 	void Set_Render_Length(_float fLength) { m_pTerrainManager->Set_Render_Length(fLength); }
+
+	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange) { m_pTerrainManager->Check_Wall(fCenter, fLook, fRange); }
+	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents) { m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents); }
 
 #pragma endregion
 
@@ -179,6 +182,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void Gravity(CPhysicsManager::P_RESULT* tResult, _bool IsTerrainCollision, _float fTimeDelta) { m_pPhysicsManager->Gravity(tResult, IsTerrainCollision, fTimeDelta); }
 	void PushedPower(CPhysicsManager::P_RESULT* tResult, _float fTimeDelta) { m_pPhysicsManager->PushedPower(tResult, fTimeDelta); }// 푸시 파워 계산, 추후 회전 관련 기능 넣기 
 	void CheckTerrainCollision(CPhysicsManager::P_RESULT* tResult, _bool IsSlideControl) { m_pPhysicsManager->CheckTerrainCollision(tResult, IsSlideControl); } // 지형 충돌만 계산 
+
+	CPhysicsManager::P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta) { m_pPhysicsManager->Bounce_Physics(Transform, Collder, IsGravity, fTimeDelta); }  // <- 지형에 튕기는 물체의 계산
+	CPhysicsManager::P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta) { m_pPhysicsManager->LandMine_Physics(Transform, Collder, fTimeDelta); }  // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
+
 #pragma endregion
 
 #pragma region UIMANAGER

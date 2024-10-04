@@ -108,8 +108,10 @@ public:
 	void Set_Render_Length(_float fLength) { m_fRender_Length = fLength; }
 
 #pragma region COLLISION
-	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
+	_float3 Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents);
+	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange); 
+	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents); // <- 단순히 충돌만 검출
 
 
 
@@ -160,6 +162,7 @@ public:
 	class CShader* m_pShaderCom_Gray = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	class CCollider* m_pColliderCom = { nullptr };
 
 public:
 	static CTerrainManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

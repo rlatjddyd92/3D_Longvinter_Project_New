@@ -50,17 +50,18 @@ void CThrow_Mine::Update(_float fTimeDelta)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
-		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
+		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
-		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
-			iter->bDead = true;
-		}
+		if (vOrigin.m128_f32[0] == vNow.m128_f32[0])
+			if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+				if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+					m_bMineActive = true;
+		
 	}
 }
 

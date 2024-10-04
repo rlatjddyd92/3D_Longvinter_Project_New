@@ -36,6 +36,16 @@ HRESULT CInterAction::Initialize(void* pArg)
 
 void CInterAction::Priority_Update(_float fTimeDelta)
 {
+	if (m_fShowTime > 0.f)
+	{
+		m_fShowTime -= fTimeDelta;
+		if (m_fShowTime < 0.f)
+		{
+			m_fShowTime = 0.f;
+		}
+	}
+
+
 }
 
 void CInterAction::Update(_float fTimeDelta)

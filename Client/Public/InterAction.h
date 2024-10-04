@@ -70,6 +70,7 @@ private:
 protected:
 	list<INTERACTION_INFO*> m_Actionlist;
 	_float4x4				m_WorldMatrix = {};
+	_float					m_fShowTime = 0.f;
 
 protected:
 	_float3					m_fSpec_Extent = { 0.f,0.f,0.f };

@@ -51,7 +51,7 @@ void CThrow_Object::Update(_float fTimeDelta)
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
 		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision_Adjust(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
 
 		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
 		{

@@ -55,14 +55,12 @@ void CBullet_MachineGun::Update(_float fTimeDelta)
 		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
-
-		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
+		if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 		{
 			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
 			iter->bDead = true;
 		}
+
 	}
 }
 

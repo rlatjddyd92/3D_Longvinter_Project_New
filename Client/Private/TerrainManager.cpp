@@ -486,7 +486,7 @@ _float3 CTerrainManager::IsPicking_Instancing(SURFACE* pSurface)
 	return vPickPos;
 }
 
-_float3 CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
+_float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
 {
 	_float3 vCenter = fCenter;
 	_float3 vAdjustPosition = { 0.f,0.f,0.f };
@@ -694,6 +694,51 @@ _bool CTerrainManager::Check_OnGround(_float3 fCenter, _float3 fExtents)
 	return false;
 }
 
+_bool CTerrainManager::Check_Wall(_float3 fCenter, _float3 fLook, _float fRange)
+{
+	return _bool();
+}
+
+_bool CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents)
+{
+	_float3 vCenter = fCenter;
+	_float3 vExtents = fExtents;
+
+	// 1. 객체가 존재할 수 있는 큐브 인덱스 범위 잡기 
+	_uint iMinX = (vCenter.x - vExtents.x) / LCUBESIZE;
+	_uint iMaxX = (vCenter.x + vExtents.x) / LCUBESIZE;
+	_uint iMinY = (vCenter.y - vExtents.y) / LCUBESIZE;
+	_uint iMaxY = (vCenter.y + vExtents.y) / LCUBESIZE;
+	_uint iMinZ = (vCenter.z - vExtents.z) / LCUBESIZE;
+	_uint iMaxZ = (vCenter.z + vExtents.z) / LCUBESIZE;
+
+	if (iMinX * iMinY * iMaxZ < 0)
+		return false;
+
+	if (iMaxX >= LMAX_X)
+		return false;
+
+	if (iMaxY >= LMAX_Y + 5)
+		return false;
+
+	if (iMaxZ >= LMAX_Z)
+		return false;
+
+	// 2. 겹치는 지형 큐브가 있는 지 확인 
+	for (_uint i = iMinX; i <= iMaxX; ++i)
+		for (_uint j = iMinY; j <= iMaxY; ++j)
+			for (_uint k = iMinZ; k <= iMaxZ; ++k)
+				if (m_vecLcubeInfo[i][j][k].m_bLand == true)
+				{
+					if ((fCenter.x - fExtents.x > _float((i + 1) * LCUBESIZE)) || (fCenter.x + fExtents.x < _float((i)*LCUBESIZE)))
+						if ((fCenter.y - fExtents.y > _float((j + 1) * LCUBESIZE)) || (fCenter.y + fExtents.y < _float((j)*LCUBESIZE)))
+							if ((fCenter.z - fExtents.z > _float((k + 1) * LCUBESIZE)) || (fCenter.z + fExtents.z < _float((k)*LCUBESIZE)))
+								return false;
+				}
+
+	return true;
+}
+
 HRESULT CTerrainManager::Ready_Components()
 {
 	m_vecLcubeInfo.resize(LMAX_X + 2);
@@ -723,6 +768,15 @@ HRESULT CTerrainManager::Ready_Components()
 
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
+	/* For.Com_Collider */
+	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.0f, ColliderDesc.vExtents.y, 0.0f);
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Collider_AABB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -1056,6 +1110,7 @@ void CTerrainManager::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom_Gray);
+	Safe_Release(m_pColliderCom);
 	
 
 	for (auto& iterX : m_vecLcubeInfo)
