@@ -45,12 +45,14 @@ private:
 	_int m_iLand[3] = { 0,0,0 };
 	_char* szMode[3] = { "Terrain", "Object", "Move_Model"};
 	_int m_iSelectMode = 0;
-	_char* szObject[1] = { "Player" };
+	_char* szObject[3] = { "Player","NPC", "Enemy"};
 	_int m_iSelectObject = 0;
 	_char* szTexture[8] = { "0","1" ,"2" ,"3" ,"4", "5", "6", "7"};
 	_int m_iSelectTexture = 0;
 
 	_int m_iAnimation = 0;
+
+	_int m_iRenderLimit = -1;
 
 	// Class
 

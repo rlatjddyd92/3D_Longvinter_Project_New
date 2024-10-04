@@ -14,6 +14,8 @@
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 bool g_IsChange[3] = { false, false, false };
 float g_ChangeColor[3] = { 0.f, 0.f, 0.f };
+bool g_Istransparency = false;
+float g_TransAlpah = 1.f;
 texture2D g_Texture;
 
 sampler LinearSampler = sampler_state
@@ -83,8 +85,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord); /*vector(1.f, In.vTexcoord.y, 0.f, 1.f);*/
 
-    if (0.1 >= Out.vColor.a)
-        discard;
+   
     
     if (g_IsChange[0])
         Out.vColor.r = g_ChangeColor[0];
@@ -94,6 +95,12 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (g_IsChange[2])
         Out.vColor.b = g_ChangeColor[2];
+    
+    if (g_Istransparency)
+        Out.vColor.a = g_TransAlpah;
+    
+    if (0.1 >= Out.vColor.a)
+        discard;
     
     return Out;
 }

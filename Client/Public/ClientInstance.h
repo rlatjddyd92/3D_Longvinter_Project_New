@@ -38,6 +38,32 @@ public: // <- 싱글톤을 통한 외부 접근용
 	HRESULT Setting_Ingame_Start(); // <- 인게임 진입 시
 	HRESULT Setting_Editor_Start(); // <- 에디터 진입 시 
 	void Release_CilentInstance(); // <- 클라 인스턴스 제거 시
+
+
+	void SetLenderLength(_float fLength)
+	{
+		m_pTerrainManager->Set_Render_Length(fLength);
+		m_fRenderLength = fLength;
+	}
+
+	_float GetLenderLength() { return m_fRenderLength; }
+
+	_bool GetIsLender(XMFLOAT3 fPosition)
+	{
+		XMVECTOR vCamera = m_pCamera->GetCameraPosition();
+		vCamera.m128_f32[0] -= fPosition.x;
+		vCamera.m128_f32[1] -= fPosition.y;
+		vCamera.m128_f32[2] -= fPosition.z;
+
+		_float fLength = sqrt(pow(vCamera.m128_f32[0], 2) + pow(vCamera.m128_f32[1], 2) + pow(vCamera.m128_f32[2], 2));
+
+		return fLength <= m_fRenderLength;
+	}
+
+
+
+
+
 #pragma endregion
 
 #pragma region LEVEL
@@ -60,13 +86,20 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma region FACTORY
 	void Save_Prototype_Model_Data() { m_pFactory->Save_Prototype_Model_Data(); }
+
+	// Container
 	void Make_Container_Player(_float3 Position) { m_pFactory->Make_Container_Player(Position); }
+	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Enemy(Position, eType); }
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Button(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Picture(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Cell(eType, fX, fY, fSizeX, fSizeY); }
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f)
+	{
+		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
+	}
 
 	// UI_Page
 	CUIPage_Main* MakeUIPage_Main() { return m_pFactory->MakeUIPage_Main(); }
@@ -75,13 +108,14 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_Equip* MakeUIPage_Equip() { return m_pFactory->MakeUIPage_Equip(); }
 	CUIPage_Crafting* MakeUIPage_Crafting() { return m_pFactory->MakeUIPage_Crafting(); }
 	CUIPage_Option* MakeUIPage_Option() { return m_pFactory->MakeUIPage_Option(); }
+	CUIPage_ToolTip* MakeUIPage_ToolTip() { return m_pFactory->MakeUIPage_ToolTip(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
 	void SaveMap(const _char* pPath) { m_pTerrainManager->SaveMap(pPath); }
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop); }
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -116,6 +150,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_OnGround(fCenter, fExtents); }
 	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius) { m_pTerrainManager->Destroy_Terrain_Explosion(fPosition, fRadius); }
 
+	void Set_Render_Length(_float fLength) { m_pTerrainManager->Set_Render_Length(fLength); }
+
 #pragma endregion
 
 #pragma region CAMERA
@@ -147,6 +183,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma region UIMANAGER
 	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
+	void ShowInformMessage(wstring Text) { m_pUIManager->ShowInformMessage(Text); }
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 #pragma endregion
 
 
@@ -154,23 +192,32 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region ITEM
 	const CItemManager::TINFO& GetItemInfo(ITEMINDEX eIndex) { return m_pItemManager->GetItemInfo(eIndex); }
 	const CItemManager::TINFO& GetInvenInfo(_uint iInvenNum) { return m_pItemManager->GetInvenInfo(iInvenNum); }
-	const CItemManager::TINFO& GetEquipInfo(CItemManager::EQUIPSLOT eSlot) { return m_pItemManager->GetEquipInfo(eSlot); }
+	const CItemManager::TINFO& GetEquipInfo(EQUIPSLOT eSlot) { return m_pItemManager->GetEquipInfo(eSlot); }
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
 
-	const CItemManager::TINFO PickItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
+	const CItemManager::TINFO PickItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
 	void CancelPick() { m_pItemManager->CancelPick(); }
-	HRESULT PutInItem(CItemManager::ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
+	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
 
 	ITEMINDEX GetPickedItemIndex() { return m_pItemManager->GetPickedItemIndex(); }
 
 	void InputRenderlist(ITEMINDEX eIndex, _uint* pParentState, const _float4x4* pMatrix, _float4x4& pParent) { return m_pItemManager->InputRenderlist(eIndex, pParentState, pMatrix, pParent); }
+
+	wstring Get_TypeName(ITEMTYPE eType) { return m_pItemManager->Get_TypeName(eType); }
+	wstring Get_TagName(ITEMTAG eType) { return m_pItemManager->Get_TagName(eType); }
+	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_pItemManager->Get_TagState(iIndex, eType);}
+
 #pragma endregion
 
 
 #pragma region INTERACTION
 	void Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END)
 	{
-		m_pInterActionManager->Input_ActionInfo(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+		m_pInterActionManager->Add_InterActionObject(eInterType, pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+	}
+	void Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider)
+	{
+		m_pInterActionManager->Input_ContainerColliderPointer(eContanerType, pHost, pCollider);
 	}
 #pragma endregion
 
@@ -190,7 +237,7 @@ private: // <- 보유 중인 포인터 목록
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;
 	LEVELID					m_eLevel = LEVELID::LEVEL_END;
-
+	_float					m_fRenderLength = 35.f;
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };

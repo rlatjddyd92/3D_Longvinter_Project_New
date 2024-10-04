@@ -77,6 +77,18 @@ HRESULT CTerrainManager::Render()
 		fLook.y = vCamera.m128_f32[1] - iter.second->m_vMat.m[3][1];
 		fLook.z = vCamera.m128_f32[2] - iter.second->m_vMat.m[3][2];
 
+		_bool bGray = false;
+
+		if (m_fRender_Length >= 0.f)
+		{
+			_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
+			if (Length > m_fRender_Length)
+				continue;
+			else if (Length > m_fRender_Length * 0.5f)
+				bGray = true;
+		}
+
+
 		LCUBEDIRECION Direc = LCUBEDIRECION(iter.first[iter.first.size() - 1] - '0');
 
 		if (Direc == LCUBEDIRECION::LDIREC_BOTTOM)
@@ -104,20 +116,25 @@ HRESULT CTerrainManager::Render()
 				continue;
 
 
+		CShader* pShader = nullptr;
 
+		if (bGray)
+			pShader = m_pShaderCom;
+		else
+			pShader = m_pShaderCom;
 
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter.second->m_vMat)))
+		if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &iter.second->m_vMat)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+		if (FAILED(pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
 			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-			return E_FAIL;
-
-		if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", iter.second->m_iTextureNum)))
+		if (FAILED(pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pTextureCom->Bind_ShadeResource(pShader, "g_DiffuseTexture", iter.second->m_iTextureNum)))
+			return E_FAIL;
+
+		if (FAILED(pShader->Begin(0)))
 			return E_FAIL;
 
 
@@ -159,9 +176,6 @@ void CTerrainManager::SaveMap(const _char* pPath)
 	for (auto& iter : m_vecObjInfo)
 	{
 		WriteFile(hFile, &iter.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eAnimal, sizeof(CON_ANIMAL), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eEnemy, sizeof(CON_ENEMY), &dwByte, nullptr);
-		WriteFile(hFile, &iter.eNPC, sizeof(CON_NPC), &dwByte, nullptr);
 		WriteFile(hFile, &iter.fPosition, sizeof(_float3), &dwByte, nullptr);
 	}
 		
@@ -224,9 +238,6 @@ void CTerrainManager::LoadMap(const _char* pPath)
 	{
 		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, {0.f,0.f,0.f});
 		ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eAnimal, sizeof(CON_ANIMAL), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eEnemy, sizeof(CON_ENEMY), &dwByte, nullptr);
-		ReadFile(hFile, &tTemp.eNPC, sizeof(CON_NPC), &dwByte, nullptr);
 		ReadFile(hFile, &tTemp.fPosition, sizeof(_float3), &dwByte, nullptr);
 		m_vecObjInfo.push_back(tTemp);
 
@@ -240,7 +251,7 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		}
 		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
 		{
-
+			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
 		}
 		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
 		{
@@ -704,6 +715,12 @@ HRESULT CTerrainManager::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxSurFace"),
+		TEXT("Com_Shader_1"), reinterpret_cast<CComponent**>(&m_pShaderCom_Gray))))
+		return E_FAIL;
+
+	
+
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
@@ -914,7 +931,7 @@ void CTerrainManager::ChangeLandInfo_Backward()
 {
 }
 
-_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop)
+_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType)
 {
 	_vector vCamera = GET_INSTANCE->GetCameraPosition();
 	_double fDistance = -1.f;
@@ -977,8 +994,13 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 				}
 				if (iMode == 1)
 				{
-					GET_INSTANCE->Make_Container_Player(fResult);
-					m_vecObjInfo.push_back({ CONTAINER::CONTAINER_PLAYER,fResult });
+					if (eType == CONTAINER::CONTAINER_PLAYER)
+						GET_INSTANCE->Make_Container_Player(fResult);
+
+					if (eType == CONTAINER::CONTAINER_ENEMY)
+						GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
+					
+					m_vecObjInfo.push_back({ eType,fResult });
 				}
 		}
 	
@@ -1033,6 +1055,8 @@ void CTerrainManager::Free()
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pShaderCom_Gray);
+	
 
 	for (auto& iterX : m_vecLcubeInfo)
 	{

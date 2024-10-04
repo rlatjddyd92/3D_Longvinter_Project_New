@@ -50,14 +50,8 @@ public:
 	typedef struct MAKEOBJ
 	{
 		MAKEOBJ(CONTAINER eType, _float3 Position) { eCon_Type = eType; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_ANIMAL Animal, _float3 Position) { eCon_Type = eType; eAnimal = Animal; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_ENEMY Enemy, _float3 Position) { eCon_Type = eType; eEnemy = Enemy; fPosition = Position; }
-		MAKEOBJ(CONTAINER eType, CON_NPC NPC, _float3 Position) { eCon_Type = eType; eNPC = NPC; fPosition = Position; }
 
 		CONTAINER eCon_Type = CONTAINER::CONTAINER_END;
-		CON_ANIMAL eAnimal = CON_ANIMAL::CONTAINER_ANIMAL_END;
-		CON_ENEMY eEnemy = CON_ENEMY::CONTAINER_ENEMY_END;
-		CON_NPC eNPC = CON_NPC::CONTAINER_NPC_END;
 		_float3 fPosition = { 0.f,0.f,0.f };
 	}MOBJ;
 
@@ -78,7 +72,7 @@ public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false);
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END);
 
 	void SetBedRock(_int iX, _int iY, _int iZ);
 	void HighLight_Surface(_bool bLinked); // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -111,7 +105,7 @@ public:
 		
 	}
 
-	
+	void Set_Render_Length(_float fLength) { m_fRender_Length = fLength; }
 
 #pragma region COLLISION
 	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
@@ -158,8 +152,12 @@ private:
 	// texture
 	_int m_iTextureIndex = 0;
 
+	// 지형 렌더 범위 설정 
+	_float m_fRender_Length = -1.f;
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
+	class CShader* m_pShaderCom_Gray = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 

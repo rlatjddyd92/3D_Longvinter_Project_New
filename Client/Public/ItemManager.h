@@ -54,24 +54,7 @@ public:
 		_float4x4 pParentMatrix{};
 	};
 
-	enum ITEMARRAY
-	{
-		ARRAY_INFO, 
-		ARRAY_INVEN,
-		ARRAY_EQUIP,
-		ARRAY_SHOP,
-		ARRAY_END
-	};
-
-	enum EQUIPSLOT
-	{
-		SLOT_HEAD,
-		SLOT_BACKPACK,
-		SLOT_MAINWEAPON,
-		SLOT_SUBWEAPON,
-		SLOT_THROW,
-		SLOT_END
-	};
+	
 
 protected:
 	CItemManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -104,7 +87,7 @@ public:
 	}
 	const TINFO& GetEquipInfo(EQUIPSLOT eSlot)
 	{
-		if (_int(eSlot) >= _int(SLOT_END))
+		if (_int(eSlot) >= _int(EQUIPSLOT::SLOT_END))
 		{
 			TINFO tFali;
 			return tFali;
@@ -121,8 +104,9 @@ public:
 		return m_vecItemInvenTexture[_int(eIndex)];
 	}
 
-
-
+	wstring Get_TypeName(ITEMTYPE eType) { return m_vecTypeName[_int(eType)]; }
+	wstring Get_TagName(ITEMTAG eType) { return m_vecTagName[_int(eType)]; }
+	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_vecItemTag[_int(iIndex)][_int(eType)]; }
 
 
 public: // <- 아이템 매니저 초반 세팅용 함수 
@@ -170,6 +154,9 @@ private: // <- 아이템 관련 변수
 	vector<CTool*> m_vecTool; // <- 유저, 적의 모델에 붙어 있는 파트 오브젝트 목록, 아이템 인덱스로 접근 
 	vector<CTexture*> m_vecItemInvenTexture; 
 	vector<vector<_bool>> m_vecItemTag;
+
+	vector<wstring> m_vecTypeName; // <- 타입의 인게임 노출 이름 목록
+	vector<wstring> m_vecTagName; // <- 태그의 인게임 노출 이름 목록 
 
 private: // <- 상점, 상자 관련 변수
 	_int m_iNowKey = 1; // <- 상점, 상자 생성 시, 키를 배정하기 위한 변수, 사용할 때 마다 증가하며 이미 사용한 키는 재사용하지 않는다 

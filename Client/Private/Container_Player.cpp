@@ -2,6 +2,7 @@
 #include "..\Public\Container_Player.h"
 
 #include "Body_Human.h"
+#include "Body.h"
 #include "ClientInstance.h"
 #include "Tool.h"
 
@@ -34,6 +35,8 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iState = 13; // <-IDLE
+
+	eContainerType = CONTAINER::CONTAINER_PLAYER;
 
 
 	GET_INSTANCE->Set_Player_Pointer(this);
@@ -102,16 +105,32 @@ void CContainer_Player::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Down(fTimeDelta);
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
+	{
 		m_eWeaponType = WEAPON_MAIN;
+		GET_INSTANCE->ShowInformMessage(TEXT("주 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
+	{
 		m_eWeaponType = WEAPON_SUB;
+		GET_INSTANCE->ShowInformMessage(TEXT("보조 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
+	{
 		m_eWeaponType = WEAPON_THROW;
+		GET_INSTANCE->ShowInformMessage(TEXT("투척 무기로 변경"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
+	{
 		m_eWeaponType = WEAPON_END;
+		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 		++m_iState;
@@ -131,11 +150,11 @@ void CContainer_Player::Update(_float fTimeDelta)
 		ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
 
 		if (m_eWeaponType == WEAPON_MAIN)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex;
 		if (m_eWeaponType == WEAPON_SUB)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex;
 		if (m_eWeaponType == WEAPON_THROW)
-			eNowType = GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex;
+			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex;
 
 		if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
 		{
@@ -149,6 +168,24 @@ void CContainer_Player::Update(_float fTimeDelta)
 		}
 	}
 
+	
+	if (m_pGameInstance->Get_DIKeyState(DIK_9, false) & 0x80)
+	{
+		++m_iBody;
+		if (m_iBody >= _int(HUMAN_BODY::BODY_END))
+			m_iBody = 0;
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
+	}
+			
+	if (m_pGameInstance->Get_DIKeyState(DIK_8, false) & 0x80)
+	{
+		++m_iFace;
+		if (m_iFace >= _int(HUMAN_FACE::FACE_END))
+			m_iFace = 0;
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+	}
+
+	
 
 
 
@@ -176,11 +213,11 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 	
 
 	if (m_eWeaponType == WEAPON_MAIN)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_SUB)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_THROW)
-		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(CItemManager::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
+		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -188,10 +225,24 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CContainer_Player::Render()
 {
+
 	m_pColliderCom->Render();
 
 	return S_OK;
 }
+
+void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
+}
+
 
 HRESULT CContainer_Player::Ready_Components()
 {
@@ -269,6 +320,8 @@ HRESULT CContainer_Player::Ready_PartObjects()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 	return S_OK;
 }
 

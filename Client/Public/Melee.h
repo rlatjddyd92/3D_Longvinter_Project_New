@@ -11,7 +11,7 @@ BEGIN(Client)
 
 class CMelee : public CInterAction
 {
-private:
+protected:
 	CMelee(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMelee(const CMelee& Prototype);
 	virtual ~CMelee() = default;
@@ -24,6 +24,8 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction) override;
+	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction) override;
 
 private:
 	HRESULT Ready_Components();

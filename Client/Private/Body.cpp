@@ -4,6 +4,7 @@
 #include "Player.h"
 
 #include "GameInstance.h"
+#include "ClientInstance.h"
 
 CBody::CBody(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPartObject{ pDevice, pContext }
@@ -76,6 +77,11 @@ void CBody::Late_Update(_float fTimeDelta)
 
 HRESULT CBody::Render()
 {
+	_float3 fPosition = { m_pParentMatrix->m[3][0], m_pParentMatrix->m[3][1], m_pParentMatrix->m[3][2] };
+	
+	if (!GET_INSTANCE->GetIsLender(fPosition))
+		return S_OK;
+
 	if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 

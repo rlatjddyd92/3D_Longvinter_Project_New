@@ -36,6 +36,8 @@ HRESULT CFactory::Setting_Program_Start()
 		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
 		return E_FAIL;
 
+
+
 	if (FAILED(Ready_Prototype_Model()))
 		return E_FAIL;
 
@@ -93,8 +95,19 @@ void CFactory::Make_Container_Player(_float3 Position)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), TEXT("Prototype_GameObject_Container_Player"), &pTemp);
 }
 
+void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
+{
+	CAI_Enemy::AI_Enemy_Desc		pTemp{};
+	pTemp.fPosition = Position;
+	pTemp.fSpeedPerSec = 10.0f;
+	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
+	pTemp.eType = eType;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), TEXT("Prototype_GameObject_Container_AI_Enemy"), &pTemp);
+}
+
 HRESULT CFactory::Ready_Prototype_Texture()
 {
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_LandTexture"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/LandTexture/texture%d.dds"), LTEXTUREMAX))))
 		return E_FAIL;
@@ -192,8 +205,39 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconDoubleShotgun.dds"), 1))))
 		return E_FAIL;
 
-	
-
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Red"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Red.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Green"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Green.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Blue"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Blue.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Yellow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Yellow.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Brown"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Brown.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Mad"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Mad.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Boring"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Boring.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Normal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Normal.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sleep"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sleep.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Psycho"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Psycho.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sad.dds"), 1))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -233,6 +277,10 @@ HRESULT CFactory::Ready_Prototype_Container()
 	/* For. Prototype_GameObject_Player */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_Player"),
 		CContainer_Player::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Enemy"),
+		CAI_Enemy::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -297,6 +345,10 @@ HRESULT CFactory::Ready_Prototype_Shader()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxSurFace.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxSurFace_Gray"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxSurFace_Gray.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
+
 	/* For. Prototype_Component_Shader_VtxCubeTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxCubeTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCubeTex.hlsl"), VTXCUBETEX::Elements, VTXCUBETEX::iNumElements))))
@@ -344,6 +396,8 @@ HRESULT CFactory::Ready_Prototype_UIPart()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Cell"), CUIPart_Cell::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_TextBox"), CUIPart_TextBox::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -366,6 +420,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Option"), CUIPage_Option::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_ToolTip"), CUIPage_ToolTip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -475,6 +532,22 @@ CUIPart_Cell* CFactory::MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float 
 	return static_cast<CUIPart_Cell*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Cell"), -1));
 }
 
+CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove, _float fShowTime)
+{
+	CUIPart_TextBox::UITextBox_DESC		pTemp{};
+	pTemp.eType = eType;
+	pTemp.fX = fX;
+	pTemp.fY = fY;
+	pTemp.fSizeX = fSizeX;
+	pTemp.fSizeY = fSizeY;
+	pTemp.fTime = fShowTime;
+	pTemp.AutoRemove = bAutoRemove;
+	pTemp.bCenter = bCenter;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), TEXT("Prototype_UIPart_TextBox"), &pTemp);
+
+	return static_cast<CUIPart_TextBox*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), -1));
+}
+
 CUIPage_Main* CFactory::MakeUIPage_Main()
 {
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), TEXT("Prototype_UIPage_Main"));
@@ -515,6 +588,13 @@ CUIPage_Option* CFactory::MakeUIPage_Option()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), TEXT("Prototype_UIPage_Option"));
 
 	return static_cast<CUIPage_Option*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Option"), -1));
+}
+
+CUIPage_ToolTip* CFactory::MakeUIPage_ToolTip()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), TEXT("Prototype_UIPage_ToolTip"));
+
+	return static_cast<CUIPage_ToolTip*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

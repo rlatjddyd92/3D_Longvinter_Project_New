@@ -32,6 +32,8 @@ public:
 	_bool IsPushed() { return m_bPushed[1]; }
 	_bool IsPressing() { return m_bPushed[0] * m_bPushed[1]; }
 
+	void Change_Back_Color(_float fR = -1, _float fG = -1, _float fB = -1, _float fAlpah = -1);
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };

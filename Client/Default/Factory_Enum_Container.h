@@ -1,12 +1,5 @@
 #pragma once
 
-#include "Factory_Enum_Container_Animal.h"
-#include "Factory_Enum_Container_Effect.h"
-#include "Factory_Enum_Container_Enemy.h"
-#include "Factory_Enum_Container_InterAction.h"
-#include "Factory_Enum_Container_Item.h"
-#include "Factory_Enum_Container_NPC.h"
-
 enum class CONTAINER
 {
 	CONTAINER_PLAYER,

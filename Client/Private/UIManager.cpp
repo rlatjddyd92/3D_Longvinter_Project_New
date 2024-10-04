@@ -29,6 +29,7 @@ HRESULT CUIManager::Initialize(void* pArg)
 	Desc.fSpeedPerSec = 10.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 
+	m_bTransParent = false;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
@@ -45,6 +46,8 @@ HRESULT CUIManager::Initialize(void* pArg)
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
 	m_iTextureIndex = 0;
+
+	m_bShowTooltip = false;
 
 	POINT mousePos{};
 
@@ -167,6 +170,30 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		else
 			iter = m_Pagelist.erase(iter);
 	}
+
+	if (m_bShowTooltip)
+		m_pPage_ToolTip->AddRender_UIPage();
+
+
+	_int iInformNum = 0;
+
+	for (list<CUIPart_TextBox*>::iterator iter = m_Informlist.begin(); iter != m_Informlist.end();)
+	{
+		if (!(*iter)->GetDead())
+		{
+			
+			(*iter)->Set_UIPosition(g_iWinSizeX >> 1, 70.f + (30.f * iInformNum));
+			(*iter)->AddRender_UIPart();
+			++iInformNum;
+			++iter;
+		}
+		else
+		{
+			//Safe_Release(*iter);
+			iter = m_Informlist.erase(iter);
+		}
+	}
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
@@ -197,10 +224,10 @@ HRESULT CUIManager::Render()
 			return E_FAIL;
 	}
 
-
-
-
 	if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, m_fRGB)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_ChangeAlpah("g_Istransparency", "g_TransAlpah", &m_bTransParent, &m_fAlpah)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(0)))
@@ -216,6 +243,25 @@ HRESULT CUIManager::Render()
 
 	return S_OK;
 }
+
+
+
+
+
+void CUIManager::ShowInformMessage(wstring Text)
+{
+	while (m_Informlist.size() >= m_iMaxInform)
+		m_Informlist.pop_front();
+
+	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_NOTICE, g_iWinSizeX >> 1, 0.f, 500.f, 25.f, true, true, 3.f);
+	pNew->SetText(Text);
+	pNew->SetSize(0.5f);
+
+	m_Informlist.push_back(pNew);
+	//Safe_AddRef(pNew);
+
+}
+
 
 HRESULT CUIManager::Ready_Components()
 {
@@ -260,6 +306,9 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_Option = GET_INSTANCE->MakeUIPage_Option();
 	Safe_AddRef(m_pPage_Option);
+
+	m_pPage_ToolTip = GET_INSTANCE->MakeUIPage_ToolTip();
+	Safe_AddRef(m_pPage_ToolTip);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -298,10 +347,16 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Equip);
 	Safe_Release(m_pPage_Crafting);
 	Safe_Release(m_pPage_Option);
+	Safe_Release(m_pPage_ToolTip);
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
+
+	for (auto& iter : m_Informlist)
+		Safe_Release(iter);
+
+	m_Informlist.clear();
 
 	m_Pagelist.clear();
 }

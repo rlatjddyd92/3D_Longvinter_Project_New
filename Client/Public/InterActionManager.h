@@ -18,6 +18,17 @@ BEGIN(Client)
 
 class CInterActionManager : public CGameObject
 {
+public: 
+	typedef struct CONTAINER_INTERACTION_INFO
+	{
+		CONTAINER eType;
+		CLongvinter_Container* pPoint;
+		CCollider* pCollider;
+	}CON_INTER_INFO;
+
+	
+
+
 private:
 	CInterActionManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CInterActionManager(const CInterActionManager& Prototype);
@@ -37,12 +48,23 @@ private:
 	HRESULT Ready_PartObjects();
 
 public:
-	void Input_ActionInfo(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END);
-
+	void Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, CInterAction::TERRAIN_ACTION eAction = CInterAction::TERRAIN_ACTION::ACTION_END);
+	void Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider);
 
 
 private:
+	void Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond);
+	void Check_Collision_InterAction_Container(INTERACTION eInter, CONTAINER eContainer);
+	void Check_Collision_Container(CONTAINER eFirst, CONTAINER eSecond);
+
+private:
 	vector<CInterAction*> m_vecInterAction;
+
+	vector<list<CON_INTER_INFO*>> m_vecConInterlist;
+	
+
+
+
 
 
 public:

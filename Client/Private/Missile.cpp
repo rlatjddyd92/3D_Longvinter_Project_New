@@ -43,6 +43,8 @@ void CMissile::Update(_float fTimeDelta)
 
 void CMissile::Late_Update(_float fTimeDelta)
 {
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CMissile::Render()
@@ -51,6 +53,22 @@ HRESULT CMissile::Render()
 
 	return S_OK;
 }
+void CMissile::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
+{
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
+}
+void CMissile::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
+{
+	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
+}
+//
+//void CMissile::Collision_Reaction_InterAction(CInterAction* pPoint)
+//{
+//}
+//
+//void CMissile::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//{
+//}
 
 HRESULT CMissile::Ready_Components()
 {

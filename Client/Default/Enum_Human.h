@@ -1,0 +1,22 @@
+#pragma once
+
+enum class HUMAN_FACE
+{
+	FACE_MAD,
+	FACE_BORING,
+	FACE_NORMAL,
+	FACE_SLEEP,
+	FACE_PSYCHO,
+	FACE_SAD,
+	FACE_END
+};
+
+enum class HUMAN_BODY
+{
+	BODY_RED,
+	BODY_BLUE,
+	BODY_YELLOW,
+	BODY_GREEN,
+	BODY_BROWN,
+	BODY_END
+};

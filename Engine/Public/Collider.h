@@ -24,6 +24,9 @@ public:
 	_float3 GetBoundingExtents(); //{ return m_pBounding->GetBoundingExtents(); }
 	_float GetBoundingRadius_Sphere(); //{ return m_pBounding->GetBoundingRadius_Sphere(); }
 
+	_bool GetCollision(CCollider::TYPE eColliderType, CCollider* pOpponent); // { return m_pBounding->GetCollision(eColliderType, pOpponent); }
+	class CBounding* GetBounding() { return m_pBounding; }
+
 private:
 	class CBounding*				m_pBounding = { nullptr };
 	TYPE							m_eColliderType = {};

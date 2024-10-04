@@ -99,6 +99,9 @@ public:
 	void PushedPower(P_RESULT* tResult, _float fTimeDelta); // 푸시 파워 계산, 추후 회전 관련 기능 넣기 
 	void CheckTerrainCollision(P_RESULT* tResult, _bool IsSlideControl); // 지형 충돌만 계산 
 
+
+
+
 private:
 	HRESULT Ready_Components();
 	_float3 m_fGravity_Direction = { 0.f,-1.f,0.f };

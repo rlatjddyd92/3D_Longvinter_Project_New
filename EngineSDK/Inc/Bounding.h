@@ -25,6 +25,89 @@ public:
 public:
 	virtual _bool Intersect(CCollider::TYPE eColliderType, CBounding* pBounding) = 0;
 
+	_bool GetCollision(CCollider::TYPE eColliderType, CCollider* pOpponent)
+	{
+		m_isColl = false;
+
+		const BoundingBox* pAABB = nullptr;
+		const BoundingOrientedBox* pOBB = nullptr;
+		const BoundingSphere* pSphere = nullptr;
+
+		if (eColliderType == CCollider::TYPE_AABB)
+		{
+			pAABB = pOpponent->GetBounding()->Get_AABB();
+			if (pAABB == nullptr) return false;
+		}
+		else if (eColliderType == CCollider::TYPE_OBB)
+		{
+			pOBB = pOpponent->GetBounding()->Get_OBB();
+			if (pOBB == nullptr) return false;
+		}
+		else
+		{
+			pSphere = pOpponent->GetBounding()->Get_Sphere();
+			if (pSphere == nullptr) return false;
+		}
+
+		if (m_pBoundingDesc_AABB)
+		{
+			switch (eColliderType)
+			{
+			case CCollider::TYPE_AABB:
+				m_isColl = m_pBoundingDesc_AABB->Intersects(*pAABB);
+				break;
+
+			case CCollider::TYPE_OBB:
+				m_isColl = m_pBoundingDesc_AABB->Intersects(*pOBB);
+				break;
+
+			case CCollider::TYPE_SPHERE:
+				m_isColl = m_pBoundingDesc_AABB->Intersects(*pSphere);
+				break;
+			}
+		}
+		else if (m_pBoundingDesc_OBB)
+		{
+			switch (eColliderType)
+			{
+			case CCollider::TYPE_AABB:
+				m_isColl = m_pBoundingDesc_OBB->Intersects(*pAABB);
+				break;
+
+			case CCollider::TYPE_OBB:
+				m_isColl = m_pBoundingDesc_OBB->Intersects(*pOBB);
+				break;
+
+			case CCollider::TYPE_SPHERE:
+				m_isColl = m_pBoundingDesc_OBB->Intersects(*pSphere);
+				break;
+			}
+		}
+		else if (m_pBoundingDesc_Sphere)
+		{
+			switch (eColliderType)
+			{
+			case CCollider::TYPE_AABB:
+				m_isColl = m_pBoundingDesc_Sphere->Intersects(*pAABB);
+				break;
+
+			case CCollider::TYPE_OBB:
+				m_isColl = m_pBoundingDesc_Sphere->Intersects(*pOBB);
+				break;
+
+			case CCollider::TYPE_SPHERE:
+				m_isColl = m_pBoundingDesc_Sphere->Intersects(*pSphere);
+				break;
+			}
+		}
+
+		return m_isColl;
+	}
+
+	const BoundingBox* Get_AABB() { return m_pBoundingDesc_AABB; }
+	const BoundingOrientedBox* Get_OBB() { return m_pBoundingDesc_OBB; }
+	const BoundingSphere* Get_Sphere() { return m_pBoundingDesc_Sphere; }
+
 public:
 	_float3 GetBoundingCenter()
 	{

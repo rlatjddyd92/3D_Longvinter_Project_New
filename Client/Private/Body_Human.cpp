@@ -80,6 +80,34 @@ HRESULT CBody_Human::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
+	m_vecTexture_HumanBody.resize(_int(HUMAN_BODY::BODY_END));
+	m_vecTexture_HumanFace.resize(_int(HUMAN_FACE::FACE_END));
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Red"),TEXT("Com_Texture_0"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanBody[_int(HUMAN_BODY::BODY_RED)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Green"), TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanBody[_int(HUMAN_BODY::BODY_GREEN)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Blue"), TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanBody[_int(HUMAN_BODY::BODY_BLUE)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Yellow"), TEXT("Com_Texture_3"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanBody[_int(HUMAN_BODY::BODY_YELLOW)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Brown"), TEXT("Com_Texture_4"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanBody[_int(HUMAN_BODY::BODY_BROWN)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Mad"), TEXT("Com_Texture_5"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_MAD)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Boring"), TEXT("Com_Texture_6"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_BORING)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Normal"), TEXT("Com_Texture_7"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_NORMAL)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sleep"), TEXT("Com_Texture_8"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_SLEEP)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Psycho"), TEXT("Com_Texture_9"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_PSYCHO)])), 1))
+		return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"), TEXT("Com_Texture_10"), reinterpret_cast<CComponent**>(&m_vecTexture_HumanFace[_int(HUMAN_FACE::FACE_SAD)])), 1))
+		return E_FAIL;
+
+	
+
 	m_pModelCom->SetUp_Animation(0, true);
 	return S_OK;
 }
@@ -113,4 +141,13 @@ CGameObject* CBody_Human::Clone(void* pArg)
 void CBody_Human::Free()
 {
 	__super::Free();
+
+	for (auto& iter : m_vecTexture_HumanBody)
+		Safe_Release(iter);
+	for (auto& iter : m_vecTexture_HumanFace)
+		Safe_Release(iter);
+
+	m_vecTexture_HumanBody.clear();
+	m_vecTexture_HumanFace.clear();
+
 }

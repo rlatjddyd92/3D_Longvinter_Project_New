@@ -22,6 +22,8 @@ HRESULT CLongvinter_Container::Initialize_Prototype()
 
 HRESULT CLongvinter_Container::Initialize(void* pArg)
 {
+	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -31,7 +33,15 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 {
+	if (m_fActionTimer > 0.f)
+	{
+		m_fActionTimer -= fTimeDelta;
+		if (m_fActionTimer < 0.f)
+		{
+			m_fActionTimer = 0.f;
+		}
 
+	}
 
 }
 
@@ -49,6 +59,18 @@ HRESULT CLongvinter_Container::Render()
 {
 
 	return S_OK;
+}
+
+void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CLongvinter_Container::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+{
+}
+
+void CLongvinter_Container::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+{
 }
 
 CLongvinter_Container* CLongvinter_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
