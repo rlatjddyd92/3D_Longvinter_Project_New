@@ -109,6 +109,11 @@ _float CCollider::GetBoundingRadius_Sphere()
 	return m_pBounding->GetBoundingRadius_Sphere();
 }
 
+_bool CCollider::GetCollision(CCollider::TYPE eColliderType, CCollider* pOpponent)
+{
+	return m_pBounding->GetCollision(eColliderType, pOpponent);
+}
+
 CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eColliderType, void* pArg)
 {
 	CCollider*		pInstance = new CCollider(pDevice, pContext);

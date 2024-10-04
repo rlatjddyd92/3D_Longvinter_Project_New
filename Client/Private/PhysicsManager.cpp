@@ -165,6 +165,100 @@ void CPhysicsManager::CheckTerrainCollision(P_RESULT* tResult, _bool IsSlideCont
 	}
 }
 
+_float CPhysicsManager::Check_Collision(CCollider::TYPE eTypeFirst, CCollider& First, CCollider::TYPE eTypeSecond, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+
+	if (eTypeFirst == eTypeSecond)
+	{
+		if (eTypeFirst == CCollider::TYPE_AABB)
+			fDepth = Check_Collision_AABB(First, Second);
+		else if (eTypeFirst == CCollider::TYPE_OBB)
+			fDepth = Check_Collision_OBB(First, Second);
+		else 
+			fDepth = Check_Collision_Sphere(First, Second);
+	}
+	else
+	{
+		if (eTypeFirst == CCollider::TYPE_AABB)
+		{
+			if (eTypeSecond == CCollider::TYPE_OBB)
+				fDepth = Check_Collision_AABB_OBB(First, Second);
+			else if (eTypeSecond == CCollider::TYPE_SPHERE)
+				fDepth = Check_Collision_AABB_Sphere(First, Second);
+		}
+		else if (eTypeFirst == CCollider::TYPE_OBB)
+		{
+			if (eTypeSecond == CCollider::TYPE_AABB)
+				fDepth = Check_Collision_AABB_OBB(Second, First);
+			else if (eTypeSecond == CCollider::TYPE_SPHERE)
+				fDepth = Check_Collision_OBB_Sphere(First, Second);
+		}
+		else
+		{
+			if (eTypeSecond == CCollider::TYPE_AABB)
+				fDepth = Check_Collision_AABB_Sphere(Second, First);
+			else if (eTypeSecond == CCollider::TYPE_OBB)
+				fDepth = Check_Collision_OBB_Sphere(Second, First);
+		}
+	}
+
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_AABB(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_AABB_OBB(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_AABB_Sphere(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_OBB(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_OBB_Sphere(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	return fDepth;
+}
+
+_float CPhysicsManager::Check_Collision_Sphere(CCollider& First, CCollider& Second)
+{
+	_float fDepth = 0.f;
+
+	_float fLimit = First.GetBoundingRadius_Sphere() + Second.GetBoundingRadius_Sphere();
+	_float3 fFirst = First.GetBoundingCenter();
+	_float3 fSecond = Second.GetBoundingCenter();
+
+	_float fDistance = sqrt(pow(fFirst.x - fSecond.x, 2) + pow(fFirst.y - fSecond.y, 2) + pow(fFirst.z - fSecond.z, 2));
+
+	if (fLimit > fDistance)
+		fDepth = fLimit - fDistance;
+
+	return fDepth;
+}
+
 HRESULT CPhysicsManager::Ready_Components()
 {
 	return E_NOTIMPL;

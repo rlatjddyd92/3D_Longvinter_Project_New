@@ -92,14 +92,61 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eFirst)]->Get_Actionlist()->end();)
+	{
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		{
+			Safe_Release((*iterA)->pCollider);
+			Safe_Release((*iterA)->pHost);
+			Safe_Release((*iterA)->pTransform);
+			Safe_Delete(*iterA);
+			iterA = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->erase(iterA);
+			continue;
+		}
+
+		if ((*iterA)->pHost->GetOff())
+			continue;
+
 		for (list<CInterAction::INTERACTION_INFO*>::iterator iterB = m_vecInterAction[_int(eSecond)]->Get_Actionlist()->begin(); iterB != m_vecInterAction[_int(eSecond)]->Get_Actionlist()->end();)
 		{
-			
+			if (((*iterB)->pCollider == nullptr) + ((*iterB)->pHost == nullptr) + ((*iterB)->pTransform == nullptr) + ((*iterB)->pHost->GetDead()) > 0)
+			{
+				Safe_Release((*iterB)->pCollider);
+				Safe_Release((*iterB)->pHost);
+				Safe_Release((*iterB)->pTransform);
+				Safe_Delete(*iterB);
+				iterB = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->erase(iterB);
+				continue;
+			}
+
+			if ((*iterB)->pHost->GetOff())
+				continue;
+
+
+
+
+
+
+
 		}
+
+		++iterA;
+	}
+		
 }
 
 void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInter, CONTAINER eContainer)
 {
+	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eInter)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eInter)]->Get_Actionlist()->end();)
+	{
+		for (list<CON_INTER_INFO*>::iterator iterB = m_vecConInterlist[_int(eContainer)].begin(); iterB != m_vecConInterlist[_int(eContainer)].end();)
+		{
+
+		}
+	}
+		
+
+
+
 }
 
 void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER eSecond)
