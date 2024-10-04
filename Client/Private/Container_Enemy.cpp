@@ -36,6 +36,8 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iState = 13; // <-IDLE
+	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
+	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 
 	return S_OK;
 }

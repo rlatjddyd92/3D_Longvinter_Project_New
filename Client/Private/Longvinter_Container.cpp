@@ -40,8 +40,20 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 		{
 			m_fActionTimer = 0.f;
 		}
-
 	}
+
+	if (m_fAttackDelay > 0.f)
+	{
+		m_fAttackDelay -= fTimeDelta;
+		if (m_fAttackDelay < 0.f)
+		{
+			m_fAttackDelay = 0.f;
+		}
+	}
+
+
+	
+
 
 }
 

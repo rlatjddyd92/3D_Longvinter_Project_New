@@ -138,6 +138,53 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 	m_Actionlist.push_back(pNew);
 }
 
+void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+{
+	INTERACTION_INFO* pNew = new INTERACTION_INFO;
+
+	pNew->pHost = pHost;
+	Safe_AddRef(pNew->pHost);
+
+	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
+	//Safe_AddRef(pNew->pTransform);
+	pNew->pTransform->Set_State(CTransform::STATE_POSITION, { fPosition.x, fPosition.y,fPosition.z });
+	pNew->pTransform->Set_Scaled(m_fSpec_Scale, m_fSpec_Scale, m_fSpec_Scale);
+	pNew->pTransform->Set_Pushed_Power(fPushedDirec, m_fSpec_PushedPower);
+	pNew->pTransform->Set_Pushed_PowerDecrease(m_fSpec_PushedPower_Decrease);
+
+	CBounding::BOUNDING_DESC* pBoundingDesc{};
+	CCollider::TYPE eColliderType = CCollider::TYPE(m_iColliderType);
+
+	if (eColliderType == CCollider::TYPE_AABB)
+	{
+		CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
+		ColliderDesc.vExtents = _float3(m_fSpec_Extent.x, m_fSpec_Extent.y, m_fSpec_Extent.z);
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB, &ColliderDesc);
+	}
+	else if (eColliderType == CCollider::TYPE_OBB)
+	{
+		CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+		ColliderDesc.vExtents = _float3(m_fSpec_Extent.x, m_fSpec_Extent.y, m_fSpec_Extent.z);
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB, &ColliderDesc);
+	}
+	else if (eColliderType == CCollider::TYPE_SPHERE)
+	{
+		CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
+		ColliderDesc.fRadius = m_fSpec_Extent.x;
+		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
+		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE, &ColliderDesc);
+	}
+
+
+	//Safe_AddRef(pNew->pCollider);
+	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
+
+
+	m_Actionlist.push_back(pNew);
+}
+
 HRESULT CInterAction::Bind_WorldMatrix(CShader* pShader, const _char* pContantName)
 {
 	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix); 

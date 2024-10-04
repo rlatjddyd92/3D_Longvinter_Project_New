@@ -314,6 +314,14 @@ HRESULT CFactory::Ready_Prototype_Model()
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bullet_Normal"), "../Bin/Resources/Particle/Bullet_Normal", PreTransformMatrix)))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Model_Bullet*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Throw_LandMine"), "../Bin/Resources/Throw/LandMine", PreTransformMatrix)))
+		return E_FAIL;
+
+	
+
 	return S_OK;
 }
 
@@ -433,7 +441,8 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Bullet_Straight"), CBullet_Straight::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Bullet_MachineGun"), CBullet_MachineGun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -441,6 +450,28 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 
 HRESULT CFactory::Ready_Prototype_Model_Single(CModel::TYPE eType, _bool bTexture, const _wstring strTag, const _char* pPath, _fmatrix PreTransformMatrix)
 {
+	if (eType == CModel::TYPE::TYPE_NONANIM)
+	{
+		string strType = ".fbx";
+		string strTemp = {};
+
+		_int i = 0;
+		while (*(pPath + i) != '\0')
+		{
+			strTemp += *(pPath + i);
+			++i;
+		}
+
+		string strPath = strTemp + strType;
+
+		CModel* pNew = CModel::Create(m_pDevice, m_pContext, eType, bTexture, strPath.c_str(), PreTransformMatrix);
+		m_ModelPrototypelist.push_back(pNew);
+		if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), strTag, pNew)))
+			return E_FAIL;
+
+		return S_OK;
+	}
+
 	string strType = ".dat";
 	string strTemp = {};
 

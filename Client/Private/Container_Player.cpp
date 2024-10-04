@@ -42,12 +42,13 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	GET_INSTANCE->Set_Player_Pointer(this);
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
+	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 	return S_OK;
 }
 
 void CContainer_Player::Priority_Update(_float fTimeDelta)
 {
-	
+	__super::Priority_Update(fTimeDelta);
 
 	
 	for (auto& pPartObject : m_Parts)
@@ -58,6 +59,8 @@ void CContainer_Player::Priority_Update(_float fTimeDelta)
 
 void CContainer_Player::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
+
 	if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, true) & 0x80)
 	{
 		m_pTransformCom->Go_Backward(fTimeDelta);
@@ -145,8 +148,10 @@ void CContainer_Player::Update(_float fTimeDelta)
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 		GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERA_THIRD);
 
-	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON) & 0x80)
+	if ((m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true) & 0x80) && (m_fAttackDelay == 0.f))
 	{
+		
+
 		ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
 
 		if (m_eWeaponType == WEAPON_MAIN)
@@ -163,8 +168,9 @@ void CContainer_Player::Update(_float fTimeDelta)
 			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
 			XMStoreFloat3(&fStartPostion, vStartPosition);
 			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
-
-			GET_INSTANCE->Input_ActionInfo(INTERACTION::INTER_BULLET_STRAIGHT, this, fStartPostion, fPushedDirec, 4.f, 0.2f,0.f, CCollider::TYPE_SPHERE, CInterAction::ACTION_EXPLOSION);
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fStartPostion, fPushedDirec);
+			m_fAttackDelay = 0.1f;
+			//GET_INSTANCE->Input_ActionInfo(INTERACTION::INTER_BULLET_STRAIGHT, this, fStartPostion, fPushedDirec, 4.f, 0.2f,0.f, CCollider::TYPE_SPHERE, CInterAction::ACTION_EXPLOSION);
 		}
 	}
 
@@ -204,6 +210,8 @@ void CContainer_Player::Update(_float fTimeDelta)
 
 void CContainer_Player::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
+
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
 

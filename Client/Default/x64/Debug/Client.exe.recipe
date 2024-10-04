@@ -2,36 +2,36 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Client.exe</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Client.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxAnimModel.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxAnimModel.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxCubeTex.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxCubeTex.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxModel.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxModel.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxNorTex.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxNorTex.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxPosTex.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxPosTex.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxRectInstance.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxRectInstance.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace_Gray.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxSurFace_Gray.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project_241004_1617\3D_Longvinter_Project\Client\Bin\Shader_VtxModel_NonTexture.cso</FullPath>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxModel_NonTexture.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

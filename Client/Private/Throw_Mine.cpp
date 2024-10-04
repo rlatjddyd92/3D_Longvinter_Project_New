@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "Throw_Object.h"
+#include "Throw_Mine.h"
 #include "ClientInstance.h"
 
-CThrow_Object::CThrow_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CThrow_Mine::CThrow_Mine(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMissile{ pDevice, pContext }
 {
 }
 
-CThrow_Object::CThrow_Object(const CThrow_Object& Prototype)
+CThrow_Mine::CThrow_Mine(const CThrow_Mine& Prototype)
 	: CMissile{ Prototype }
 {
 }
 
-HRESULT CThrow_Object::Initialize_Prototype()
+HRESULT CThrow_Mine::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CThrow_Object::Initialize(void* pArg)
+HRESULT CThrow_Mine::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
@@ -30,17 +30,20 @@ HRESULT CThrow_Object::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
-	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
+	m_fSpec_Scale = 1.f;
+	m_fSpec_PushedPower = 10.f;
+	m_fSpec_PushedPower_Decrease = 1.f;
+	m_iColliderType = _int(CCollider::TYPE_AABB);
 
 	return S_OK;
 }
 
-void CThrow_Object::Priority_Update(_float fTimeDelta)
+void CThrow_Mine::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CThrow_Object::Update(_float fTimeDelta)
+void CThrow_Mine::Update(_float fTimeDelta)
 {
 
 	for (auto& iter : m_Actionlist)
@@ -61,7 +64,7 @@ void CThrow_Object::Update(_float fTimeDelta)
 	}
 }
 
-void CThrow_Object::Late_Update(_float fTimeDelta)
+void CThrow_Mine::Late_Update(_float fTimeDelta)
 {
 	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
 	{
@@ -82,7 +85,7 @@ void CThrow_Object::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CThrow_Object::Render()
+HRESULT CThrow_Mine::Render()
 {
 	__super::Render();
 
@@ -123,24 +126,24 @@ HRESULT CThrow_Object::Render()
 
 	return S_OK;
 }
-void CThrow_Object::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
+void CThrow_Mine::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
+void CThrow_Mine::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
 //
-//void CThrow_Object::Collision_Reaction_InterAction(CInterAction* pPoint)
+//void CThrow_Mine::Collision_Reaction_InterAction(CInterAction* pPoint)
 //{
 //}
 //
-//void CThrow_Object::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//void CThrow_Mine::Collision_Reaction_Container(CLongvinter_Container* pPoint)
 //{
 //}
 
-HRESULT CThrow_Object::Ready_Components()
+HRESULT CThrow_Mine::Ready_Components()
 {
 
 
@@ -150,7 +153,7 @@ HRESULT CThrow_Object::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Bullet_Normal"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Throw_LandMine"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -158,38 +161,38 @@ HRESULT CThrow_Object::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CThrow_Object::Ready_PartObjects()
+HRESULT CThrow_Mine::Ready_PartObjects()
 {
 	return S_OK;
 }
 
-CThrow_Object* CThrow_Object::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CThrow_Mine* CThrow_Mine::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CThrow_Object* pInstance = new CThrow_Object(pDevice, pContext);
+	CThrow_Mine* pInstance = new CThrow_Mine(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CThrow_Object"));
+		MSG_BOX(TEXT("Failed to Created : CThrow_Mine"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CThrow_Object::Clone(void* pArg)
+CGameObject* CThrow_Mine::Clone(void* pArg)
 {
-	CThrow_Object* pInstance = new CThrow_Object(*this);
+	CThrow_Mine* pInstance = new CThrow_Mine(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CThrow_Object"));
+		MSG_BOX(TEXT("Failed to Cloned : CThrow_Mine"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CThrow_Object::Free()
+void CThrow_Mine::Free()
 {
 	__super::Free();
 

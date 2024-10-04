@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "Throw_Object.h"
+#include "Bullet_MachineGun.h"
 #include "ClientInstance.h"
 
-CThrow_Object::CThrow_Object(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CBullet_MachineGun::CBullet_MachineGun(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMissile{ pDevice, pContext }
 {
 }
 
-CThrow_Object::CThrow_Object(const CThrow_Object& Prototype)
+CBullet_MachineGun::CBullet_MachineGun(const CBullet_MachineGun& Prototype)
 	: CMissile{ Prototype }
 {
 }
 
-HRESULT CThrow_Object::Initialize_Prototype()
+HRESULT CBullet_MachineGun::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CThrow_Object::Initialize(void* pArg)
+HRESULT CBullet_MachineGun::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
@@ -32,15 +32,20 @@ HRESULT CThrow_Object::Initialize(void* pArg)
 
 
 	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
+	m_fSpec_Scale = 0.1f;
+	m_fSpec_PushedPower = 50.f;
+	m_fSpec_PushedPower_Decrease = 0.f;
+	m_iColliderType = _int(CCollider::TYPE_SPHERE);
 
 	return S_OK;
 }
 
-void CThrow_Object::Priority_Update(_float fTimeDelta)
+void CBullet_MachineGun::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CThrow_Object::Update(_float fTimeDelta)
+void CBullet_MachineGun::Update(_float fTimeDelta)
 {
 
 	for (auto& iter : m_Actionlist)
@@ -61,7 +66,7 @@ void CThrow_Object::Update(_float fTimeDelta)
 	}
 }
 
-void CThrow_Object::Late_Update(_float fTimeDelta)
+void CBullet_MachineGun::Late_Update(_float fTimeDelta)
 {
 	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
 	{
@@ -82,7 +87,7 @@ void CThrow_Object::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CThrow_Object::Render()
+HRESULT CBullet_MachineGun::Render()
 {
 	__super::Render();
 
@@ -123,24 +128,26 @@ HRESULT CThrow_Object::Render()
 
 	return S_OK;
 }
-void CThrow_Object::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
+void CBullet_MachineGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
+void CBullet_MachineGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
+
+	pAction->bDead = true;
 }
 //
-//void CThrow_Object::Collision_Reaction_InterAction(CInterAction* pPoint)
+//void CBullet_MachineGun::Collision_Reaction_InterAction(CInterAction* pPoint)
 //{
 //}
 //
-//void CThrow_Object::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//void CBullet_MachineGun::Collision_Reaction_Container(CLongvinter_Container* pPoint)
 //{
 //}
 
-HRESULT CThrow_Object::Ready_Components()
+HRESULT CBullet_MachineGun::Ready_Components()
 {
 
 
@@ -158,38 +165,38 @@ HRESULT CThrow_Object::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CThrow_Object::Ready_PartObjects()
+HRESULT CBullet_MachineGun::Ready_PartObjects()
 {
 	return S_OK;
 }
 
-CThrow_Object* CThrow_Object::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CBullet_MachineGun* CBullet_MachineGun::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CThrow_Object* pInstance = new CThrow_Object(pDevice, pContext);
+	CBullet_MachineGun* pInstance = new CBullet_MachineGun(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CThrow_Object"));
+		MSG_BOX(TEXT("Failed to Created : CBullet_MachineGun"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CThrow_Object::Clone(void* pArg)
+CGameObject* CBullet_MachineGun::Clone(void* pArg)
 {
-	CThrow_Object* pInstance = new CThrow_Object(*this);
+	CBullet_MachineGun* pInstance = new CBullet_MachineGun(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CThrow_Object"));
+		MSG_BOX(TEXT("Failed to Cloned : CBullet_MachineGun"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CThrow_Object::Free()
+void CBullet_MachineGun::Free()
 {
 	__super::Free();
 

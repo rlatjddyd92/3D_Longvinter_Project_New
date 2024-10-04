@@ -37,7 +37,7 @@ protected:
 
 protected:
 	_float m_fActionTimer = 0.f;
-
+	_float m_fAttackDelay = 0.f;
 
 public:
 	static CLongvinter_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

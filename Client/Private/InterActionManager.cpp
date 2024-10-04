@@ -31,11 +31,13 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_vecInterAction.resize(_int(INTERACTION::INTER_END));
-	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), TEXT("Prototype_Inter_Bullet_Straight"));
-
-	m_vecInterAction[_int(INTERACTION::INTER_BULLET_STRAIGHT)] = static_cast<CBullet_Straight*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), -1));
 	m_vecConInterlist.resize(_int(CONTAINER::CONTAINER_END));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), TEXT("Prototype_Inter_Bullet_Straight"));
+	m_vecInterAction[_int(INTERACTION::INTER_BULLET_STRAIGHT)] = static_cast<CBullet_Straight*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
 
 
@@ -58,6 +60,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	// InterActionManager는 모든 InterAction객체보다 먼저 업데이트가 돌아간다 
 
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -93,6 +96,11 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	Safe_AddRef(pNew->pCollider);
 
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
+}
+
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+{
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec);
 }
 
 void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)
@@ -135,9 +143,8 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			}
 
 
-			CCollider::TYPE eType = CCollider::TYPE::TYPE_SPHERE;
-			// 추후 상대방 인터랙션 객체에 따라 값을 변경하는 코드 추가 필요 
-
+			CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
+	
 
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{

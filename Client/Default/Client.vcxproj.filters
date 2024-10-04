@@ -199,6 +199,21 @@
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object">
       <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun">
+      <UniqueIdentifier>{b9f4d636-8ecc-4672-a8bc-eb84e97bbbe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw">
+      <UniqueIdentifier>{04a75ec4-aa6e-474e-a556-0f8fbe1de53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine">
+      <UniqueIdentifier>{36d2b478-a7bb-4371-8a5b-dce43c78bc37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade">
+      <UniqueIdentifier>{ae6d1441-6112-4a81-9497-9215f62625a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite">
+      <UniqueIdentifier>{f861a864-6b14-45cd-bac2-d077944d05a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -405,6 +420,21 @@
     <ClInclude Include="Enum_InterAction.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Bullet_MachineGun.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Melee_ChainSaw.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Throw_Mine.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Throw_Dinamite.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Throw_Granade.h">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -565,6 +595,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Object.cpp">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bullet_MachineGun.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Melee_ChainSaw.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Throw_Mine.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Throw_Dinamite.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Throw_Granade.cpp">
+      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
