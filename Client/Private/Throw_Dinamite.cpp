@@ -30,8 +30,11 @@ HRESULT CThrow_Dinamite::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
-	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
+	m_fSpec_Scale = 1.f;
+	m_fSpec_PushedPower = 10.f;
+	m_fSpec_PushedPower_Decrease = 1.f;
+	m_iColliderType = _int(CCollider::TYPE_AABB);
 
 	return S_OK;
 }
@@ -47,17 +50,18 @@ void CThrow_Dinamite::Update(_float fTimeDelta)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
-		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
+		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision_Adjust(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
-		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
-			iter->bDead = true;
-		}
+		if (vOrigin.m128_f32[0] == vNow.m128_f32[0])
+			if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+				if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+					m_bDinamiteActive = true;
+
 	}
 }
 
@@ -150,7 +154,7 @@ HRESULT CThrow_Dinamite::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Bullet_Normal"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Throw_LandDinamite"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

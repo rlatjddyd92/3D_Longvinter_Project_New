@@ -116,6 +116,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType); }
+	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -152,15 +153,17 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	void Set_Render_Length(_float fLength) { m_pTerrainManager->Set_Render_Length(fLength); }
 
-	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange) { m_pTerrainManager->Check_Wall(fCenter, fLook, fRange); }
-	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents) { m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents); }
+	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange) { return m_pTerrainManager->Check_Wall(fCenter, fLook, fRange); }
+	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents); }
 
 #pragma endregion
 
 #pragma region CAMERA
-	void SetCameraMode(CFreeCamera::CAMERAMODE eInput) { m_pCamera->SetCameraMode(eInput); }
+	void SetCameraMode(CAMERAMODE eInput) { m_pCamera->SetCameraMode(eInput); }
+	CAMERAMODE GetCameraMode() { return m_pCamera->GetCameraMode(); }
 	void ShakeCamera(_float fDeltaTime) { m_pCamera->ShakeCamera(fDeltaTime); }
 	_vector GetCameraPosition() { return m_pCamera->GetCameraPosition(); }
+	_vector GetCameraLook() { return m_pCamera->GetCameraLook();}
 #pragma endregion
 
 
@@ -183,8 +186,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void PushedPower(CPhysicsManager::P_RESULT* tResult, _float fTimeDelta) { m_pPhysicsManager->PushedPower(tResult, fTimeDelta); }// 푸시 파워 계산, 추후 회전 관련 기능 넣기 
 	void CheckTerrainCollision(CPhysicsManager::P_RESULT* tResult, _bool IsSlideControl) { m_pPhysicsManager->CheckTerrainCollision(tResult, IsSlideControl); } // 지형 충돌만 계산 
 
-	CPhysicsManager::P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta) { m_pPhysicsManager->Bounce_Physics(Transform, Collder, IsGravity, fTimeDelta); }  // <- 지형에 튕기는 물체의 계산
-	CPhysicsManager::P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta) { m_pPhysicsManager->LandMine_Physics(Transform, Collder, fTimeDelta); }  // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
+	CPhysicsManager::P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta) { return m_pPhysicsManager->Bounce_Physics(Transform, Collder, IsGravity, fTimeDelta); }  // <- 지형에 튕기는 물체의 계산
+	CPhysicsManager::P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta) { return m_pPhysicsManager->LandMine_Physics(Transform, Collder, fTimeDelta); }  // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
 
 #pragma endregion
 

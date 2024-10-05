@@ -44,7 +44,7 @@ private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
 
-
+	_bool m_bDinamiteActive = false;
 
 
 

@@ -206,7 +206,12 @@
     <ClInclude Include="..\Public\Throw_Mine.h" />
     <ClInclude Include="..\Public\Throw_Object.h" />
     <ClInclude Include="..\Public\Tool.h" />
+    <ClInclude Include="..\Public\Tool_Bow.h" />
+    <ClInclude Include="..\Public\Tool_ChainSaw.h" />
     <ClInclude Include="..\Public\Tool_Empty.h" />
+    <ClInclude Include="..\Public\Tool_FireThrower.h" />
+    <ClInclude Include="..\Public\Tool_LandMine.h" />
+    <ClInclude Include="..\Public\Tool_MachineGun.h" />
     <ClInclude Include="..\Public\Tool_ShotGun.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Struct.h" />
+    <ClInclude Include="Tool_Granade.h" />
     <ClInclude Include="Enum_Enemy.h" />
     <ClInclude Include="Enum_Human.h" />
     <ClInclude Include="Enum_InterAction.h" />
@@ -280,7 +286,12 @@
     <ClCompile Include="..\Private\Throw_Mine.cpp" />
     <ClCompile Include="..\Private\Throw_Object.cpp" />
     <ClCompile Include="..\Private\Tool.cpp" />
+    <ClCompile Include="..\Private\Tool_Bow.cpp" />
+    <ClCompile Include="..\Private\Tool_ChainSaw.cpp" />
     <ClCompile Include="..\Private\Tool_Empty.cpp" />
+    <ClCompile Include="..\Private\Tool_FireThrower.cpp" />
+    <ClCompile Include="..\Private\Tool_LandMine.cpp" />
+    <ClCompile Include="..\Private\Tool_MachineGun.cpp" />
     <ClCompile Include="..\Private\Tool_ShotGun.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\private\UIPage.cpp" />
@@ -299,6 +310,7 @@
     <ClCompile Include="..\Private\UIPart_Picture.cpp" />
     <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Tool_Granade.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

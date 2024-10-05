@@ -29,6 +29,9 @@ public:
 		CCollider* pCollider{};
 		TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END;
 		CLongvinter_Container* pHost = { nullptr };
+
+		_float fTime = 0.f;
+		_bool bActive = false;
 		_bool bDead = false;
 	}INTER_INFO;
 

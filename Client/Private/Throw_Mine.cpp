@@ -41,18 +41,19 @@ HRESULT CThrow_Mine::Initialize(void* pArg)
 
 void CThrow_Mine::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CThrow_Mine::Update(_float fTimeDelta)
 {
-
+	__super::Update(fTimeDelta);
 	for (auto& iter : m_Actionlist)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
 		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
+		tResult = GET_INSTANCE->LandMine_Physics(*iter->pTransform, *iter->pCollider, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
 		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);

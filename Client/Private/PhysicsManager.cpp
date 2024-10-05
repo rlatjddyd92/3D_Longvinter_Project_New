@@ -197,6 +197,8 @@ void CPhysicsManager::BounceControl(P_RESULT* tResult, _bool bLandMine)
 	_float3 vAdjustPosition = {};
 	LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
 
+	_bool bCollision = false;
+
 	while (1)
 	{
 		vAdjustPosition = GET_INSTANCE->Check_Terrain_Collision_Adjust(tResult->fCollider_Center, tResult->fCollider_Extents, tResult->Get_AdjustVector(), &eDirec);
@@ -210,28 +212,45 @@ void CPhysicsManager::BounceControl(P_RESULT* tResult, _bool bLandMine)
 			tResult->fCollider_Center.y += vAdjustPosition.y;
 			tResult->fCollider_Center.z += vAdjustPosition.z;
 			tResult->fBeforePosition = { tResult->fWorld._41, tResult->fWorld._42, tResult->fWorld._43 };
+
+			bCollision = true;
 		}
 		else
 			break;
 
 		if ((bLandMine) && (eDirec == LCUBEDIRECION::LDIREC_TOP))
 		{
-			break;
+			
 			tResult->fPushed_Power = 0.f;
+			break;
 		}
 			
 		vAdjustPosition.x *= -1;
 		vAdjustPosition.y *= -1;
 		vAdjustPosition.z *= -1;
 
+		
+
 		if ((eDirec == LCUBEDIRECION::LDIREC_TOP) || (eDirec == LCUBEDIRECION::LDIREC_BOTTOM))
-			vAdjustPosition.y *= -1;
+		{
+			vAdjustPosition.y = 0.f;
+			tResult->fPushed_Power_Dir.y *= -1;
+		}
+			
 
 		if ((eDirec == LCUBEDIRECION::LDIREC_EAST) || (eDirec == LCUBEDIRECION::LDIREC_WEST))
-			vAdjustPosition.x *= -1;
+		{
+			vAdjustPosition.x = 0.f;
+			tResult->fPushed_Power_Dir.x *= -1;
+		}
+			
 
 		if ((eDirec == LCUBEDIRECION::LDIREC_NORTH) || (eDirec == LCUBEDIRECION::LDIREC_SOUTH))
-			vAdjustPosition.z *= -1;
+		{
+			vAdjustPosition.z = 0.f;
+			tResult->fPushed_Power_Dir.z *= -1;
+		}
+			
 
 		tResult->fWorld._41 += vAdjustPosition.x;
 		tResult->fWorld._42 += vAdjustPosition.y;
@@ -240,6 +259,9 @@ void CPhysicsManager::BounceControl(P_RESULT* tResult, _bool bLandMine)
 		tResult->fCollider_Center.y += vAdjustPosition.y;
 		tResult->fCollider_Center.z += vAdjustPosition.z;
 	}
+
+	if (bCollision)
+		tResult->fPushed_Power *= 0.9f;
 }
 
 HRESULT CPhysicsManager::Ready_Components()

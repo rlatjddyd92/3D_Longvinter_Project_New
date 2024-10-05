@@ -59,7 +59,12 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
-public: 
+private:
+	void Moving_Control(_float fTimeDelta);
+	void Weapon_Control(_float fTimeDelta);
+	void Camera_Control(_float fTimeDelta);
+	void Test_Control(_float fTimeDelta);
+
 
 private:
 	_uint				m_iState = {  };

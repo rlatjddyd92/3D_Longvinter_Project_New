@@ -65,6 +65,15 @@ namespace Client
 	    TMODE_END,
 	};
 
+	enum class CAMERAMODE
+	{
+		CAMERA_OFF,
+		CAMERA_FIRST,
+		CAMERA_THIRD,
+		CAMERA_EDITOR,
+		CAMERA_END
+	};
+
 }
 
 

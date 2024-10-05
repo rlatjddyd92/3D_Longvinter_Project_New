@@ -151,9 +151,6 @@
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
       <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\01.%28보류%29">
-      <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal">
       <UniqueIdentifier>{f2c4d3e9-7e94-4478-be60-8eaf6f5ad956}</UniqueIdentifier>
     </Filter>
@@ -213,6 +210,30 @@
     </Filter>
     <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite">
       <UniqueIdentifier>{f861a864-6b14-45cd-bac2-d077944d05a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\NewFilter1">
+      <UniqueIdentifier>{33e2ac06-49b8-42b2-967b-d259c7e1fd16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\01.Explosion_Granade">
+      <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\01.Tool_Granade">
+      <UniqueIdentifier>{ea68cd12-8f80-4ef0-8306-01708afc02be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\02.Tool_ChainSaw">
+      <UniqueIdentifier>{d6a3e76e-1059-4936-9389-4ef86f468c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\03.Tool_MachineGun">
+      <UniqueIdentifier>{cf1bdd17-f3bc-446e-8010-10bb78bf2c70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\04.Tool_LandMine">
+      <UniqueIdentifier>{e5a6d94f-1ed5-48b9-8fa7-7601b2e4e4c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\05.Tool_FireThrower">
+      <UniqueIdentifier>{56b0da79-866e-4e08-bd47-961c1aab9444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\06.Tool_Bow">
+      <UniqueIdentifier>{b2e52ad5-f487-453c-bb23-0693c23f9656}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -435,6 +456,24 @@
     <ClInclude Include="..\Public\Throw_Granade.h">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tool_Bow.h">
+      <Filter>02.PartObject\07.Tool\06.Tool_Bow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tool_ChainSaw.h">
+      <Filter>02.PartObject\07.Tool\02.Tool_ChainSaw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tool_FireThrower.h">
+      <Filter>02.PartObject\07.Tool\05.Tool_FireThrower</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_Granade.h">
+      <Filter>02.PartObject\07.Tool\01.Tool_Granade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tool_LandMine.h">
+      <Filter>02.PartObject\07.Tool\04.Tool_LandMine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tool_MachineGun.h">
+      <Filter>02.PartObject\07.Tool\03.Tool_MachineGun</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -610,6 +649,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Granade.cpp">
       <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_Bow.cpp">
+      <Filter>02.PartObject\07.Tool\06.Tool_Bow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_ChainSaw.cpp">
+      <Filter>02.PartObject\07.Tool\02.Tool_ChainSaw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_FireThrower.cpp">
+      <Filter>02.PartObject\07.Tool\05.Tool_FireThrower</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_Granade.cpp">
+      <Filter>02.PartObject\07.Tool\01.Tool_Granade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_LandMine.cpp">
+      <Filter>02.PartObject\07.Tool\04.Tool_LandMine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_MachineGun.cpp">
+      <Filter>02.PartObject\07.Tool\03.Tool_MachineGun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

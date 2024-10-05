@@ -343,12 +343,12 @@ void CTerrainManager::Change_Surface(_bool bLinked)
 
 void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius)
 {
-	_uint iMinX = (fPosition.x - fRadius) / LCUBESIZE;
-	_uint iMaxX = (fPosition.x + fRadius) / LCUBESIZE;
-	_uint iMinY = (fPosition.y - fRadius) / LCUBESIZE;
-	_uint iMaxY = (fPosition.y + fRadius) / LCUBESIZE;
-	_uint iMinZ = (fPosition.z - fRadius) / LCUBESIZE;
-	_uint iMaxZ = (fPosition.z + fRadius) / LCUBESIZE;
+	_uint iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
+	_uint iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
+	_uint iMinY = max(0, (fPosition.y - fRadius) / LCUBESIZE);
+	_uint iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
+	_uint iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
+	_uint iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
 
 	for (_int i = iMinX; i <= iMaxX;++i)
 		for (_int j = iMinY; j <= iMaxY; ++j)
@@ -358,7 +358,7 @@ void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadiu
 					_float3 fCubePosition = { i + 0.5f, j + 0.5f, k + 0.5f };
 					_float fDistance = sqrt(pow(fCubePosition.x - fPosition.x, 2) + pow(fCubePosition.y - fPosition.y, 2) + pow(fCubePosition.z - fPosition.z, 2));
 
-					if (fDistance > fRadius + 0.5f)
+					if (fDistance < fRadius)
 					{
 						LCOMMAND tTemp = {};
 						tTemp.m_eType = LANDCOMMAND::LCOMMAND_REMOVE_LAND;
@@ -734,9 +734,10 @@ _bool CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents
 						if ((fCenter.y - fExtents.y > _float((j + 1) * LCUBESIZE)) || (fCenter.y + fExtents.y < _float((j)*LCUBESIZE)))
 							if ((fCenter.z - fExtents.z > _float((k + 1) * LCUBESIZE)) || (fCenter.z + fExtents.z < _float((k)*LCUBESIZE)))
 								return false;
+					return true;
 				}
 
-	return true;
+	return false;
 }
 
 HRESULT CTerrainManager::Ready_Components()
@@ -1059,6 +1060,33 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 		}
 	
 		return fResult;
+}
+
+_float3 CTerrainManager::CheckPicking()
+{
+	_vector vCamera = GET_INSTANCE->GetCameraPosition();
+	_double fDistance = -1.f;
+	_wstring strKey = {};
+	_float3 fResult{ -1,-1,-1 };
+
+	for (auto& pair : m_mapInstancing_SurFace)
+	{
+		_float3 fTempResult = IsPicking_Instancing(pair.second);
+		if (fTempResult.x == -1)
+			continue;
+
+		_vector fTemp = vCamera - XMLoadFloat3(&fTempResult);
+		_double dTempDistance = sqrt((pow(fTemp.m128_f32[0], 2) + pow(fTemp.m128_f32[1], 2) + pow(fTemp.m128_f32[2], 2)));
+
+		if ((fDistance == -1.f) || (fDistance > dTempDistance))
+		{
+			fDistance = dTempDistance;
+			strKey = pair.first;
+			fResult = fTempResult;
+		}
+	}
+
+	return fResult;
 }
 
 CTerrainManager* CTerrainManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

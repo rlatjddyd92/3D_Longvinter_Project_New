@@ -35,7 +35,7 @@ public:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
-
+	
 
 
 
@@ -44,8 +44,8 @@ private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
 
-
-
+	_float m_fExplosionTime = 3.f;
+	
 
 
 

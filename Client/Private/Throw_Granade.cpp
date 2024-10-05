@@ -30,32 +30,56 @@ HRESULT CThrow_Granade::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
-	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_fSpec_Extent = { 0.1f,0.1f,0.1f };
+	m_fSpec_Scale = 1.f;
+	m_fSpec_PushedPower = 20.f;
+	m_fSpec_PushedPower_Decrease = 0.5f;
+	m_iColliderType = _int(CCollider::TYPE_AABB);
 
 	return S_OK;
 }
 
 void CThrow_Granade::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
+
+	if (m_fShowTime > 0.f)
+	{
+		m_fShowTime -= fTimeDelta;
+		if (m_fShowTime < 0.f)
+		{
+			m_fShowTime = 0.f;
+		}
+	}
 }
 
 void CThrow_Granade::Update(_float fTimeDelta)
 {
-
+	__super::Update(fTimeDelta);
 	for (auto& iter : m_Actionlist)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
-		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
+		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision_Adjust(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
+		if (!iter->bActive)
 		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
+			iter->bActive = true;
+			iter->fTime = 2.5f;
+		}
+
+
+
+		iter->fTime -= fTimeDelta;
+
+		if (iter->fTime < 0.f)
+		{
+			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), 2.f);
 			iter->bDead = true;
 		}
 	}
@@ -63,6 +87,9 @@ void CThrow_Granade::Update(_float fTimeDelta)
 
 void CThrow_Granade::Late_Update(_float fTimeDelta)
 {
+
+
+
 	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
 	{
 		if (*iter == nullptr)
@@ -150,7 +177,7 @@ HRESULT CThrow_Granade::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Bullet_Normal"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Throw_Granade_Unpinned"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
