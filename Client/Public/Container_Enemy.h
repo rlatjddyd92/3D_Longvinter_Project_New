@@ -71,7 +71,14 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
-public:
+protected:
+	virtual void Moving_Control(_float fTimeDelta) override;
+	virtual void Weapon_Control(_float fTimeDelta) override;
+	virtual void Camera_Control(_float fTimeDelta) override;
+	virtual void Test_Control(_float fTimeDelta) override;
+
+protected: // AI 관련 함수 
+	virtual void Set_AI_Status(_float fTimeDelta) override;
 
 protected:
 	_uint				m_iState = {  };
@@ -86,7 +93,7 @@ private:
 
 protected:
 	CCollider* m_pColliderCom = { nullptr };
-	WEAPON_TYPE m_eWeaponType = WEAPON_TYPE::WEAPON_END;
+	ITEMINDEX m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
 
 	ENEMY_TYPE m_eEnemy_Type = ENEMY_TYPE::ENEMY_TYPE_END;
 

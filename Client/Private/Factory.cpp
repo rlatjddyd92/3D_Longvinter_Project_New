@@ -90,7 +90,7 @@ void CFactory::Make_Container_Player(_float3 Position)
 {
 	CGameObject::GAMEOBJECT_DESC		pTemp{};
 	pTemp.fPosition = Position;
-	pTemp.fSpeedPerSec = 10.0f;
+	pTemp.fSpeedPerSec = 5.0f;
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), TEXT("Prototype_GameObject_Container_Player"), &pTemp);
 }
@@ -99,7 +99,7 @@ void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
 {
 	CAI_Enemy::AI_Enemy_Desc		pTemp{};
 	pTemp.fPosition = Position;
-	pTemp.fSpeedPerSec = 10.0f;
+	pTemp.fSpeedPerSec = 3.0f;
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	pTemp.eType = eType;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), TEXT("Prototype_GameObject_Container_AI_Enemy"), &pTemp);

@@ -13,6 +13,7 @@ namespace Client
 #include "../Default/Enum_Item.h"
 #include "../Default/Enum_Enemy.h"
 #include "../Default/Enum_Human.h"
+#include "../Default/Enum_Sound.h"
 
 	const unsigned int			g_iWinSizeX = { 1280 };
 	const unsigned int			g_iWinSizeY = { 720 };
@@ -73,6 +74,32 @@ namespace Client
 		CAMERA_EDITOR,
 		CAMERA_END
 	};
+
+	enum class CROWDCONTROL
+	{
+		CC_BURN,
+		CC_BLEED,
+		CC_SLOW,
+		CC_STRN,
+		CC_END
+	};
+
+	enum class AI_STATUS
+	{
+		AI_IDLE,
+		AI_OFF,
+		AI_PANIC,
+		AI_SERACH,
+		AI_DEFENCE,
+		AI_ATTACK,
+		AI_END
+	};
+
+
+
+
+
+
 
 }
 

@@ -84,7 +84,10 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 
 	m_pTransformCom->Save_BeforePosition();
 
+	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
 
+
+	GET_INSTANCE->InputRenderlist(m_eWeapon, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -111,6 +114,33 @@ void CContainer_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, I
 void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+}
+
+void CContainer_Enemy::Moving_Control(_float fTimeDelta)
+{
+	__super::Moving_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
+{
+	__super::Weapon_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Camera_Control(_float fTimeDelta)
+{
+	__super::Camera_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Test_Control(_float fTimeDelta)
+{
+	__super::Test_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Set_AI_Status(_float fTimeDelta)
+{
+	__super::Set_AI_Status(fTimeDelta);
+
+	
 }
 
 

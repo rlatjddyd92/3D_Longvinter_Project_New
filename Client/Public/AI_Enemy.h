@@ -41,6 +41,15 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
+protected:
+	virtual void Moving_Control(_float fTimeDelta) override;
+	virtual void Weapon_Control(_float fTimeDelta) override;
+	virtual void Camera_Control(_float fTimeDelta) override;
+	virtual void Test_Control(_float fTimeDelta) override;
+
+protected: // AI 관련 함수 
+	virtual void Set_AI_Status(_float fTimeDelta) override;
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();

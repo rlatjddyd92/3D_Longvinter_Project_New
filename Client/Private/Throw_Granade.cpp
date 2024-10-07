@@ -34,7 +34,7 @@ HRESULT CThrow_Granade::Initialize(void* pArg)
 	m_fSpec_Scale = 1.f;
 	m_fSpec_PushedPower = 20.f;
 	m_fSpec_PushedPower_Decrease = 0.5f;
-	m_iColliderType = _int(CCollider::TYPE_AABB);
+	m_iColliderType = _int(CCollider::TYPE_OBB);
 
 	return S_OK;
 }

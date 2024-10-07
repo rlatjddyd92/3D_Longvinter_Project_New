@@ -19,26 +19,8 @@
     <Filter Include="02.ClientInstance">
       <UniqueIdentifier>{bd09e51d-766a-4343-ad6c-b0e50d2d43cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\00.BackGround">
-      <UniqueIdentifier>{21287f1c-586b-4a97-90d2-9e630f240bae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\99.Camera">
-      <UniqueIdentifier>{aae6caeb-858d-4707-9718-e4b878cdd9de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\05.ImguiManager">
-      <UniqueIdentifier>{81ab461c-5861-47cc-9293-40be0f2e7291}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\06.TerrainManager">
-      <UniqueIdentifier>{e600eca2-1d37-44ff-bf4d-84bb279497f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\06.TerrainManager\00.SurFace">
-      <UniqueIdentifier>{7d5642f0-c25e-4d9d-9131-383903d3ee29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\01.Factory">
       <UniqueIdentifier>{c46e7237-5e5e-4224-8832-899548aba9d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\02.Controller">
-      <UniqueIdentifier>{c666f4c1-bfb5-4f1c-af06-c54bf54e16e9}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Levels\00.Loading">
       <UniqueIdentifier>{5826f108-d734-4b34-a4f6-11a528a309a5}</UniqueIdentifier>
@@ -58,62 +40,8 @@
     <Filter Include="99.Defines\00.Factory">
       <UniqueIdentifier>{661998ba-32fe-4c4f-8428-f3f359393d3e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\07.PhysicsManager">
-      <UniqueIdentifier>{3973ed0c-be1e-4076-a6b0-8e9d0907e158}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager">
-      <UniqueIdentifier>{4dacb8ae-a713-4e04-8d00-591622bb8657}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page">
-      <UniqueIdentifier>{cc31de98-0fec-4155-bde1-a7f8dec05858}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part">
-      <UniqueIdentifier>{7cf57900-db6b-4af0-a09c-0bcb05e13abd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\00.UI_Part_Back">
-      <UniqueIdentifier>{c8695df2-3f02-4199-a5f6-2f2fdf177f8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\01.UI_Part_Button">
-      <UniqueIdentifier>{6318da64-83a1-459d-9e32-93039aa0aab9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\02.UI_Part_Picture">
-      <UniqueIdentifier>{783519af-ffd2-4a7a-8230-8adcdb603595}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\00.UI_Page_Main">
-      <UniqueIdentifier>{097cb05c-5d24-4db8-a0d9-38d2709cb493}</UniqueIdentifier>
-    </Filter>
     <Filter Include="99.Defines\01.UI">
       <UniqueIdentifier>{028b3546-a49c-4dfa-91d2-ab8c5d0dcffb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\03.UI_Part_Bar">
-      <UniqueIdentifier>{304e1474-0f6a-46d6-96c6-407da3c658ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test">
-      <UniqueIdentifier>{fed7e3ec-34b6-4796-bbbe-239d83edc8b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven">
-      <UniqueIdentifier>{24a85a78-8d01-493d-be26-3d12171bd6e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip">
-      <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop">
-      <UniqueIdentifier>{c4bd10d3-86c1-47c1-96a8-51b4c108ef63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting">
-      <UniqueIdentifier>{33de20ef-9ac0-42ad-9302-00e46efdedd2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option">
-      <UniqueIdentifier>{6baa500a-8939-460d-8021-791c5b579454}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell">
-      <UniqueIdentifier>{c39db73d-c9d4-43e4-802e-0c37d730aec8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\09.ItemManager">
-      <UniqueIdentifier>{b625aefd-3a0c-4cdf-8d3e-b067b6745f09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager">
-      <UniqueIdentifier>{6963eeeb-b867-466a-af0d-f7a3e68568bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="99.Defines\02.InterAction">
       <UniqueIdentifier>{062df20c-80fa-48ce-aa94-b32846fd0eb9}</UniqueIdentifier>
@@ -136,24 +64,6 @@
     <Filter Include="02.PartObject\07.Tool\99.Tool_Empty">
       <UniqueIdentifier>{498e6a6a-4f22-477e-9bac-cc8a81efbaa4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction">
-      <UniqueIdentifier>{a4f5b98b-cfe5-49d7-8228-64897aa37935}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee">
-      <UniqueIdentifier>{6829cee5-7793-4022-a9e3-eb9565ccb3cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile">
-      <UniqueIdentifier>{e16a3aca-d4b1-4c3b-b3ad-188302bbcf12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight">
-      <UniqueIdentifier>{1a703c10-54f5-4fe0-a575-dbeadd316793}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion">
-      <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal">
-      <UniqueIdentifier>{f2c4d3e9-7e94-4478-be60-8eaf6f5ad956}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Container">
       <UniqueIdentifier>{cf4c0265-cf7a-4753-9681-e591e6c8173f}</UniqueIdentifier>
     </Filter>
@@ -169,53 +79,8 @@
     <Filter Include="03.Container\03.Container_Animal">
       <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Container\04.Container_Item">
-      <UniqueIdentifier>{c7b38ad9-a92a-4bb1-89cd-1964343b18bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Container\05.Container_InterAction">
-      <UniqueIdentifier>{9054aa96-bba6-4c47-9b7f-0e52cfb9dfe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Container\06.Container_Effect">
-      <UniqueIdentifier>{196223b7-9a85-41dc-b9ea-19e826ef9f18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip">
-      <UniqueIdentifier>{0333281b-12e4-4e96-82ca-6120a466703f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message">
-      <UniqueIdentifier>{35caf8e6-a375-4b40-82fa-d89598700484}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Container\02.Container_Enemy\00.AI_Enemy">
       <UniqueIdentifier>{c144e254-c3c5-418a-aa07-f212c983f894}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal">
-      <UniqueIdentifier>{49c4a00e-2e45-40da-87e8-f4d927efca13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun">
-      <UniqueIdentifier>{aec5e36a-49aa-489e-82db-1b6e9477b0df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object">
-      <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun">
-      <UniqueIdentifier>{b9f4d636-8ecc-4672-a8bc-eb84e97bbbe0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw">
-      <UniqueIdentifier>{04a75ec4-aa6e-474e-a556-0f8fbe1de53d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine">
-      <UniqueIdentifier>{36d2b478-a7bb-4371-8a5b-dce43c78bc37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade">
-      <UniqueIdentifier>{ae6d1441-6112-4a81-9497-9215f62625a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite">
-      <UniqueIdentifier>{f861a864-6b14-45cd-bac2-d077944d05a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\NewFilter1">
-      <UniqueIdentifier>{33e2ac06-49b8-42b2-967b-d259c7e1fd16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\01.Explosion_Granade">
-      <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.PartObject\07.Tool\01.Tool_Granade">
       <UniqueIdentifier>{ea68cd12-8f80-4ef0-8306-01708afc02be}</UniqueIdentifier>
@@ -234,6 +99,135 @@
     </Filter>
     <Filter Include="02.PartObject\07.Tool\06.Tool_Bow">
       <UniqueIdentifier>{b2e52ad5-f487-453c-bb23-0693c23f9656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\99.BackGround">
+      <UniqueIdentifier>{21287f1c-586b-4a97-90d2-9e630f240bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\98.Controller">
+      <UniqueIdentifier>{c666f4c1-bfb5-4f1c-af06-c54bf54e16e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\02.TerrainManager">
+      <UniqueIdentifier>{e600eca2-1d37-44ff-bf4d-84bb279497f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\02.TerrainManager\00.SurFace">
+      <UniqueIdentifier>{7d5642f0-c25e-4d9d-9131-383903d3ee29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\03.PhysicsManager">
+      <UniqueIdentifier>{3973ed0c-be1e-4076-a6b0-8e9d0907e158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager">
+      <UniqueIdentifier>{6963eeeb-b867-466a-af0d-f7a3e68568bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction">
+      <UniqueIdentifier>{a4f5b98b-cfe5-49d7-8228-64897aa37935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee">
+      <UniqueIdentifier>{6829cee5-7793-4022-a9e3-eb9565ccb3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal">
+      <UniqueIdentifier>{49c4a00e-2e45-40da-87e8-f4d927efca13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun">
+      <UniqueIdentifier>{aec5e36a-49aa-489e-82db-1b6e9477b0df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw">
+      <UniqueIdentifier>{04a75ec4-aa6e-474e-a556-0f8fbe1de53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile">
+      <UniqueIdentifier>{e16a3aca-d4b1-4c3b-b3ad-188302bbcf12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight">
+      <UniqueIdentifier>{1a703c10-54f5-4fe0-a575-dbeadd316793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\01.Throw_Object">
+      <UniqueIdentifier>{fb89b6e3-e0bf-4f3c-b0dc-712dcc018ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun">
+      <UniqueIdentifier>{b9f4d636-8ecc-4672-a8bc-eb84e97bbbe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine">
+      <UniqueIdentifier>{36d2b478-a7bb-4371-8a5b-dce43c78bc37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade">
+      <UniqueIdentifier>{ae6d1441-6112-4a81-9497-9215f62625a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite">
+      <UniqueIdentifier>{f861a864-6b14-45cd-bac2-d077944d05a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion">
+      <UniqueIdentifier>{e4e86fbb-f61b-4cba-879f-284f1a4f5fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal">
+      <UniqueIdentifier>{f2c4d3e9-7e94-4478-be60-8eaf6f5ad956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion\NewFilter1">
+      <UniqueIdentifier>{33e2ac06-49b8-42b2-967b-d259c7e1fd16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion\01.Explosion_Granade">
+      <UniqueIdentifier>{b73957de-e8f0-47b9-bc58-983a26918c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager">
+      <UniqueIdentifier>{4dacb8ae-a713-4e04-8d00-591622bb8657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page">
+      <UniqueIdentifier>{cc31de98-0fec-4155-bde1-a7f8dec05858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\00.UI_Page_Main">
+      <UniqueIdentifier>{097cb05c-5d24-4db8-a0d9-38d2709cb493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test">
+      <UniqueIdentifier>{fed7e3ec-34b6-4796-bbbe-239d83edc8b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven">
+      <UniqueIdentifier>{24a85a78-8d01-493d-be26-3d12171bd6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip">
+      <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop">
+      <UniqueIdentifier>{c4bd10d3-86c1-47c1-96a8-51b4c108ef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting">
+      <UniqueIdentifier>{33de20ef-9ac0-42ad-9302-00e46efdedd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\05.UI_Page_Option">
+      <UniqueIdentifier>{6baa500a-8939-460d-8021-791c5b579454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\06.UI_Page_ToolTip">
+      <UniqueIdentifier>{0333281b-12e4-4e96-82ca-6120a466703f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part">
+      <UniqueIdentifier>{7cf57900-db6b-4af0-a09c-0bcb05e13abd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\00.UI_Part_Back">
+      <UniqueIdentifier>{c8695df2-3f02-4199-a5f6-2f2fdf177f8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\01.UI_Part_Button">
+      <UniqueIdentifier>{6318da64-83a1-459d-9e32-93039aa0aab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\02.UI_Part_Picture">
+      <UniqueIdentifier>{783519af-ffd2-4a7a-8230-8adcdb603595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\03.UI_Part_Bar">
+      <UniqueIdentifier>{304e1474-0f6a-46d6-96c6-407da3c658ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\04.UI_Part_Cell">
+      <UniqueIdentifier>{c39db73d-c9d4-43e4-802e-0c37d730aec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\05.UI_Part_Message">
+      <UniqueIdentifier>{35caf8e6-a375-4b40-82fa-d89598700484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\06.ItemManager">
+      <UniqueIdentifier>{b625aefd-3a0c-4cdf-8d3e-b067b6745f09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\07.SoundManager">
+      <UniqueIdentifier>{66d49e85-8a74-4ac5-9131-8567d7fb2132}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\08.Camera">
+      <UniqueIdentifier>{aae6caeb-858d-4707-9718-e4b878cdd9de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\09.ImguiManager">
+      <UniqueIdentifier>{81ab461c-5861-47cc-9293-40be0f2e7291}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -268,22 +262,22 @@
       <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BackGround.h">
-      <Filter>02.ClientInstance\00.BackGround</Filter>
+      <Filter>02.ClientInstance\99.BackGround</Filter>
     </ClInclude>
     <ClInclude Include="..\public\FreeCamera.h">
-      <Filter>02.ClientInstance\99.Camera</Filter>
+      <Filter>02.ClientInstance\08.Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ImguiManager.h">
-      <Filter>02.ClientInstance\05.ImguiManager</Filter>
+      <Filter>02.ClientInstance\09.ImguiManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TerrainManager.h">
-      <Filter>02.ClientInstance\06.TerrainManager</Filter>
+      <Filter>02.ClientInstance\02.TerrainManager</Filter>
     </ClInclude>
     <ClInclude Include="Enum_Terrain.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SurFace.h">
-      <Filter>02.ClientInstance\06.TerrainManager\00.SurFace</Filter>
+      <Filter>02.ClientInstance\02.TerrainManager\00.SurFace</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Body.h">
       <Filter>02.PartObject\06.Body</Filter>
@@ -307,7 +301,7 @@
       <Filter>02.ClientInstance\01.Factory</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Controller.h">
-      <Filter>02.ClientInstance\02.Controller</Filter>
+      <Filter>02.ClientInstance\98.Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Editor.h">
       <Filter>01.Levels\03.Editor</Filter>
@@ -319,31 +313,31 @@
       <Filter>02.PartObject\07.Tool\99.Tool_Empty</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PhysicsManager.h">
-      <Filter>02.ClientInstance\07.PhysicsManager</Filter>
+      <Filter>02.ClientInstance\03.PhysicsManager</Filter>
     </ClInclude>
     <ClInclude Include="Client_Struct.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIManager.h">
-      <Filter>02.ClientInstance\08.UIManager</Filter>
+      <Filter>02.ClientInstance\05.UIManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_Back.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\00.UI_Part_Back</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\00.UI_Part_Back</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_Picture.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\02.UI_Part_Picture</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\02.UI_Part_Picture</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_Button.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\01.UI_Part_Button</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\01.UI_Part_Button</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Main.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\00.UI_Page_Main</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\00.UI_Page_Main</Filter>
     </ClInclude>
     <ClInclude Include="UIPage_Defines.h">
       <Filter>99.Defines\01.UI</Filter>
@@ -352,49 +346,49 @@
       <Filter>99.Defines\01.UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UIPage_Inven.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Equip.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Crfting.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Option.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Shop.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_Cell.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ItemManager.h">
-      <Filter>02.ClientInstance\09.ItemManager</Filter>
+      <Filter>02.ClientInstance\06.ItemManager</Filter>
     </ClInclude>
     <ClInclude Include="Enum_Item.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Missile.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Explosion.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Melee.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InterActionManager.h">
-      <Filter>02.ClientInstance\03.InterActionManager</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bullet_Straight.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Explosion_Normal.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Longvinter_Container.h">
       <Filter>03.Container</Filter>
@@ -403,13 +397,13 @@
       <Filter>99.Defines\02.InterAction</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InterAction.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ToolTip.h">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_TextBox.h">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Container_Enemy.h">
       <Filter>03.Container\02.Container_Enemy</Filter>
@@ -418,13 +412,13 @@
       <Filter>03.Container\02.Container_Enemy\00.AI_Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Melee_Normal.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Melee_ShotGun.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Throw_Object.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
     </ClInclude>
     <ClInclude Include="Enum_Enemy.h">
       <Filter>99.Defines</Filter>
@@ -442,19 +436,19 @@
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bullet_MachineGun.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Melee_ChainSaw.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Throw_Mine.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Throw_Dinamite.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Throw_Granade.h">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Tool_Bow.h">
       <Filter>02.PartObject\07.Tool\06.Tool_Bow</Filter>
@@ -473,6 +467,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Tool_MachineGun.h">
       <Filter>02.PartObject\07.Tool\03.Tool_MachineGun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SoundManager.h">
+      <Filter>02.ClientInstance\07.SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_Sound.h">
+      <Filter>99.Defines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -498,19 +498,19 @@
       <Filter>01.Levels\00.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BackGround.cpp">
-      <Filter>02.ClientInstance\00.BackGround</Filter>
+      <Filter>02.ClientInstance\99.BackGround</Filter>
     </ClCompile>
     <ClCompile Include="..\private\FreeCamera.cpp">
-      <Filter>02.ClientInstance\99.Camera</Filter>
+      <Filter>02.ClientInstance\08.Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ImguiManager.cpp">
-      <Filter>02.ClientInstance\05.ImguiManager</Filter>
+      <Filter>02.ClientInstance\09.ImguiManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TerrainManager.cpp">
-      <Filter>02.ClientInstance\06.TerrainManager</Filter>
+      <Filter>02.ClientInstance\02.TerrainManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SurFace.cpp">
-      <Filter>02.ClientInstance\06.TerrainManager\00.SurFace</Filter>
+      <Filter>02.ClientInstance\02.TerrainManager\00.SurFace</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Body.cpp">
       <Filter>02.PartObject\06.Body</Filter>
@@ -534,7 +534,7 @@
       <Filter>02.ClientInstance\01.Factory</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Controller.cpp">
-      <Filter>02.ClientInstance\02.Controller</Filter>
+      <Filter>02.ClientInstance\98.Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Editor.cpp">
       <Filter>01.Levels\03.Editor</Filter>
@@ -543,82 +543,82 @@
       <Filter>02.PartObject\07.Tool\99.Tool_Empty</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PhysicsManager.cpp">
-      <Filter>02.ClientInstance\07.PhysicsManager</Filter>
+      <Filter>02.ClientInstance\03.PhysicsManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIManager.cpp">
-      <Filter>02.ClientInstance\08.UIManager</Filter>
+      <Filter>02.ClientInstance\05.UIManager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UIPage.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UIPart_Back.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\00.UI_Part_Back</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\00.UI_Part_Back</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Picture.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\02.UI_Part_Picture</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\02.UI_Part_Picture</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Button.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\01.UI_Part_Button</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\01.UI_Part_Button</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Main.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\00.UI_Page_Main</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\00.UI_Page_Main</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inven.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Equip.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Crfting.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Option.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Shop.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Cell.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ItemManager.cpp">
-      <Filter>02.ClientInstance\09.ItemManager</Filter>
+      <Filter>02.ClientInstance\06.ItemManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Missile.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Explosion.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Melee.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\InterActionManager.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bullet_Straight.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\00.Bullet_Straight</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Explosion_Normal.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\02.Explosion\00.Explosion_Normal</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Longvinter_Container.cpp">
       <Filter>03.Container</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\InterAction.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
-      <Filter>02.ClientInstance\08.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\06.UI_Page_ToolTip</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_TextBox.cpp">
-      <Filter>02.ClientInstance\08.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\05.UI_Part_Message</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Container_Enemy.cpp">
       <Filter>03.Container\02.Container_Enemy</Filter>
@@ -627,28 +627,28 @@
       <Filter>03.Container\02.Container_Enemy\00.AI_Enemy</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Melee_Normal.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\00.Melee_Normal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Melee_ShotGun.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\01.Melee_ShotGun</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Object.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\01.Throw_Object</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bullet_MachineGun.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\02.Bullet_MachineGun</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Melee_ChainSaw.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\01.Melee\02.Melee_ChainSaw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Mine.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\03.Throw_Mine</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Dinamite.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\05.Throw_Dinamite</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Throw_Granade.cpp">
-      <Filter>02.ClientInstance\03.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\04.Throw_Granade</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Tool_Bow.cpp">
       <Filter>02.PartObject\07.Tool\06.Tool_Bow</Filter>
@@ -667,6 +667,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tool_MachineGun.cpp">
       <Filter>02.PartObject\07.Tool\03.Tool_MachineGun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SoundManager.cpp">
+      <Filter>02.ClientInstance\07.SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -94,7 +94,10 @@ HRESULT CThrow_Mine::Render()
 	for (auto& iter : m_Actionlist)
 	{
 		_float3 fPosition{};
-		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
+		_vector vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION) - _vector{0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f};
+		iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
+
+		XMStoreFloat3(&fPosition, vPosition);
 
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			continue;
@@ -124,6 +127,9 @@ HRESULT CThrow_Mine::Render()
 #ifdef _DEBUG
 		iter->pCollider->Render();
 #endif
+
+		vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION) + _vector{0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f};
+		iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 
 	return S_OK;

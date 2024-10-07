@@ -358,7 +358,7 @@ void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadiu
 					_float3 fCubePosition = { i + 0.5f, j + 0.5f, k + 0.5f };
 					_float fDistance = sqrt(pow(fCubePosition.x - fPosition.x, 2) + pow(fCubePosition.y - fPosition.y, 2) + pow(fCubePosition.z - fPosition.z, 2));
 
-					if (fDistance < fRadius)
+					if (fDistance < fRadius + (LCUBESIZE * 0.5f))
 					{
 						LCOMMAND tTemp = {};
 						tTemp.m_eType = LANDCOMMAND::LCOMMAND_REMOVE_LAND;
@@ -718,7 +718,7 @@ _bool CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents
 	if (iMaxX >= LMAX_X)
 		return false;
 
-	if (iMaxY >= LMAX_Y + 5)
+	if (iMaxY >= LMAX_Y)
 		return false;
 
 	if (iMaxZ >= LMAX_Z)

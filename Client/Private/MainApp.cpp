@@ -22,6 +22,8 @@ HRESULT CMainApp::Initialize()
 	EngineDesc.iWinSizeY = g_iWinSizeY;
 	EngineDesc.isWindowsed = true;
 
+	srand(time(NULL)); // <- 랜덤 시드 생성 
+
 	/* 엔진을 사용하기위한 여러 초기화 과정을 수행한다. */
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, _uint(LEVELID::LEVEL_END), EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;

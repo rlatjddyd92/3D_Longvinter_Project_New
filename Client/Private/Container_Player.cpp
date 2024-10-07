@@ -125,6 +125,8 @@ void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAI
 
 void CContainer_Player::Moving_Control(_float fTimeDelta)
 {
+	__super::Moving_Control(fTimeDelta);
+
 	if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
 	{
 		// 이동 조작 
@@ -193,12 +195,6 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 
 		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
-
-
-
-
-
-
 		_float fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
 
 		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
@@ -207,13 +203,11 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 
 		_long		MouseMove = { 0 };
 
-		
-
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * fAngle);
 
 		
 
-
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
 			m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
@@ -225,7 +219,7 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 
 void CContainer_Player::Weapon_Control(_float fTimeDelta)
 {
-
+	__super::Weapon_Control(fTimeDelta);
 	// 무기 조작 
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
@@ -272,27 +266,15 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 		else
 			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
-		if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
-		{
-			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fStartPostion, fPushedDirec);
-			m_fAttackDelay = 0.1f;
-		}
-		if (eNowType == ITEMINDEX::ITEM_LANDMINE)
-		{
-			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_MINE, this, fStartPostion, fPushedDirec);
-			m_fAttackDelay = 0.5f;
-		}
-		if (eNowType == ITEMINDEX::ITEM_GRANADE)
-		{
-			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fStartPostion, fPushedDirec);
-			m_fAttackDelay = 0.5f;
-		}
+		__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 
 	}
 }
 
 void CContainer_Player::Camera_Control(_float fTimeDelta)
 {
+	__super::Camera_Control(fTimeDelta);
+
 	if (m_pGameInstance->Get_DIKeyState(DIK_F) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
@@ -312,6 +294,8 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 
 void CContainer_Player::Test_Control(_float fTimeDelta)
 {
+	__super::Test_Control(fTimeDelta);
+
 	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 		++m_iState;
 
@@ -333,6 +317,11 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 			m_iFace = 0;
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 	}
+}
+
+void CContainer_Player::Set_AI_Status(_float fTimeDelta)
+{
+	//__super::Set_AI_Status(fTimeDelta);
 }
 
 

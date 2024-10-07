@@ -199,6 +199,7 @@
     <ClInclude Include="..\Public\Melee_ShotGun.h" />
     <ClInclude Include="..\Public\Missile.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
+    <ClInclude Include="..\Public\SoundManager.h" />
     <ClInclude Include="..\Public\SurFace.h" />
     <ClInclude Include="..\Public\TerrainManager.h" />
     <ClInclude Include="..\Public\Throw_Dinamite.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Struct.h" />
+    <ClInclude Include="Enum_Sound.h" />
     <ClInclude Include="Tool_Granade.h" />
     <ClInclude Include="Enum_Enemy.h" />
     <ClInclude Include="Enum_Human.h" />
@@ -279,6 +281,7 @@
     <ClCompile Include="..\Private\Melee_ShotGun.cpp" />
     <ClCompile Include="..\Private\Missile.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
+    <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\Private\SurFace.cpp" />
     <ClCompile Include="..\Private\TerrainManager.cpp" />
     <ClCompile Include="..\Private\Throw_Dinamite.cpp" />
