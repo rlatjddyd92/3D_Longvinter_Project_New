@@ -480,6 +480,9 @@
     <ClInclude Include="..\Public\Fire.h">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPart_Bar.h">
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\03.UI_Part_Bar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -679,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fire.cpp">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_Bar.cpp">
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\03.UI_Part_Bar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -53,6 +53,10 @@ public: // 툴팁 관련 함수
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_bShowTooltip = true;  m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 
 
+public:
+	void MakeEnemyHpBar(CLongvinter_Container* pHost);
+
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
@@ -78,6 +82,7 @@ private:
 	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
 
 	list<CUIPart_TextBox*> m_Informlist;
+	list<CUIPart_Bar*> m_EnemyHplist;
 
 	_int m_iMaxInform = 10;
 

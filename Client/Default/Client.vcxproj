@@ -226,6 +226,7 @@
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
+    <ClInclude Include="..\Public\UIPart_Bar.h" />
     <ClInclude Include="..\Public\UIPart_Button.h" />
     <ClInclude Include="..\Public\UIPart_Cell.h" />
     <ClInclude Include="..\Public\UIPart_TextBox.h" />
@@ -309,6 +310,7 @@
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
+    <ClCompile Include="..\Private\UIPart_Bar.cpp" />
     <ClCompile Include="..\Private\UIPart_Button.cpp" />
     <ClCompile Include="..\Private\UIPart_Cell.cpp" />
     <ClCompile Include="..\Private\UIPart_TextBox.cpp" />

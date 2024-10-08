@@ -33,6 +33,18 @@ public:
 
 	CONTAINER GetContainerType() { return eContainerType; }
 
+	_float Get_Hp() { return m_fHp; }
+	_float Get_HpMax() { return m_fHp_Max; }
+	void Add_Hp(_float fAdd) 
+	{
+		m_fHp += fAdd;
+		if (m_fHp > m_fHp_Max)
+			m_fHp = m_fHp_Max;
+		else if (m_fHp < 0.f)
+			m_fHp = 0.f;
+	}
+
+
 protected:
 	CONTAINER eContainerType = CONTAINER::CONTAINER_END;
 
@@ -62,7 +74,7 @@ protected: // <- 상태 제어용
 
 protected: // <- 스탯
 	_float m_fHp = 1000.f;
-
+	_float m_fHp_Max = 1000.f;
 
 protected: // <- 상태
 	vector<_bool> m_vecCrowdControl;

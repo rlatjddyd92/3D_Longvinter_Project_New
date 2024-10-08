@@ -40,7 +40,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	m_fAttack_Length = 15.f;
 	m_fDetective_Length = 20.f;
 	
-
+	GET_INSTANCE->MakeEnemyHpBar(this);
 
 	return S_OK;
 }
@@ -108,11 +108,11 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 
 		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
 		{
-			m_fHp -= 10.f;
+			__super::Add_Hp(-100.f);
 		}
 		else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 		{
-			m_fHp -= 10.f;
+			__super::Add_Hp(-100.f);
 			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
 			_float3 fDirec{};
 			XMStoreFloat3(&fDirec, vDirec);
