@@ -35,10 +35,12 @@ HRESULT CExplosion::Initialize(void* pArg)
 
 void CExplosion::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CExplosion::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CExplosion::Late_Update(_float fTimeDelta)
@@ -48,12 +50,11 @@ void CExplosion::Late_Update(_float fTimeDelta)
 
 
 
-	m_bDemege = false;
 }
 
 HRESULT CExplosion::Render()
 {
-
+	__super::Render();
 
 
 
@@ -62,16 +63,14 @@ HRESULT CExplosion::Render()
 
 void CExplosion::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
-	if (!m_bDemege)
-		return;
+
 
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
 
 void CExplosion::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
-	if (!m_bDemege)
-		return;
+
 
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
@@ -86,24 +85,40 @@ void CExplosion::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIn
 
 HRESULT CExplosion::Ready_Components()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
-
 HRESULT CExplosion::Ready_PartObjects()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 CExplosion* CExplosion::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	return nullptr;
+	CExplosion* pInstance = new CExplosion(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CExplosion"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CGameObject* CExplosion::Clone(void* pArg)
 {
-	return nullptr;
+	CExplosion* pInstance = new CExplosion(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CExplosion"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CExplosion::Free()
 {
+	__super::Free();
 }

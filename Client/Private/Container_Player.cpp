@@ -111,7 +111,7 @@ HRESULT CContainer_Player::Render()
 	return S_OK;
 }
 
-void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
 }
 
@@ -148,7 +148,8 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
-			m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 		}
 
 		_long		MouseMove = { 0 };
@@ -186,7 +187,8 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
-			m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 		}
 
 		_float3 fPoint = GET_INSTANCE->CheckPicking();

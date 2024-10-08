@@ -28,10 +28,12 @@ public:
 		CTransform* pTransform{};
 		CCollider* pCollider{};
 		TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END;
-		CLongvinter_Container* pHost = { nullptr };
+		CLongvinter_Container* pHost = { nullptr }; // <- 이 객체를 만든 대상
+
+		CLongvinter_Container* pTrace = { nullptr }; // <- 추적 대상
 
 		_float fTime = 0.f;
-		_bool bActive = false;
+		_bool bActive = true;
 		_bool bDead = false;
 	}INTER_INFO;
 
@@ -81,6 +83,7 @@ protected:
 	_float					m_fSpec_PushedPower = 0.f;
 	_float					m_fSpec_PushedPower_Decrease = 0.f;
 	_int					m_iColliderType = 0;
+	_float					m_fSpec_Time = 0.f;
 
 public:
 	static CInterAction* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

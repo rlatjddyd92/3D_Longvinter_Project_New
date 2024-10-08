@@ -229,6 +229,9 @@
     <Filter Include="02.ClientInstance\09.ImguiManager">
       <UniqueIdentifier>{81ab461c-5861-47cc-9293-40be0f2e7291}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire">
+      <UniqueIdentifier>{44b80a5a-c9d0-41d3-8d44-bbf36f8c1ef0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -474,6 +477,9 @@
     <ClInclude Include="Enum_Sound.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Fire.h">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -671,6 +677,9 @@
     <ClCompile Include="..\Private\SoundManager.cpp">
       <Filter>02.ClientInstance\07.SoundManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Fire.cpp">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -716,6 +725,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxSurFace_Gray.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_NonTexture_Alpah.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

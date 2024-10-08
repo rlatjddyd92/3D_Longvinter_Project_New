@@ -60,7 +60,7 @@ void CBullet_Straight::Update(_float fTimeDelta)
 
 		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
 		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
 			iter->bDead = true;
 		}
 	}

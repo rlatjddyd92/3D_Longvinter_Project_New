@@ -111,6 +111,16 @@ _float CCollider::GetBoundingRadius_Sphere()
 	return m_pBounding->GetBoundingRadius_Sphere();
 }
 
+void CCollider::SetBoundingExtents(_float3 fExtent)
+{
+	m_pBounding->SetBoundingExtents(fExtent);
+}
+
+void CCollider::SetBoundingRadius_Sphere(_float fRadius)
+{
+	m_pBounding->SetBoundingRadius_Sphere(fRadius);
+}
+
 _bool CCollider::GetCollision(CCollider::TYPE eColliderType, CCollider* pOpponent)
 {
 	return m_pBounding->GetCollision(eColliderType, pOpponent);

@@ -100,9 +100,9 @@ HRESULT CContainer_Enemy::Render()
 	return S_OK;
 }
 
-void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex)
+void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
-	__super::Collision_Reaction_InterAction(pPoint, eIndex);
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
 }
 

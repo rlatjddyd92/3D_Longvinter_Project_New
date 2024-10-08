@@ -45,6 +45,9 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Granade"), TEXT("Prototype_Inter_Throw_Granade"));
 	m_vecInterAction[_int(INTERACTION::INTER_THORW_GRANADE)] = static_cast<CThrow_Granade*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Granade"), -1));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), TEXT("Prototype_Inter_Explosion_Normal"));
+	m_vecInterAction[_int(INTERACTION::INTER_EXPLOSION_NORMAL)] = static_cast<CExplosion_Normal*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), -1));
+
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
@@ -79,6 +82,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -125,7 +129,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eFirst)]->Get_Actionlist()->end();)
 	{
-		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pTransform == nullptr) > 0)
 		{
 			Safe_Release((*iterA)->pCollider);
 			Safe_Release((*iterA)->pHost);
@@ -135,7 +139,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			continue;
 		}
 
-		if ((*iterA)->pHost->GetOff())
+		if ((*iterA)->bActive == false)
 		{
 			++iterA;
 			continue;
@@ -144,7 +148,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 
 		for (list<CInterAction::INTERACTION_INFO*>::iterator iterB = m_vecInterAction[_int(eSecond)]->Get_Actionlist()->begin(); iterB != m_vecInterAction[_int(eSecond)]->Get_Actionlist()->end();)
 		{
-			if (((*iterB)->pCollider == nullptr) + ((*iterB)->pHost == nullptr) + ((*iterB)->pTransform == nullptr) + ((*iterB)->pHost->GetDead()) > 0)
+			if (((*iterB)->pCollider == nullptr) + ((*iterB)->pTransform == nullptr) > 0)
 			{
 				Safe_Release((*iterB)->pCollider);
 				Safe_Release((*iterB)->pHost);
@@ -154,7 +158,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 				continue;
 			}
 
-			if ((*iterB)->pHost->GetOff())
+			if((*iterB)->bActive == false)
 			{
 				++iterB;
 				continue;
@@ -182,7 +186,7 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eInter)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eInter)]->Get_Actionlist()->end();)
 	{
-		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pTransform == nullptr) > 0)
 		{
 			Safe_Release((*iterA)->pCollider);
 			Safe_Release((*iterA)->pHost);
@@ -192,7 +196,7 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 			continue;
 		}
 
-		if ((*iterA)->pHost->GetOff())
+		if ((*iterA)->bActive == false)
 		{
 			++iterA;
 			continue;
@@ -223,7 +227,7 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{
 				m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
-				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter);
+				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter, *(*iterA));
 			}
 
 			++iterB;

@@ -35,6 +35,7 @@ HRESULT CThrow_Granade::Initialize(void* pArg)
 	m_fSpec_PushedPower = 20.f;
 	m_fSpec_PushedPower_Decrease = 0.5f;
 	m_iColliderType = _int(CCollider::TYPE_OBB);
+	m_fSpec_Time = 2.5f;
 
 	return S_OK;
 }
@@ -67,11 +68,8 @@ void CThrow_Granade::Update(_float fTimeDelta)
 
 		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if (!iter->bActive)
-		{
-			iter->bActive = true;
-			iter->fTime = 2.5f;
-		}
+	
+
 
 
 
@@ -79,7 +77,7 @@ void CThrow_Granade::Update(_float fTimeDelta)
 
 		if (iter->fTime < 0.f)
 		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), 2.f);
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, iter->pHost, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
 			iter->bDead = true;
 		}
 	}

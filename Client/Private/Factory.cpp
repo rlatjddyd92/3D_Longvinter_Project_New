@@ -362,6 +362,12 @@ HRESULT CFactory::Ready_Prototype_Model()
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_Bullet*/
+	PreTransformMatrix = XMMatrixScaling(1.f, 1.f, 1.f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Explosion"), "../Bin/Resources/Particle/Explosion", PreTransformMatrix)))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Bullet*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Throw_LandMine"), "../Bin/Resources/Throw/LandMine", PreTransformMatrix)))
@@ -424,6 +430,10 @@ HRESULT CFactory::Ready_Prototype_Shader()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_NonTexture.hlsl"), VTXMESH_NONTEX::Elements, VTXMESH_NONTEX::iNumElements))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture_Alpah"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel_NonTexture_Alpah.hlsl"), VTXMESH_NONTEX::Elements, VTXMESH_NONTEX::iNumElements))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
@@ -450,7 +460,7 @@ HRESULT CFactory::Ready_Prototype_Shader()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPointInstance"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE::Elements, VTXPOINTINSTANCE::iNumElements))))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 
@@ -527,6 +537,9 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Throw_Granade"), CThrow_Granade::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Explosion_Normal"), CExplosion_Normal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))

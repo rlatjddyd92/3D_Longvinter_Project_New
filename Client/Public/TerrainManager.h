@@ -132,7 +132,8 @@ private:
 
 private:
 	
-
+	// 설정
+	_int m_iBedRock = 2.f; //<- 인게임 플레이에서 Y 축 기준으로 해당 인덱스 미만의 지형 파괴 불가 
 
 	//test
 	_float fTest = 0.f;

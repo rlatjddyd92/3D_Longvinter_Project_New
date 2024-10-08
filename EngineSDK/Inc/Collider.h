@@ -23,6 +23,8 @@ public:
 	_float3 GetBoundingCenter(); //{ return m_pBounding->GetBoundingCenter(); }
 	_float3 GetBoundingExtents(); //{ return m_pBounding->GetBoundingExtents(); }
 	_float GetBoundingRadius_Sphere(); //{ return m_pBounding->GetBoundingRadius_Sphere(); }
+	void SetBoundingExtents(_float3 fExtent);
+	void SetBoundingRadius_Sphere(_float fRadius);
 
 	_bool GetCollision(CCollider::TYPE eColliderType, CCollider* pOpponent); // { return m_pBounding->GetCollision(eColliderType, pOpponent); }
 	class CBounding* GetBounding() { return m_pBounding; }

@@ -93,7 +93,7 @@ HRESULT CLongvinter_Container::Render()
 	return S_OK;
 }
 
-void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
 }
 

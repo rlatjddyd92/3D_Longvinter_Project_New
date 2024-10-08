@@ -345,7 +345,7 @@ void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadiu
 {
 	_uint iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
 	_uint iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
-	_uint iMinY = max(0, (fPosition.y - fRadius) / LCUBESIZE);
+	_uint iMinY = max(m_iBedRock, (fPosition.y - fRadius) / LCUBESIZE);
 	_uint iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
 	_uint iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
 	_uint iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
@@ -365,6 +365,9 @@ void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadiu
 						tTemp.m_vIndex[0] = i;
 						tTemp.m_vIndex[1] = j;
 						tTemp.m_vIndex[2] = k;
+						for (_int i = 0; i < 6; ++i)
+							tTemp.m_iTextureNum[i] = 5;
+
 						m_CommandBuffer.push_back(tTemp);
 					}
 				}
@@ -954,7 +957,7 @@ void CTerrainManager::ChangeLandInfo_Normal()
 				pNew->SetPosition(iter.m_vIndex[0] + iX, iter.m_vIndex[1] + iY, iter.m_vIndex[2] + iZ, eNow, m_pTextureCom);
 				pNew->SetTextureIndex(iter.m_iTextureNum[_int(eNow)]);
 				m_mapSurFace.insert({ strKey ,pNew });
-				Safe_AddRef(pNew);*/
+				Safe_AddRef(pNew);*/ 
 			}
 
 		}

@@ -181,6 +181,7 @@
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Explosion_Normal.h" />
     <ClInclude Include="..\Public\Factory.h" />
+    <ClInclude Include="..\Public\Fire.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\ImguiManager.h" />
     <ClInclude Include="..\Public\InterAction.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Explosion_Normal.cpp" />
     <ClCompile Include="..\Private\Factory.cpp" />
+    <ClCompile Include="..\Private\Fire.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\ImguiManager.cpp" />
     <ClCompile Include="..\Private\InterAction.cpp" />
@@ -332,6 +334,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_NonTexture_Alpah.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>

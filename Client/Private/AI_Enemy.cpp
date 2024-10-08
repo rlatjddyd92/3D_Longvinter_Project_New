@@ -86,17 +86,56 @@ HRESULT CAI_Enemy::Render()
 	return S_OK;
 }
 
-void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
-	__super::Collision_Reaction_InterAction(pPoint, eIndex);
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
-	CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
-	if (pOpponent->GetContainerType() == CONTAINER::CONTAINER_PLAYER)
+	CONTAINER eType = CONTAINER::CONTAINER_END;
+
+	if (pPoint)
+	{
+		CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+		eType = pOpponent->GetContainerType();
+	}
+
+	if (eType == CONTAINER::CONTAINER_PLAYER)
 	{
 		m_fActionTimer = 0.5f;
 
 		m_iFace = _int(HUMAN_FACE::FACE_SAD);
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+
+
+		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			m_fHp -= 10.f;
+		}
+		else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
+		{
+			m_fHp -= 10.f;
+			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
+			_float3 fDirec{};
+			XMStoreFloat3(&fDirec, vDirec);
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.5f);
+		}
+	/*	else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			m_fHp -= 10.f;
+		}
+		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			m_fHp -= 10.f;
+		}
+		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			m_fHp -= 10.f;
+		}
+		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			m_fHp -= 10.f;
+		}*/
+
+			
 	}
 
 

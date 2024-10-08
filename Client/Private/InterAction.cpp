@@ -105,8 +105,12 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
-	pNew->pHost = pHost;
-	Safe_AddRef(pNew->pHost);
+	if (pHost)
+	{
+		pNew->pHost = pHost;
+		Safe_AddRef(pNew->pHost);
+	}
+	
 
 	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
 	//Safe_AddRef(pNew->pTransform);
@@ -152,8 +156,11 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
-	pNew->pHost = pHost;
-	Safe_AddRef(pNew->pHost);
+	if (pHost)
+	{
+		pNew->pHost = pHost;
+		Safe_AddRef(pNew->pHost);
+	}
 
 	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
 	//Safe_AddRef(pNew->pTransform);
@@ -190,7 +197,7 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 
 	//Safe_AddRef(pNew->pCollider);
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
-
+	pNew->fTime = m_fSpec_Time;
 
 	m_Actionlist.push_back(pNew);
 }
@@ -243,6 +250,7 @@ void CInterAction::Free()
 	for (auto& iter : m_Actionlist)
 	{
 		Safe_Release(iter->pHost);
+		Safe_Release(iter->pTrace);
 		Safe_Release(iter->pTransform);
 		Safe_Release(iter->pCollider);
 		Safe_Delete(iter);

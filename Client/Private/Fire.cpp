@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "Bullet_MachineGun.h"
+#include "Fire.h"
 #include "ClientInstance.h"
 
-CBullet_MachineGun::CBullet_MachineGun(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CFire::CFire(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMissile{ pDevice, pContext }
 {
 }
 
-CBullet_MachineGun::CBullet_MachineGun(const CBullet_MachineGun& Prototype)
+CFire::CFire(const CFire& Prototype)
 	: CMissile{ Prototype }
 {
 }
 
-HRESULT CBullet_MachineGun::Initialize_Prototype()
+HRESULT CFire::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CBullet_MachineGun::Initialize(void* pArg)
+HRESULT CFire::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
@@ -30,41 +30,42 @@ HRESULT CBullet_MachineGun::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
-	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
 	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
-	m_fSpec_Scale = 0.1f;
-	m_fSpec_PushedPower = 50.f;
-	m_fSpec_PushedPower_Decrease = 0.f;
-	m_iColliderType = _int(CCollider::TYPE_SPHERE);
+	m_fSpec_Scale = 1.f;
+	m_fSpec_PushedPower = 10.f;
+	m_fSpec_PushedPower_Decrease = 1.f;
+	m_iColliderType = _int(CCollider::TYPE_AABB);
 
 	return S_OK;
 }
 
-void CBullet_MachineGun::Priority_Update(_float fTimeDelta)
+void CFire::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CBullet_MachineGun::Update(_float fTimeDelta)
+void CFire::Update(_float fTimeDelta)
 {
 
 	for (auto& iter : m_Actionlist)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
-		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
+		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
-		{
-			//GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
-			iter->bDead = true;
-		}
+		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		if (vOrigin.m128_f32[0] == vNow.m128_f32[0])
+			if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+				if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
+					m_bDinamiteActive = true;
 
 	}
 }
 
-void CBullet_MachineGun::Late_Update(_float fTimeDelta)
+void CFire::Late_Update(_float fTimeDelta)
 {
 	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
 	{
@@ -85,7 +86,7 @@ void CBullet_MachineGun::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CBullet_MachineGun::Render()
+HRESULT CFire::Render()
 {
 	__super::Render();
 
@@ -126,26 +127,24 @@ HRESULT CBullet_MachineGun::Render()
 
 	return S_OK;
 }
-void CBullet_MachineGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
+void CFire::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, pAction);
 }
-void CBullet_MachineGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
+void CFire::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
-
-	pAction->bDead = true;
 }
 //
-//void CBullet_MachineGun::Collision_Reaction_InterAction(CInterAction* pPoint)
+//void CFire::Collision_Reaction_InterAction(CInterAction* pPoint)
 //{
 //}
 //
-//void CBullet_MachineGun::Collision_Reaction_Container(CLongvinter_Container* pPoint)
+//void CFire::Collision_Reaction_Container(CLongvinter_Container* pPoint)
 //{
 //}
 
-HRESULT CBullet_MachineGun::Ready_Components()
+HRESULT CFire::Ready_Components()
 {
 
 
@@ -155,7 +154,7 @@ HRESULT CBullet_MachineGun::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Bullet_Normal"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("-"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -163,38 +162,38 @@ HRESULT CBullet_MachineGun::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CBullet_MachineGun::Ready_PartObjects()
+HRESULT CFire::Ready_PartObjects()
 {
 	return S_OK;
 }
 
-CBullet_MachineGun* CBullet_MachineGun::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CFire* CFire::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CBullet_MachineGun* pInstance = new CBullet_MachineGun(pDevice, pContext);
+	CFire* pInstance = new CFire(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CBullet_MachineGun"));
+		MSG_BOX(TEXT("Failed to Created : CFire"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CBullet_MachineGun::Clone(void* pArg)
+CGameObject* CFire::Clone(void* pArg)
 {
-	CBullet_MachineGun* pInstance = new CBullet_MachineGun(*this);
+	CFire* pInstance = new CFire(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CBullet_MachineGun"));
+		MSG_BOX(TEXT("Failed to Cloned : CFire"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CBullet_MachineGun::Free()
+void CFire::Free()
 {
 	__super::Free();
 
