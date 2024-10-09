@@ -58,6 +58,11 @@ HRESULT CFactory::Setting_Program_Start()
 	if (FAILED(Ready_Prototype_InterAction()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Prototype_Effect()))
+		return E_FAIL;
+
+	
+
 
 	return S_OK;
 }
@@ -152,9 +157,9 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Cursor%d.dds"), 3))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
+	/*if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Particle/Fire/T_SmokeDissolve1a_%d.dds"), 64))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
@@ -464,6 +469,11 @@ HRESULT CFactory::Ready_Prototype_Shader()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPointInstance"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE::Elements, VTXPOINTINSTANCE::iNumElements))))
 		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_VtxPointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxFireSmoke"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxFireSmoke.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
+		return E_FAIL;
 	
 	return S_OK;
 }
@@ -549,6 +559,9 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Explosion_Normal"), CExplosion_Normal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Fire"), CFire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
@@ -558,6 +571,16 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Explosion_Normal"), CExplosion_Normal::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
 
+
+
+
+	return S_OK;
+}
+
+HRESULT CFactory::Ready_Prototype_Effect()
+{
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Fire"), CParticle_Fire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 

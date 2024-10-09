@@ -143,6 +143,9 @@ void CPhysicsManager::PushedPower(P_RESULT* tResult, _float fTimeDelta)
 	tResult->fPushed_Power -= tResult->fPushed_Power_Decrease;
 	if (tResult->fPushed_Power < 0)
 		tResult->fPushed_Power = 0;
+
+	if (tResult->fCollider_Center.y < 0.f)
+		cout << tResult->fCollider_Center.x << " " << tResult->fCollider_Center.y << " " << tResult->fCollider_Center.z << "\n";
 }
 
 void CPhysicsManager::CheckTerrainCollision(P_RESULT* tResult, _bool IsSlideControl)

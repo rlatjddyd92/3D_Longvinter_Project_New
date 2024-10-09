@@ -33,14 +33,20 @@ HRESULT CParticle_Fire::Initialize(void* pArg)
 
 	m_bSpec_TerrainDelete = true;
 	m_tSpec.fTime = 3.f;
-	m_tSpec.fDirec = { 0.f,0.5f,0.f };
+	m_tSpec.fFly = 0.02f;
+	m_tSpec.fDirec = { 0.f,0.2f,0.f };
 	m_tSpec.fColor = { 0.f,0.f,0.f,1.f };
 	m_tSpec.fPowerDecrease = 0.01f;
 	m_tSpec.fPower = 0.1f;
 
+	m_pTransformCom->Set_Scaled(0.1f, 0.1f, 0.1f);
+
 	m_bChangeColor[0] = true;
 	m_bChangeColor[1] = true;
 	m_bChangeColor[2] = true;
+
+	m_bRandDirec[0] = true;
+	m_bRandDirec[2] = true;
 
 	return S_OK;
 }
@@ -63,10 +69,10 @@ void CParticle_Fire::Priority_Update(_float fTimeDelta)
 			iter->fColor = { 255.f / 255.f, 69.f / 255.f , 0.f / 255.f , 255.f / 255.f };
 		else if (_float(iter->fTime / m_tSpec.fTime) > 0.4f) // 짙은 회색 
 			iter->fColor = { 50.f / 255.f, 50.f / 255.f , 50.f / 255.f , 255.f / 255.f };
-		else if (_float(iter->fTime / m_tSpec.fTime) > 0.3f) // 회색
+		else //if (_float(iter->fTime / m_tSpec.fTime) > 0.3f) // 회색
 			iter->fColor = { 105.f / 255.f, 105.f / 255.f , 105.f / 255.f , 255.f / 255.f };
-		else  // 연한 회색
-			iter->fColor = { 211.f / 255.f, 211.f / 255.f , 211.f / 255.f , 255.f / 255.f };
+		//else  // 연한 회색
+		//	iter->fColor = { 211.f / 255.f, 211.f / 255.f , 211.f / 255.f , 255.f / 255.f };
 
 	}
 
@@ -87,14 +93,13 @@ void CParticle_Fire::Late_Update(_float fTimeDelta)
 
 	__super::Late_Update(fTimeDelta);
 
-
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 }
 
 HRESULT CParticle_Fire::Render()
 {
 	//__super::Render();
-
 	for (auto& iter : m_EffectInfolist)
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&iter->fPosition));
@@ -115,8 +120,8 @@ HRESULT CParticle_Fire::Render()
 		if (FAILED(m_pShaderCom->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor, fRGB)))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
-			return E_FAIL;
+		/*if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Float4(), sizeof(_float4))))
+			return E_FAIL;*/
 
 		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
@@ -126,13 +131,6 @@ HRESULT CParticle_Fire::Render()
 			return E_FAIL;
 		if (FAILED(m_pVIBufferCom->Render()))
 			return E_FAIL;
-
-
-
-
-
-
-
 	}
 
 
@@ -154,7 +152,7 @@ HRESULT CParticle_Fire::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxSurFace"),
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxFireSmoke"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 

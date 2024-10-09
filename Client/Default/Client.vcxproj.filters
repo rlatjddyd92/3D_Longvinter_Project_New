@@ -510,6 +510,9 @@
     <ClInclude Include="Enum_Effect.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EffectManager.h">
+      <Filter>02.ClientInstance\10.EffectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -722,6 +725,9 @@
     <ClCompile Include="..\Private\Particle_FIre.cpp">
       <Filter>02.ClientInstance\10.EffectManager\00.Particle\00.Fire</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EffectManager.cpp">
+      <Filter>02.ClientInstance\10.EffectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -770,6 +776,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_NonTexture_Alpah.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxFireSmoke.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

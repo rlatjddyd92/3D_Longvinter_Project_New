@@ -179,6 +179,7 @@
     <ClInclude Include="..\Public\Container_Player.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\Effect.h" />
+    <ClInclude Include="..\Public\EffectManager.h" />
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Explosion_Normal.h" />
     <ClInclude Include="..\Public\Factory.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="..\Private\Container_Player.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
+    <ClCompile Include="..\Private\EffectManager.cpp" />
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Explosion_Normal.cpp" />
     <ClCompile Include="..\Private\Factory.cpp" />
@@ -343,6 +345,7 @@
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxFireSmoke.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_NonTexture_Alpah.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />

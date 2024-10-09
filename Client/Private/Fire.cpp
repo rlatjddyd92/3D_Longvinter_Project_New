@@ -30,39 +30,58 @@ HRESULT CFire::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_fSpec_Extent = { 0.01f,0.01f,0.01f };
+	m_fSpec_Extent = { 0.1f,0.1f,0.1f };
 	m_fSpec_Scale = 0.1f;
-	m_fSpec_PushedPower = 5.f;
+	m_fSpec_PushedPower = GRAVITY_ACCELE * 2.f;
 	m_fSpec_PushedPower_Decrease = 0.2f;
 	m_iColliderType = _int(CCollider::TYPE_OBB);
+	m_fSpec_Time = 10.f;
 
 	return S_OK;
 }
 
 void CFire::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
+
+
 }
 
 void CFire::Update(_float fTimeDelta)
 {
-
 	for (auto& iter : m_Actionlist)
 	{
+		if (iter->fTime > 0.f)
+		{
+			iter->fTime -= fTimeDelta;
+			if (iter->fTime < 0.f)
+			{
+				iter->bDead = true;
+				continue;
+			}
+		}
+			
+
+
+
+
+
 		if (iter->pHost == nullptr)
 		{
-			CPhysicsManager::P_RESULT tResult = {};
-
-			tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
-			GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
-
 			if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 			{
 				iter->pTransform->Set_Pushed_Power({ 0.f,0.f,0.f }, 0.f);
 			}
+
+			CPhysicsManager::P_RESULT tResult = {};
+
+			tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, true, true, false, fTimeDelta);
+			GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 		}
 		else if (iter->pHost->GetDead())
 		{
 			iter->bDead = true;
+			continue;
 		}
 		else if (!iter->pHost->GetDead())
 		{
@@ -75,17 +94,22 @@ void CFire::Update(_float fTimeDelta)
 			XMStoreFloat4x4(&fMatrix, XMLoadFloat4x4(iter->pTransform->Get_WorldMatrix_Ptr()) * XMLoadFloat4x4(&iter->pHost->GetWorldMatrix()));
 			iter->pTransform->Set_WorldMatrix(fMatrix);
 
-
+			
 		}
-	
 
-
-
-
-
+			if (m_fMakeEffect >= 0.1f)
+			{
+				for (_int i = 0; i < 5; ++i)
+					GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, iter->pCollider->GetBoundingCenter());
+			}
 		
-
 	}
+
+	m_fMakeEffect -= fTimeDelta;
+	if (m_fMakeEffect < 0.f)
+		m_fMakeEffect = 0.1f;
+
+
 }
 
 void CFire::Late_Update(_float fTimeDelta)

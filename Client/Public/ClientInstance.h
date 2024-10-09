@@ -13,6 +13,7 @@
 #include "UIManager.h"
 #include "ItemManager.h"
 #include "InterActionManager.h"
+#include "EffectManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -243,6 +244,13 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma endregion
 
+#pragma region EFFECT
+	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition) { m_pEffectManager->MakeEffect(eType, fPosition); }
+
+
+#pragma endregion
+	
+
 private: // <- 보유 중인 포인터 목록 
 	CGameInstance*			m_pGameInstance = { nullptr };
 	CFreeCamera*			m_pCamera = { nullptr };
@@ -255,6 +263,7 @@ private: // <- 보유 중인 포인터 목록
 	CUIManager*				m_pUIManager = { nullptr };
 	CItemManager*			m_pItemManager = { nullptr };
 	CInterActionManager*	m_pInterActionManager = { nullptr };
+	CEffectManager*			m_pEffectManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;

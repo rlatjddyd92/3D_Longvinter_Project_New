@@ -6,7 +6,7 @@
 #include "Collider.h"
 
 BEGIN(Engine)
-
+class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
@@ -42,7 +42,7 @@ public:
 	virtual HRESULT Render() override;
 
 
-	void AddEffectBySpec();
+	void AddEffectBySpec(_float3 fPosition);
 
 protected:
 
@@ -63,6 +63,7 @@ protected:
 
 
 	_bool m_bSpec_TerrainDelete = true;
+	_bool m_bRandDirec[3] = {false,};
 	E_INFO m_tSpec{};
 
 

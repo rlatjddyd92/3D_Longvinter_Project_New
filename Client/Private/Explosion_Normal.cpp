@@ -58,6 +58,12 @@ void CExplosion_Normal::Update(_float fTimeDelta)
 			_float fSize = iter->pTransform->Get_Scaled().x * 1.15f;
 			iter->pCollider->SetBoundingRadius_Sphere(fSize);
 			iter->pCollider->Update(iter->pTransform->Get_WorldMatrix_Ptr());
+
+			_float3 fDirec = { _float((rand() % 1000) - (rand() % 1000)) / 1000.f, 0.5f, _float((rand() % 1000) - (rand() % 1000)) / 1000.f };
+
+
+
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, nullptr, iter->pCollider->GetBoundingCenter(), fDirec);
 			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingRadius_Sphere());
 			iter->pTransform->Set_Scaled(fSize, fSize, fSize);
 			if (fSize > 3.f)

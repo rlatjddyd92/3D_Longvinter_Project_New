@@ -114,7 +114,15 @@ public:
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents);
 	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange); 
 	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents); // <- 단순히 충돌만 검출
-	_bool Check_IsTerrain(_float3 fPosition) {return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
+	_bool Check_IsTerrain(_float3 fPosition) 
+	{
+		fPosition.x = max(0.f, fPosition.x);
+		fPosition.y = max(0.f, fPosition.y);
+		fPosition.z = max(0.f, fPosition.z);
+		fPosition.x = min((LCUBESIZE * LMAX_X) - 1.f, fPosition.x);
+		fPosition.y = min((LCUBESIZE * LMAX_Y) - 1.f, fPosition.y);
+		fPosition.z = min((LCUBESIZE * LMAX_Z) - 1.f, fPosition.z);
+		return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
 
 
 #pragma endregion

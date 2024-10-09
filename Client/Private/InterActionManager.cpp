@@ -48,6 +48,9 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), TEXT("Prototype_Inter_Explosion_Normal"));
 	m_vecInterAction[_int(INTERACTION::INTER_EXPLOSION_NORMAL)] = static_cast<CExplosion_Normal*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), -1));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), TEXT("Prototype_Inter_Fire"));
+	m_vecInterAction[_int(INTERACTION::INTER_FIRE)] = static_cast<CFire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), -1));
+
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 

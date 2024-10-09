@@ -7,6 +7,7 @@
 #include "../Default/UIPart_Defines.h"
 #include "../Default/UIPage_Defines.h"
 #include "../Default/InterAction_Defines.h"
+#include "../Default/Effect_Defines.h"
 
 BEGIN(Engine)
 
@@ -96,6 +97,7 @@ private: // <- 프로토타입 제작
 	HRESULT Ready_Prototype_UIPart();
 	HRESULT Ready_Prototype_UIPage();
 	HRESULT Ready_Prototype_InterAction();
+	HRESULT Ready_Prototype_Effect();
 
 #pragma endregion
 

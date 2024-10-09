@@ -43,7 +43,8 @@ private:
 private:
 	
 
-	_bool m_bDinamiteActive = false;
+	_float m_fMakeEffect = 0.1f;
+
 
 	
 

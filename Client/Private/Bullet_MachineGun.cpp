@@ -43,6 +43,7 @@ HRESULT CBullet_MachineGun::Initialize(void* pArg)
 
 void CBullet_MachineGun::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CBullet_MachineGun::Update(_float fTimeDelta)
@@ -52,15 +53,16 @@ void CBullet_MachineGun::Update(_float fTimeDelta)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
+		
+
 		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
+		
 		if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 		{
-			//GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
 			iter->bDead = true;
 		}
-
 	}
 }
 

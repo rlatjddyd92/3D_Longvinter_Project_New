@@ -48,49 +48,66 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 
 void CContainer_Player::Priority_Update(_float fTimeDelta)
 {
+	//cout << "[1]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 	__super::Priority_Update(fTimeDelta);
 
-	
+	//cout << "[2]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Priority_Update(fTimeDelta);
 
-	
+	//cout << "[3]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 }
 
 void CContainer_Player::Update(_float fTimeDelta)
 {
+	//cout << "[4]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 	__super::Update(fTimeDelta);
+	//cout << "[5]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	Camera_Control(fTimeDelta);
-
-	Moving_Control(fTimeDelta);
-		
-	Weapon_Control(fTimeDelta);
 	
-	Test_Control(fTimeDelta);
+	Moving_Control(fTimeDelta);
+	
+	Weapon_Control(fTimeDelta);
+	//cout << "[8]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
+	Test_Control(fTimeDelta);
+	
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
 	CPhysicsManager::P_RESULT tResult = {};
+	//cout << "[9]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	tResult = GET_INSTANCE->Total_Physics(*m_pTransformCom, *m_pColliderCom, true, true, true, fTimeDelta);
 	GET_INSTANCE->Update_By_P_Result(m_pTransformCom, m_pColliderCom, tResult);
+	//cout << "[10]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
+	//cout << "[11]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 }
 
 void CContainer_Player::Late_Update(_float fTimeDelta)
 {
+	//cout << "[12]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 	__super::Late_Update(fTimeDelta);
+	//cout << "[13]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
+	//cout << "[14]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	m_pTransformCom->Save_BeforePosition();
+	//cout << "[15]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
-	
+	//cout << "[16]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+
 
 	if (m_eWeaponType == WEAPON_MAIN)
 		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
@@ -98,9 +115,12 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_THROW)
 		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
-
+	
+	//cout << "[17]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	//cout << "[18]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << "\n";
+
 }
 
 HRESULT CContainer_Player::Render()
@@ -126,7 +146,7 @@ void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAI
 void CContainer_Player::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
-
+	
 	if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
 	{
 		// 이동 조작 
@@ -151,7 +171,7 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 		}
-
+		
 		_long		MouseMove = { 0 };
 
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
@@ -164,10 +184,12 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			//m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove);
 		}
 
-
+		
 	}
 	else if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_THIRD)
 	{
+		
+
 		// 이동 조작 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, true) & 0x80)
 		{
@@ -190,7 +212,7 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 		}
-
+		
 		_float3 fPoint = GET_INSTANCE->CheckPicking();
 		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
 		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
@@ -203,20 +225,15 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 
 		_float fAngle = acos(fDot / fCos);
 
+		if (isnan(fAngle))
+			fAngle = 0.f;
+
 		_long		MouseMove = { 0 };
-
+		
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * fAngle);
-
-		
-
-		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
-		{
-			m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
-		}
-
-		
 	}
+
+	
 }
 
 void CContainer_Player::Weapon_Control(_float fTimeDelta)

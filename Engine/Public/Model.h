@@ -58,7 +58,8 @@ public:
 	void SetAnimSpeed(_float fSpeed) { m_fAnimSpeed = fSpeed; } // <- 애니메이션 속도 조절 (1은 정상속도 0에 가까울 수록 느려지며 0이되면 재생 안됨, 아마 음수 넣으면 반대로 움직일 듯) 
 	_float GetAnimSpeed() { return m_fAnimSpeed; }
 
-	void SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture) { m_Materials[iMetarial].pMaterialTextures[iTextureType] = pTexture; }
+	void SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture);
+	
 
 
 
