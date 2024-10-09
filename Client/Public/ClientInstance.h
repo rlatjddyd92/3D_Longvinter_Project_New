@@ -159,6 +159,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange) { return m_pTerrainManager->Check_Wall(fCenter, fLook, fRange); }
 	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents); }
+	_bool Check_IsTerrain(_float3 fPosition) {return m_pTerrainManager->Check_IsTerrain(fPosition);}
 
 #pragma endregion
 

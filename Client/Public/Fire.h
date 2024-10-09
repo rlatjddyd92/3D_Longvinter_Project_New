@@ -6,14 +6,14 @@
 BEGIN(Engine)
 class CShader;
 class CModel;
+class CVIBuffer;
 END
 
 BEGIN(Client)
 
 class CFire : public CMissile
 {
-
-
+	
 
 
 private:
@@ -41,12 +41,11 @@ private:
 
 
 private:
-	class CShader* m_pShaderCom = { nullptr };
-	class CModel* m_pModelCom = { nullptr };
+	
 
 	_bool m_bDinamiteActive = false;
 
-
+	
 
 
 public:

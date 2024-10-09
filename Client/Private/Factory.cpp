@@ -152,6 +152,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Cursor%d.dds"), 3))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Particle/Fire/T_SmokeDissolve1a_%d.dds"), 64))))
+		return E_FAIL;
+
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Christmas_hat.dds"), 1))))

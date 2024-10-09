@@ -30,11 +30,11 @@ HRESULT CFire::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
-	m_fSpec_Scale = 1.f;
-	m_fSpec_PushedPower = 10.f;
-	m_fSpec_PushedPower_Decrease = 1.f;
-	m_iColliderType = _int(CCollider::TYPE_AABB);
+	m_fSpec_Extent = { 0.01f,0.01f,0.01f };
+	m_fSpec_Scale = 0.1f;
+	m_fSpec_PushedPower = 5.f;
+	m_fSpec_PushedPower_Decrease = 0.2f;
+	m_iColliderType = _int(CCollider::TYPE_OBB);
 
 	return S_OK;
 }
@@ -48,33 +48,48 @@ void CFire::Update(_float fTimeDelta)
 
 	for (auto& iter : m_Actionlist)
 	{
-		CPhysicsManager::P_RESULT tResult = {};
+		if (iter->pHost == nullptr)
+		{
+			CPhysicsManager::P_RESULT tResult = {};
 
-		_vector vOrigin = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+			tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
+			GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
-		tResult = GET_INSTANCE->Bounce_Physics(*iter->pTransform, *iter->pCollider, true, fTimeDelta);
-		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
+			if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
+			{
+				iter->pTransform->Set_Pushed_Power({ 0.f,0.f,0.f }, 0.f);
+			}
+		}
+		else if (iter->pHost->GetDead())
+		{
+			iter->bDead = true;
+		}
+		else if (!iter->pHost->GetDead())
+		{
 
-		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if (vOrigin.m128_f32[0] == vNow.m128_f32[0])
-			if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
-				if (vOrigin.m128_f32[1] == vNow.m128_f32[1])
-					m_bDinamiteActive = true;
+			iter->pHost->GetTransform(CTransform::STATE_POSITION);
+
+
+			_float4x4 fMatrix{};
+			XMStoreFloat4x4(&fMatrix, XMLoadFloat4x4(iter->pTransform->Get_WorldMatrix_Ptr()) * XMLoadFloat4x4(&iter->pHost->GetWorldMatrix()));
+			iter->pTransform->Set_WorldMatrix(fMatrix);
+
+
+		}
+	
+
+
+
+
+
+		
 
 	}
 }
 
 void CFire::Late_Update(_float fTimeDelta)
 {
-	for (list<INTER_INFO*>::iterator iter = m_Actionlist.begin(); iter != m_Actionlist.end();)
-	{
-		if (*iter == nullptr)
-			iter = m_Actionlist.erase(iter);
-		else
-			++iter;
-	}
-
 	__super::Late_Update(fTimeDelta);
 
 	for (auto& iter : m_Actionlist)
@@ -99,27 +114,7 @@ HRESULT CFire::Render()
 			continue;
 
 
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-			return E_FAIL;
-
-		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-		for (size_t i = 0; i < iNumMeshes; i++)
-		{
-			/*if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, i)))
-				return E_FAIL;*/
-
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-
-			if (FAILED(m_pModelCom->Render(i)))
-				return E_FAIL;
-		}
+		
 #ifdef _DEBUG
 		iter->pCollider->Render();
 #endif
@@ -147,18 +142,7 @@ void CFire::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, 
 HRESULT CFire::Ready_Components()
 {
 
-
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-
-	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("-"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
-
-
+	
 	return S_OK;
 }
 
@@ -197,6 +181,4 @@ void CFire::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
 }

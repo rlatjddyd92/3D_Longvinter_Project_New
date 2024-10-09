@@ -232,6 +232,18 @@
     <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\00.Missile\06.Fire">
       <UniqueIdentifier>{44b80a5a-c9d0-41d3-8d44-bbf36f8c1ef0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager">
+      <UniqueIdentifier>{721fd468-e950-4cff-bfeb-0f61ba7b8d96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle">
+      <UniqueIdentifier>{2a81ef3f-4d4a-4f57-a777-92987168cf49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\00.Fire">
+      <UniqueIdentifier>{1d2077c3-6633-4783-b124-b4a53d27609c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Defines\03.Effect">
+      <UniqueIdentifier>{9837c57b-78d3-40fd-8795-2780f58b9236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -483,6 +495,21 @@
     <ClInclude Include="..\Public\UIPart_Bar.h">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\03.UI_Part_Bar</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Effect.h">
+      <Filter>02.ClientInstance\10.EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Particle.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_FIre.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\00.Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect_Defines.h">
+      <Filter>99.Defines\03.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_Effect.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -685,6 +712,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Bar.cpp">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\03.UI_Part_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect.cpp">
+      <Filter>02.ClientInstance\10.EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Particle.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_FIre.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\00.Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
