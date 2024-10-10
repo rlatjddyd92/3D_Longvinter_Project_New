@@ -104,6 +104,35 @@ HRESULT CEffect::Render()
 
 }
 
+_float CEffect::BillBoard(CTransform* pTransform)
+{
+	_vector vCam = (m_pGameInstance->Get_CamPosition_Vector() - pTransform->Get_State(CTransform::STATE_POSITION));
+	_vector vLook = pTransform->Get_State(CTransform::STATE_LOOK);
+
+	vCam.m128_f32[1] = 0.f;
+	vLook.m128_f32[1] = 0.f;
+
+	_float fDot = XMVector3Dot(vCam, vLook).m128_f32[0];
+	_float fCos = (sqrt(pow(vCam.m128_f32[0], 2) + pow(vCam.m128_f32[2], 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+	_float fAngle = acos(fDot / fCos);
+
+	if (isnan(fAngle))
+		fAngle = 0.f;
+
+	_float3 fCam{};
+	_float3 fLook{};
+
+	XMStoreFloat3(&fCam, vCam);
+	XMStoreFloat3(&fLook, vLook);
+
+	if (!GET_INSTANCE->Check_CCW_XZ(fCam, { 0.f,0.f,0.f }, fLook))
+		fAngle *= -1;
+
+	pTransform->Rotation({ 0.f, 1.f, 0.f }, fAngle * PI_DEFINE);
+
+	return fAngle;
+}
+
 void CEffect::AddEffectBySpec(_float3 fPosition)
 {
 	E_INFO* pNew = new E_INFO;

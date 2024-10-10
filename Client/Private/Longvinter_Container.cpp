@@ -56,11 +56,14 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
-	if (m_fSearch_Time > 0.f)
+	if (m_eAI_Status == AI_STATUS::AI_SERACH)
+	if (m_fSearch_Time_Now < m_fSearch_Time)
 	{
-		m_fSearch_Time -= fTimeDelta;
-		if (m_fSearch_Time < 0.f)
-			m_fSearch_Time = 0.f;
+		m_fSearch_Time_Now += fTimeDelta;
+		if (m_fSearch_Time_Now > m_fSearch_Time)
+		{
+			End_Search();
+		}	
 	}
 
 	
@@ -155,18 +158,26 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 	_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
 	_float fAngle = acos(fDot / fCos);
 
-	if (fAngle < m_fLook_Angle)
-		*bCanSee = true;
-	else
+	if ((isnan(fAngle)) || (fAngle > m_fLook_Angle))
 	{
 		*bCanSee = false;
 		*fTurnAngle = 0.f;
 		return;
 	}
 
+	*bCanSee = true;
+
+	
+
+
 	fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
 	fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
 	*fTurnAngle = acos(fDot / fCos);
+
+	_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+	if (bResult)
+		*fTurnAngle *= -1;
 }
 
 void CLongvinter_Container::Get_Sound(_float3* fSoundPosition, _float* fVolume, _float* fTurnAngle)
@@ -178,6 +189,9 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 	if (eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+
+		
+
 		m_fAttackDelay = 0.1f;
 	}
 	if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
@@ -201,6 +215,24 @@ void CLongvinter_Container::Set_AI_Status(_float fTimeDelta)
 
 
 
+}
+
+void CLongvinter_Container::Start_Serach()
+{
+	m_eAI_Status = AI_STATUS::AI_SERACH;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 20.f;
+	m_fSearch_Interval = 5.f;
+	m_iSearch_Count = 0;
+}
+
+void CLongvinter_Container::End_Search()
+{
+	m_eAI_Status = AI_STATUS::AI_IDLE;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 20.f;
+	m_fSearch_Interval = 5.f;
+	m_iSearch_Count = 0;
 }
 
 CLongvinter_Container* CLongvinter_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

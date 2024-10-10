@@ -36,6 +36,7 @@ namespace Client
 #define INVEN_TEXTURE	45.f
 
 #define PI_DEFINE		3.141592
+#define BURN_TIME		10.f
 
 	using namespace std;
 

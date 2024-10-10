@@ -699,7 +699,16 @@ _bool CTerrainManager::Check_OnGround(_float3 fCenter, _float3 fExtents)
 
 _bool CTerrainManager::Check_Wall(_float3 fCenter, _float3 fLook, _float fRange)
 {
-	return _bool();
+	fLook.x *= fRange;
+	fLook.y *= fRange;
+	fLook.z *= fRange;
+
+	_float3 fPosition{};
+	XMStoreFloat3(&fPosition, XMLoadFloat3(&fCenter) + XMLoadFloat3(&fLook));
+
+
+
+	return Check_IsTerrain(fPosition);
 }
 
 _bool CTerrainManager::Check_Terrain_Collision(_float3 fCenter, _float3 fExtents)

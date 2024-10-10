@@ -61,6 +61,7 @@ public:
 	list<INTERACTION_INFO*>* Get_Actionlist() {return &m_Actionlist;}
 	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec);
 	_int Get_ColliderType() { return m_iColliderType; }
+	_float Get_Sensor_Range() { return m_fSpec_Sensor; }
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
@@ -84,6 +85,7 @@ protected:
 	_float					m_fSpec_PushedPower_Decrease = 0.f;
 	_int					m_iColliderType = 0;
 	_float					m_fSpec_Time = 0.f;
+	_float					m_fSpec_Sensor = 0.f;
 
 public:
 	static CInterAction* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

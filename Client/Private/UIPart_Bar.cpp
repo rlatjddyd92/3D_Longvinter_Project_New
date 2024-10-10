@@ -145,8 +145,7 @@ HRESULT CUIPart_Bar::Render()
 
 				m_pTransformCom->Set_Scaled(m_fSizeX, m_fSizeY, 1.f);
 
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-					XMVectorSet(m_fX - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,XMVectorSet(m_fX - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
 			}
 			else
 			{
@@ -160,8 +159,7 @@ HRESULT CUIPart_Bar::Render()
 
 				m_pTransformCom->Set_Scaled(m_fFill_SizeX, m_fSizeY, 1.f);
 
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-					XMVectorSet(m_fFill_X - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,XMVectorSet(m_fFill_X - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
 			}
 			
 

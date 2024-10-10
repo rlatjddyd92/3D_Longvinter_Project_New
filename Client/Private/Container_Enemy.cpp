@@ -143,6 +143,20 @@ void CContainer_Enemy::Set_AI_Status(_float fTimeDelta)
 	
 }
 
+void CContainer_Enemy::Burning()
+{
+	m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] = true;
+	m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_BURN)] = BURN_TIME;
+
+	_float3 fPosition = m_pColliderCom->GetBoundingCenter();
+	fPosition.y += m_pColliderCom->GetBoundingExtents().y;
+
+	GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, this, fPosition, { 0.f,0.f,0.f });
+	m_fActionTimer = BURN_TIME;
+	m_iFace = _int(HUMAN_FACE::FACE_SAD);
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+}
+
 
 HRESULT CContainer_Enemy::Ready_Components()
 {

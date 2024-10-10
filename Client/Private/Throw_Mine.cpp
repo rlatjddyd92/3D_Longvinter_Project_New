@@ -34,7 +34,8 @@ HRESULT CThrow_Mine::Initialize(void* pArg)
 	m_fSpec_Scale = 1.f;
 	m_fSpec_PushedPower = 10.f;
 	m_fSpec_PushedPower_Decrease = 1.f;
-	m_iColliderType = _int(CCollider::TYPE_AABB);
+	m_fSpec_Sensor = 2.f;
+	m_iColliderType = _int(CCollider::TYPE_SPHERE);
 
 	return S_OK;
 }
@@ -141,6 +142,23 @@ void CThrow_Mine::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTIO
 void CThrow_Mine::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
+
+	CONTAINER eType = CONTAINER::CONTAINER_END;
+
+	if (pPoint)
+	{
+		CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+		eType = pOpponent->GetContainerType();
+	}
+
+	if (eType == CONTAINER::CONTAINER_ENEMY)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, pAction->pHost, pAction->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
+		pAction->bDead = true;
+	}
+
+
+
 }
 //
 //void CThrow_Mine::Collision_Reaction_InterAction(CInterAction* pPoint)

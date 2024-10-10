@@ -35,7 +35,7 @@ HRESULT CFire::Initialize(void* pArg)
 	m_fSpec_PushedPower = GRAVITY_ACCELE * 2.f;
 	m_fSpec_PushedPower_Decrease = 0.2f;
 	m_iColliderType = _int(CCollider::TYPE_OBB);
-	m_fSpec_Time = 10.f;
+	m_fSpec_Time = BURN_TIME;
 
 	return S_OK;
 }
@@ -60,11 +60,6 @@ void CFire::Update(_float fTimeDelta)
 				continue;
 			}
 		}
-			
-
-
-
-
 
 		if (iter->pHost == nullptr)
 		{
@@ -78,7 +73,7 @@ void CFire::Update(_float fTimeDelta)
 			tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, true, true, false, fTimeDelta);
 			GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 		}
-		else if (iter->pHost->GetDead())
+		else if ((iter->pHost->GetDead()) || (!iter->pHost->Get_CC(CROWDCONTROL::CC_BURN)))
 		{
 			iter->bDead = true;
 			continue;
@@ -86,14 +81,7 @@ void CFire::Update(_float fTimeDelta)
 		else if (!iter->pHost->GetDead())
 		{
 
-
-			iter->pHost->GetTransform(CTransform::STATE_POSITION);
-
-
-			_float4x4 fMatrix{};
-			XMStoreFloat4x4(&fMatrix, XMLoadFloat4x4(iter->pTransform->Get_WorldMatrix_Ptr()) * XMLoadFloat4x4(&iter->pHost->GetWorldMatrix()));
-			iter->pTransform->Set_WorldMatrix(fMatrix);
-
+			iter->pTransform->Set_State(CTransform::STATE_POSITION, iter->pHost->GetTransform(CTransform::STATE_POSITION));
 			
 		}
 

@@ -34,7 +34,7 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_iState = 13; // <-IDLE
+	m_iState = STATE_IDEL;
 
 	eContainerType = CONTAINER::CONTAINER_PLAYER;
 
@@ -149,22 +149,28 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 	
 	if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
 	{
+		m_iState = STATE_IDEL;
+
 		// 이동 조작 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, true) & 0x80)
 		{
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, true) & 0x80)
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, true) & 0x80)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta, true);
+			m_iState = STATE_WALK_L;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, true) & 0x80)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta, true);
+			m_iState = STATE_WALK_R;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
@@ -188,24 +194,28 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 	}
 	else if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_THIRD)
 	{
-		
+		m_iState = STATE_IDEL;
 
 		// 이동 조작 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, true) & 0x80)
 		{
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, true) & 0x80)
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, true) & 0x80)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta, true);
+			m_iState = STATE_WALK_L;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, true) & 0x80)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta, true);
+			m_iState = STATE_WALK_R;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
@@ -267,31 +277,52 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
 	}
 
+	ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
 
+	if (m_eWeaponType == WEAPON_MAIN)
+		eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex;
+	if (m_eWeaponType == WEAPON_SUB)
+		eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex;
+	if (m_eWeaponType == WEAPON_THROW)
+		eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex;
 
-	if ((m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true) & 0x80) && (m_fAttackDelay == 0.f))
+	if (m_iState == STATE_IDEL)
 	{
-		ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
+		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if ((eNowType == ITEMINDEX::ITEM_FIRETHROWER) || (eNowType == ITEMINDEX::ITEM_MACHINEGUN))
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_THROW_WAIT;
+	}
 
-		if (m_eWeaponType == WEAPON_MAIN)
-			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex;
-		if (m_eWeaponType == WEAPON_SUB)
-			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_SUBWEAPON).eIndex;
-		if (m_eWeaponType == WEAPON_THROW)
-			eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex;
+	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true) & 0x80) 
+	{
+		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
+			m_iState = STATE_GUN;
+		else if (eNowType == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_HANDGUN;
+		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_GRANADE;
 
-		_float3 fStartPostion{};
-		_float3 fPushedDirec{};
-		_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
-		XMStoreFloat3(&fStartPostion, vStartPosition);
+		if (m_fAttackDelay == 0.f)
+		{
+			_float3 fStartPostion{};
+			_float3 fPushedDirec{};
+			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
+			XMStoreFloat3(&fStartPostion, vStartPosition);
 
-		if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
-			XMStoreFloat3(&fPushedDirec, GET_INSTANCE->GetCameraLook());
-		else
-			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+			if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
+				XMStoreFloat3(&fPushedDirec, GET_INSTANCE->GetCameraLook());
+			else
+				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
-		__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
-
+			__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
+		}
 	}
 }
 
@@ -321,10 +352,22 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 	__super::Test_Control(fTimeDelta);
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
+	{
 		++m_iState;
+		
+		wstring strNum = to_wstring(m_iState);
+		GET_INSTANCE->ShowInformMessage(strNum);
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_6) & 0x80)
+	{
 		m_iState = 0;
+
+		wstring strNum = to_wstring(m_iState);
+		GET_INSTANCE->ShowInformMessage(strNum);
+	}
+		
 
 	if (m_pGameInstance->Get_DIKeyState(DIK_9, false) & 0x80)
 	{

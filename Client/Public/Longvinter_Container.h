@@ -35,14 +35,9 @@ public:
 
 	_float Get_Hp() { return m_fHp; }
 	_float Get_HpMax() { return m_fHp_Max; }
-	void Add_Hp(_float fAdd) 
-	{
-		m_fHp += fAdd;
-		if (m_fHp > m_fHp_Max)
-			m_fHp = m_fHp_Max;
-		else if (m_fHp < 0.f)
-			m_fHp = 0.f;
-	}
+	
+	_bool Get_CC(CROWDCONTROL eType) { return m_vecCrowdControl[_int(eType)]; }
+
 
 
 protected:
@@ -62,8 +57,21 @@ protected:
 
 	void UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _float3 fDirec);
 
+	void Add_Hp(_float fAdd)
+	{
+		m_fHp += fAdd;
+		if (m_fHp > m_fHp_Max)
+			m_fHp = m_fHp_Max;
+		else if (m_fHp < 0.f)
+			m_fHp = 0.f;
+	}
+
+
+
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta);
+	void Start_Serach();
+	void End_Search();
 
 
 
@@ -85,7 +93,7 @@ protected:
 	_float m_fAttack_Length = 10.f;
 	_float m_fClosuerLimit_Length = 10.f;
 
-	_float m_fLook_Angle = 0.5f;
+	_float m_fLook_Angle = 0.4f * PI_DEFINE;
 
 	_float m_fDistance_from_Player = 0.f;
 
@@ -100,7 +108,8 @@ protected:
 
 
 	// serach
-	_float m_fSearch_Time = 5.f;
+	_float m_fSearch_Time_Now = 0.f;
+	_float m_fSearch_Time = 20.f;
 	_float m_fSearch_Interval = 5.f;
 	_int m_iSearch_Count = 0;
 

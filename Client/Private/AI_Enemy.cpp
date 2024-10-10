@@ -49,7 +49,10 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
-
+	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
+	{
+		__super::Add_Hp(-10.f);
+	}
 
 
 
@@ -98,6 +101,10 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 		eType = pOpponent->GetContainerType();
 	}
 
+	if (eIndex == INTERACTION::INTER_FIRE)
+		if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
+			__super::Burning();
+
 	if (eType == CONTAINER::CONTAINER_PLAYER)
 	{
 		m_fActionTimer = 0.5f;
@@ -116,25 +123,12 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
 			_float3 fDirec{};
 			XMStoreFloat3(&fDirec, vDirec);
-			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.5f);
-		}
-	/*	else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
-		{
-			m_fHp -= 10.f;
-		}
-		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
-		{
-			m_fHp -= 10.f;
-		}
-		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
-		{
-			m_fHp -= 10.f;
-		}
-		else if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
-		{
-			m_fHp -= 10.f;
-		}*/
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 2.f);
 
+			if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
+				__super::Burning();
+		}
+	
 			
 	}
 
@@ -164,15 +158,19 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
 
+	m_iState = STATE_IDEL;
+
 	if (m_eAI_Status == AI_STATUS::AI_SERACH)
 	{
 		if (m_fMove_Angle == 0.f)
-		if (_int(m_fSearch_Time / m_fSearch_Interval) < m_iSearch_Count)
+		if (_int(m_fSearch_Time_Now / m_fSearch_Interval) > m_iSearch_Count)
 		{
-			m_fMove_Angle = _float(rand() % 5000) / 10.f;
+			m_fMove_Angle = (_float(rand() % 5000) / (_float(rand() % 4999) + 1.f)) * PI_DEFINE;
+			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
+			++m_iSearch_Count;
 		}
 
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
+		
 
 		_float3 fLook{};
 		XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
@@ -183,7 +181,9 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 			}
 
-		m_pTransformCom->Go_Straight(fTimeDelta, true);
+
+		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
+		m_iState = STATE_WALK;
 
 	}
 	else if (m_eAI_Status == AI_STATUS::AI_ATTACK)
@@ -193,6 +193,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		if (m_fDistance_from_Player < m_fClosuerLimit_Length) 
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 		else if (m_fDistance_from_Player < m_fAttack_Length)
 		{
@@ -210,6 +211,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 				}
 
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
+			m_iState = STATE_WALK;
 		}
 	}
 }
@@ -218,6 +220,7 @@ void CAI_Enemy::Weapon_Control(_float fTimeDelta)
 {
 	__super::Weapon_Control(fTimeDelta);
 
+	
 	if (m_fMove_Angle < 0.1f)
 	{
 		_float3 fStartPostion{};
@@ -229,7 +232,20 @@ void CAI_Enemy::Weapon_Control(_float fTimeDelta)
 		_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
 		XMStoreFloat3(&fPushedDirec, vPushedDirec);
 
-		__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
+		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+			m_iState = STATE_GUN;
+		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_HANDGUN;
+		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_GRANADE;
+
+		if (m_fAttackDelay == 0.f)
+		{
+			__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
+		}
+
 	}
 }
 
@@ -276,10 +292,7 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 	{
 		if (m_eAI_Status == AI_STATUS::AI_ATTACK)
 		{
-			m_eAI_Status = AI_STATUS::AI_SERACH;
-			m_fSearch_Time = 20.f;
-			m_fSearch_Interval = 5.f;
-			m_iSearch_Count = _int(m_fSearch_Time / m_fSearch_Interval);
+			__super::Start_Serach();
 		}
 		else if (m_eAI_Status == AI_STATUS::AI_SERACH)
 		{

@@ -33,16 +33,24 @@ public:
 		PART_END
 	};
 	enum STATE {
-		STATE_RESET = 0x00000000,
-		STATE_IDLE = 0x00000001,	// 0000 0001
-		STATE_WALK = 0x00000002,	// 0000 0010 
-		STATE_ATTACK = 0x00000004,	// 0000 0100
-		//STATE_ATTACK = 0x00000008,	// 0000 1000
-		//STATE_ATTACK = 0x00000010,	// 0001 0000
-		//STATE_ATTACK = 0x00000020,	// 0010 0000
-		//STATE_ATTACK = 0x00000040,	// 0100 0000
-		//STATE_ATTACK = 0x00000080,	// 1000 0000
-		STATE_END = 0xffffffff,
+		STATE_EAT = 3,
+		STATE_THROW_WAIT = 6,
+		STATE_SLOW_WALK = 8,
+		STATE_HIT = 9,
+		STATE_HANDGUN = 10,
+		STATE_GUN = 11,
+		STATE_SIT = 12,
+		STATE_GIVE = 13,
+		STATE_THROW = 14,
+		STATE_GRANADE = 15,
+		STATE_WALK_R = 40,
+		STATE_WALK_L = 41,
+		STATE_AIM = 51,
+		STATE_CHAINSAW = 56,
+		STATE_IDEL = 58,
+		STATE_WALK = 64,
+		STATE_HI = 70,
+		STATE_END
 	};
 	enum WEAPON_TYPE
 	{
@@ -79,6 +87,7 @@ protected:
 
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta) override;
+	void Burning();
 
 protected:
 	_uint				m_iState = {  };

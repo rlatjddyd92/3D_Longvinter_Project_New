@@ -86,6 +86,8 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -231,6 +233,19 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 			{
 				m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
 				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter, *(*iterA));
+			}
+			else if (m_vecInterAction[_int(eInter)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+				
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eInter)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
+					(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter, *(*iterA));
+				}
 			}
 
 			++iterB;
