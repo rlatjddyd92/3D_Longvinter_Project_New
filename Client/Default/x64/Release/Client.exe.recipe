@@ -13,7 +13,13 @@
       <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxCubeTex.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxFireSmoke.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxModel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxModel_NonTexture_Alpah.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>F:\3D_Project\3D_Personal_Git_Fork\3D_Longvinter_Project\Client\Bin\Shader_VtxNorTex.cso</FullPath>

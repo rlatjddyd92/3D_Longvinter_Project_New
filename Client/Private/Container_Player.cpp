@@ -228,6 +228,11 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 		if (isnan(fAngle))
 			fAngle = 0.f;
 
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+		
+		if (bResult)
+			fAngle *= -1;
+
 		_long		MouseMove = { 0 };
 		
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * fAngle);

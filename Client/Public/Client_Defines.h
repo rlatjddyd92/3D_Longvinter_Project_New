@@ -35,6 +35,8 @@ namespace Client
 #define INVEN_CELLSIZE	50.f
 #define INVEN_TEXTURE	45.f
 
+#define PI_DEFINE		3.141592
+
 	using namespace std;
 
 	enum class LEVELID 

@@ -267,6 +267,17 @@ void CPhysicsManager::BounceControl(P_RESULT* tResult, _bool bLandMine)
 		tResult->fPushed_Power *= 0.9f;
 }
 
+_bool CPhysicsManager::Check_CCW_XZ(_float3 fPointA, _float3 fPointB, _float3 fPointC)
+{
+	_float fX[3] = { fPointA.x,  fPointB.x ,  fPointC.x };
+	_float fZ[3] = { fPointA.z,  fPointB.z ,  fPointC.z };
+
+	_float fResult = ((fX[1] - fX[0]) * (fZ[2] - fZ[0])) - ((fX[2] - fX[0]) * (fZ[1] - fZ[0]));
+
+
+	return (fResult > 0.f);
+}
+
 HRESULT CPhysicsManager::Ready_Components()
 {
 	return E_NOTIMPL;

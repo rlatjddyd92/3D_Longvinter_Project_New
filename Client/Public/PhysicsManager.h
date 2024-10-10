@@ -109,7 +109,7 @@ public:
 
 	void BounceControl(P_RESULT* tResult, _bool bLandMine);
 
-
+	_bool Check_CCW_XZ(_float3 fPointA, _float3 fPointB, _float3 fPointC);
 
 
 

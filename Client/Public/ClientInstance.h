@@ -195,6 +195,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CPhysicsManager::P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta) { return m_pPhysicsManager->Bounce_Physics(Transform, Collder, IsGravity, fTimeDelta); }  // <- 지형에 튕기는 물체의 계산
 	CPhysicsManager::P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta) { return m_pPhysicsManager->LandMine_Physics(Transform, Collder, fTimeDelta); }  // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
 
+	_bool Check_CCW_XZ(_float3 fPointA, _float3 fPointB, _float3 fPointC) { return m_pPhysicsManager->Check_CCW_XZ(fPointA, fPointB, fPointC); } // <- 양수가 나오면 반시계
+
 #pragma endregion
 
 #pragma region UIMANAGER

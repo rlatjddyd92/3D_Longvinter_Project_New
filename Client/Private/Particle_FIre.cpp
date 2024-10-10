@@ -39,7 +39,7 @@ HRESULT CParticle_Fire::Initialize(void* pArg)
 	m_tSpec.fPowerDecrease = 0.01f;
 	m_tSpec.fPower = 0.1f;
 
-	m_pTransformCom->Set_Scaled(0.1f, 0.1f, 0.1f);
+	m_pTransformCom->Set_Scaled(0.2f, 0.2f, 0.2f);
 
 	m_bChangeColor[0] = true;
 	m_bChangeColor[1] = true;
@@ -102,6 +102,10 @@ HRESULT CParticle_Fire::Render()
 	//__super::Render();
 	for (auto& iter : m_EffectInfolist)
 	{
+		_float fScale = _float(iter->fTime / m_tSpec.fTime) * 0.2f;
+
+		m_pTransformCom->Set_Scaled(fScale, fScale, fScale);
+
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&iter->fPosition));
 
 		_float fRGB[3] = { iter->fColor.x, iter->fColor.y, iter->fColor.z };

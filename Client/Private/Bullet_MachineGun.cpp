@@ -34,7 +34,7 @@ HRESULT CBullet_MachineGun::Initialize(void* pArg)
 	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
 	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
 	m_fSpec_Scale = 0.1f;
-	m_fSpec_PushedPower = 50.f;
+	m_fSpec_PushedPower = 65.f;
 	m_fSpec_PushedPower_Decrease = 0.f;
 	m_iColliderType = _int(CCollider::TYPE_SPHERE);
 
