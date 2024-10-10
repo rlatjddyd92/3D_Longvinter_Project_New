@@ -22,6 +22,7 @@ public:
 public: 
 #pragma region TRANSFORM
 	_vector GetTransform(CTransform::STATE eState){ return m_pTransformCom->Get_State(eState);}
+	_float4x4 GetWorldMatrix() { return m_pTransformCom->Get_WorldMatrix(); }
 #pragma endregion
 
 protected:

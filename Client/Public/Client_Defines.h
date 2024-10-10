@@ -13,6 +13,8 @@ namespace Client
 #include "../Default/Enum_Item.h"
 #include "../Default/Enum_Enemy.h"
 #include "../Default/Enum_Human.h"
+#include "../Default/Enum_Sound.h"
+#include "../Default/Enum_Effect.h"
 
 	const unsigned int			g_iWinSizeX = { 1280 };
 	const unsigned int			g_iWinSizeY = { 720 };
@@ -32,6 +34,9 @@ namespace Client
 #define INVEN_COL		10
 #define INVEN_CELLSIZE	50.f
 #define INVEN_TEXTURE	45.f
+
+#define PI_DEFINE		3.141592
+#define BURN_TIME		10.f
 
 	using namespace std;
 
@@ -56,7 +61,49 @@ namespace Client
 		CMODE_END
 	};
 
-	
+	enum class TERRAIN_MODE
+	{
+		TMODE_SLIDING, // <- 지형 슬라이딩 (플레이어, 인간, 동물에 적용)
+		TMODE_BOUNCE, // <- 지형에 닿으면 튕겨나감
+		TMODE_MINE, // <- 지형 큐브 위쪽에 닿으면 멈춤
+		TMODE_NONE, // <- 지형 통과
+	    TMODE_END,
+	};
+
+	enum class CAMERAMODE
+	{
+		CAMERA_OFF,
+		CAMERA_FIRST,
+		CAMERA_THIRD,
+		CAMERA_EDITOR,
+		CAMERA_END
+	};
+
+	enum class CROWDCONTROL
+	{
+		CC_BURN,
+		CC_BLEED,
+		CC_SLOW,
+		CC_STRN,
+		CC_END
+	};
+
+	enum class AI_STATUS
+	{
+		AI_IDLE,
+		AI_OFF,
+		AI_PANIC,
+		AI_SERACH,
+		AI_DEFENCE,
+		AI_ATTACK,
+		AI_END
+	};
+
+
+
+
+
+
 
 }
 

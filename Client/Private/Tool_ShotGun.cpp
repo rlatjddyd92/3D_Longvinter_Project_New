@@ -55,35 +55,7 @@ void CTool_ShotGun::Update(_float fTimeDelta)
 {
 	
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_X, true))
-	{
-		if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
-			m_fTest_X -= fTimeDelta * 5.f;
-		else
-			m_fTest_X += fTimeDelta * 5.f;
-		if (m_fTest_X >= 360.f)
-			m_fTest_X = 0;
-	}
 
-		if (m_pGameInstance->Get_DIKeyState(DIK_Y, true))
-		{
-			if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
-				m_fTest_Y -= fTimeDelta * 5.f;
-			else
-				m_fTest_Y += fTimeDelta * 5.f;
-			if (m_fTest_Y >= 360.f)
-				m_fTest_Y = 0;
-		}
-
-			if (m_pGameInstance->Get_DIKeyState(DIK_Z, true))
-			{
-				if (m_pGameInstance->Get_DIKeyState(DIK_LSHIFT, true))
-					m_fTest_Z -= fTimeDelta * 5.f;
-				else
-					m_fTest_Z += fTimeDelta * 5.f;
-				if (m_fTest_Z >= 360.f)
-					m_fTest_Z = 0;
-			}
 }
 
 void CTool_ShotGun::Late_Update(_float fTimeDelta)

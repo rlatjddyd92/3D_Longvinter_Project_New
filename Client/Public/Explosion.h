@@ -34,8 +34,8 @@ private:
 
 
 private:
-
-
+	_bool m_bDemege = true;
+	
 
 
 

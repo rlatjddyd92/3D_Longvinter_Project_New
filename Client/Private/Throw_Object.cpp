@@ -51,15 +51,12 @@ void CThrow_Object::Update(_float fTimeDelta)
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
 		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision_Adjust(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
 
 		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
 		{
 			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
-			Safe_Release(iter->pHost);
-			Safe_Release(iter->pTransform);
-			Safe_Release(iter->pCollider);
-			Safe_Delete(iter);
+			iter->bDead = true;
 		}
 	}
 }
@@ -91,6 +88,13 @@ HRESULT CThrow_Object::Render()
 
 	for (auto& iter : m_Actionlist)
 	{
+		_float3 fPosition{};
+		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
+
+		if (!GET_INSTANCE->GetIsLender(fPosition))
+			continue;
+
+
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
 			return E_FAIL;
 

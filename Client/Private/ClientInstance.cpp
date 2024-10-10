@@ -88,6 +88,17 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 		return E_FAIL;
 	m_pInterActionManager = dynamic_cast<CInterActionManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_InterActionManager"), -1));
 
+	// EffectManager
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_EffectManager"), CEffectManager::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_EffectManager"), TEXT("Prototype_GameObject_EffectManager"))))
+		return E_FAIL;
+	m_pEffectManager = dynamic_cast<CEffectManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_EffectManager"), -1));
+
+
+
+
 
 	return S_OK;
 }
@@ -102,7 +113,7 @@ HRESULT CClientInstance::Setting_Ingame_Start()
 	m_pTerrainManager = dynamic_cast<CTerrainManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_SINGLE), TEXT("Layer_TerrainManager"), -1));
 	m_pTerrainManager->LoadMap("../Bin/Resources/MapData/Map_1.dat");
 	m_pTerrainManager->Set_Render_Length(35.f);
-	m_pCamera->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_THIRD);
+	m_pCamera->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
 
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
 	LIGHT_DESC			LightDesc{};
@@ -142,7 +153,7 @@ HRESULT CClientInstance::Setting_Ingame_Start()
 
 HRESULT CClientInstance::Setting_Editor_Start()
 {
-	m_pCamera->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_EDITOR);
+	m_pCamera->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
 
 	// TerrainManager
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_SINGLE), TEXT("Layer_TerrainManager"), TEXT("Prototype_GameObject_TerrainManager"))))

@@ -6,3 +6,4 @@
 #include "UIPart_Picture.h"
 #include "UIPart_Cell.h"
 #include "UIPart_TextBox.h"
+#include "UIPart_Bar.h"

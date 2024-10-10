@@ -64,6 +64,9 @@ public:
 	}P_RESULT;
 
 
+
+
+
 private:
 	CPhysicsManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPhysicsManager(const CPhysicsManager& Prototype);
@@ -91,13 +94,23 @@ public:
 	
 
 	P_RESULT Total_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _bool IsTerrainCollision, _bool IsSlideControl, _float fTimeDelta); // 모든 물리 계산을 진행(IsGravity - 중력 적용, IsTerrainCollision - 지형 충돌 적용, IsSlideControl - 지형 충돌 시 부드러운 처리)
-	
 	P_RESULT Make_P_Result(CTransform& Transform, CCollider& Collder); // 계산 결과 기록용 구조체 제작 
+	
+	P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta); // <- 지형에 튕기는 물체의 계산
+	P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta); // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
+	
+	
+	
 	void Update_By_P_Result(CTransform* Transform, CCollider* Collder, P_RESULT tResult);
 
 	void Gravity(P_RESULT* tResult, _bool IsTerrainCollision, _float fTimeDelta);
 	void PushedPower(P_RESULT* tResult, _float fTimeDelta); // 푸시 파워 계산, 추후 회전 관련 기능 넣기 
 	void CheckTerrainCollision(P_RESULT* tResult, _bool IsSlideControl); // 지형 충돌만 계산 
+
+	void BounceControl(P_RESULT* tResult, _bool bLandMine);
+
+	_bool Check_CCW_XZ(_float3 fPointA, _float3 fPointB, _float3 fPointC);
+
 
 
 

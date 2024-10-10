@@ -35,10 +35,12 @@ HRESULT CMissile::Initialize(void* pArg)
 
 void CMissile::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CMissile::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CMissile::Late_Update(_float fTimeDelta)

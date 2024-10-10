@@ -146,17 +146,17 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 
 		if (ImGui::Button("Camera_First"))
 		{
-			GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_FIRST);
+			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Camera_Third"))
 		{
-			GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_THIRD);
+			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Camera_Editor"))
 		{
-			GET_INSTANCE->SetCameraMode(CFreeCamera::CAMERAMODE::CAMERA_EDITOR);
+			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
 		}
 
 

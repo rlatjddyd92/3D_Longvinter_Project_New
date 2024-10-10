@@ -138,6 +138,26 @@ public:
 	}
 	_float GetBoundingRadius_Sphere() { return m_pBoundingDesc_Sphere->Radius; }
 
+	void SetBoundingExtents(_float3 fExtent)
+	{
+		if (m_pBoundingDesc_AABB)
+		{
+			m_pBoundingDesc_AABB->Extents = fExtent;
+		}
+		else if (m_pBoundingDesc_OBB)
+		{
+			m_pBoundingDesc_OBB->Extents = fExtent;
+		}
+		else if (m_pBoundingDesc_Sphere)
+		{
+			m_pBoundingDesc_Sphere->Radius = fExtent.x;
+		}
+	}
+	void SetBoundingRadius_Sphere(_float fRadius)
+	{
+		m_pBoundingDesc_Sphere->Radius = fRadius;
+	}
+
 protected: // AABB
 	BoundingBox* m_pOriginalBoundingDesc_AABB = { nullptr };
 	BoundingBox* m_pBoundingDesc_AABB = { nullptr };

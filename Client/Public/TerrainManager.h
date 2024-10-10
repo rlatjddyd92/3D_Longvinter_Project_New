@@ -74,6 +74,8 @@ public:
 
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END);
 
+	_float3 CheckPicking();
+
 	void SetBedRock(_int iX, _int iY, _int iZ);
 	void HighLight_Surface(_bool bLinked); // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
 	void HighLight_NewCube(_float3 fSize);
@@ -108,9 +110,19 @@ public:
 	void Set_Render_Length(_float fLength) { m_fRender_Length = fLength; }
 
 #pragma region COLLISION
-	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
+	_float3 Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec);
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents);
-
+	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange); 
+	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents); // <- 단순히 충돌만 검출
+	_bool Check_IsTerrain(_float3 fPosition) 
+	{
+		fPosition.x = max(0.f, fPosition.x);
+		fPosition.y = max(0.f, fPosition.y);
+		fPosition.z = max(0.f, fPosition.z);
+		fPosition.x = min((LCUBESIZE * LMAX_X) - 1.f, fPosition.x);
+		fPosition.y = min((LCUBESIZE * LMAX_Y) - 1.f, fPosition.y);
+		fPosition.z = min((LCUBESIZE * LMAX_Z) - 1.f, fPosition.z);
+		return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
 
 
 #pragma endregion
@@ -128,7 +140,8 @@ private:
 
 private:
 	
-
+	// 설정
+	_int m_iBedRock = 2.f; //<- 인게임 플레이에서 Y 축 기준으로 해당 인덱스 미만의 지형 파괴 불가 
 
 	//test
 	_float fTest = 0.f;
@@ -160,6 +173,7 @@ public:
 	class CShader* m_pShaderCom_Gray = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	class CCollider* m_pColliderCom = { nullptr };
 
 public:
 	static CTerrainManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

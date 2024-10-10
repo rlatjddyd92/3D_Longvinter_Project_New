@@ -389,6 +389,16 @@ HRESULT CModel::Ready_Animations()
 	return S_OK;
 }
 
+void CModel::SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture)
+{
+	if (m_Materials[iMetarial].pMaterialTextures[iTextureType])
+		Safe_Release(m_Materials[iMetarial].pMaterialTextures[iTextureType]);
+
+	m_Materials[iMetarial].pMaterialTextures[iTextureType] = pTexture;
+
+	Safe_AddRef(pTexture);
+}
+
 
 CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, _bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool IsLoad)
 {

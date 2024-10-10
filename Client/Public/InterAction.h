@@ -28,7 +28,12 @@ public:
 		CTransform* pTransform{};
 		CCollider* pCollider{};
 		TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END;
-		CLongvinter_Container* pHost = { nullptr };
+		CLongvinter_Container* pHost = { nullptr }; // <- 이 객체를 만든 대상
+
+		CLongvinter_Container* pTrace = { nullptr }; // <- 추적 대상
+
+		_float fTime = 0.f;
+		_bool bActive = true;
 		_bool bDead = false;
 	}INTER_INFO;
 
@@ -54,7 +59,9 @@ public:
 public:
 	void Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END);
 	list<INTERACTION_INFO*>* Get_Actionlist() {return &m_Actionlist;}
-
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec);
+	_int Get_ColliderType() { return m_iColliderType; }
+	_float Get_Sensor_Range() { return m_fSpec_Sensor; }
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
@@ -69,6 +76,16 @@ private:
 protected:
 	list<INTERACTION_INFO*> m_Actionlist;
 	_float4x4				m_WorldMatrix = {};
+	_float					m_fShowTime = 0.f;
+
+protected:
+	_float3					m_fSpec_Extent = { 0.f,0.f,0.f };
+	_float					m_fSpec_Scale = 1.f;
+	_float					m_fSpec_PushedPower = 0.f;
+	_float					m_fSpec_PushedPower_Decrease = 0.f;
+	_int					m_iColliderType = 0;
+	_float					m_fSpec_Time = 0.f;
+	_float					m_fSpec_Sensor = 0.f;
 
 public:
 	static CInterAction* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

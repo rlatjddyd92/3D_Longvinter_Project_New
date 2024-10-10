@@ -36,6 +36,8 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iState = 13; // <-IDLE
+	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
+	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 
 	return S_OK;
 }
@@ -82,7 +84,10 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 
 	m_pTransformCom->Save_BeforePosition();
 
+	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
 
+
+	GET_INSTANCE->InputRenderlist(m_eWeapon, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -95,9 +100,9 @@ HRESULT CContainer_Enemy::Render()
 	return S_OK;
 }
 
-void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex)
+void CContainer_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint,INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
-	__super::Collision_Reaction_InterAction(pPoint, eIndex);
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
 }
 
@@ -109,6 +114,47 @@ void CContainer_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, I
 void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+}
+
+void CContainer_Enemy::Moving_Control(_float fTimeDelta)
+{
+	__super::Moving_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
+{
+	__super::Weapon_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Camera_Control(_float fTimeDelta)
+{
+	__super::Camera_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Test_Control(_float fTimeDelta)
+{
+	__super::Test_Control(fTimeDelta);
+}
+
+void CContainer_Enemy::Set_AI_Status(_float fTimeDelta)
+{
+	__super::Set_AI_Status(fTimeDelta);
+
+	
+}
+
+void CContainer_Enemy::Burning()
+{
+	m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] = true;
+	m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_BURN)] = BURN_TIME;
+
+	_float3 fPosition = m_pColliderCom->GetBoundingCenter();
+	fPosition.y += m_pColliderCom->GetBoundingExtents().y;
+
+	GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, this, fPosition, { 0.f,0.f,0.f });
+	m_fActionTimer = BURN_TIME;
+	m_iFace = _int(HUMAN_FACE::FACE_SAD);
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 }
 
 

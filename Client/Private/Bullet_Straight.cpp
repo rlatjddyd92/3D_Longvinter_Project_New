@@ -32,6 +32,11 @@ HRESULT CBullet_Straight::Initialize(void* pArg)
 
 
 	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
+	m_fSpec_Scale = 0.1f;
+	m_fSpec_PushedPower = 50.f;
+	m_fSpec_PushedPower_Decrease = 0.f;
+	m_iColliderType = _int(CCollider::TYPE_SPHERE);
 
 	return S_OK;
 }
@@ -51,11 +56,11 @@ void CBullet_Straight::Update(_float fTimeDelta)
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
 		LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_END;
-		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
+		_float3 fAdjust = GET_INSTANCE->Check_Terrain_Collision_Adjust(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents(), iter->pTransform->Get_AdjustVector(), &eDirec);
 
 		if ((fAdjust.x != -1) || (fAdjust.y != -1) || (fAdjust.z != -1))
 		{
-			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents().x);
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
 			iter->bDead = true;
 		}
 	}

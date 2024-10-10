@@ -33,7 +33,7 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 
 void CFreeCamera::Priority_Update(_float fTimeDelta)
 {
-	if (m_eCameraMode == CAMERA_FIRST)
+	if (m_eCameraMode == CAMERAMODE::CAMERA_FIRST)
 	{
 		_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
 		vPosition += {0.f, m_fCameraUp_First, 0.f};
@@ -42,13 +42,20 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_RIGHT));
 		m_pTransformCom->Set_State(CTransform::STATE_UP, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_UP));
 
+		m_lCamera_Y_move_First += m_pGameInstance->Get_DIMouseMove(DIMM_Y);
+		m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), 0.01f * m_lCamera_Y_move_First * m_fSensor);
+		
 
+
+
+
+		
 
 		m_pTransformCom->Go_Right(0.03f);
 		m_pTransformCom->Go_Up(0.01f);
 		m_pTransformCom->Go_Backward(0.04f);
 	}
-	else if (m_eCameraMode == CAMERA_THIRD)
+	else if (m_eCameraMode == CAMERAMODE::CAMERA_THIRD)
 	{
 		_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
 		vPosition += {m_fCamera_Third.x, m_fCamera_Third.y, m_fCamera_Third.z, 0.f};
@@ -61,7 +68,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_UP, vUp);
 
 	}
-	else if (m_eCameraMode == CAMERA_EDITOR)
+	else if (m_eCameraMode == CAMERAMODE::CAMERA_EDITOR)
 	{
 		if (m_pGameInstance->Get_DIKeyState(DIK_W,true) & 0x80)
 			m_pTransformCom->Go_Straight(fTimeDelta);
@@ -106,7 +113,7 @@ HRESULT CFreeCamera::Render()
 void CFreeCamera::SetCameraMode(CAMERAMODE eInput)
 {
 	m_eCameraMode = eInput;
-	
+	m_lCamera_Y_move_First = 0.f;
 	if (m_eCameraMode == CAMERAMODE::CAMERA_OFF)
 	{
 		m_bOff = true;
@@ -129,6 +136,7 @@ void CFreeCamera::ShakeCamera(_float fDeltaTime)
 void CFreeCamera::SetFirstCamera()
 {
 	_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
+	m_lCamera_Y_move_First = 0.f;
 	vPosition += {0.f, m_fCameraUp_First, 0.f};
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_LOOK));
@@ -139,6 +147,7 @@ void CFreeCamera::SetFirstCamera()
 }
 void CFreeCamera::SetThirdCamera()
 {
+	m_lCamera_Y_move_First = 0.f;
 	_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
 	vPosition += {m_fCamera_Third.x, m_fCamera_Third.y, m_fCamera_Third.z, 0.f};
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);

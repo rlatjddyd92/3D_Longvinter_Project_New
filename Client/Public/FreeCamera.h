@@ -8,14 +8,7 @@ BEGIN(Client)
 class CFreeCamera final : public CCamera
 {
 public:
-	enum CAMERAMODE
-	{
-		CAMERA_OFF,
-		CAMERA_FIRST,
-		CAMERA_THIRD,
-		CAMERA_EDITOR,
-		CAMERA_END
-	};
+	
 public:
 	typedef struct : public CCamera::CAMERA_DESC
 	{
@@ -36,8 +29,10 @@ public:
 
 public:
 	void SetCameraMode(CAMERAMODE eInput);
+	CAMERAMODE GetCameraMode() { return m_eCameraMode; }
 	void ShakeCamera(_float fDeltaTime);
 	_vector GetCameraPosition() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
+	_vector GetCameraLook() { return m_pTransformCom->Get_State(CTransform::STATE_LOOK); }
 
 private:
 	void SetFirstCamera();
@@ -51,6 +46,8 @@ private:
 
 	_float3				m_fCamera_Third = { 0.f,10.f,-10.f }; 
 	_float3				m_fCamera_Third_Look = { 0.f,0.f,0.f };
+
+	_long				m_lCamera_Y_move_First = 0.f;
 
 
 public:

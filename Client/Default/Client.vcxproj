@@ -43,6 +43,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -50,6 +51,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -171,15 +173,19 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
     <ClInclude Include="..\Public\Body_Human.h" />
+    <ClInclude Include="..\Public\Bullet_MachineGun.h" />
     <ClInclude Include="..\Public\Bullet_Straight.h" />
     <ClInclude Include="..\Public\ClientInstance.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Container_Enemy.h" />
     <ClInclude Include="..\Public\Container_Player.h" />
     <ClInclude Include="..\Public\Controller.h" />
+    <ClInclude Include="..\Public\Effect.h" />
+    <ClInclude Include="..\Public\EffectManager.h" />
     <ClInclude Include="..\Public\Explosion.h" />
     <ClInclude Include="..\Public\Explosion_Normal.h" />
     <ClInclude Include="..\Public\Factory.h" />
+    <ClInclude Include="..\Public\Fire.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\ImguiManager.h" />
     <ClInclude Include="..\Public\InterAction.h" />
@@ -193,15 +199,27 @@
     <ClInclude Include="..\Public\Longvinter_Container.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Melee.h" />
+    <ClInclude Include="..\Public\Melee_ChainSaw.h" />
     <ClInclude Include="..\Public\Melee_Normal.h" />
     <ClInclude Include="..\Public\Melee_ShotGun.h" />
     <ClInclude Include="..\Public\Missile.h" />
+    <ClInclude Include="..\Public\Effect_Particle.h" />
+    <ClInclude Include="..\Public\Particle_FIre.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
+    <ClInclude Include="..\Public\SoundManager.h" />
     <ClInclude Include="..\Public\SurFace.h" />
     <ClInclude Include="..\Public\TerrainManager.h" />
+    <ClInclude Include="..\Public\Throw_Dinamite.h" />
+    <ClInclude Include="..\Public\Throw_Granade.h" />
+    <ClInclude Include="..\Public\Throw_Mine.h" />
     <ClInclude Include="..\Public\Throw_Object.h" />
     <ClInclude Include="..\Public\Tool.h" />
+    <ClInclude Include="..\Public\Tool_Bow.h" />
+    <ClInclude Include="..\Public\Tool_ChainSaw.h" />
     <ClInclude Include="..\Public\Tool_Empty.h" />
+    <ClInclude Include="..\Public\Tool_FireThrower.h" />
+    <ClInclude Include="..\Public\Tool_LandMine.h" />
+    <ClInclude Include="..\Public\Tool_MachineGun.h" />
     <ClInclude Include="..\Public\Tool_ShotGun.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
@@ -214,6 +232,7 @@
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
+    <ClInclude Include="..\Public\UIPart_Bar.h" />
     <ClInclude Include="..\Public\UIPart_Button.h" />
     <ClInclude Include="..\Public\UIPart_Cell.h" />
     <ClInclude Include="..\Public\UIPart_TextBox.h" />
@@ -221,6 +240,10 @@
     <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Struct.h" />
+    <ClInclude Include="Effect_Defines.h" />
+    <ClInclude Include="Enum_Effect.h" />
+    <ClInclude Include="Enum_Sound.h" />
+    <ClInclude Include="Tool_Granade.h" />
     <ClInclude Include="Enum_Enemy.h" />
     <ClInclude Include="Enum_Human.h" />
     <ClInclude Include="Enum_InterAction.h" />
@@ -241,14 +264,18 @@
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />
     <ClCompile Include="..\Private\Body_Human.cpp" />
+    <ClCompile Include="..\Private\Bullet_MachineGun.cpp" />
     <ClCompile Include="..\Private\Bullet_Straight.cpp" />
     <ClCompile Include="..\Private\ClientInstance.cpp" />
     <ClCompile Include="..\Private\Container_Enemy.cpp" />
     <ClCompile Include="..\Private\Container_Player.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
+    <ClCompile Include="..\Private\Effect.cpp" />
+    <ClCompile Include="..\Private\EffectManager.cpp" />
     <ClCompile Include="..\Private\Explosion.cpp" />
     <ClCompile Include="..\Private\Explosion_Normal.cpp" />
     <ClCompile Include="..\Private\Factory.cpp" />
+    <ClCompile Include="..\Private\Fire.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\ImguiManager.cpp" />
     <ClCompile Include="..\Private\InterAction.cpp" />
@@ -262,15 +289,27 @@
     <ClCompile Include="..\private\Longvinter_Container.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Melee.cpp" />
+    <ClCompile Include="..\Private\Melee_ChainSaw.cpp" />
     <ClCompile Include="..\Private\Melee_Normal.cpp" />
     <ClCompile Include="..\Private\Melee_ShotGun.cpp" />
     <ClCompile Include="..\Private\Missile.cpp" />
+    <ClCompile Include="..\Private\Effect_Particle.cpp" />
+    <ClCompile Include="..\Private\Particle_FIre.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
+    <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\Private\SurFace.cpp" />
     <ClCompile Include="..\Private\TerrainManager.cpp" />
+    <ClCompile Include="..\Private\Throw_Dinamite.cpp" />
+    <ClCompile Include="..\Private\Throw_Granade.cpp" />
+    <ClCompile Include="..\Private\Throw_Mine.cpp" />
     <ClCompile Include="..\Private\Throw_Object.cpp" />
     <ClCompile Include="..\Private\Tool.cpp" />
+    <ClCompile Include="..\Private\Tool_Bow.cpp" />
+    <ClCompile Include="..\Private\Tool_ChainSaw.cpp" />
     <ClCompile Include="..\Private\Tool_Empty.cpp" />
+    <ClCompile Include="..\Private\Tool_FireThrower.cpp" />
+    <ClCompile Include="..\Private\Tool_LandMine.cpp" />
+    <ClCompile Include="..\Private\Tool_MachineGun.cpp" />
     <ClCompile Include="..\Private\Tool_ShotGun.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\private\UIPage.cpp" />
@@ -283,12 +322,14 @@
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
+    <ClCompile Include="..\Private\UIPart_Bar.cpp" />
     <ClCompile Include="..\Private\UIPart_Button.cpp" />
     <ClCompile Include="..\Private\UIPart_Cell.cpp" />
     <ClCompile Include="..\Private\UIPart_TextBox.cpp" />
     <ClCompile Include="..\Private\UIPart_Picture.cpp" />
     <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Tool_Granade.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -306,7 +347,9 @@
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxFireSmoke.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_NonTexture_Alpah.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EnableDebuggingInformation>

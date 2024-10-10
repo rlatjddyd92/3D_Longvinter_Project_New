@@ -31,11 +31,37 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_vecInterAction.resize(_int(INTERACTION::INTER_END));
-	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), TEXT("Prototype_Inter_Bullet_Straight"));
-
-	m_vecInterAction[_int(INTERACTION::INTER_BULLET_STRAIGHT)] = static_cast<CBullet_Straight*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), -1));
 	m_vecConInterlist.resize(_int(CONTAINER::CONTAINER_END));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), TEXT("Prototype_Inter_Bullet_Straight"));
+	m_vecInterAction[_int(INTERACTION::INTER_BULLET_STRAIGHT)] = static_cast<CBullet_Straight*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_Straight"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Mine"), TEXT("Prototype_Inter_Throw_Mine"));
+	m_vecInterAction[_int(INTERACTION::INTER_THORW_MINE)] = static_cast<CThrow_Mine*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Mine"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Granade"), TEXT("Prototype_Inter_Throw_Granade"));
+	m_vecInterAction[_int(INTERACTION::INTER_THORW_GRANADE)] = static_cast<CThrow_Granade*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Throw_Granade"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), TEXT("Prototype_Inter_Explosion_Normal"));
+	m_vecInterAction[_int(INTERACTION::INTER_EXPLOSION_NORMAL)] = static_cast<CExplosion_Normal*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Explosion_Normal"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), TEXT("Prototype_Inter_Fire"));
+	m_vecInterAction[_int(INTERACTION::INTER_FIRE)] = static_cast<CFire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), -1));
+
+	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+
+	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+
+	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+
+	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
+	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
 
 
@@ -58,6 +84,10 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	// InterActionManager는 모든 InterAction객체보다 먼저 업데이트가 돌아간다 
 
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -95,11 +125,16 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+{
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec);
+}
+
 void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eFirst)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eFirst)]->Get_Actionlist()->end();)
 	{
-		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pTransform == nullptr) > 0)
 		{
 			Safe_Release((*iterA)->pCollider);
 			Safe_Release((*iterA)->pHost);
@@ -109,7 +144,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			continue;
 		}
 
-		if ((*iterA)->pHost->GetOff())
+		if ((*iterA)->bActive == false)
 		{
 			++iterA;
 			continue;
@@ -118,7 +153,7 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 
 		for (list<CInterAction::INTERACTION_INFO*>::iterator iterB = m_vecInterAction[_int(eSecond)]->Get_Actionlist()->begin(); iterB != m_vecInterAction[_int(eSecond)]->Get_Actionlist()->end();)
 		{
-			if (((*iterB)->pCollider == nullptr) + ((*iterB)->pHost == nullptr) + ((*iterB)->pTransform == nullptr) + ((*iterB)->pHost->GetDead()) > 0)
+			if (((*iterB)->pCollider == nullptr) + ((*iterB)->pTransform == nullptr) > 0)
 			{
 				Safe_Release((*iterB)->pCollider);
 				Safe_Release((*iterB)->pHost);
@@ -128,16 +163,15 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 				continue;
 			}
 
-			if ((*iterB)->pHost->GetOff())
+			if((*iterB)->bActive == false)
 			{
 				++iterB;
 				continue;
 			}
 
 
-			CCollider::TYPE eType = CCollider::TYPE::TYPE_SPHERE;
-			// 추후 상대방 인터랙션 객체에 따라 값을 변경하는 코드 추가 필요 
-
+			CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
+	
 
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{
@@ -157,7 +191,7 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 {
 	for (list<CInterAction::INTERACTION_INFO*>::iterator iterA = m_vecInterAction[_int(eInter)]->Get_Actionlist()->begin(); iterA != m_vecInterAction[_int(eInter)]->Get_Actionlist()->end();)
 	{
-		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pHost == nullptr) + ((*iterA)->pTransform == nullptr) + ((*iterA)->pHost->GetDead()) > 0)
+		if (((*iterA)->pCollider == nullptr) + ((*iterA)->pTransform == nullptr) > 0)
 		{
 			Safe_Release((*iterA)->pCollider);
 			Safe_Release((*iterA)->pHost);
@@ -167,7 +201,7 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 			continue;
 		}
 
-		if ((*iterA)->pHost->GetOff())
+		if ((*iterA)->bActive == false)
 		{
 			++iterA;
 			continue;
@@ -198,7 +232,20 @@ void CInterActionManager::Check_Collision_InterAction_Container(INTERACTION eInt
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{
 				m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
-				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter);
+				(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter, *(*iterA));
+			}
+			else if (m_vecInterAction[_int(eInter)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+				
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eInter)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eInter)]->Collision_Reaction_Container((*iterB)->pPoint, eContainer, *iterA);
+					(*iterB)->pPoint->Collision_Reaction_InterAction((*iterA)->pHost, eInter, *(*iterA));
+				}
 			}
 
 			++iterB;

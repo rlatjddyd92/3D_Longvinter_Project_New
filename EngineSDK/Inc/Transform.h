@@ -101,7 +101,19 @@ public: // Physics
 	_float Get_Pushed_PowerDecrease() { return m_tPhysics.fPushedPowerDecrease; }
 
 	void Add_Pushed_Power(_float3 Dir, _float Power);
-	void Set_Pushed_Power(_float3 Dir, _float Power) { m_tPhysics.fPushedDirection = Dir; m_tPhysics.fPushedPower = Power; }
+	void Set_Pushed_Power(_float3 Dir, _float Power) 
+	{ 
+		m_tPhysics.fPushedDirection = Dir;
+		_float fLength = sqrt(pow(Dir.x, 2) + pow(Dir.y, 2) + pow(Dir.z, 2));
+		if (fLength != 0.f)
+		{
+			m_tPhysics.fPushedDirection.x /= fLength;
+			m_tPhysics.fPushedDirection.y /= fLength;
+			m_tPhysics.fPushedDirection.z /= fLength;
+		}
+		m_tPhysics.fPushedPower = Power; 
+		
+	}
 	void Set_Pushed_PowerDecrease(_float Power) { m_tPhysics.fPushedPowerDecrease = Power; }
 
 	void Set_RotationPerSec(_float fSpeed) { m_fRotationPerSec = fSpeed; }

@@ -107,7 +107,18 @@ void CUIManager::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	
+	for (list<CUIPart_Bar*>::iterator iter = m_EnemyHplist.begin(); iter != m_EnemyHplist.end();)
+	{
+		if (((*iter) == nullptr) || ((*iter)->GetDead()))
+		{
+			iter = m_EnemyHplist.erase(iter);
+		}
+		else
+		{
+			(*iter)->AddRender_UIPart();
+			++iter;
+		}
+	}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_LOGO)
 	{
@@ -263,6 +274,12 @@ void CUIManager::ShowInformMessage(wstring Text)
 }
 
 
+void CUIManager::MakeEnemyHpBar(CLongvinter_Container* pHost)
+{
+	CUIPart_Bar* pNew = GET_INSTANCE->MakeUIPart_Bar(CUIPart_Bar::BAR_ENEMY_HP, 0.f, 0.f, 0.f, 0.f, pHost);
+	m_EnemyHplist.push_back(pNew);
+}
+
 HRESULT CUIManager::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -351,12 +368,17 @@ void CUIManager::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom); 
 
 	for (auto& iter : m_Informlist)
 		Safe_Release(iter);
 
 	m_Informlist.clear();
+
+	for (auto& iter : m_EnemyHplist)
+		Safe_Release(iter);
+
+	m_EnemyHplist.clear();
 
 	m_Pagelist.clear();
 }

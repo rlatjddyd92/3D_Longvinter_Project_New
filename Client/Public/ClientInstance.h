@@ -13,6 +13,7 @@
 #include "UIManager.h"
 #include "ItemManager.h"
 #include "InterActionManager.h"
+#include "EffectManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -96,6 +97,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Button(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Picture(eType, fX, fY, fSizeX, fSizeY); }
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Cell(eType, fX, fY, fSizeX, fSizeY); }
+	CUIPart_Bar* MakeUIPart_Bar(CUIPart_Bar::UIBAR_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr)
+	{
+		return m_pFactory->MakeUIPart_Bar(eType, fX, fY, fSizeX, fSizeY, pHost);
+	}
 	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f)
 	{
 		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
@@ -116,6 +121,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType); }
+	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -146,18 +152,24 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	}
 
-	_float3 Check_Terrain_Collision(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents, vAdjustVector, eDirec); }
+	_float3 Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec) { return m_pTerrainManager->Check_Terrain_Collision_Adjust(fCenter, fExtents, vAdjustVector, eDirec); }
 	_bool Check_OnGround(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_OnGround(fCenter, fExtents); }
 	void Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius) { m_pTerrainManager->Destroy_Terrain_Explosion(fPosition, fRadius); }
 
 	void Set_Render_Length(_float fLength) { m_pTerrainManager->Set_Render_Length(fLength); }
 
+	_bool Check_Wall(_float3 fCenter, _float3 fLook, _float fRange) { return m_pTerrainManager->Check_Wall(fCenter, fLook, fRange); }
+	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents) { return m_pTerrainManager->Check_Terrain_Collision(fCenter, fExtents); }
+	_bool Check_IsTerrain(_float3 fPosition) {return m_pTerrainManager->Check_IsTerrain(fPosition);}
+
 #pragma endregion
 
 #pragma region CAMERA
-	void SetCameraMode(CFreeCamera::CAMERAMODE eInput) { m_pCamera->SetCameraMode(eInput); }
+	void SetCameraMode(CAMERAMODE eInput) { m_pCamera->SetCameraMode(eInput); }
+	CAMERAMODE GetCameraMode() { return m_pCamera->GetCameraMode(); }
 	void ShakeCamera(_float fDeltaTime) { m_pCamera->ShakeCamera(fDeltaTime); }
 	_vector GetCameraPosition() { return m_pCamera->GetCameraPosition(); }
+	_vector GetCameraLook() { return m_pCamera->GetCameraLook();}
 #pragma endregion
 
 
@@ -179,12 +191,19 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void Gravity(CPhysicsManager::P_RESULT* tResult, _bool IsTerrainCollision, _float fTimeDelta) { m_pPhysicsManager->Gravity(tResult, IsTerrainCollision, fTimeDelta); }
 	void PushedPower(CPhysicsManager::P_RESULT* tResult, _float fTimeDelta) { m_pPhysicsManager->PushedPower(tResult, fTimeDelta); }// 푸시 파워 계산, 추후 회전 관련 기능 넣기 
 	void CheckTerrainCollision(CPhysicsManager::P_RESULT* tResult, _bool IsSlideControl) { m_pPhysicsManager->CheckTerrainCollision(tResult, IsSlideControl); } // 지형 충돌만 계산 
+
+	CPhysicsManager::P_RESULT Bounce_Physics(CTransform& Transform, CCollider& Collder, _bool IsGravity, _float fTimeDelta) { return m_pPhysicsManager->Bounce_Physics(Transform, Collder, IsGravity, fTimeDelta); }  // <- 지형에 튕기는 물체의 계산
+	CPhysicsManager::P_RESULT LandMine_Physics(CTransform& Transform, CCollider& Collder, _float fTimeDelta) { return m_pPhysicsManager->LandMine_Physics(Transform, Collder, fTimeDelta); }  // <- 지뢰 및 지형 설치물 전용 (벽면, 바닥면은 바운스, 윗면에는 안착함 
+
+	_bool Check_CCW_XZ(_float3 fPointA, _float3 fPointB, _float3 fPointC) { return m_pPhysicsManager->Check_CCW_XZ(fPointA, fPointB, fPointC); } // <- 양수가 나오면 반시계
+
 #pragma endregion
 
 #pragma region UIMANAGER
 	void ActivateCursor() { m_pUIManager->ActivateCursor(); }
 	void ShowInformMessage(wstring Text) { m_pUIManager->ShowInformMessage(Text); }
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
+	void MakeEnemyHpBar(CLongvinter_Container* pHost) { m_pUIManager->MakeEnemyHpBar(pHost); }
 #pragma endregion
 
 
@@ -219,7 +238,20 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		m_pInterActionManager->Input_ContainerColliderPointer(eContanerType, pHost, pCollider);
 	}
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+	{ 
+		m_pInterActionManager->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec); 
+	}
+
+
 #pragma endregion
+
+#pragma region EFFECT
+	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition) { m_pEffectManager->MakeEffect(eType, fPosition); }
+
+
+#pragma endregion
+	
 
 private: // <- 보유 중인 포인터 목록 
 	CGameInstance*			m_pGameInstance = { nullptr };
@@ -233,6 +265,7 @@ private: // <- 보유 중인 포인터 목록
 	CUIManager*				m_pUIManager = { nullptr };
 	CItemManager*			m_pItemManager = { nullptr };
 	CInterActionManager*	m_pInterActionManager = { nullptr };
+	CEffectManager*			m_pEffectManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;

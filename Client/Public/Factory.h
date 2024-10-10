@@ -7,6 +7,7 @@
 #include "../Default/UIPart_Defines.h"
 #include "../Default/UIPage_Defines.h"
 #include "../Default/InterAction_Defines.h"
+#include "../Default/Effect_Defines.h"
 
 BEGIN(Engine)
 
@@ -38,7 +39,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPart_Button* MakeUIPart_Button(CUIPart_Button::UIBUTTON_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
-
+	CUIPart_Bar* MakeUIPart_Bar(CUIPart_Bar::UIBAR_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr);
 	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f);
 	
 #pragma endregion
@@ -96,6 +97,7 @@ private: // <- 프로토타입 제작
 	HRESULT Ready_Prototype_UIPart();
 	HRESULT Ready_Prototype_UIPage();
 	HRESULT Ready_Prototype_InterAction();
+	HRESULT Ready_Prototype_Effect();
 
 #pragma endregion
 
