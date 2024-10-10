@@ -2,6 +2,7 @@
 
 #include "BackGround.h"
 #include "SurFace.h"
+#include "Sky.h"
 #include "Collider.h"
 
 #include "Container_Player.h"

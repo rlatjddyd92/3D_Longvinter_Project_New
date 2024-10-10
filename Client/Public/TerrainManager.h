@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "SurFace.h"
 #include "Monster.h"
+#include "Sky.h"
 
 BEGIN(Engine)
 class CShader;
@@ -119,9 +120,9 @@ public:
 		fPosition.x = max(0.f, fPosition.x);
 		fPosition.y = max(0.f, fPosition.y);
 		fPosition.z = max(0.f, fPosition.z);
-		fPosition.x = min((LCUBESIZE * LMAX_X) - 1.f, fPosition.x);
-		fPosition.y = min((LCUBESIZE * LMAX_Y) - 1.f, fPosition.y);
-		fPosition.z = min((LCUBESIZE * LMAX_Z) - 1.f, fPosition.z);
+		fPosition.x = min((LCUBESIZE * LMAX_X) - LCUBESIZE, fPosition.x);
+		fPosition.y = min((LCUBESIZE * LMAX_Y) - LCUBESIZE, fPosition.y);
+		fPosition.z = min((LCUBESIZE * LMAX_Z) - LCUBESIZE, fPosition.z);
 		return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
 
 
@@ -174,6 +175,7 @@ public:
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	class CCollider* m_pColliderCom = { nullptr };
+	class CSky* m_pSky = { nullptr };
 
 public:
 	static CTerrainManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

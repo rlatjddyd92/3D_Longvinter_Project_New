@@ -206,6 +206,7 @@
     <ClInclude Include="..\Public\Effect_Particle.h" />
     <ClInclude Include="..\Public\Particle_FIre.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
+    <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundManager.h" />
     <ClInclude Include="..\Public\SurFace.h" />
     <ClInclude Include="..\Public\TerrainManager.h" />
@@ -296,6 +297,7 @@
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
     <ClCompile Include="..\Private\Particle_FIre.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
+    <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\Private\SurFace.cpp" />
     <ClCompile Include="..\Private\TerrainManager.cpp" />

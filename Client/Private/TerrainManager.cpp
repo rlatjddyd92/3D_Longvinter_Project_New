@@ -44,7 +44,6 @@ void CTerrainManager::Priority_Update(_float fTimeDelta)
 
 
 
-
 }
 
 void CTerrainManager::Update(_float fTimeDelta)
@@ -67,6 +66,8 @@ void CTerrainManager::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrainManager::Render()
 {
+
+
 	for (auto& iter : m_mapInstancing_SurFace)
 	{
 		_vector vCamera = GET_INSTANCE->GetCameraPosition();
@@ -777,11 +778,13 @@ HRESULT CTerrainManager::Ready_Components()
 		TEXT("Com_Shader_1"), reinterpret_cast<CComponent**>(&m_pShaderCom_Gray))))
 		return E_FAIL;
 
-	
-
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Sky"), TEXT("Prototype_GameObject_Sky"));
+
+	m_pSky = static_cast<CSky*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Sky"), -1));
 
 	/* For.Com_Collider */
 	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
@@ -1151,7 +1154,7 @@ void CTerrainManager::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom_Gray);
 	Safe_Release(m_pColliderCom);
-	
+	//Safe_Release(m_pSky);
 
 	for (auto& iterX : m_vecLcubeInfo)
 	{

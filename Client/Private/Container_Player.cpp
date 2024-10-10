@@ -334,16 +334,19 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
 		GET_INSTANCE->ShowInformMessage(TEXT("F키 : 숄더뷰 모드"));
+		GET_INSTANCE->SetLenderLength(35.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_E) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
 		GET_INSTANCE->ShowInformMessage(TEXT("E키 : 에디터 카메라 모드"));
+		GET_INSTANCE->SetLenderLength(50.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
 		GET_INSTANCE->ShowInformMessage(TEXT("T키 : 3인칭 모드"));
+		GET_INSTANCE->SetLenderLength(20.f);
 	}
 }
 

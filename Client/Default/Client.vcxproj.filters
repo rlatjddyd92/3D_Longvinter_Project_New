@@ -244,6 +244,9 @@
     <Filter Include="99.Defines\03.Effect">
       <UniqueIdentifier>{9837c57b-78d3-40fd-8795-2780f58b9236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\02.TerrainManager\01.SkyBox">
+      <UniqueIdentifier>{f8f3093c-b9ea-4b85-8c07-d666cc0c1fd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -513,6 +516,9 @@
     <ClInclude Include="..\Public\EffectManager.h">
       <Filter>02.ClientInstance\10.EffectManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sky.h">
+      <Filter>02.ClientInstance\02.TerrainManager\01.SkyBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -727,6 +733,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectManager.cpp">
       <Filter>02.ClientInstance\10.EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sky.cpp">
+      <Filter>02.ClientInstance\02.TerrainManager\01.SkyBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

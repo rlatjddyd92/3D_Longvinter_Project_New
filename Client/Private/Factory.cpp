@@ -50,6 +50,10 @@ HRESULT CFactory::Setting_Program_Start()
 		CSurFace::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Prototype_UIPart()))
 		return E_FAIL;
 	if (FAILED(Ready_Prototype_UIPage()))
@@ -157,9 +161,9 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Cursor%d.dds"), 3))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Particle/Fire/T_SmokeDissolve1a_%d.dds"), 64))))
-		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_SkyBox"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/SkyBox/SkyBox0.dds"), 1))))
+		return E_FAIL;
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
@@ -488,6 +492,11 @@ HRESULT CFactory::Ready_Prototype_Buffer()
 	/* For. Prototype_Component_VIBuffer_Rect3D */
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
 		CVIBuffer_Rect3D::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_VIBuffer_Rect */
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
