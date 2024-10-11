@@ -87,7 +87,7 @@ void CFire::Update(_float fTimeDelta)
 
 			if (m_fMakeEffect >= 0.1f)
 			{
-				for (_int i = 0; i < 5; ++i)
+				for (_int i = 0; i < 3; ++i)
 					GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, iter->pCollider->GetBoundingCenter());
 			}
 		

@@ -123,7 +123,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
 			_float3 fDirec{};
 			XMStoreFloat3(&fDirec, vDirec);
-			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 2.f);
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 4.f);
 
 			if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
 				__super::Burning();

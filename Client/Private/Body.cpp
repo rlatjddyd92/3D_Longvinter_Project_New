@@ -51,11 +51,18 @@ void CBody::Priority_Update(_float fTimeDelta)
 void CBody::Update(_float fTimeDelta)
 {
 
+	_float3 fPosition = { m_pParentMatrix->m[3][0], m_pParentMatrix->m[3][1], m_pParentMatrix->m[3][2] };
 
-
-
-
-	m_pModelCom->Play_Animation(fTimeDelta);
+	if (!GET_INSTANCE->GetIsLender(fPosition))
+	{
+		m_fAnimTime_Deposit += fTimeDelta;
+	}
+	else
+	{
+		m_pModelCom->Play_Animation(fTimeDelta + m_fAnimTime_Deposit);
+		m_fAnimTime_Deposit = 0.f;
+	}
+	
 }
 
 void CBody::Late_Update(_float fTimeDelta)
@@ -68,6 +75,7 @@ void CBody::Late_Update(_float fTimeDelta)
 		cout << m_iBeforeState << *m_pParentState << "\n";
 		m_iBeforeState = *m_pParentState;
 		m_pModelCom->SetUp_Animation(m_iBeforeState, true);
+		m_fAnimTime_Deposit = 0.f;
 	}
 
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * XMLoadFloat4x4(m_pParentMatrix));

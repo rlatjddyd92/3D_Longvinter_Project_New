@@ -16,7 +16,7 @@ CParticle_Fire::CParticle_Fire(const CParticle_Fire& Prototype)
 HRESULT CParticle_Fire::Initialize_Prototype()
 {
 	return S_OK;
-}
+} 
 
 HRESULT CParticle_Fire::Initialize(void* pArg)
 {
@@ -34,12 +34,13 @@ HRESULT CParticle_Fire::Initialize(void* pArg)
 	m_bSpec_TerrainDelete = true;
 	m_tSpec.fTime = 3.f;
 	m_tSpec.fFly = 0.02f;
+	m_tSpec.fScale = 0.5f;
 	m_tSpec.fDirec = { 0.f,0.2f,0.f };
 	m_tSpec.fColor = { 0.f,0.f,0.f,1.f };
 	m_tSpec.fPowerDecrease = 0.01f;
 	m_tSpec.fPower = 0.1f;
 
-	m_pTransformCom->Set_Scaled(0.5f, 0.5f, 0.5f);
+	m_pTransformCom->Set_Scaled(2.f, 2.f, 2.f);
 
 	m_bChangeColor[0] = true;
 	m_bChangeColor[1] = true;
@@ -59,16 +60,16 @@ void CParticle_Fire::Priority_Update(_float fTimeDelta)
 
 	for (auto& iter : m_EffectInfolist)
 	{
-		if (_float(iter->fTime / m_tSpec.fTime) > 0.8f) // 흰색(에 가까운 색)
+		if (_float(iter->fTime / m_tSpec.fTime) > 0.95f) // 흰색(에 가까운 색)
 			iter->fColor = { 255.f / 255.f, 250.f / 255.f , 240.f / 255.f , 255.f / 255.f };
-		else if (_float(iter->fTime / m_tSpec.fTime) > 0.7f) // 노란색
+		else if (_float(iter->fTime / m_tSpec.fTime) > 0.85f) // 노란색
 			iter->fColor = { 255.f / 255.f, 215.f / 255.f , 0.f / 255.f , 255.f / 255.f };
-		else if (_float(iter->fTime / m_tSpec.fTime) > 0.6f) // 주황색
+		else if (_float(iter->fTime / m_tSpec.fTime) > 0.75f) // 주황색
 			iter->fColor = { 255.f / 255.f, 165.f / 255.f , 0.f / 255.f , 255.f / 255.f };
-		else if (_float(iter->fTime / m_tSpec.fTime) > 0.5f) // 붉은색
+		else if (_float(iter->fTime / m_tSpec.fTime) > 0.65f) // 붉은색
 			iter->fColor = { 255.f / 255.f, 69.f / 255.f , 0.f / 255.f , 255.f / 255.f };
-		else if (_float(iter->fTime / m_tSpec.fTime) > 0.4f) // 짙은 회색 
-			iter->fColor = { 50.f / 255.f, 50.f / 255.f , 50.f / 255.f , 255.f / 255.f };
+		else if (_float(iter->fTime / m_tSpec.fTime) > 0.55f) // 짙은 회색 
+			iter->fColor = { 70.f / 255.f, 70.f / 255.f , 70.f / 255.f , 255.f / 255.f };
 		else //if (_float(iter->fTime / m_tSpec.fTime) > 0.3f) // 회색
 			iter->fColor = { 105.f / 255.f, 105.f / 255.f , 105.f / 255.f , 255.f / 255.f };
 		//else  // 연한 회색
@@ -103,7 +104,12 @@ HRESULT CParticle_Fire::Render()
 
 	for (auto& iter : m_EffectInfolist)
 	{
-		_float fScale = _float(iter->fTime / m_tSpec.fTime) * 0.2f;
+		_float fScale = _float(iter->fTime / m_tSpec.fTime) * m_tSpec.fScale;
+
+		_float4x4 fMat{};
+		XMStoreFloat4x4(&fMat, XMMatrixIdentity());
+
+		m_pTransformCom->Set_WorldMatrix(fMat);
 
 		m_pTransformCom->Set_Scaled(fScale, fScale, fScale);
 
@@ -139,7 +145,7 @@ HRESULT CParticle_Fire::Render()
 		if (FAILED(m_pVIBufferCom->Render()))
 			return E_FAIL;
 
-		m_pTransformCom->Rotation({ 0.f,1.f,0.f }, -fAngle * PI_DEFINE);
+		
 	}
 
 

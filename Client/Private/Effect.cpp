@@ -125,10 +125,12 @@ _float CEffect::BillBoard(CTransform* pTransform)
 	XMStoreFloat3(&fCam, vCam);
 	XMStoreFloat3(&fLook, vLook);
 
-	if (!GET_INSTANCE->Check_CCW_XZ(fCam, { 0.f,0.f,0.f }, fLook))
+	fAngle += PI_DEFINE;
+
+	if (GET_INSTANCE->Check_CCW_XZ(fCam, { 0.f,0.f,0.f }, fLook))
 		fAngle *= -1;
 
-	pTransform->Rotation({ 0.f, 1.f, 0.f }, fAngle * PI_DEFINE);
+	pTransform->Rotation({ 0.f, 1.f, 0.f }, fAngle);
 
 	return fAngle;
 }

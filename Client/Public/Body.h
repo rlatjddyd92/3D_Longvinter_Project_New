@@ -52,6 +52,8 @@ protected:
 	const _uint* m_pParentState = { nullptr };
 	_uint		 m_iBeforeState = 0;
 
+	_float		 m_fAnimTime_Deposit = 0.f;
+
 protected:
 	HRESULT Ready_Components();
 
