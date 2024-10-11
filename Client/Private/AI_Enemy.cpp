@@ -41,7 +41,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	m_fDetective_Length = 20.f;
 	
 	GET_INSTANCE->MakeEnemyHpBar(this);
-
+	GET_INSTANCE->MakeSymbol(this);
 	return S_OK;
 }
 

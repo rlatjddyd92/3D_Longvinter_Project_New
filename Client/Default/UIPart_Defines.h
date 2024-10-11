@@ -7,3 +7,4 @@
 #include "UIPart_Cell.h"
 #include "UIPart_TextBox.h"
 #include "UIPart_Bar.h"
+#include "UIPart_Symbol.h"

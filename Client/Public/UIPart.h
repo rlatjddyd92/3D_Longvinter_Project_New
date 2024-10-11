@@ -41,10 +41,15 @@ public:
 
 protected:
 	HRESULT Ready_Components();
+
+	_bool SetPositionByObject(_float* fX, _float* fY, _matrix mHost);
+
 	_uint m_iTextureIndex = 0;
 
 	_bool m_bOnCursor = false; // <- 마우스 위치와 겹침 
 	_bool m_bPushed[2] = { false,false }; // <- 마우스, 키로 작동시킴 [0] : 이전 프레임, [1] : 현재 프레임 <- 둘 다 true인 경우 Pressing
+
+	_float3 m_fAdjust = { 0.f,0.f,0.f };
 
 public:
 	static CUIPart* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

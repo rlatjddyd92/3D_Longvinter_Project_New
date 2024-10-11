@@ -37,7 +37,7 @@ public:
 	_float Get_HpMax() { return m_fHp_Max; }
 	
 	_bool Get_CC(CROWDCONTROL eType) { return m_vecCrowdControl[_int(eType)]; }
-
+	AI_STATUS Get_AI_Status() { return m_eAI_Status; }
 
 
 protected:
@@ -66,7 +66,7 @@ protected:
 			m_fHp = 0.f;
 	}
 
-
+	
 
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta);

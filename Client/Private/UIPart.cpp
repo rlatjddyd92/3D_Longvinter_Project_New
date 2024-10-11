@@ -133,6 +133,38 @@ HRESULT CUIPart::Ready_Components()
 	return S_OK;
 }
 
+_bool CUIPart::SetPositionByObject(_float* fX, _float* fY, _matrix mHost)
+{
+	_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
+	_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
+
+	_vector vResult = { m_fAdjust.x, m_fAdjust.y, m_fAdjust.z, 0.f };
+
+	// 투영 좌표 계산
+	vResult = XMVector3Transform(vResult, mHost);
+	vResult = XMVector3Transform(vResult, mView);
+	vResult = XMVector3Transform(vResult, mProj);
+
+
+
+	// W나누기
+	_float4 fResult{};
+	XMStoreFloat4(&fResult, vResult);
+
+	if (fResult.w < 0.f)
+		return false;
+
+
+	m_fX = fResult.x / fResult.w;
+	m_fY = fResult.y / fResult.w;
+
+	// 스크린 좌표로 변환
+	m_fX = ((m_fX + 1.f) * 0.5) * 1280.f;
+	m_fY = ((1.f - m_fY) * 0.5) * 720.f;
+
+	return true;
+}
+
 CUIPart* CUIPart::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPart* pInstance = new CUIPart(pDevice, pContext);

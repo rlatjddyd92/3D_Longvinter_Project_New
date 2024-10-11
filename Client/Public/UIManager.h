@@ -55,7 +55,7 @@ public: // 툴팁 관련 함수
 
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
-
+	void MakeSymbol(CLongvinter_Container* pHost);
 
 private:
 	HRESULT Ready_Components();
@@ -83,6 +83,7 @@ private:
 
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
+	list<CUIPart_Symbol*> m_Symbollist;
 
 	_int m_iMaxInform = 10;
 

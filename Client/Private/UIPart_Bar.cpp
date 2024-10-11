@@ -30,6 +30,8 @@ HRESULT CUIPart_Bar::Initialize(void* pArg)
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
 	
+	m_fAdjust = { 0.f, 2.f, 0.f };
+
 	
 
 	
@@ -96,39 +98,9 @@ HRESULT CUIPart_Bar::Render()
 
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			return S_OK;
-
-
-		_matrix mHost = XMLoadFloat4x4(&m_pHost->GetWorldMatrix());
-	
-		_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
-		_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
-
-		_vector vResult = { 0.f, 2.f, 0.f, 0.f };
 		
-		// 투영 좌표 계산
-		vResult = XMVector3Transform(vResult, mHost);
-		vResult = XMVector3Transform(vResult, mView);
-		vResult = XMVector3Transform(vResult, mProj);
-
-	
-
-		// W나누기
-		_float4 fResult{};
-		XMStoreFloat4(&fResult, vResult);
-
-		if (fResult.w <0.f)
+		if (!SetPositionByObject(&m_fX, &m_fY, XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
 			return S_OK;
-
-
-		m_fX = fResult.x / fResult.w;
-		m_fY = fResult.y / fResult.w;
-
-		// 스크린 좌표로 변환
-		m_fX = ((m_fX + 1.f) * 0.5) * 1280.f;
-		m_fY = ((1.f - m_fY) * 0.5) * 720.f;
-
-
-
 		
 		m_fFill_X = m_fX;
 		m_fFill_SizeX = m_fSizeX;

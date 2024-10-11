@@ -105,6 +105,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
 	}
+	CUIPart_Symbol* MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr) 
+	{ 
+		return m_pFactory->MakeUIPart_Symbol(eType, fX, fY, fSizeX, fSizeY, pHost);
+	}
 
 	// UI_Page
 	CUIPage_Main* MakeUIPage_Main() { return m_pFactory->MakeUIPage_Main(); }
@@ -204,6 +208,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ShowInformMessage(wstring Text) { m_pUIManager->ShowInformMessage(Text); }
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 	void MakeEnemyHpBar(CLongvinter_Container* pHost) { m_pUIManager->MakeEnemyHpBar(pHost); }
+	void MakeSymbol(CLongvinter_Container* pHost) { m_pUIManager->MakeSymbol(pHost); }
 #pragma endregion
 
 

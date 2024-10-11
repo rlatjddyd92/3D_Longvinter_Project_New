@@ -247,6 +247,9 @@
     <Filter Include="02.ClientInstance\02.TerrainManager\01.SkyBox">
       <UniqueIdentifier>{f8f3093c-b9ea-4b85-8c07-d666cc0c1fd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol">
+      <UniqueIdentifier>{7ea65dc0-1023-4eb4-8d32-4c0996996575}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -519,6 +522,9 @@
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.ClientInstance\02.TerrainManager\01.SkyBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPart_Symbol.h">
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -736,6 +742,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.ClientInstance\02.TerrainManager\01.SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_Symbol.cpp">
+      <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

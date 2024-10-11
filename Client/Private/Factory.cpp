@@ -145,6 +145,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cell/InvenCell_Empty.dds"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Symbol_Back"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Symbol/T_Rounded32.dds"), 1))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ShotGun"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconAutoShotgun.dds"), 1))))
 		return E_FAIL;
@@ -522,6 +526,9 @@ HRESULT CFactory::Ready_Prototype_UIPart()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Bar"), CUIPart_Bar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Symbol"), CUIPart_Symbol::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -739,6 +746,20 @@ CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eT
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), TEXT("Prototype_UIPart_TextBox"), &pTemp);
 
 	return static_cast<CUIPart_TextBox*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), -1));
+}
+
+CUIPart_Symbol* CFactory::MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost)
+{
+	CUIPart_Symbol::UISymbol_DESC		pTemp{};
+	pTemp.eType = eType;
+	pTemp.fX = fX;
+	pTemp.fY = fY;
+	pTemp.fSizeX = fSizeX;
+	pTemp.fSizeY = fSizeY;
+	pTemp.pHost = pHost;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Symbol"), TEXT("Prototype_UIPart_Symbol"), &pTemp);
+
+	return static_cast<CUIPart_Symbol*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Symbol"), -1));
 }
 
 CUIPage_Main* CFactory::MakeUIPage_Main()
