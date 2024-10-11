@@ -344,12 +344,15 @@ void CTerrainManager::Change_Surface(_bool bLinked)
 
 void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius)
 {
-	_uint iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
-	_uint iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
-	_uint iMinY = max(m_iBedRock, (fPosition.y - fRadius) / LCUBESIZE);
-	_uint iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
-	_uint iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
-	_uint iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
+	_int iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
+	_int iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
+	_int iMinY = max(m_iBedRock, (fPosition.y - fRadius) / LCUBESIZE);
+	_int iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
+	_int iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
+	_int iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
+
+	Adjust_Index(&iMinX, &iMinY, &iMinZ);
+	Adjust_Index(&iMaxX, &iMaxY, &iMaxZ);
 
 	for (_int i = iMinX; i <= iMaxX;++i)
 		for (_int j = iMinY; j <= iMaxY; ++j)
@@ -490,6 +493,20 @@ _float3 CTerrainManager::IsPicking_Instancing(SURFACE* pSurface)
 	return vPickPos;
 }
 
+void CTerrainManager::Adjust_Index(_int* iX, _int* iY, _int* iZ)
+{
+	if (*iX < 0.f) *iX = 0.f;
+	if (*iY < 0.f) *iY = 0.f;
+	if (*iZ < 0.f) *iZ = 0.f;
+
+	*iX = min(*iX, m_vecLcubeInfo.size() - 1);
+	*iY = min(*iY, m_vecLcubeInfo[*iX].size() - 1);
+	*iZ = min(*iZ, m_vecLcubeInfo[*iX][*iY].size() - 1);
+	*iX = max(*iX, 0);
+	*iY = max(*iY, 0);
+	*iZ = max(*iZ, 0);
+}
+
 _float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
 {
 	_float3 vCenter = fCenter;
@@ -499,24 +516,27 @@ _float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3
 	_float3 vExtents = fExtents;
 
 	// 1. 객체가 존재할 수 있는 큐브 인덱스 범위 잡기 
-	_uint iMinX = (vCenter.x - vExtents.x) / LCUBESIZE;
-	_uint iMaxX = (vCenter.x + vExtents.x) / LCUBESIZE;
-	_uint iMinY = (vCenter.y - vExtents.y) / LCUBESIZE;
-	_uint iMaxY = (vCenter.y + vExtents.y) / LCUBESIZE;
-	_uint iMinZ = (vCenter.z - vExtents.z) / LCUBESIZE;
-	_uint iMaxZ = (vCenter.z + vExtents.z) / LCUBESIZE;
+	_int iMinX = (vCenter.x - vExtents.x) / LCUBESIZE;
+	_int iMaxX = (vCenter.x + vExtents.x) / LCUBESIZE;
+	_int iMinY = (vCenter.y - vExtents.y) / LCUBESIZE;
+	_int iMaxY = (vCenter.y + vExtents.y) / LCUBESIZE;
+	_int iMinZ = (vCenter.z - vExtents.z) / LCUBESIZE;
+	_int iMaxZ = (vCenter.z + vExtents.z) / LCUBESIZE;
 
-	if (iMinX * iMinY * iMaxZ < 0)
+	Adjust_Index(&iMinX, &iMinY, &iMinZ);
+	Adjust_Index(&iMaxX, &iMaxY, &iMaxZ);
+
+	/*if ((iMinX < 0.f) + (iMinY < 0.f) + (iMinZ < 0.f) > 0)
 		return TERRAINERROR;
 
 	if (iMaxX >= LMAX_X)
 		return TERRAINERROR;
 
-	if (iMaxY >= LMAX_Y + 5)
+	if (iMaxY >= LMAX_Y)
 		return TERRAINERROR;
 
 	if (iMaxZ >= LMAX_Z)
-		return TERRAINERROR;
+		return TERRAINERROR;*/
 
 	// 2. 겹치는 지형 큐브가 있는 지 확인 
 	for (_uint i = iMinX; i <= iMaxX; ++i)

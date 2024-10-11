@@ -57,7 +57,6 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 
 
 	if (m_fActionTimer == 0.f)
-		if (m_iFace == _int(HUMAN_FACE::FACE_SAD))
 		{
 			m_iFace = _int(HUMAN_FACE::FACE_NORMAL);
 			static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
@@ -163,14 +162,32 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 	if (m_eAI_Status == AI_STATUS::AI_SERACH)
 	{
 		if (m_fMove_Angle == 0.f)
-		if (_int(m_fSearch_Time_Now / m_fSearch_Interval) > m_iSearch_Count)
-		{
-			m_fMove_Angle = (_float(rand() % 5000) / (_float(rand() % 4999) + 1.f)) * PI_DEFINE;
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
-			++m_iSearch_Count;
-		}
+			if (_int(m_fSearch_Time_Now / m_fSearch_Interval) > m_iSearch_Count)
+			{
 
-		
+				m_fMove_Angle = m_pGameInstance->Get_Random(2.f, 4.f);
+
+				if (m_pGameInstance->Get_Random(0.f, 2.f) > 1.f)
+					m_fMove_Angle *= -1;
+
+
+				++m_iSearch_Count;
+			}
+
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
+
+		if (m_fMove_Angle < 0.f)
+		{
+			m_fMove_Angle += fTimeDelta;
+			if (m_fMove_Angle > 0.f)
+				m_fMove_Angle = 0.f;
+		}
+		else if (m_fMove_Angle > 0.f)
+		{
+			m_fMove_Angle -= fTimeDelta;
+			if (m_fMove_Angle < 0.f)
+				m_fMove_Angle = 0.f;
+		}
 
 		_float3 fLook{};
 		XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
@@ -214,14 +231,65 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 			m_iState = STATE_WALK;
 		}
 	}
+	else if (m_eAI_Status == AI_STATUS::AI_PANIC)
+	{
+		if (m_fMove_Angle == 0.f)
+			if (_int(m_fSearch_Time_Now / m_fSearch_Interval) > m_iSearch_Count)
+			{
+
+				m_fMove_Angle = m_pGameInstance->Get_Random(2.f,4.f);
+
+				if (m_pGameInstance->Get_Random(0.f, 2.f) > 1.f)
+					m_fMove_Angle *= -1;
+
+				
+				++m_iSearch_Count;
+			}
+
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f),m_fMove_Angle);
+
+	
+			
+
+		_float3 fLook{};
+		XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+		{
+			if (GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
+			{
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+			}
+			else if (rand() % 10 == 0)
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+		}
+			
+
+		
+
+
+		m_pTransformCom->Go_Straight(fTimeDelta * 1.5f, true);
+		m_iState = STATE_WALK;
+	}
 }
 
 void CAI_Enemy::Weapon_Control(_float fTimeDelta)
 {
 	__super::Weapon_Control(fTimeDelta);
 
+	if (m_iState == STATE_IDEL)
+	{
+		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if ((m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER) || (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN))
+			m_iState = STATE_AIM;
+		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_AIM;
+		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_THROW_WAIT;
+	}
 	
-	if (m_fMove_Angle < 0.1f)
+	if (abs(m_fMove_Angle) < 0.5f)
 	{
 		_float3 fStartPostion{};
 		_float3 fPushedDirec{};

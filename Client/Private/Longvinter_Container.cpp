@@ -56,13 +56,14 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
-	if (m_eAI_Status == AI_STATUS::AI_SERACH)
+	if ((m_eAI_Status == AI_STATUS::AI_SERACH) || (m_eAI_Status == AI_STATUS::AI_PANIC))
 	if (m_fSearch_Time_Now < m_fSearch_Time)
 	{
 		m_fSearch_Time_Now += fTimeDelta;
 		if (m_fSearch_Time_Now > m_fSearch_Time)
 		{
-			End_Search();
+			if (m_eAI_Status == AI_STATUS::AI_SERACH)
+				End_Search();
 		}	
 	}
 
@@ -75,14 +76,21 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 		{
 			m_vecCrowdControl_Time[i] = 0.f;
 			m_vecCrowdControl[i] = false;
+
+			if (i == _int(CROWDCONTROL::CC_BURN))
+				End_Panic();
 		}
 	}
+
+	
+		
 
 }
 
 void CLongvinter_Container::Update(_float fTimeDelta)
 {
 	
+
 }
 
 void CLongvinter_Container::Late_Update(_float fTimeDelta)
@@ -158,7 +166,7 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 	_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
 	_float fAngle = acos(fDot / fCos);
 
-	if ((isnan(fAngle)) || (fAngle > m_fLook_Angle))
+	if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
 	{
 		*bCanSee = false;
 		*fTurnAngle = 0.f;
@@ -227,6 +235,24 @@ void CLongvinter_Container::Start_Serach()
 }
 
 void CLongvinter_Container::End_Search()
+{
+	m_eAI_Status = AI_STATUS::AI_IDLE;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 20.f;
+	m_fSearch_Interval = 5.f;
+	m_iSearch_Count = 0;
+}
+
+void CLongvinter_Container::Start_Panic()
+{
+	m_eAI_Status = AI_STATUS::AI_PANIC;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 1000.f;
+	m_fSearch_Interval = 0.5f;
+	m_iSearch_Count = 0;
+}
+
+void CLongvinter_Container::End_Panic()
 {
 	m_eAI_Status = AI_STATUS::AI_IDLE;
 	m_fSearch_Time_Now = 0.f;

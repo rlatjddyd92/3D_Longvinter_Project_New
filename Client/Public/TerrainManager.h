@@ -117,13 +117,13 @@ public:
 	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents); // <- 단순히 충돌만 검출
 	_bool Check_IsTerrain(_float3 fPosition) 
 	{
-		fPosition.x = max(0.f, fPosition.x);
-		fPosition.y = max(0.f, fPosition.y);
-		fPosition.z = max(0.f, fPosition.z);
-		fPosition.x = min((LCUBESIZE * LMAX_X) - LCUBESIZE, fPosition.x);
-		fPosition.y = min((LCUBESIZE * LMAX_Y) - LCUBESIZE, fPosition.y);
-		fPosition.z = min((LCUBESIZE * LMAX_Z) - LCUBESIZE, fPosition.z);
-		return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
+		_int iX = _int(fPosition.x / LCUBESIZE);
+		_int iY = _int(fPosition.y / LCUBESIZE);
+		_int iZ = _int(fPosition.z / LCUBESIZE);
+
+		Adjust_Index(&iX, &iY, &iZ);
+
+		return m_vecLcubeInfo[iX][iY][iZ].m_bLand;}
 
 
 #pragma endregion
@@ -138,6 +138,8 @@ private:
 
 	void SetPosition_Surface(_int iX, _int iY, _int iZ, LCUBEDIRECION eDirec, _float4x4* fSurface);
 	_float3 IsPicking_Instancing(SURFACE* pSurface);
+
+	void Adjust_Index(_int* iX, _int* iY, _int* iZ);
 
 private:
 	

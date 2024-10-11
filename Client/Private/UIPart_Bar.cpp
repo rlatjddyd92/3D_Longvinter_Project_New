@@ -69,39 +69,7 @@ void CUIPart_Bar::Late_Update(_float fTimeDelta)
 {
 	if (m_eType == BAR_ENEMY_HP)
 	{
-		if ((m_pHost == nullptr) && (m_pHost->GetDead()))
-		{
-			__super::SetDead();
-			return;
-		}
-
-		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
-		vPosition += _vector{ 0.f,0.7f,0.f,0.f };
-
-		_matrix mPosition = XMMatrixIdentity();
-		_matrix mProj{};
-		_matrix mView{};
-
-		mPosition.r[3] = vPosition;
-
-
-		mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
-		mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
-
-		mPosition = mProj * mView * mPosition;
-
-		mPosition.r[3].m128_f32[0] = (mPosition.r[3].m128_f32[0] + 1.f) * 0.5f * g_iWinSizeX;
-		mPosition.r[3].m128_f32[1] = (1.f - mPosition.r[3].m128_f32[1]) * 0.5f * g_iWinSizeY;
-
-
-		m_fX = mPosition.r[3].m128_f32[0];
-		m_fY = mPosition.r[3].m128_f32[1];
-
-		m_fFill_X = m_fX;
-		m_fFill_SizeX = m_fSizeX;
-
-		m_fFill_SizeX = (m_pHost->Get_Hp() / m_pHost->Get_HpMax()) * m_fSizeX;
-		m_fFill_X = m_fX - (m_fSizeX * 0.5f) + (m_fFill_SizeX * 0.5f);
+		
 	}
 	else 
 		__super::Late_Update(fTimeDelta);
@@ -121,7 +89,7 @@ HRESULT CUIPart_Bar::Render()
 			__super::SetDead();
 			return S_OK;
 		}
-			
+
 		_float3 fPosition{};
 		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
 		XMStoreFloat3(&fPosition, vPosition);
@@ -129,6 +97,44 @@ HRESULT CUIPart_Bar::Render()
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			return S_OK;
 
+
+		_matrix mHost = XMLoadFloat4x4(&m_pHost->GetWorldMatrix());
+	
+		_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
+		_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
+
+		_vector vResult = { 0.f, 2.f, 0.f, 0.f };
+		
+		// 투영 좌표 계산
+		vResult = XMVector3Transform(vResult, mHost);
+		vResult = XMVector3Transform(vResult, mView);
+		vResult = XMVector3Transform(vResult, mProj);
+
+	
+
+		// W나누기
+		_float4 fResult{};
+		XMStoreFloat4(&fResult, vResult);
+
+		if (fResult.w <0.f)
+			return S_OK;
+
+
+		m_fX = fResult.x / fResult.w;
+		m_fY = fResult.y / fResult.w;
+
+		// 스크린 좌표로 변환
+		m_fX = ((m_fX + 1.f) * 0.5) * 1280.f;
+		m_fY = ((1.f - m_fY) * 0.5) * 720.f;
+
+
+
+		
+		m_fFill_X = m_fX;
+		m_fFill_SizeX = m_fSizeX;
+
+		m_fFill_SizeX = (m_pHost->Get_Hp() / m_pHost->Get_HpMax()) * m_fSizeX;
+		m_fFill_X = m_fX - (m_fSizeX * 0.5f) + (m_fFill_SizeX * 0.5f);
 
 
 		for (_int i = 0; i < 2; ++i)
@@ -145,7 +151,8 @@ HRESULT CUIPart_Bar::Render()
 
 				m_pTransformCom->Set_Scaled(m_fSizeX, m_fSizeY, 1.f);
 
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION,XMVectorSet(m_fX - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+					XMVectorSet(m_fX - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
 			}
 			else
 			{
@@ -159,10 +166,9 @@ HRESULT CUIPart_Bar::Render()
 
 				m_pTransformCom->Set_Scaled(m_fFill_SizeX, m_fSizeY, 1.f);
 
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION,XMVectorSet(m_fFill_X - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+					XMVectorSet(m_fFill_X - m_fViewWidth * 0.5f, -m_fY + m_fViewHeight * 0.5f, 0.f, 1.f));
 			}
-			
-
 
 			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 				return E_FAIL;

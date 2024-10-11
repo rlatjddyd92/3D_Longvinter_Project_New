@@ -73,6 +73,9 @@ protected: // AI 관련 함수
 	void Start_Serach();
 	void End_Search();
 
+	void Start_Panic();
+	void End_Panic();
+
 
 
 protected: // <- 상태 제어용
@@ -106,6 +109,7 @@ protected:
 
 	_float m_fMove_Angle = 0.f;
 
+	_float m_fMakeEffect = 0.1f;
 
 	// serach
 	_float m_fSearch_Time_Now = 0.f;
