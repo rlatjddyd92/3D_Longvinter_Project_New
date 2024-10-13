@@ -230,10 +230,9 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_SHOTGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.5f;
+		m_fAttackDelay = 1.f;
 	}
-
-
+	
 
 }
 

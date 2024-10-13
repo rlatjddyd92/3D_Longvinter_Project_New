@@ -221,6 +221,7 @@
     <ClInclude Include="..\Public\Tool_Empty.h" />
     <ClInclude Include="..\Public\Tool_FireThrower.h" />
     <ClInclude Include="..\Public\Tool_LandMine.h" />
+    <ClInclude Include="..\Public\Tool_Machete.h" />
     <ClInclude Include="..\Public\Tool_MachineGun.h" />
     <ClInclude Include="..\Public\Tool_ShotGun.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -314,6 +315,7 @@
     <ClCompile Include="..\Private\Tool_Empty.cpp" />
     <ClCompile Include="..\Private\Tool_FireThrower.cpp" />
     <ClCompile Include="..\Private\Tool_LandMine.cpp" />
+    <ClCompile Include="..\Private\Tool_Machete.cpp" />
     <ClCompile Include="..\Private\Tool_MachineGun.cpp" />
     <ClCompile Include="..\Private\Tool_ShotGun.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />

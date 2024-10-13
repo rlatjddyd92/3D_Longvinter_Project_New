@@ -249,7 +249,9 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconMine"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconMine.dds"), 1))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconMachete"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconMachete.dds"), 1))))
+		return E_FAIL;
 
 	
 
@@ -286,6 +288,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sad.dds"), 1))))
 		return E_FAIL;
+
+
+
+	
 
 	return S_OK;
 }
@@ -340,6 +346,9 @@ HRESULT CFactory::Ready_Prototype_Part()
 		CTool_Bow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tool_Machete"),
+		CTool_Machete::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
@@ -436,7 +445,10 @@ HRESULT CFactory::Ready_Prototype_Model()
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_MachineGun"), "../Bin/Resources/Models/MachineGun/HeavyMachineGun", PreTransformMatrix)))
 		return E_FAIL;
 
-
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Machete"), "../Bin/Resources/Models/Machete/Machete", PreTransformMatrix)))
+		return E_FAIL;
 
 	return S_OK;
 }

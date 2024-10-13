@@ -314,6 +314,17 @@ HRESULT CItemManager::Setting_ItemInfo()
 	m_vecTool[_int(ITEMINDEX::ITEM_BOW)] = static_cast<CTool*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_Bow"), -1));
 
 
+	m_vecItemInfo[_int(ITEMINDEX::ITEM_MACHETE)] =
+	{ ITEMINDEX::ITEM_MACHETE, TEXT("마체테"), TEXT("근거리의 적을 공격합니다."), true,  ITEMTYPE::ITEM_TYPE_WEAPON, false, 1000.f, 22000, 500.f,10.f , 0.f };
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconMachete"),
+		TEXT("Com_Texture_24"), reinterpret_cast<CComponent**>(&m_vecItemInvenTexture[_int(ITEMINDEX::ITEM_MACHETE)]))))
+		return E_FAIL;
+	m_vecItemTag[_int(ITEMINDEX::ITEM_MACHETE)].resize(_int(ITEMTAG::ITEM_TAG_END));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_Machete"), TEXT("Prototype_GameObject_Tool_Machete"), &ToolDesc);
+	m_vecTool[_int(ITEMINDEX::ITEM_MACHETE)] = static_cast<CTool*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_Machete"), -1));
+
+
 
 
 

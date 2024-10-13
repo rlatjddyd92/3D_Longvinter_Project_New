@@ -54,7 +54,6 @@ void CBody::Update(_float fTimeDelta)
 {
 
 	
-	
 }
 
 void CBody::Late_Update(_float fTimeDelta)

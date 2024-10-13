@@ -36,14 +36,44 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_fClosuerLimit_Length = 5.f;
-	m_fAttack_Length = 15.f;
-	m_fDetective_Length = 20.f;
+	
 	
 	m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
 
 	GET_INSTANCE->MakeEnemyHpBar(this);
 	GET_INSTANCE->MakeSymbol(this);
+
+	_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
+
+	
+	m_fDetective_Length = 20.f;
+
+	if (iWeapon == 0)
+	{
+		m_fClosuerLimit_Length = 5.f;
+		m_fAttack_Length = 15.f;
+		m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
+	}
+		
+	else if (iWeapon == 1)
+	{
+		m_fClosuerLimit_Length = 1.f;
+		m_fAttack_Length = 3.f;
+		m_eWeapon = ITEMINDEX::ITEM_SHOTGUN;
+	}
+		
+	else if (iWeapon == 2)
+	{
+		m_fClosuerLimit_Length = 0.f;
+		m_fAttack_Length = 1.f;
+		m_eWeapon = ITEMINDEX::ITEM_MACHETE;
+	}
+		
+
+
+	
+
+
 	return S_OK;
 }
 
@@ -219,7 +249,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		}
 			
 
-
+		bMove = true;
 		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
 		m_iState = STATE_WALK;
 
@@ -252,7 +282,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 					m_bJump = true;
 				}
 			}
-
+			bMove = true;
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
 			m_iState = STATE_WALK;
 		}
@@ -294,7 +324,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 				m_bJump = true;
 			}
-				
+			bMove = true;
 		}
 			
 
@@ -309,45 +339,8 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 void CAI_Enemy::Weapon_Control(_float fTimeDelta)
 {
 	__super::Weapon_Control(fTimeDelta);
-
-	if (m_iState == STATE_IDEL)
-	{
-		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if ((m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER) || (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN))
-			m_iState = STATE_AIM;
-		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_AIM;
-		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_THROW_WAIT;
-	}
 	
-	if (abs(m_fMove_Angle) < 0.5f)
-	{
-		_float3 fStartPostion{};
-		_float3 fPushedDirec{};
 
-		_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f };
-		XMStoreFloat3(&fStartPostion, vStartPosition);
-
-		_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
-		XMStoreFloat3(&fPushedDirec, vPushedDirec);
-
-		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
-			m_iState = STATE_GUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_HANDGUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_GRANADE;
-
-		if (m_fAttackDelay == 0.f)
-		{
-			__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
-		}
-
-	}
 }
 
 void CAI_Enemy::Camera_Control(_float fTimeDelta)

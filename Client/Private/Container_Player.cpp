@@ -96,15 +96,13 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 		if (static_cast<CBody*>(m_Parts[PART_BODY])->GetEnd())
 		{
 			if (m_iState == STATE_GRANADE)
-			{
-				
 				m_iState = STATE_THROW_WAIT;
-			}
-				
 			else if ((m_iState == STATE_HANDGUN) || (m_iState == STATE_GUN))
 				m_iState = STATE_AIM;
 			else if (m_iState == STATE_CHAINSAW)
 				m_iState = STATE_CHAINSAW;
+			else if (m_iState == STATE_HIT)
+				m_iState = STATE_IDEL;
 		}
 
 	}
@@ -316,12 +314,23 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 			m_iState = STATE_AIM;
 		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
 			m_iState = STATE_GRANADE;
+		else if (eNowType == ITEMINDEX::ITEM_MACHETE)
+			m_iState = STATE_HIT;
 
 		if (m_fAttackDelay == 0.f)
 		{
 			m_bNonLoopAnimReset = true;
 
-			if (m_iState != STATE_GRANADE)
+			if (m_iState == STATE_GRANADE)
+			{
+				m_fPreAttackDelay = 1.3f;
+			}
+			else if (m_iState == STATE_HIT)
+			{
+				m_fAttackDelay = 0.5f;
+				m_fPreAttackDelay = 0.5f;
+			}
+			else 
 			{
 				_float3 fStartPostion{};
 				_float3 fPushedDirec{};
@@ -336,9 +345,6 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 
 				__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 			}
-			else
-				m_fPreAttackDelay = 1.3f;
-			
 		}
 	}
 
@@ -358,7 +364,7 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 			else
 				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
-			__super::UsingWeapon(ITEMINDEX::ITEM_GRANADE, fStartPostion, fPushedDirec);
+			__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 
 			m_fPreAttackDelay = 0.f;
 		}
@@ -373,7 +379,7 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 
 	if (bMove == false)
 		if ((m_iState != STATE_GRANADE) && (m_iState != STATE_HANDGUN))
-			if (m_iState != STATE_GUN)
+			if ((m_iState != STATE_GUN) && (m_iState != STATE_HIT))
 	{
 		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
 			m_iState = STATE_CHAINSAW;
@@ -385,6 +391,8 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 			m_iState = STATE_AIM;
 		else if (eNowType == ITEMINDEX::ITEM_FIRETHROWER)
 			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_THROW_WAIT;
 		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
 			m_iState = STATE_THROW_WAIT;
 		else 

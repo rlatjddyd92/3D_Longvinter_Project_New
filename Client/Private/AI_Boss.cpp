@@ -42,12 +42,16 @@ HRESULT CAI_Boss::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Scaled(1.5f, 1.5f, 1.5f);
 
+	m_fHp_Max = 10000.f;
+	m_fHp = m_fHp_Max;
+
 	m_iBody = _int(HUMAN_BODY::BODY_RED);
 	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
-	m_eWeapon = ITEMINDEX::ITEM_END;
 
 	GET_INSTANCE->MakeEnemyHpBar(this);
 	GET_INSTANCE->MakeSymbol(this);
+
+	m_eWeapon = ITEMINDEX::ITEM_MACHETE;
 	return S_OK;
 }
 
@@ -199,7 +203,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 	if (m_eAI_Status == AI_STATUS::AI_SERACH)
 	{
 		
-
+		bMove = true;
 		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
 		m_iState = STATE_IDEL;
 
@@ -214,16 +218,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 		}
 		else if (m_fDistance_from_Player < m_fAttack_Length)
 		{
-			if (abs(m_fMove_Angle) < 0.5f)
-				if (m_fAttackDelay == 0.f)
-				{
-					// 근접 공격 객체 추가 
-					if (m_iState == STATE_HIT)
-						static_cast<CBody*>(m_Parts[PART_BODY])->Start_NonLoopAnim();
-
-					m_iState = STATE_HIT;
-					m_fAttackDelay = 3.f;
-				}
+			Weapon_Control(fTimeDelta);
 		}
 		else if (m_fDistance_from_Player < m_fDetective_Length)
 		{
@@ -234,7 +229,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 			{
 				if (m_bJump == true)
 				{
-					GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, this, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+					
 					m_bJump = false;
 				}
 
@@ -249,7 +244,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 					m_bJump = true;
 				}
 			}
-
+			bMove = true;
 			m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
 			m_iState = STATE_WALK;
 		}
@@ -278,7 +273,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 		{
 			if (m_bJump == true)
 			{
-				GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, this, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+				
 				m_bJump = false;
 			}
 
@@ -297,7 +292,7 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 				
 		}
 
-
+		bMove = true;
 		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
 		m_iState = STATE_WALK;
 	}
@@ -305,46 +300,13 @@ void CAI_Boss::Moving_Control(_float fTimeDelta)
 
 void CAI_Boss::Weapon_Control(_float fTimeDelta)
 {
+	_float fDelay = m_fAttackDelay;
+
 	__super::Weapon_Control(fTimeDelta);
 
-	if (m_iState == STATE_IDEL)
-	{
-		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if ((m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER) || (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN))
-			m_iState = STATE_AIM;
-		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_AIM;
-		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_THROW_WAIT;
-	}
+	if ((fDelay == 0.f) && (fDelay < m_fAttackDelay))
+		m_fAttackDelay = 3.f;
 
-	if (abs(m_fMove_Angle) < 0.5f)
-	{
-		_float3 fStartPostion{};
-		_float3 fPushedDirec{};
-
-		_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f };
-		XMStoreFloat3(&fStartPostion, vStartPosition);
-
-		_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
-		XMStoreFloat3(&fPushedDirec, vPushedDirec);
-
-		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
-			m_iState = STATE_GUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_HANDGUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_GRANADE;
-
-		if (m_fAttackDelay == 0.f)
-		{
-			__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
-		}
-
-	}
 }
 
 void CAI_Boss::Camera_Control(_float fTimeDelta)

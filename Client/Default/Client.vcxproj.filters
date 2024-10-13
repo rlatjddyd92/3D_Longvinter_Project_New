@@ -253,6 +253,9 @@
     <Filter Include="03.Container\02.Container_Enemy\01.AI_Boss">
       <UniqueIdentifier>{259cd606-a19b-4847-8129-1a80894c564e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.PartObject\07.Tool\07.Tool_Machete">
+      <UniqueIdentifier>{c3e37d30-b1f7-4bd7-8537-6c06e8767b07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -531,6 +534,9 @@
     <ClInclude Include="..\Public\AI_Boss.h">
       <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tool_Machete.h">
+      <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -754,6 +760,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AI_Boss.cpp">
       <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_Machete.cpp">
+      <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
