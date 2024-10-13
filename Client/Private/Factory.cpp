@@ -114,6 +114,16 @@ void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), TEXT("Prototype_GameObject_Container_AI_Enemy"), &pTemp);
 }
 
+void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType)
+{
+	CAI_Enemy::AI_Enemy_Desc		pTemp{};
+	pTemp.fPosition = Position;
+	pTemp.fSpeedPerSec = 3.0f;
+	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
+	pTemp.eType = eType;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), TEXT("Prototype_GameObject_Container_AI_Boss"), &pTemp);
+}
+
 HRESULT CFactory::Ready_Prototype_Texture()
 {
 
@@ -347,6 +357,10 @@ HRESULT CFactory::Ready_Prototype_Container()
 		CAI_Enemy::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Boss"),
+		CAI_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -578,8 +592,8 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Fire"), CFire::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ChainSaw"), CMelee_ChainSaw::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;

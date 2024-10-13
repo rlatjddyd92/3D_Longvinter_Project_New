@@ -44,6 +44,10 @@ public:
 			m_pModelCom->SetTexture(iMeterial, iType, pTexture);
 	}
 
+	void Start_NonLoopAnim();
+
+	_bool GetEnd() { return m_bIsEnd; }
+
 protected:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
@@ -53,6 +57,12 @@ protected:
 	_uint		 m_iBeforeState = 0;
 
 	_float		 m_fAnimTime_Deposit = 0.f;
+
+	_bool		 m_bIsEnd = false;
+	_bool		 m_bLoop = true;
+	_bool		 m_bNonLoopAnimStart = false;
+
+	_int		 m_iDefalut = 0;
 
 protected:
 	HRESULT Ready_Components();

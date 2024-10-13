@@ -38,12 +38,15 @@ HRESULT CBody_Human::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_iDefalut = STATE::STATE_IDEL;
+
 	return S_OK;
 }
 
 void CBody_Human::Priority_Update(_float fTimeDelta)
 {
 	int a = 10;
+
 }
 
 void CBody_Human::Update(_float fTimeDelta)
@@ -56,9 +59,41 @@ void CBody_Human::Update(_float fTimeDelta)
 void CBody_Human::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+
+	m_bLoop = true;
+
+
+	if (*m_pParentState == STATE::STATE_EAT)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_GRANADE)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_GUN)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_HANDGUN)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_HI)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_THROW)
+	{
+		m_bLoop = false;
+	}
+	else if (*m_pParentState == STATE::STATE_HIT)
+	{
+		m_bLoop = false;
+	}
+
 	__super::Late_Update(fTimeDelta);
 
-	
 }
 
 HRESULT CBody_Human::Render()

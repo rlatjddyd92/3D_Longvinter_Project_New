@@ -8,6 +8,8 @@
 #include "Container_Player.h"
 #include "Container_Enemy.h"
 #include "AI_Enemy.h"
+#include "AI_Boss.h"
+
 
 #include "Body.h"
 #include "Body_Human.h"

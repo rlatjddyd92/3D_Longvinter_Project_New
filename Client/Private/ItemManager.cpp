@@ -131,6 +131,9 @@ HRESULT CItemManager::Setting_ItemInfo()
 	m_vecItemTag[_int(ITEMINDEX::ITEM_CHAINSAW)].resize(_int(ITEMTAG::ITEM_TAG_END));
 	m_vecItemTag[_int(ITEMINDEX::ITEM_CHAINSAW)][_int(ITEMTAG::ITEM_TAG_HEAVYDEMAGE)] = true;
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_ChainSaw"), TEXT("Prototype_GameObject_Tool_ChainSaw"), &ToolDesc);
+	m_vecTool[_int(ITEMINDEX::ITEM_CHAINSAW)] = static_cast<CTool*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_ChainSaw"), -1));
+
 
 	m_vecItemInfo[_int(ITEMINDEX::ITEM_CHRISTMAS_HAT)] =
 	{ ITEMINDEX::ITEM_CHRISTMAS_HAT, TEXT("산타 모자"), TEXT("크리스마스 시즌 아이템, 상점에 비싸게 팔 수 있습니다."), true,  ITEMTYPE::ITEM_TYPE_HAT, false, 700.f, 1200, 120.f, 11.f, 34.f };

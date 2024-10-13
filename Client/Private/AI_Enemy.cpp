@@ -40,6 +40,8 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	m_fAttack_Length = 15.f;
 	m_fDetective_Length = 20.f;
 	
+	m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
+
 	GET_INSTANCE->MakeEnemyHpBar(this);
 	GET_INSTANCE->MakeSymbol(this);
 	return S_OK;
@@ -127,7 +129,20 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 			if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
 				__super::Burning();
 		}
-	
+		else if (eIndex == INTERACTION::INTER_MELEE_SHOTGUN)
+		{
+			if (pPoint == nullptr)
+				return;
+
+
+
+			__super::Add_Hp(-100.f);
+
+			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
+			fDirec.y = 0.1f;
+			
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 3.f);
+		}
 			
 	}
 
@@ -193,10 +208,16 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 		
 		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+		{
+			m_bJump = false;
+
 			if (GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
 			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
 			}
+		}
+			
 
 
 		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
@@ -222,10 +243,15 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 			XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
 			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+			{
+				m_bJump = false;
+
 				if (GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
 				{
 					m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+					m_bJump = true;
 				}
+			}
 
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
 			m_iState = STATE_WALK;
@@ -256,12 +282,19 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 
 		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		{
+			m_bJump = false;
+
 			if (GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
 			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
 			}
 			else if (rand() % 10 == 0)
+			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+			}
+				
 		}
 			
 

@@ -32,26 +32,7 @@ public:
 		PART_LEG_RIGHT, //MCH-thigh_parent_socket_R
 		PART_END
 	};
-	enum STATE {
-		STATE_EAT = 3,
-		STATE_THROW_WAIT = 6,
-		STATE_SLOW_WALK = 8,
-		STATE_HIT = 9,
-		STATE_HANDGUN = 10,
-		STATE_GUN = 11,
-		STATE_SIT = 12,
-		STATE_GIVE = 13,
-		STATE_THROW = 14,
-		STATE_GRANADE = 15,
-		STATE_WALK_R = 40,
-		STATE_WALK_L = 41,
-		STATE_AIM = 51,
-		STATE_CHAINSAW = 56,
-		STATE_IDEL = 58,
-		STATE_WALK = 64,
-		STATE_HI = 70,
-		STATE_END
-	};
+	
 	enum WEAPON_TYPE
 	{
 		WEAPON_MAIN,
@@ -92,7 +73,7 @@ protected: // AI 관련 함수
 protected:
 	_uint				m_iState = {  };
 
-	// test 
+
 	_int				m_iBody = 2;
 	_int				m_iFace = _int(HUMAN_FACE::FACE_NORMAL);
 

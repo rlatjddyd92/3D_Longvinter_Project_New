@@ -56,6 +56,8 @@ protected:
 	void Get_Sound(_float3* fSoundPosition, _float* fVolume, _float* fTurnAngle);
 
 	void UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _float3 fDirec);
+	void AimWeapon_Anim(ITEMINDEX eWeapon);
+	void FireWeapon_Anim(ITEMINDEX eWeapon);
 
 	void Add_Hp(_float fAdd)
 	{
@@ -80,8 +82,11 @@ protected: // AI 관련 함수
 
 protected: // <- 상태 제어용
 	_float m_fActionTimer = 0.f;
+	_float m_fPreAttackDelay = 0.f;
 	_float m_fAttackDelay = 0.f;
 	_float m_fDeamegeDelay = 0.f;
+
+	_bool m_bMakeInterAction = false;
 
 protected: // <- 스탯
 	_float m_fHp = 1000.f;
@@ -90,6 +95,8 @@ protected: // <- 스탯
 protected: // <- 상태
 	vector<_bool> m_vecCrowdControl;
 	vector<_float> m_vecCrowdControl_Time;
+
+	_bool m_bJump = false;
 
 protected:
 	_float m_fDetective_Length = 10.f;
@@ -110,6 +117,9 @@ protected:
 	_float m_fMove_Angle = 0.f;
 
 	_float m_fMakeEffect = 0.1f;
+	_bool m_bNonLoopAnimReset = false;
+
+	_bool bMove = false;
 
 	// serach
 	_float m_fSearch_Time_Now = 0.f;

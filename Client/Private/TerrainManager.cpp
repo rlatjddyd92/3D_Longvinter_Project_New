@@ -254,9 +254,9 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		{
 			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
+		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_BOSS)
 		{
-
+			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
 		}
 	}
 
@@ -1089,6 +1089,9 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 
 					if (eType == CONTAINER::CONTAINER_ENEMY)
 						GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
+
+					if (eType == CONTAINER::CONTAINER_BOSS)
+						GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
 					
 					m_vecObjInfo.push_back({ eType,fResult });
 				}

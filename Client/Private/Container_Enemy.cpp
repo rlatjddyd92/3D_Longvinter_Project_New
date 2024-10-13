@@ -98,7 +98,6 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 
 	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
 
-
 	GET_INSTANCE->InputRenderlist(m_eWeapon, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 

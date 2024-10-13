@@ -35,6 +35,9 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 {
+	m_bNonLoopAnimReset = false;
+	bMove = false;
+
 	if (m_fActionTimer > 0.f)
 	{
 		m_fActionTimer -= fTimeDelta;
@@ -197,24 +200,49 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 	if (eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-
-		
-
 		m_fAttackDelay = 0.1f;
 	}
-	if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
+	else if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_MINE, this, fPosition, fDirec);
-		m_fAttackDelay = 0.5f;
+		m_fAttackDelay = 1.f;
 	}
-	if (eWeapon == ITEMINDEX::ITEM_GRANADE)
+	else if (eWeapon == ITEMINDEX::ITEM_GRANADE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fPosition, fDirec);
+		m_fAttackDelay = 1.f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 0.f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_ARROW)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 0.5f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 0.1f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_SHOTGUN, this, fPosition, fDirec);
 		m_fAttackDelay = 0.5f;
 	}
 
 
 
+}
+
+void CLongvinter_Container::AimWeapon_Anim(ITEMINDEX eWeapon)
+{
+}
+
+void CLongvinter_Container::FireWeapon_Anim(ITEMINDEX eWeapon)
+{
 }
 
 void CLongvinter_Container::Set_AI_Status(_float fTimeDelta)

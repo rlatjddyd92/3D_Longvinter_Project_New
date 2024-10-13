@@ -91,6 +91,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	// Container
 	void Make_Container_Player(_float3 Position) { m_pFactory->Make_Container_Player(Position); }
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Enemy(Position, eType); }
+	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Boss(Position, eType); }
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }

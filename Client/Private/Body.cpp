@@ -45,23 +45,15 @@ HRESULT CBody::Initialize(void* pArg)
 
 void CBody::Priority_Update(_float fTimeDelta)
 {
+	
+	m_bNonLoopAnimStart = false;
 	int a = 10;
 }
 
 void CBody::Update(_float fTimeDelta)
 {
 
-	_float3 fPosition = { m_pParentMatrix->m[3][0], m_pParentMatrix->m[3][1], m_pParentMatrix->m[3][2] };
-
-	if (!GET_INSTANCE->GetIsLender(fPosition))
-	{
-		m_fAnimTime_Deposit += fTimeDelta;
-	}
-	else
-	{
-		m_pModelCom->Play_Animation(fTimeDelta + m_fAnimTime_Deposit);
-		m_fAnimTime_Deposit = 0.f;
-	}
+	
 	
 }
 
@@ -71,12 +63,34 @@ void CBody::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	if (m_iBeforeState != *m_pParentState)
+		if ((m_bLoop == true) || (m_bNonLoopAnimStart == true))
 	{
-		cout << m_iBeforeState << *m_pParentState << "\n";
-		m_iBeforeState = *m_pParentState;
-		m_pModelCom->SetUp_Animation(m_iBeforeState, true);
+			m_pModelCom->AnimReset();
+			m_iBeforeState = *m_pParentState;
+			m_pModelCom->SetUp_Animation(m_iBeforeState, m_bLoop);
+			m_fAnimTime_Deposit = 0.f;
+	}
+
+	_float3 fPosition = { m_pParentMatrix->m[3][0], m_pParentMatrix->m[3][1], m_pParentMatrix->m[3][2] };
+
+	m_bIsEnd = false;
+
+	if (!GET_INSTANCE->GetIsLender(fPosition))
+	{
+		m_fAnimTime_Deposit += fTimeDelta;
+	}
+	else
+	{
+		if (m_pModelCom->Play_Animation(fTimeDelta + m_fAnimTime_Deposit))
+		{
+			m_bIsEnd = true;
+		}
+
 		m_fAnimTime_Deposit = 0.f;
 	}
+
+
+
 
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * XMLoadFloat4x4(m_pParentMatrix));
 
@@ -117,6 +131,11 @@ HRESULT CBody::Render()
 	}
 
 	return S_OK;
+}
+
+void CBody::Start_NonLoopAnim()
+{
+	m_bNonLoopAnimStart = true;
 }
 
 HRESULT CBody::Ready_Components()

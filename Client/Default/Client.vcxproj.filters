@@ -250,6 +250,9 @@
     <Filter Include="02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol">
       <UniqueIdentifier>{7ea65dc0-1023-4eb4-8d32-4c0996996575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Container\02.Container_Enemy\01.AI_Boss">
+      <UniqueIdentifier>{259cd606-a19b-4847-8129-1a80894c564e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -525,6 +528,9 @@
     <ClInclude Include="..\Public\UIPart_Symbol.h">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AI_Boss.h">
+      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -745,6 +751,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Symbol.cpp">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AI_Boss.cpp">
+      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

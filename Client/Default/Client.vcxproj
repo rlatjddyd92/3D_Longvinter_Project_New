@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AI_Boss.h" />
     <ClInclude Include="..\Public\AI_Enemy.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="UIPart_Defines.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AI_Boss.cpp" />
     <ClCompile Include="..\Private\AI_Enemy.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />

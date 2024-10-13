@@ -51,8 +51,8 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), TEXT("Prototype_Inter_Fire"));
 	m_vecInterAction[_int(INTERACTION::INTER_FIRE)] = static_cast<CFire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), -1));
 
-	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
-	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), TEXT("Prototype_Inter_Melee_ShotGun"));
+	m_vecInterAction[_int(INTERACTION::INTER_MELEE_SHOTGUN)] = static_cast<CMelee_ShotGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), -1));
 
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
@@ -88,6 +88,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
