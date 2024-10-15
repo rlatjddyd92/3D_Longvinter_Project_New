@@ -41,6 +41,7 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
+
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
 	virtual void Weapon_Control(_float fTimeDelta) override;

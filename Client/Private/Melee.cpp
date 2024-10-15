@@ -63,14 +63,7 @@ void CMelee::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex,
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CMelee::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CMelee::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CMelee::Ready_Components()
 {

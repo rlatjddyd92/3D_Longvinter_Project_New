@@ -39,11 +39,21 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 
+	m_fRotate = 0.4f;
+
 	return S_OK;
 }
 
 void CContainer_Enemy::Priority_Update(_float fTimeDelta)
 {
+
+	/*if (m_bRotate)
+	{
+		m_pTransformCom->Rotation({ 0.f,1.f,0.f }, -m_fRotate);
+		m_bRotate = false;
+	}
+		*/
+
 	__super::Priority_Update(fTimeDelta);
 
 	
@@ -120,6 +130,14 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 	GET_INSTANCE->InputRenderlist(m_eWeapon, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+	/*if (m_iState == STATE::STATE_GUN)
+		m_bRotate = true;
+	else if (m_iState == STATE::STATE_HANDGUN)
+		m_bRotate = true;
+
+	if (m_bRotate)
+		m_pTransformCom->Rotation({ 0.f,1.f,0.f }, m_fRotate);*/
 }
 
 HRESULT CContainer_Enemy::Render()
@@ -144,6 +162,7 @@ void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAIN
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
+
 
 void CContainer_Enemy::Moving_Control(_float fTimeDelta)
 {

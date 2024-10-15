@@ -142,14 +142,7 @@ void CFire::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, 
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CFire::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CFire::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CFire::Ready_Components()
 {

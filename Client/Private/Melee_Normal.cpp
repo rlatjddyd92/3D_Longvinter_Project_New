@@ -48,14 +48,7 @@ void CMelee_Normal::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER 
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CMelee_Normal::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CMelee_Normal::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CMelee_Normal::Ready_Components()
 {

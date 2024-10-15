@@ -57,11 +57,11 @@ private:
 	void Check_Collision_InterAction_Container(INTERACTION eInter, CONTAINER eContainer);
 	void Check_Collision_Container(CONTAINER eFirst, CONTAINER eSecond);
 
+
 private:
 	vector<CInterAction*> m_vecInterAction;
 
 	vector<list<CON_INTER_INFO*>> m_vecConInterlist;
-	
 
 
 

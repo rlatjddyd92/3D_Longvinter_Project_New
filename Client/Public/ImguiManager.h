@@ -45,10 +45,32 @@ private:
 	_int m_iLand[3] = { 0,0,0 };
 	_char* szMode[3] = { "Terrain", "Object", "Move_Model"};
 	_int m_iSelectMode = 0;
-	_char* szObject[4] = { "Player","NPC", "Enemy","Boss"};
+	_char* szObject[5] = { "Player","NPC", "Enemy","Boss", "LandObject"};
 	_int m_iSelectObject = 0;
 	_char* szTexture[8] = { "0","1" ,"2" ,"3" ,"4", "5", "6", "7"};
 	_int m_iSelectTexture = 0;
+
+	_char* szLandObject[_int(INTERACTION::INTER_END)]
+		= {
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"사과나무",
+"바위",
+"덤불",
+"아이템",
+"나무",
+	};
+	_int m_iSelectLandObject = _int(INTERACTION::INTER_END);
 
 	_int m_iAnimation = 0;
 

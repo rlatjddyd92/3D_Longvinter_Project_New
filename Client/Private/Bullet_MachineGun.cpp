@@ -138,14 +138,7 @@ void CBullet_MachineGun::Collision_Reaction_Container(CGameObject* pPoint, CONTA
 
 	pAction->bDead = true;
 }
-//
-//void CBullet_MachineGun::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CBullet_MachineGun::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CBullet_MachineGun::Ready_Components()
 {

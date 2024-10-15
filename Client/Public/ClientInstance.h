@@ -119,13 +119,14 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_Crafting* MakeUIPage_Crafting() { return m_pFactory->MakeUIPage_Crafting(); }
 	CUIPage_Option* MakeUIPage_Option() { return m_pFactory->MakeUIPage_Option(); }
 	CUIPage_ToolTip* MakeUIPage_ToolTip() { return m_pFactory->MakeUIPage_ToolTip(); }
+	CUIPage_User* MakeUIPage_User() { return m_pFactory->MakeUIPage_User(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
 	void SaveMap(const _char* pPath) { m_pTerrainManager->SaveMap(pPath); }
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType); }
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType, eInter); }
 	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }

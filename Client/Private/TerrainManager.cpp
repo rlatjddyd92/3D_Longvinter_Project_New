@@ -1021,7 +1021,7 @@ void CTerrainManager::ChangeLandInfo_Backward()
 {
 }
 
-_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType)
+_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType, INTERACTION eInter)
 {
 	_vector vCamera = GET_INSTANCE->GetCameraPosition();
 	_double fDistance = -1.f;
@@ -1045,23 +1045,6 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 		}
 	}
 
-	/*for (auto& pair : m_mapSurFace)
-	{
-		_float3 fTempResult = pair.second->IsPicking();
-		if (fTempResult.x == -1)
-			continue;
-
-		_vector fTemp = vCamera - XMLoadFloat3(&fTempResult);
-		_double dTempDistance = sqrt((pow(fTemp.m128_f32[0], 2) + pow(fTemp.m128_f32[1], 2) + pow(fTemp.m128_f32[2], 2)));
-
-		if ((fDistance == -1.f) || (fDistance > dTempDistance))
-		{
-			fDistance = dTempDistance;
-			strKey = pair.first;
-			fResult = fTempResult;
-		}
-			
-	}*/
 
 	if (fDistance == -1)
 		return fResult;
@@ -1086,12 +1069,15 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 				{
 					if (eType == CONTAINER::CONTAINER_PLAYER)
 						GET_INSTANCE->Make_Container_Player(fResult);
-
-					if (eType == CONTAINER::CONTAINER_ENEMY)
+					else if (eType == CONTAINER::CONTAINER_ENEMY)
 						GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
-
-					if (eType == CONTAINER::CONTAINER_BOSS)
+					else if (eType == CONTAINER::CONTAINER_BOSS)
 						GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
+					else if (eType == CONTAINER::CONTAINER_END)
+					{
+						if (eInter != INTERACTION::INTER_END)
+							GET_INSTANCE->Add_InterActionObject_BySpec(eInter, nullptr, fResult, { 0.f,0.f,0.f });
+					}
 					
 					m_vecObjInfo.push_back({ eType,fResult });
 				}

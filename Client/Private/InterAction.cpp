@@ -101,6 +101,7 @@ void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER e
 
 
 
+
 void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, TERRAIN_ACTION eAction)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
@@ -193,6 +194,13 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 		ColliderDesc.vCenter = _float3(0.0f, 0.0f, 0.0f);
 		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE, &ColliderDesc);
 	}
+
+	if (eInterType == INTERACTION::INTER_BUSH)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 3.f));
+	else if (eInterType == INTERACTION::INTER_TREE)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 2.f));
+	else if (eInterType == INTERACTION::INTER_ROCK)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 7.f));
 
 
 	//Safe_AddRef(pNew->pCollider);

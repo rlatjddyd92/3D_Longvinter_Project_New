@@ -28,6 +28,7 @@ public:
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction) override;
 
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();

@@ -21,6 +21,7 @@ class CTerrainManager;
 class CTerrainManager final : public CGameObject
 {
 public:
+
 	enum class LANDCOMMAND
 	{
 		LCOMMAND_REMOVE_LAND = 0,
@@ -73,7 +74,7 @@ public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END);
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END);
 
 	_float3 CheckPicking();
 

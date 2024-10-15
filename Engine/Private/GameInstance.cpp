@@ -8,6 +8,7 @@
 #include "Light_Manager.h"
 #include "Font_Manager.h"
 #include "Target_Manager.h"
+#include "Frustum.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -21,6 +22,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	/* 그래픽 카드를 초기화하낟. */
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.isWindowsed, EngineDesc.iWinSizeX, EngineDesc.iWinSizeY, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pFrustum = CFrustum::Create();
+	if (nullptr == m_pFrustum)
 		return E_FAIL;
 
 	m_pTimer_Manager = CTimer_Manager::Create();
@@ -94,6 +99,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pPicking->Update();
 
+	m_pFrustum->Update();
+
 	m_pObject_Manager->Update(fTimeDelta);
 	
 	m_pObject_Manager->Late_Update(fTimeDelta);
@@ -118,6 +125,11 @@ HRESULT CGameInstance::Clear(_uint iLevelIndex)
 	// m_pComponent_Manager->Clear(iLevelIndex);
 
 	return S_OK;
+}
+
+ID3D11ShaderResourceView* CGameInstance::Get_BackBuffer_SRV() const
+{
+	return m_pGraphic_Device->Get_BackBuffer_SRV();
 }
 
 void CGameInstance::Render_Begin()
@@ -333,9 +345,9 @@ HRESULT CGameInstance::Add_MRT(const _wstring& strMRTTag, const _wstring& strTar
 	return m_pTarget_Manager->Add_MRT(strMRTTag, strTargetTag);
 }
 
-HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag)
+HRESULT CGameInstance::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV)
 {
-	return m_pTarget_Manager->Begin_MRT(strMRTTag);
+	return m_pTarget_Manager->Begin_MRT(strMRTTag, pDSV);
 }
 
 HRESULT CGameInstance::End_MRT()
@@ -376,12 +388,32 @@ _bool CGameInstance::isPicked_InLocalSpace(const _float3& vPointA, const _float3
 	return m_pPicking->isPicked_InLocalSpace(vPointA, vPointB, vPointC, pOut);
 }
 
+#pragma region FRUSTUM
+
+_bool CGameInstance::isIn_Frustum_WorldSpace(_fvector vPosition, _float fRadius)
+{
+	return m_pFrustum->isIn_WorldSpace(vPosition, fRadius);
+}
+
+_bool CGameInstance::isIn_Frustum_LocalSpace(_fvector vPosition, _float fRadius)
+{
+	return m_pFrustum->isIn_LocalSpace(vPosition, fRadius);
+}
+
+void CGameInstance::Transform_ToLocalSpace(_fmatrix WorldMatrix)
+{
+	return m_pFrustum->Transform_ToLocalSpace(WorldMatrix);
+}
+
+#pragma endregion
+
 
 
 #pragma endregion
 
 void CGameInstance::Release_Engine()
 {	
+	Safe_Release(m_pFrustum);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pLight_Manager);

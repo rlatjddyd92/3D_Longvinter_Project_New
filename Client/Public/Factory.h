@@ -52,6 +52,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_Crafting* MakeUIPage_Crafting();
 	CUIPage_Option* MakeUIPage_Option();
 	CUIPage_ToolTip* MakeUIPage_ToolTip();
+	CUIPage_User* MakeUIPage_User();
 #pragma endregion
 
 

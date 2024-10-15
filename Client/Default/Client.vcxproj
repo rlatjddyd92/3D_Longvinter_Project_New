@@ -192,6 +192,9 @@
     <ClInclude Include="..\Public\InterAction.h" />
     <ClInclude Include="..\Public\InterActionManager.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
+    <ClInclude Include="..\Public\LandObject.h" />
+    <ClInclude Include="..\Public\LandObject_Anim.h" />
+    <ClInclude Include="..\Public\LandObject_NonAnim.h" />
     <ClInclude Include="..\Public\Level_Editor.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -233,6 +236,7 @@
     <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
+    <ClInclude Include="..\Public\UIPage_User.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
     <ClInclude Include="..\Public\UIPart_Bar.h" />
@@ -286,6 +290,9 @@
     <ClCompile Include="..\Private\InterAction.cpp" />
     <ClCompile Include="..\Private\InterActionManager.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
+    <ClCompile Include="..\Private\LandObject.cpp" />
+    <ClCompile Include="..\Private\LandObject_Anim.cpp" />
+    <ClCompile Include="..\Private\LandObject_NonAnim.cpp" />
     <ClCompile Include="..\Private\Level_Editor.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
@@ -327,6 +334,7 @@
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
+    <ClCompile Include="..\Private\UIPage_User.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
     <ClCompile Include="..\Private\UIPart_Bar.cpp" />

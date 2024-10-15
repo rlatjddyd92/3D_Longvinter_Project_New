@@ -131,14 +131,7 @@ void CThrow_Object::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER 
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CThrow_Object::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CThrow_Object::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CThrow_Object::Ready_Components()
 {

@@ -198,6 +198,8 @@ void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eInd
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
+
+
 void CAI_Enemy::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);

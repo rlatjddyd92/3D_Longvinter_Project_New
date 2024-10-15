@@ -107,6 +107,9 @@ void CUIManager::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	m_pPage_User->AddRender_UIPage();
+
+
 	for (list<CUIPart_Bar*>::iterator iter = m_EnemyHplist.begin(); iter != m_EnemyHplist.end();)
 	{
 		if (((*iter) == nullptr) || ((*iter)->GetDead()))
@@ -345,6 +348,9 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_ToolTip = GET_INSTANCE->MakeUIPage_ToolTip();
 	Safe_AddRef(m_pPage_ToolTip);
+
+	m_pPage_User = GET_INSTANCE->MakeUIPage_User();
+	Safe_AddRef(m_pPage_User);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -384,6 +390,8 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Crafting);
 	Safe_Release(m_pPage_Option);
 	Safe_Release(m_pPage_ToolTip);
+	Safe_Release(m_pPage_User);
+	
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);

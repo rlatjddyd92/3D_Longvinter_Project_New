@@ -179,6 +179,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/SkyBox/SkyBox0.dds"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Crosshair"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Crosshair.dds"), 1))))
+		return E_FAIL;
+
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/Christmas_hat.dds"), 1))))
@@ -254,7 +258,7 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		return E_FAIL;
 
 	
-
+	
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Red"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Red.dds"), 1))))
 		return E_FAIL;
@@ -450,6 +454,69 @@ HRESULT CFactory::Ready_Prototype_Model()
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Machete"), "../Bin/Resources/Models/Machete/Machete", PreTransformMatrix)))
 		return E_FAIL;
 
+	// LANDOBJECT
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_AppleTree"), "../Bin/Resources/Models/LandObject/AppleTree", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_1"), "../Bin/Resources/Models/LandObject/Bush_1", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_2"), "../Bin/Resources/Models/LandObject/Bush_2", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_3"), "../Bin/Resources/Models/LandObject/Bush_3", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_ItemPocket"), "../Bin/Resources/Models/LandObject/ItemPocket", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_1"), "../Bin/Resources/Models/LandObject/Rock_1", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_2"), "../Bin/Resources/Models/LandObject/Rock_2", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_3"), "../Bin/Resources/Models/LandObject/Rock_3", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_4"), "../Bin/Resources/Models/LandObject/Rock_4", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_5"), "../Bin/Resources/Models/LandObject/Rock_5", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_6"), "../Bin/Resources/Models/LandObject/Rock_6", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_7"), "../Bin/Resources/Models/LandObject/Rock_7", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_8"), "../Bin/Resources/Models/LandObject/Rock_8", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Tree_Fine"), "../Bin/Resources/Models/LandObject/Tree_Fine", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Tree_Normal"), "../Bin/Resources/Models/LandObject/Tree_Normal", PreTransformMatrix)))
+		return E_FAIL;
+	
+
 	return S_OK;
 }
 
@@ -581,6 +648,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_ToolTip"), CUIPage_ToolTip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_User"), CUIPage_User::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -614,6 +684,13 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	//	return E_FAIL;
 
 
+	// LandObject
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_LandObject_NonAnim"), CLandObject_NonAnim::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_LandObject_Anim"), CLandObject_Anim::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
 
 
 	return S_OK;
@@ -835,6 +912,13 @@ CUIPage_ToolTip* CFactory::MakeUIPage_ToolTip()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), TEXT("Prototype_UIPage_ToolTip"));
 
 	return static_cast<CUIPage_ToolTip*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), -1));
+}
+
+CUIPage_User* CFactory::MakeUIPage_User()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), TEXT("Prototype_UIPage_User"));
+
+	return static_cast<CUIPage_User*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

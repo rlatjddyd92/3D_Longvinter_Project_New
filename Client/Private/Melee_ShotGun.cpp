@@ -150,6 +150,8 @@ void CMelee_ShotGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER
 }
 
 
+
+
 HRESULT CMelee_ShotGun::Ready_Components()
 {
 	/* FOR.Com_Shader */

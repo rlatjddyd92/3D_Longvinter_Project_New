@@ -64,6 +64,27 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
 
+	// LANDOBJECT
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_AppleTree"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_APPLETREE)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_AppleTree"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_APPLETREE)])->SetLandObject(INTERACTION::INTER_APPLETREE);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Bush"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_BUSH)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Bush"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_BUSH)])->SetLandObject(INTERACTION::INTER_BUSH);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Rock"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_ROCK)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Rock"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_ROCK)])->SetLandObject(INTERACTION::INTER_ROCK);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Tree"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_TREE)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Tree"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_TREE)])->SetLandObject(INTERACTION::INTER_TREE);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Item"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_ITEM)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Item"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_ITEM)])->SetLandObject(INTERACTION::INTER_ITEM);
+
 
 
 	return S_OK;
@@ -313,7 +334,6 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 }
 
 
-
 CInterActionManager* CInterActionManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CInterActionManager* pInstance = new CInterActionManager(pDevice, pContext);
@@ -360,6 +380,7 @@ void CInterActionManager::Free()
 		iter.clear();
 	}
 		
+	
 	m_vecConInterlist.clear();
 }
 

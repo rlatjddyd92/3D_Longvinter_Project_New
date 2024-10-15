@@ -28,6 +28,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, _uint(LEVELID::LEVEL_END), EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Gara()))
+		return E_FAIL;
+
 	GET_INSTANCE->Setting_Program_Start(&m_pDevice, &m_pContext, m_pGameInstance);
 
 	/*m_pContext->RSSetState();
@@ -37,6 +40,8 @@ HRESULT CMainApp::Initialize()
 	ID3D11BlendState*		pBlendState;
 	m_pDevice->CreateBlendState();
 	m_pContext->OMSetBlendState(pBlendState);*/
+
+	
 
 	if (FAILED(Ready_Prototype_Component_Static()))
 		return E_FAIL;
@@ -84,6 +89,65 @@ HRESULT CMainApp::Render()
 	return S_OK;
 }
 
+
+HRESULT CMainApp::Ready_Gara()
+{
+	ID3D11Texture2D* pTexture2D = { nullptr };
+
+	D3D11_TEXTURE2D_DESC	TextureDesc{};
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	TextureDesc.Width = 256;
+	TextureDesc.Height = 256;
+	TextureDesc.MipLevels = 1;
+	TextureDesc.ArraySize = 1;
+	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.SampleDesc.Count = 1;
+
+	TextureDesc.Usage = D3D11_USAGE_STAGING;
+	/* 추후에 어떤 용도로 바인딩 될 수 있는 View타입의 텍스쳐를 만들기위한 Texture2D입니까? */
+	TextureDesc.BindFlags = 0;
+
+	TextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+	TextureDesc.MiscFlags = 0;
+
+	_uint* pPixel = new _uint[TextureDesc.Width * TextureDesc.Height];
+	ZeroMemory(pPixel, sizeof(_uint) * TextureDesc.Width * TextureDesc.Height);
+
+	D3D11_SUBRESOURCE_DATA	InitialDesc{};
+	InitialDesc.pSysMem = pPixel;
+	InitialDesc.SysMemPitch = TextureDesc.Width * sizeof(_uint);
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, &InitialDesc, &pTexture2D)))
+		return E_FAIL;
+
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+
+	m_pContext->Map(pTexture2D, 0, D3D11_MAP_READ_WRITE, 0, &SubResource);
+
+	/* a b g r */
+	for (size_t i = 0; i < 256; i++)
+	{
+		for (size_t j = 0; j < 256; j++)
+		{
+			_uint iIndex = i * 256 + j;
+
+			if (j < 128)
+				((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 0, 0, 0);
+			else
+				((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 255, 255, 255);
+		}
+	}
+
+	m_pContext->Unmap(pTexture2D, 0);
+
+	Safe_Delete_Array(pPixel);
+	Safe_Release(pTexture2D);
+
+	return S_OK;
+}
 
 HRESULT CMainApp::Ready_Prototype_Component_Static()
 {

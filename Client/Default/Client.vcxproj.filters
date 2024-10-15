@@ -178,15 +178,6 @@
     <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test">
       <UniqueIdentifier>{fed7e3ec-34b6-4796-bbbe-239d83edc8b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven">
-      <UniqueIdentifier>{24a85a78-8d01-493d-be26-3d12171bd6e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip">
-      <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop">
-      <UniqueIdentifier>{c4bd10d3-86c1-47c1-96a8-51b4c108ef63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting">
       <UniqueIdentifier>{33de20ef-9ac0-42ad-9302-00e46efdedd2}</UniqueIdentifier>
     </Filter>
@@ -255,6 +246,27 @@
     </Filter>
     <Filter Include="02.PartObject\07.Tool\07.Tool_Machete">
       <UniqueIdentifier>{c3e37d30-b1f7-4bd7-8537-6c06e8767b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_User">
+      <UniqueIdentifier>{de67e653-f6cd-411b-a2d5-3a5ea206bee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Inven">
+      <UniqueIdentifier>{24a85a78-8d01-493d-be26-3d12171bd6e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Equip">
+      <UniqueIdentifier>{991ba471-e595-468d-a16f-a16e7fd2e1e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\07.UI_Page_Shop">
+      <UniqueIdentifier>{c4bd10d3-86c1-47c1-96a8-51b4c108ef63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject">
+      <UniqueIdentifier>{04908170-f1be-4fe5-a4ed-d6d395064fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\00.NonAnim">
+      <UniqueIdentifier>{45228ddf-9c9e-4ade-b697-9912f9298d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim">
+      <UniqueIdentifier>{5f6d5fe5-4386-43ef-b9cb-e9b35c0e8ee9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -376,10 +388,10 @@
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UIPage_Inven.h">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Inven</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Equip.h">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Equip</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Crfting.h">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
@@ -388,7 +400,7 @@
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Shop.h">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\07.UI_Page_Shop</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_Cell.h">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
@@ -537,6 +549,18 @@
     <ClInclude Include="..\Public\Tool_Machete.h">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_User.h">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_User</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LandObject.h">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LandObject_NonAnim.h">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\00.NonAnim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LandObject_Anim.h">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -633,10 +657,10 @@
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\99.UI_Page_Test</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inven.cpp">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_Inven</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Inven</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Equip.cpp">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\02.UI_Page_Equip</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Equip</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Crfting.cpp">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\04.UI_Page_Crafting</Filter>
@@ -645,7 +669,7 @@
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\05.UI_Page_Option</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Shop.cpp">
-      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\03.UI_Page_Shop</Filter>
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\07.UI_Page_Shop</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_Cell.cpp">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\04.UI_Part_Cell</Filter>
@@ -763,6 +787,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tool_Machete.cpp">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_User.cpp">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\01.UI_Page_User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LandObject.cpp">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LandObject_NonAnim.cpp">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\00.NonAnim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LandObject_Anim.cpp">
+      <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

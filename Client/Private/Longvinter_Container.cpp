@@ -119,6 +119,8 @@ void CLongvinter_Container::Collision_Reaction_Container(CGameObject* pPoint, CO
 {
 }
 
+
+
 void CLongvinter_Container::Moving_Control(_float fTimeDelta)
 {
 
@@ -184,6 +186,9 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 	fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
 	fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
 	*fTurnAngle = acos(fDot / fCos);
+
+	if (isnan(*fTurnAngle))
+		*fTurnAngle = 0.f;
 
 	_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
 

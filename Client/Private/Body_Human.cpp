@@ -98,7 +98,12 @@ void CBody_Human::Late_Update(_float fTimeDelta)
 
 HRESULT CBody_Human::Render()
 {
-	__super::Render();
+
+	
+	_bool bResult = __super::Render();
+
+	if (!bResult)
+		return E_FAIL;
 
 	return S_OK;
 }

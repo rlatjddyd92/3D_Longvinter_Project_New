@@ -135,14 +135,7 @@ void CBullet_Straight::Collision_Reaction_Container(CGameObject* pPoint, CONTAIN
 
 
 }
-//
-//void CBullet_Straight::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CBullet_Straight::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CBullet_Straight::Ready_Components()
 {

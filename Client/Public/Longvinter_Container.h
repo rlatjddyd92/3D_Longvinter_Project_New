@@ -30,6 +30,7 @@ public:
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent);
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex);
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex);
+	
 
 	CONTAINER GetContainerType() { return eContainerType; }
 
@@ -87,6 +88,9 @@ protected: // <- 상태 제어용
 	_float m_fDeamegeDelay = 0.f;
 
 	_bool m_bMakeInterAction = false;
+
+	_bool m_bRotate = false;
+	_float m_fRotate = 0.f;
 
 protected: // <- 스탯
 	_float m_fHp = 1000.f;

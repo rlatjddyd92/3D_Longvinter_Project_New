@@ -35,6 +35,8 @@ public:
 		_float fTime = 0.f;
 		_bool bActive = true;
 		_bool bDead = false;
+
+		_int iIndex = 0; // <- 인터랙션의 스펙에 따라 사용
 	}INTER_INFO;
 
 	
