@@ -59,6 +59,10 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
+	
+
+
+
 	if ((m_eAI_Status == AI_STATUS::AI_SERACH) || (m_eAI_Status == AI_STATUS::AI_PANIC))
 	if (m_fSearch_Time_Now < m_fSearch_Time)
 	{
@@ -109,14 +113,24 @@ HRESULT CLongvinter_Container::Render()
 
 void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
+	
+
 }
 
 void CLongvinter_Container::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
+	
 }
 
 void CLongvinter_Container::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+	
+}
+
+void CLongvinter_Container::DeadAction()
+{
+	
+
 }
 
 

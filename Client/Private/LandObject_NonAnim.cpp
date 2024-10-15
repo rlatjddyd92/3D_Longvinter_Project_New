@@ -49,7 +49,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 	for (auto& iter : m_Actionlist)
 	{
-		if ((!m_bSettingComplete) || (m_eType == INTERACTION::INTER_ITEM))
+		if ((!iter->bSetting) || (m_eType == INTERACTION::INTER_ITEM))
 		{
 			CPhysicsManager::P_RESULT tResult = {};
 
@@ -57,7 +57,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
 			if (GET_INSTANCE->Check_OnGround(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
-				m_bSettingComplete = true;
+				iter->bSetting = true;
 		}
 		else
 		{
@@ -95,7 +95,16 @@ HRESULT CLandObject_NonAnim::Render()
 	for (auto& iter : m_Actionlist)
 	{
 		_float3 fPosition{};
-		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
+		_vector vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+		if (m_eType == INTERACTION::INTER_ITEM)
+		{
+			vPosition += _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
+			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		
+
+		XMStoreFloat3(&fPosition, vPosition);
 
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			continue;
@@ -126,6 +135,13 @@ HRESULT CLandObject_NonAnim::Render()
 #ifdef _DEBUG
 		iter->pCollider->Render();
 #endif
+
+		if (m_eType == INTERACTION::INTER_ITEM)
+		{
+			vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION) - _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
+			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		
 	}
 
 	return S_OK;
@@ -178,8 +194,8 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"),TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		m_fSpec_Extent = { 0.2f,1.f,0.2f };
-		m_fSpec_Scale = 1.f;
+		m_fSpec_Extent = { 0.2f,0.4f,0.2f };
+		m_fSpec_Scale = 0.8f;
 		m_bTexture = false;
 	}
 	else if (eIndex == INTERACTION::INTER_BUSH)
@@ -198,7 +214,7 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 			return E_FAIL;
 
 		m_fSpec_Extent = { 0.2f,0.2f,0.2f };
-		m_fSpec_Scale = 0.5f;
+		m_fSpec_Scale = 0.4f;
 		m_bTexture = false;
 	}
 	else if (eIndex == INTERACTION::INTER_ROCK)
@@ -227,7 +243,7 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 			return E_FAIL;
 
 		m_fSpec_Extent = { 0.2f,0.2f,0.2f };
-		m_fSpec_Scale = 0.2f;
+		m_fSpec_Scale = 0.1f;
 		m_bTexture = true;
 	}
 	else if (eIndex == INTERACTION::INTER_APPLETREE)
@@ -256,36 +272,11 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 			return E_FAIL;
 
 		m_fSpec_Extent = { 0.2f,0.2f,0.2f };
-		m_fSpec_Scale = 0.2f;
+		m_fSpec_Scale = 0.3f;
+		m_fSpec_PushedPower = 5.f;
+		m_fSpec_PushedPower_Decrease = 5.f;
 		m_bTexture = false;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-	
-
-
-
-
-
-
-	
-
-
 
 }
 

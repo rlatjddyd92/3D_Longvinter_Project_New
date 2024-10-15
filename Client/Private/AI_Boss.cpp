@@ -193,6 +193,11 @@ void CAI_Boss::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eInde
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
+void CAI_Boss::DeadAction()
+{
+	__super::DeadAction();
+}
+
 
 void CAI_Boss::Moving_Control(_float fTimeDelta)
 {

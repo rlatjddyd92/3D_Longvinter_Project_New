@@ -79,6 +79,37 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 
 void CAI_Enemy::Priority_Update(_float fTimeDelta)
 {
+	
+
+	if (m_eAI_Status == AI_STATUS::AI_DEAD)
+	{
+		if (m_fActionTimer > 0.f)
+		{
+			m_fActionTimer -= fTimeDelta;
+			if (m_fActionTimer < 0.f)
+				m_fActionTimer = 0.f;
+		}
+
+		if (m_fActionTimer <= 0.f)
+		{
+			__super::SetDead();
+
+			_float3 fPosition{};
+			_float3 fDirec{};
+
+			XMStoreFloat3(&fPosition, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			fPosition.y += 1.f;
+
+			fDirec.x = _float(m_pGameInstance->Get_Random(0.f, 1000.f) - m_pGameInstance->Get_Random(0.f, 1000.f)) / _float(1000.f);
+			fDirec.y = 0.5f;
+			fDirec.z = _float(m_pGameInstance->Get_Random(0.f, 1000.f) - m_pGameInstance->Get_Random(0.f, 1000.f)) / _float(1000.f);
+
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_ITEM, nullptr, fPosition, fDirec);
+		}
+		else
+			return;
+	}
+		
 	__super::Priority_Update(fTimeDelta);
 
 	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
@@ -99,8 +130,30 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 
 void CAI_Enemy::Update(_float fTimeDelta)
 {
+	if (m_fHp <= 0.f)
+		DeadAction();
+
+	if (m_eAI_Status == AI_STATUS::AI_DEAD)
+	{
+		m_pTransformCom->Turn({ -1.f,0.f,0.f }, fTimeDelta * m_fMove_Angle);
+
+		
+		_float3 fExtent = m_pColliderCom->GetBoundingExtents();
+
+		fExtent.y -= ((fTimeDelta * m_fMove_Angle / _float(PI_DEFINE)) * fExtent.y);
+
+		if (fExtent.y < 0.5f)
+			fExtent.y = 0.5f;
+
+		m_pColliderCom->SetBoundingExtents({ fExtent.x, fExtent.y - ((fTimeDelta * m_fMove_Angle / _float(PI_DEFINE)) * fExtent.y), fExtent.z });
+		
 	
-	Moving_Control(fTimeDelta);
+		m_fMove_Angle -= fTimeDelta * m_fMove_Angle;
+	}
+	else 	
+		Moving_Control(fTimeDelta);
+
+	
 	
 
 	__super::Update(fTimeDelta);
@@ -109,6 +162,9 @@ void CAI_Enemy::Update(_float fTimeDelta)
 
 void CAI_Enemy::Late_Update(_float fTimeDelta)
 {
+
+
+
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -122,6 +178,8 @@ HRESULT CAI_Enemy::Render()
 
 void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
+	if (m_eAI_Status == AI_STATUS::AI_DEAD) return;
+
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
 	CONTAINER eType = CONTAINER::CONTAINER_END;
@@ -190,12 +248,29 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 
 void CAI_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
+	if (m_eAI_Status == AI_STATUS::AI_DEAD) return;
+
 	__super::Collision_Reaction_MadeInterAction(pPoint, eIndex);
 }
 
 void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+	if (m_eAI_Status == AI_STATUS::AI_DEAD) return;
+
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+}
+
+void CAI_Enemy::DeadAction()
+{
+	__super::DeadAction();
+
+	if (m_eAI_Status == AI_STATUS::AI_DEAD)
+		return;
+
+	m_eAI_Status = AI_STATUS::AI_DEAD;
+	m_fActionTimer = 3.f;
+	m_fMove_Angle = PI_DEFINE * 0.15f;
+	m_iState = STATE_IDEL;
 }
 
 
@@ -359,6 +434,11 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 {
 	__super::Set_AI_Status(fTimeDelta);
 
+	
+
+	if (m_eAI_Status == AI_STATUS::AI_DEAD)
+		return;
+
 	m_fMove_Angle = 0.f;
 
 	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_STRN)] == true)
@@ -395,6 +475,8 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 
 		}
 	}
+
+	
 }
 
 

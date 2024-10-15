@@ -163,6 +163,11 @@ void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAIN
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
+void CContainer_Enemy::DeadAction()
+{
+	__super::DeadAction();
+}
+
 
 void CContainer_Enemy::Moving_Control(_float fTimeDelta)
 {
@@ -294,6 +299,7 @@ void CContainer_Enemy::Burning()
 
 	__super::Start_Panic();
 }
+
 
 
 HRESULT CContainer_Enemy::Ready_Components()

@@ -96,6 +96,7 @@ namespace Client
 		AI_SERACH,
 		AI_DEFENCE,
 		AI_ATTACK,
+		AI_DEAD,
 		AI_END
 	};
 

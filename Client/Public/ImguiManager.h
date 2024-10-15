@@ -64,11 +64,11 @@ private:
 "없음",
 "없음",
 "없음",
-"사과나무",
-"바위",
-"덤불",
-"아이템",
-"나무",
+"ITEM",
+"Tree",
+"AppleTree",
+"Rock",
+"Bush",
 	};
 	_int m_iSelectLandObject = _int(INTERACTION::INTER_END);
 
