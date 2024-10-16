@@ -128,6 +128,13 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	{
 		
 	}
+	else if (m_iSelectMode == 3)
+	{
+		//ImGui::Text("MakeSpecialLand");
+		//ImGui::InputInt3("LandSize", m_iLand);
+		////ImGui::Combo("SelectTexTure", &m_iSelectTexture, szTexture, IM_ARRAYSIZE(szTexture));
+		////GET_INSTANCE->ChangeIndex(m_iSelectTexture);
+	}
 
 	if (ImGui::Button("SAVE_MODEL"))
 	{

@@ -21,6 +21,7 @@ class CTerrainManager;
 class CTerrainManager final : public CGameObject
 {
 public:
+	
 
 	enum class LANDCOMMAND
 	{

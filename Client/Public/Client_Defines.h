@@ -25,7 +25,7 @@ namespace Client
 #define LMAX_X			200
 #define LMAX_Y			50
 #define LMAX_Z			200
-#define LTEXTUREMAX		8
+#define LTEXTUREMAX		26
 #define MAKELKEY(X, Y, Z, D) (X * (6*LMAX_X * LMAX_Y * LMAX_Z)) + (Y * (6*LMAX_Y * LMAX_Z)) + (Z * (6*LMAX_Z)) + (D * 6)
 #define TERRAINERROR	{-1.f,-1.f,-1.f}
 #define GAPFROMTERRAIN	0.01f

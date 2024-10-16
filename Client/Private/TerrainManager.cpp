@@ -316,6 +316,12 @@ void CTerrainManager::SetBedRock(_int iX, _int iY, _int iZ)
 			for (_int k = 1; k <= iZ; ++k)
 			{
 				LCOMMAND tTemp = { LANDCOMMAND::LCOMMAND_ADD_LAND, {i,j,k},{0,0,0,0,0,0} };
+
+				tTemp.m_iTextureNum[0] = _int(LANDNAME::LNAME_GRASS);
+
+				for (_int z = 1; z < 6; ++z)
+					tTemp.m_iTextureNum[z] = _int(LANDNAME::LNAME_DIRT_RED);
+
 				m_CommandBuffer.push_back(tTemp);
 			}
 
@@ -350,8 +356,22 @@ void CTerrainManager::Make_NewCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY
 					tTemp.m_vIndex[0] = i;
 					tTemp.m_vIndex[1] = j;
 					tTemp.m_vIndex[2] = k;
-					for (_int z = 0; z < 6; ++z)
-						tTemp.m_iTextureNum[z] = TextureIndex;
+
+
+					if (TextureIndex != _int(LANDNAME::LNAME_GRASS))
+					{
+						for (_int z = 0; z < 6; ++z)
+							tTemp.m_iTextureNum[z] = TextureIndex;
+					}
+					else
+					{
+						tTemp.m_iTextureNum[0] = TextureIndex;
+
+						for (_int z = 1; z < 6; ++z)
+							tTemp.m_iTextureNum[z] = _int(LANDNAME::LNAME_DIRT_RED);
+					}
+
+
 					m_CommandBuffer.push_back(tTemp);
 				}
 	
@@ -1196,7 +1216,27 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 					else
 					{
 						if (eType == CONTAINER::CONTAINER_PLAYER)
-							GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+						{
+							if (GET_INSTANCE->Get_Player_Pointer() == nullptr)
+							{
+								GET_INSTANCE->ShowInformMessage(TEXT("플레이어 캐릭터 신규 생성"));
+								GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+							}
+							else
+							{
+								GET_INSTANCE->ShowInformMessage(TEXT("플레이어 캐릭터 위치 변경"));
+
+								CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1);
+								m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), pTemp);
+								m_vecObjInfo.pop_back();
+
+								GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+
+							}
+							
+
+
+						}
 						else if (eType == CONTAINER::CONTAINER_ENEMY)
 							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
 						else if (eType == CONTAINER::CONTAINER_BOSS)
