@@ -30,8 +30,8 @@ public:
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent);
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex);
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex);
-	virtual void DeadAction();
-	
+
+	void Rotation(_float3 fAxis, _float fAngle) { m_pTransformCom->Rotation(XMLoadFloat3(&fAxis), XMConvertToRadians(fAngle)); }
 
 	CONTAINER GetContainerType() { return eContainerType; }
 
@@ -49,6 +49,8 @@ protected:
 	virtual void Weapon_Control(_float fTimeDelta);
 	virtual void Camera_Control(_float fTimeDelta);
 	virtual void Test_Control(_float fTimeDelta);
+
+	virtual void DeadAction();
 
 	void Update_Distance_From_Player();
 	
@@ -70,6 +72,7 @@ protected:
 			m_fHp = 0.f;
 	}
 
+	
 	
 
 protected: // AI 관련 함수 

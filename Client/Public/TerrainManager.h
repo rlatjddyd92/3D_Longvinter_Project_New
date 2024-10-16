@@ -51,10 +51,15 @@ public:
 
 	typedef struct MAKEOBJ
 	{
-		MAKEOBJ(CONTAINER eType, _float3 Position) { eCon_Type = eType; fPosition = Position; }
+		MAKEOBJ(CONTAINER eType, _float3 Position, _float Rotate = 0.f, _int Index = 0) { eCon_Type = eType; fPosition = Position; fRotate = Rotate; iIndex = Index; }
+
+		MAKEOBJ(INTERACTION eType, _float3 Position, _float Rotate = 0.f, _int Index = 0) { eInter_Type = eType; fPosition = Position; fRotate = Rotate;  iIndex = Index; }
 
 		CONTAINER eCon_Type = CONTAINER::CONTAINER_END;
+		INTERACTION eInter_Type = INTERACTION::INTER_END;
 		_float3 fPosition = { 0.f,0.f,0.f };
+		_float fRotate = 0.f;
+		_int iIndex = 0;
 	}MOBJ;
 
 private:
@@ -74,7 +79,9 @@ public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END);
+	void IndexMarkHeight(_int iHeight) { m_iIndexY = iHeight; }
+
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0);
 
 	_float3 CheckPicking();
 
@@ -142,6 +149,10 @@ private:
 
 	void Adjust_Index(_int* iX, _int* iY, _int* iZ);
 
+	void Delete_LastObject();
+
+	void ShowIndex(_int iX, _int iZ, _matrix mHost);
+
 private:
 	
 	// 설정
@@ -166,11 +177,18 @@ private:
 	// 객체 정보 저장 
 	list<MAKEOBJ> m_vecObjInfo;
 
+
 	// texture
 	_int m_iTextureIndex = 0;
 
 	// 지형 렌더 범위 설정 
 	_float m_fRender_Length = -1.f;
+
+	_float m_fRender_Index = 50.f;
+	_int m_iIndexY = 5; // <- 인덱스 표시하는 높이 (에디터 전용) 
+
+
+
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

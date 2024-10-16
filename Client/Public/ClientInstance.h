@@ -89,9 +89,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void Save_Prototype_Model_Data() { m_pFactory->Save_Prototype_Model_Data(); }
 
 	// Container
-	void Make_Container_Player(_float3 Position) { m_pFactory->Make_Container_Player(Position); }
-	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Enemy(Position, eType); }
-	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType) { m_pFactory->Make_Container_Boss(Position, eType); }
+	void Make_Container_Player(_float3 Position, _float fAngle = 0.f) { m_pFactory->Make_Container_Player(Position, fAngle); }
+	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Enemy(Position, eType, fAngle); }
+	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Boss(Position, eType, fAngle); }
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
@@ -126,7 +126,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void SaveMap(const _char* pPath) { m_pTerrainManager->SaveMap(pPath); }
 	void LoadMap(const _char* pPath) { m_pTerrainManager->LoadMap(pPath); }
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType, eInter); }
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType, eInter, iRotate,  iIndex); }
 	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
@@ -245,10 +245,11 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		m_pInterActionManager->Input_ContainerColliderPointer(eContanerType, pHost, pCollider);
 	}
-	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f)
 	{ 
-		m_pInterActionManager->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec); 
+		m_pInterActionManager->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
 	}
+	void Delete_LastInterAction(INTERACTION eInterType) { m_pInterActionManager->Delete_LastInterAction(eInterType); }
 
 
 #pragma endregion

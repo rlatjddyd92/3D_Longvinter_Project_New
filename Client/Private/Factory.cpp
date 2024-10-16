@@ -95,16 +95,18 @@ void CFactory::Save_Prototype_Model_Data()
 	}
 }
 
-void CFactory::Make_Container_Player(_float3 Position)
+void CFactory::Make_Container_Player(_float3 Position, _float fAngle)
 {
 	CGameObject::GAMEOBJECT_DESC		pTemp{};
 	pTemp.fPosition = Position;
 	pTemp.fSpeedPerSec = 5.0f;
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), TEXT("Prototype_GameObject_Container_Player"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
+
 }
 
-void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
+void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle)
 {
 	CAI_Enemy::AI_Enemy_Desc		pTemp{};
 	pTemp.fPosition = Position;
@@ -112,9 +114,10 @@ void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	pTemp.eType = eType;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), TEXT("Prototype_GameObject_Container_AI_Enemy"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
-void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType)
+void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle)
 {
 	CAI_Enemy::AI_Enemy_Desc		pTemp{};
 	pTemp.fPosition = Position;
@@ -122,6 +125,7 @@ void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType)
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	pTemp.eType = eType;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), TEXT("Prototype_GameObject_Container_AI_Boss"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
 HRESULT CFactory::Ready_Prototype_Texture()

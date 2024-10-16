@@ -128,9 +128,9 @@ HRESULT CInterActionManager::Ready_PartObjects()
 	return S_OK;
 }
 
-void CInterActionManager::Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction)
+void CInterActionManager::Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction, _float fAngle)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction, fAngle);
 }
 
 void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider)
@@ -147,9 +147,14 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
-void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
+}
+
+void CInterActionManager::Delete_LastInterAction(INTERACTION eInterType)
+{
+	m_vecInterAction[_int(eInterType)]->Delete_LastInterAction();
 }
 
 void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)

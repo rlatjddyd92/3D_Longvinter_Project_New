@@ -40,13 +40,15 @@ public:
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent) override;
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
-	virtual void DeadAction() override;
+
 
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
 	virtual void Weapon_Control(_float fTimeDelta) override;
 	virtual void Camera_Control(_float fTimeDelta) override;
 	virtual void Test_Control(_float fTimeDelta) override;
+
+	virtual void DeadAction() override;
 
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta) override;

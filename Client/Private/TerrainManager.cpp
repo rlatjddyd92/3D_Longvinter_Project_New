@@ -80,14 +80,38 @@ HRESULT CTerrainManager::Render()
 
 		_bool bGray = false;
 
+		_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
+
 		if (m_fRender_Length >= 0.f)
 		{
-			_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
+			
 			if (Length > m_fRender_Length)
 				continue;
 			else if (Length > m_fRender_Length * 0.5f)
 				bGray = true;
 		}
+
+		
+		if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_EDITOR)
+			if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true))
+				if (Length <= m_fRender_Index)
+				{
+			
+
+					_int iX = -1;
+					_int iY = -1;
+					_int iZ = -1;
+					LCUBEDIRECION Derec = LCUBEDIRECION::LDIREC_END;
+
+					InterpretKey(iter.first, &iX, &iY, &iZ, &Derec);
+
+
+					if ((iX % 10 == 0) && (iZ % 10 == 0))
+						ShowIndex(iX, iZ, XMLoadFloat4x4(&iter.second->m_vMat));
+
+				}
+
+		
 
 
 		LCUBEDIRECION Direc = LCUBEDIRECION(iter.first[iter.first.size() - 1] - '0');
@@ -144,6 +168,9 @@ HRESULT CTerrainManager::Render()
 		if (FAILED(m_pVIBufferCom->Render()))
 			return E_FAIL;
 
+
+	
+		
 	}
 
 	return S_OK;
@@ -177,7 +204,10 @@ void CTerrainManager::SaveMap(const _char* pPath)
 	for (auto& iter : m_vecObjInfo)
 	{
 		WriteFile(hFile, &iter.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
+		WriteFile(hFile, &iter.eInter_Type, sizeof(INTERACTION), &dwByte, nullptr);
 		WriteFile(hFile, &iter.fPosition, sizeof(_float3), &dwByte, nullptr);
+		WriteFile(hFile, &iter.fRotate, sizeof(_float), &dwByte, nullptr);
+		WriteFile(hFile, &iter.iIndex, sizeof(_int), &dwByte, nullptr);
 	}
 		
 
@@ -237,27 +267,36 @@ void CTerrainManager::LoadMap(const _char* pPath)
 
 	for (_int i = 0; i < iSize; ++i)
 	{
-		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, {0.f,0.f,0.f});
+		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, { 0.f,0.f,0.f }, 0.f, 0);
 		ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.eInter_Type, sizeof(INTERACTION), &dwByte, nullptr);
 		ReadFile(hFile, &tTemp.fPosition, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.fRotate, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.iIndex, sizeof(_int), &dwByte, nullptr);
 		m_vecObjInfo.push_back(tTemp);
 
 		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_PLAYER)
 		{
-			GET_INSTANCE->Make_Container_Player(tTemp.fPosition);
+			GET_INSTANCE->Make_Container_Player(tTemp.fPosition, tTemp.fRotate);
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ANIMAL)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ANIMAL)
 		{
 
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
 		{
-			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
+			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_BOSS)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_BOSS)
 		{
-			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
+			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
 		}
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_END)
+		{
+			GET_INSTANCE->Add_InterActionObject_BySpec(tTemp.eInter_Type, nullptr, tTemp.fPosition, _float3(0.f, 0.f, 0.f), tTemp.fRotate);
+		}
+
+
 	}
 
 	Safe_Delete_Array(TempName);
@@ -506,6 +545,89 @@ void CTerrainManager::Adjust_Index(_int* iX, _int* iY, _int* iZ)
 	*iY = max(*iY, 0);
 	*iZ = max(*iZ, 0);
 }
+
+void CTerrainManager::Delete_LastObject()
+{
+	if (m_vecObjInfo.empty())
+		return;
+
+	MAKEOBJ tTemp = m_vecObjInfo.back();
+
+	if (tTemp.eInter_Type != INTERACTION::INTER_END)
+	{
+		GET_INSTANCE->Delete_LastInterAction(tTemp.eInter_Type);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_PLAYER)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_ENEMY)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_BOSS)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+
+
+
+
+}
+
+void CTerrainManager::ShowIndex(_int iX, _int iZ, _matrix mHost)
+{
+	_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
+	_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
+
+	_vector vResult = { 0.f,  0.f,  0.f, 0.f };
+
+	// 투영 좌표 계산
+	vResult = XMVector3Transform(vResult, mHost);
+	vResult = XMVector3Transform(vResult, mView);
+	vResult = XMVector3Transform(vResult, mProj);
+
+
+
+	// W나누기
+	_float4 fResult{};
+	XMStoreFloat4(&fResult, vResult);
+
+	if (fResult.w < 0.f)
+		return;
+
+
+	_float m_fX = fResult.x / fResult.w;
+	_float m_fY = fResult.y / fResult.w;
+
+	// 스크린 좌표로 변환
+	m_fX = ((m_fX + 1.f) * 0.5) * 1280.f;
+	m_fY = ((1.f - m_fY) * 0.5) * 720.f;
+
+	
+	string strX = to_string(iX);
+	string strZ = to_string(iZ);
+
+	strX += ":";
+	strX += strZ;
+
+	_tchar* tIndex = new _tchar[strX.size() + 1];
+	
+	for (_int i = 0; i < strX.size() + 1; ++i)
+		tIndex[i] = strX[i];
+
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), tIndex, { m_fX , m_fY,0.f , 0.f }, 0.5f);
+
+	Safe_Delete_Array(tIndex);
+}
+
 
 _float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
 {
@@ -1021,7 +1143,7 @@ void CTerrainManager::ChangeLandInfo_Backward()
 {
 }
 
-_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType, INTERACTION eInter)
+_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType, INTERACTION eInter, _int iRotate, _int iIndex)
 {
 	_vector vCamera = GET_INSTANCE->GetCameraPosition();
 	_double fDistance = -1.f;
@@ -1067,19 +1189,35 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 				}
 				if (iMode == 1)
 				{
-					if (eType == CONTAINER::CONTAINER_PLAYER)
-						GET_INSTANCE->Make_Container_Player(fResult);
-					else if (eType == CONTAINER::CONTAINER_ENEMY)
-						GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
-					else if (eType == CONTAINER::CONTAINER_BOSS)
-						GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
-					else if (eType == CONTAINER::CONTAINER_END)
+					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
 					{
-						if (eInter != INTERACTION::INTER_END)
-							GET_INSTANCE->Add_InterActionObject_BySpec(eInter, nullptr, fResult, { 0.f,0.f,0.f });
+						Delete_LastObject();
 					}
-					
-					m_vecObjInfo.push_back({ eType,fResult });
+					else
+					{
+						if (eType == CONTAINER::CONTAINER_PLAYER)
+							GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+						else if (eType == CONTAINER::CONTAINER_ENEMY)
+							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						else if (eType == CONTAINER::CONTAINER_BOSS)
+							GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						else if (eType == CONTAINER::CONTAINER_END)
+						{
+							if (eInter != INTERACTION::INTER_END)
+								GET_INSTANCE->Add_InterActionObject_BySpec(eInter, nullptr, fResult, { 0.f,0.f,0.f }, iRotate);
+						}
+
+						if (eType != CONTAINER::CONTAINER_END)
+						{
+							MOBJ tNew(eType, fResult, _float(iRotate), iIndex);
+							m_vecObjInfo.push_back(tNew);
+						}
+						else
+						{
+							MOBJ tNew(eInter, fResult, _float(iRotate), iIndex);
+							m_vecObjInfo.push_back(tNew);
+						}
+					}
 				}
 		}
 	

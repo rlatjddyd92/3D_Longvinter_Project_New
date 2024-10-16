@@ -114,6 +114,10 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	else if (m_iSelectMode == 1)
 	{
 		ImGui::Combo("SelectObject", &m_iSelectObject, szObject, IM_ARRAYSIZE(szObject));
+		ImGui::InputInt("Angle", &m_iRotate);
+
+		if ((m_iRotate < 0) || (m_iRotate >= 360))
+			m_iRotate = 0;
 
 		if (m_iSelectObject == 4)
 		{
@@ -122,59 +126,7 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	}
 	else if (m_iSelectMode == 2)
 	{
-		if (ImGui::PushButtonRepeat)
-		if (ImGui::Button("TURN_X"))
-		{
-			GET_INSTANCE->Turn_Model({ 1.f,0.f,0.f }, fTimeDelta);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("TURN_Y"))
-		{
-			GET_INSTANCE->Turn_Model({ 0.f,1.f,0.f }, fTimeDelta);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("TURN_Z"))
-		{
-			GET_INSTANCE->Turn_Model({ 0.f,0.f,1.f }, fTimeDelta);
-		}
 		
-		if (ImGui::Button("Scale_Up"))
-		{
-			GET_INSTANCE->Scaling_Model(1.01f);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Scale_Down"))
-		{
-			GET_INSTANCE->Scaling_Model(0.99f);
-		}
-
-		if (ImGui::InputInt("BaseSize", &m_iAnimation))
-		{
-
-		}
-
-		if (ImGui::Button("Change_Animation"))
-		{
-			GET_INSTANCE->Change_Animation(m_iAnimation);
-		}
-
-
-		if (ImGui::Button("Camera_First"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Camera_Third"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Camera_Editor"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
-		}
-
-
 	}
 
 	if (ImGui::Button("SAVE_MODEL"))
@@ -192,9 +144,9 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		_bool bTop = m_iSelectMode == 1;
 
 		if (m_iSelectObject != 4)
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
+			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
 		else if (szLandObject[_int(m_iSelectLandObject)] != "¾øÀ½")
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject));
+			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject), m_iRotate);
 	}
 
 	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))

@@ -76,6 +76,8 @@ private:
 
 	_int m_iRenderLimit = -1;
 
+	_int m_iRotate = 0;
+
 	// Class
 
 public:
