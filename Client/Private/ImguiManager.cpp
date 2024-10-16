@@ -145,26 +145,31 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 
 	ImGui::End();
 
+	
+		_bool bPressing = m_iSelectMode == 0;
 
-	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON))
-	{
-		_bool bTop = m_iSelectMode == 1;
+		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, bPressing))
+		{
+			_bool bTop = m_iSelectMode == 1;
 
-		if (m_iSelectObject != 4)
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
-		else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject), m_iRotate);
-	}
+			if (m_iSelectObject != 4)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
+			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject), m_iRotate);
+		}
 
-	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
-	{
-		_bool bTop = m_iSelectMode == 1;
+		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON, bPressing))
+		{
+			_bool bTop = m_iSelectMode == 1;
 
-		if (m_iSelectObject != 4)
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
-		else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
-			GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject));
-	}
+			if (m_iSelectObject != 4)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
+			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject));
+		}
+	
+
+	
 }
 
 void CImguiManager::Update(_float fTimeDelta)

@@ -194,8 +194,8 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"),TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		m_fSpec_Extent = { 0.2f,0.4f,0.2f };
-		m_fSpec_Scale = 0.8f;
+		m_fSpec_Extent = { 0.2f,0.3f,0.2f };
+		m_fSpec_Scale = 0.5f;
 		m_bTexture = false;
 	}
 	else if (eIndex == INTERACTION::INTER_BUSH)

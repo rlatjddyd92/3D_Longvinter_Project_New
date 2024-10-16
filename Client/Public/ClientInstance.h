@@ -43,6 +43,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	void SetLenderLength(_float fLength)
 	{
+		if (fLength < 0.f)
+			fLength = 0.f;
+
 		m_pTerrainManager->Set_Render_Length(fLength);
 		m_fRenderLength = fLength;
 	}

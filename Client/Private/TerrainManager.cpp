@@ -40,8 +40,10 @@ HRESULT CTerrainManager::Initialize(void* pArg)
 
 void CTerrainManager::Priority_Update(_float fTimeDelta)
 {
-	
+	m_fInterval_Now -= fTimeDelta;
 
+	if (m_fInterval_Now < 0.f)
+		m_fInterval_Now = 0.f;
 
 
 }
@@ -1196,16 +1198,19 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 			
 				if (iMode == 0)
 				{
+					if (m_fInterval_Now > 0.f)
+						return fResult;
+
 					_int iIndex[3] = { 0, };
 					LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_TOP;
 					InterpretKey(strKey, &iIndex[0], &iIndex[1], &iIndex[2], &eDirec);
 
-					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON))
+					if ((m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON)) || (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true)))
 						Make_NewCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ, m_iTextureIndex);
 					else
 						Make_DeleteCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ);
 
-					
+					m_fInterval_Now = m_fInterval;
 				}
 				if (iMode == 1)
 				{

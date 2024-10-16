@@ -467,6 +467,21 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 			m_iFace = 0;
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true) & 0x80)
+	{
+		_float fLength = GET_INSTANCE->GetLenderLength();
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_UP, true) & 0x80)
+		{
+			GET_INSTANCE->SetLenderLength(fLength + fTimeDelta);
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, true) & 0x80)
+		{
+			GET_INSTANCE->SetLenderLength(fLength - fTimeDelta);
+		}
+			
+	}
 }
 
 void CContainer_Player::Set_AI_Status(_float fTimeDelta)
