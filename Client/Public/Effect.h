@@ -20,6 +20,7 @@ public:
 		_float3 fPosition = { 0.f,0.f,0.f };
 		_float3 fDirec = { 0.f,0.f,0.f };
 		_float4 fColor = { 0.f,0.f,0.f,0.f };
+		_float fScale = 0.f;
 		_float fFly = 0.f;
 		_float fPower = 0.f;
 		_float fPowerDecrease = 0.f;

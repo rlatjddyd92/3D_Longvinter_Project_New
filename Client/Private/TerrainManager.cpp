@@ -40,9 +40,10 @@ HRESULT CTerrainManager::Initialize(void* pArg)
 
 void CTerrainManager::Priority_Update(_float fTimeDelta)
 {
-	
+	m_fInterval_Now -= fTimeDelta;
 
-
+	if (m_fInterval_Now < 0.f)
+		m_fInterval_Now = 0.f;
 
 
 }
@@ -67,6 +68,8 @@ void CTerrainManager::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrainManager::Render()
 {
+
+
 	for (auto& iter : m_mapInstancing_SurFace)
 	{
 		_vector vCamera = GET_INSTANCE->GetCameraPosition();
@@ -79,14 +82,40 @@ HRESULT CTerrainManager::Render()
 
 		_bool bGray = false;
 
+		_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
+
 		if (m_fRender_Length >= 0.f)
 		{
-			_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
 			if (Length > m_fRender_Length)
 				continue;
-			else if (Length > m_fRender_Length * 0.5f)
-				bGray = true;
 		}
+
+		_vector vPosition = { iter.second->m_vMat.m[3][0], iter.second->m_vMat.m[3][1], iter.second->m_vMat.m[3][2], iter.second->m_vMat.m[3][3] };
+
+		if (GET_INSTANCE->IsBackOfCamera(vPosition))
+			continue;
+
+		
+		if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_EDITOR)
+			if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true))
+				if (Length <= m_fRender_Index)
+				{
+			
+
+					_int iX = -1;
+					_int iY = -1;
+					_int iZ = -1;
+					LCUBEDIRECION Derec = LCUBEDIRECION::LDIREC_END;
+
+					InterpretKey(iter.first, &iX, &iY, &iZ, &Derec);
+
+
+					if ((iX % 10 == 0) && (iZ % 10 == 0))
+						ShowIndex(iX, iZ, XMLoadFloat4x4(&iter.second->m_vMat));
+
+				}
+
+		
 
 
 		LCUBEDIRECION Direc = LCUBEDIRECION(iter.first[iter.first.size() - 1] - '0');
@@ -143,6 +172,9 @@ HRESULT CTerrainManager::Render()
 		if (FAILED(m_pVIBufferCom->Render()))
 			return E_FAIL;
 
+
+	
+		
 	}
 
 	return S_OK;
@@ -176,7 +208,10 @@ void CTerrainManager::SaveMap(const _char* pPath)
 	for (auto& iter : m_vecObjInfo)
 	{
 		WriteFile(hFile, &iter.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
+		WriteFile(hFile, &iter.eInter_Type, sizeof(INTERACTION), &dwByte, nullptr);
 		WriteFile(hFile, &iter.fPosition, sizeof(_float3), &dwByte, nullptr);
+		WriteFile(hFile, &iter.fRotate, sizeof(_float), &dwByte, nullptr);
+		WriteFile(hFile, &iter.iIndex, sizeof(_int), &dwByte, nullptr);
 	}
 		
 
@@ -236,27 +271,36 @@ void CTerrainManager::LoadMap(const _char* pPath)
 
 	for (_int i = 0; i < iSize; ++i)
 	{
-		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, {0.f,0.f,0.f});
+		MAKEOBJ tTemp(CONTAINER::CONTAINER_END, { 0.f,0.f,0.f }, 0.f, 0);
 		ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.eInter_Type, sizeof(INTERACTION), &dwByte, nullptr);
 		ReadFile(hFile, &tTemp.fPosition, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.fRotate, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tTemp.iIndex, sizeof(_int), &dwByte, nullptr);
 		m_vecObjInfo.push_back(tTemp);
 
 		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_PLAYER)
 		{
-			GET_INSTANCE->Make_Container_Player(tTemp.fPosition);
+			GET_INSTANCE->Make_Container_Player(tTemp.fPosition, tTemp.fRotate);
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ANIMAL)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ANIMAL)
 		{
 
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
 		{
-			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END);
+			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
 		}
-		if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_BOSS)
 		{
+			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
+		}
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_END)
+		{
+			GET_INSTANCE->Add_InterActionObject_BySpec(tTemp.eInter_Type, nullptr, tTemp.fPosition, _float3(0.f, 0.f, 0.f), tTemp.fRotate);
+		}
 
-		}
+
 	}
 
 	Safe_Delete_Array(TempName);
@@ -276,6 +320,12 @@ void CTerrainManager::SetBedRock(_int iX, _int iY, _int iZ)
 			for (_int k = 1; k <= iZ; ++k)
 			{
 				LCOMMAND tTemp = { LANDCOMMAND::LCOMMAND_ADD_LAND, {i,j,k},{0,0,0,0,0,0} };
+
+				tTemp.m_iTextureNum[0] = _int(LANDNAME::LNAME_GRASS);
+
+				for (_int z = 1; z < 6; ++z)
+					tTemp.m_iTextureNum[z] = _int(LANDNAME::LNAME_DIRT_RED);
+
 				m_CommandBuffer.push_back(tTemp);
 			}
 
@@ -310,8 +360,22 @@ void CTerrainManager::Make_NewCube(_int iX, _int iY, _int iZ, _int iCX, _int iCY
 					tTemp.m_vIndex[0] = i;
 					tTemp.m_vIndex[1] = j;
 					tTemp.m_vIndex[2] = k;
-					for (_int z = 0; z < 6; ++z)
-						tTemp.m_iTextureNum[z] = TextureIndex;
+
+
+					if (TextureIndex != _int(LANDNAME::LNAME_GRASS))
+					{
+						for (_int z = 0; z < 6; ++z)
+							tTemp.m_iTextureNum[z] = TextureIndex;
+					}
+					else
+					{
+						tTemp.m_iTextureNum[0] = TextureIndex;
+
+						for (_int z = 1; z < 6; ++z)
+							tTemp.m_iTextureNum[z] = _int(LANDNAME::LNAME_DIRT_RED);
+					}
+
+
 					m_CommandBuffer.push_back(tTemp);
 				}
 	
@@ -343,12 +407,15 @@ void CTerrainManager::Change_Surface(_bool bLinked)
 
 void CTerrainManager::Destroy_Terrain_Explosion(_float3 fPosition, _float fRadius)
 {
-	_uint iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
-	_uint iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
-	_uint iMinY = max(m_iBedRock, (fPosition.y - fRadius) / LCUBESIZE);
-	_uint iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
-	_uint iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
-	_uint iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
+	_int iMinX = max(0, (fPosition.x - fRadius) / LCUBESIZE);
+	_int iMaxX = min(LMAX_X, (fPosition.x + fRadius) / LCUBESIZE);
+	_int iMinY = max(m_iBedRock, (fPosition.y - fRadius) / LCUBESIZE);
+	_int iMaxY = min(LMAX_Y, (fPosition.y + fRadius) / LCUBESIZE);
+	_int iMinZ = max(0, (fPosition.z - fRadius) / LCUBESIZE);
+	_int iMaxZ = min(LMAX_Z, (fPosition.z + fRadius) / LCUBESIZE);
+
+	Adjust_Index(&iMinX, &iMinY, &iMinZ);
+	Adjust_Index(&iMaxX, &iMaxY, &iMaxZ);
 
 	for (_int i = iMinX; i <= iMaxX;++i)
 		for (_int j = iMinY; j <= iMaxY; ++j)
@@ -489,6 +556,103 @@ _float3 CTerrainManager::IsPicking_Instancing(SURFACE* pSurface)
 	return vPickPos;
 }
 
+void CTerrainManager::Adjust_Index(_int* iX, _int* iY, _int* iZ)
+{
+	if (*iX < 0.f) *iX = 0.f;
+	if (*iY < 0.f) *iY = 0.f;
+	if (*iZ < 0.f) *iZ = 0.f;
+
+	*iX = min(*iX, m_vecLcubeInfo.size() - 1);
+	*iY = min(*iY, m_vecLcubeInfo[*iX].size() - 1);
+	*iZ = min(*iZ, m_vecLcubeInfo[*iX][*iY].size() - 1);
+	*iX = max(*iX, 0);
+	*iY = max(*iY, 0);
+	*iZ = max(*iZ, 0);
+}
+
+void CTerrainManager::Delete_LastObject()
+{
+	if (m_vecObjInfo.empty())
+		return;
+
+	MAKEOBJ tTemp = m_vecObjInfo.back();
+
+	if (tTemp.eInter_Type != INTERACTION::INTER_END)
+	{
+		GET_INSTANCE->Delete_LastInterAction(tTemp.eInter_Type);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_PLAYER)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_ENEMY)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_BOSS)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
+
+
+
+
+}
+
+void CTerrainManager::ShowIndex(_int iX, _int iZ, _matrix mHost)
+{
+	_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
+	_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));
+
+	_vector vResult = { 0.f,  0.f,  0.f, 0.f };
+
+	// 투영 좌표 계산
+	vResult = XMVector3Transform(vResult, mHost);
+	vResult = XMVector3Transform(vResult, mView);
+	vResult = XMVector3Transform(vResult, mProj);
+
+
+
+	// W나누기
+	_float4 fResult{};
+	XMStoreFloat4(&fResult, vResult);
+
+	if (fResult.w < 0.f)
+		return;
+
+
+	_float m_fX = fResult.x / fResult.w;
+	_float m_fY = fResult.y / fResult.w;
+
+	// 스크린 좌표로 변환
+	m_fX = ((m_fX + 1.f) * 0.5) * 1280.f;
+	m_fY = ((1.f - m_fY) * 0.5) * 720.f;
+
+	
+	string strX = to_string(iX);
+	string strZ = to_string(iZ);
+
+	strX += ":";
+	strX += strZ;
+
+	_tchar* tIndex = new _tchar[strX.size() + 1];
+	
+	for (_int i = 0; i < strX.size() + 1; ++i)
+		tIndex[i] = strX[i];
+
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), tIndex, { m_fX , m_fY,0.f , 0.f }, 0.5f);
+
+	Safe_Delete_Array(tIndex);
+}
+
+
 _float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3 fExtents, _float3 vAdjustVector, LCUBEDIRECION* eDirec)
 {
 	_float3 vCenter = fCenter;
@@ -498,24 +662,27 @@ _float3 CTerrainManager::Check_Terrain_Collision_Adjust(_float3 fCenter, _float3
 	_float3 vExtents = fExtents;
 
 	// 1. 객체가 존재할 수 있는 큐브 인덱스 범위 잡기 
-	_uint iMinX = (vCenter.x - vExtents.x) / LCUBESIZE;
-	_uint iMaxX = (vCenter.x + vExtents.x) / LCUBESIZE;
-	_uint iMinY = (vCenter.y - vExtents.y) / LCUBESIZE;
-	_uint iMaxY = (vCenter.y + vExtents.y) / LCUBESIZE;
-	_uint iMinZ = (vCenter.z - vExtents.z) / LCUBESIZE;
-	_uint iMaxZ = (vCenter.z + vExtents.z) / LCUBESIZE;
+	_int iMinX = (vCenter.x - vExtents.x) / LCUBESIZE;
+	_int iMaxX = (vCenter.x + vExtents.x) / LCUBESIZE;
+	_int iMinY = (vCenter.y - vExtents.y) / LCUBESIZE;
+	_int iMaxY = (vCenter.y + vExtents.y) / LCUBESIZE;
+	_int iMinZ = (vCenter.z - vExtents.z) / LCUBESIZE;
+	_int iMaxZ = (vCenter.z + vExtents.z) / LCUBESIZE;
 
-	if (iMinX * iMinY * iMaxZ < 0)
+	Adjust_Index(&iMinX, &iMinY, &iMinZ);
+	Adjust_Index(&iMaxX, &iMaxY, &iMaxZ);
+
+	/*if ((iMinX < 0.f) + (iMinY < 0.f) + (iMinZ < 0.f) > 0)
 		return TERRAINERROR;
 
 	if (iMaxX >= LMAX_X)
 		return TERRAINERROR;
 
-	if (iMaxY >= LMAX_Y + 5)
+	if (iMaxY >= LMAX_Y)
 		return TERRAINERROR;
 
 	if (iMaxZ >= LMAX_Z)
-		return TERRAINERROR;
+		return TERRAINERROR;*/
 
 	// 2. 겹치는 지형 큐브가 있는 지 확인 
 	for (_uint i = iMinX; i <= iMaxX; ++i)
@@ -777,11 +944,13 @@ HRESULT CTerrainManager::Ready_Components()
 		TEXT("Com_Shader_1"), reinterpret_cast<CComponent**>(&m_pShaderCom_Gray))))
 		return E_FAIL;
 
-	
-
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect3D"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Sky"), TEXT("Prototype_GameObject_Sky"));
+
+	m_pSky = static_cast<CSky*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Sky"), -1));
 
 	/* For.Com_Collider */
 	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
@@ -998,7 +1167,7 @@ void CTerrainManager::ChangeLandInfo_Backward()
 {
 }
 
-_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType)
+_float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, _bool bTop, CONTAINER eType, INTERACTION eInter, _int iRotate, _int iIndex)
 {
 	_vector vCamera = GET_INSTANCE->GetCameraPosition();
 	_double fDistance = -1.f;
@@ -1022,23 +1191,6 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 		}
 	}
 
-	/*for (auto& pair : m_mapSurFace)
-	{
-		_float3 fTempResult = pair.second->IsPicking();
-		if (fTempResult.x == -1)
-			continue;
-
-		_vector fTemp = vCamera - XMLoadFloat3(&fTempResult);
-		_double dTempDistance = sqrt((pow(fTemp.m128_f32[0], 2) + pow(fTemp.m128_f32[1], 2) + pow(fTemp.m128_f32[2], 2)));
-
-		if ((fDistance == -1.f) || (fDistance > dTempDistance))
-		{
-			fDistance = dTempDistance;
-			strKey = pair.first;
-			fResult = fTempResult;
-		}
-			
-	}*/
 
 	if (fDistance == -1)
 		return fResult;
@@ -1048,26 +1200,139 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 			
 				if (iMode == 0)
 				{
-					_int iIndex[3] = { 0, };
+					if (m_fInterval_Now > 0.f)
+						return fResult;
+
+					_int iIndex[3] = { 0,0,0 };
 					LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_TOP;
 					InterpretKey(strKey, &iIndex[0], &iIndex[1], &iIndex[2], &eDirec);
 
-					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON))
+					if ((m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON)) || (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true)))
+					{
+						if (eDirec == LCUBEDIRECION::LDIREC_TOP)
+						{
+							iIndex[1] += 1;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_BOTTOM)
+						{
+							iIndex[1] -= iCY;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_NORTH)
+						{
+							iIndex[2] += 1;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_SOUTH)
+						{
+							iIndex[2] -= iCZ;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_WEST)
+						{
+							iIndex[0] -= iCX;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_EAST)
+						{
+							iIndex[0] += 1;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+
+						Adjust_Index(&iIndex[0], &iIndex[1], &iIndex[2]);
+
+
+
 						Make_NewCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ, m_iTextureIndex);
+					}
+						
 					else
 						Make_DeleteCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ);
 
-					
+					m_fInterval_Now = m_fInterval;
 				}
 				if (iMode == 1)
 				{
-					if (eType == CONTAINER::CONTAINER_PLAYER)
-						GET_INSTANCE->Make_Container_Player(fResult);
+					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
+					{
+						Delete_LastObject();
+					}
+					else
+					{
+						if (eType == CONTAINER::CONTAINER_PLAYER)
+						{
+							if (GET_INSTANCE->Get_Player_Pointer() == nullptr)
+							{
+								GET_INSTANCE->ShowInformMessage(TEXT("플레이어 캐릭터 신규 생성"));
+								GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+							}
+							else
+							{
+								GET_INSTANCE->ShowInformMessage(TEXT("플레이어 캐릭터 위치 변경"));
 
-					if (eType == CONTAINER::CONTAINER_ENEMY)
-						GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END);
-					
-					m_vecObjInfo.push_back({ eType,fResult });
+								CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1);
+								m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), pTemp);
+								m_vecObjInfo.pop_back();
+
+								GET_INSTANCE->Make_Container_Player(fResult, iRotate);
+
+							}
+							
+
+
+						}
+						else if (eType == CONTAINER::CONTAINER_ENEMY)
+							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						else if (eType == CONTAINER::CONTAINER_BOSS)
+							GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						else if (eType == CONTAINER::CONTAINER_END)
+						{
+							if (eInter != INTERACTION::INTER_END)
+								GET_INSTANCE->Add_InterActionObject_BySpec(eInter, nullptr, fResult, { 0.f,0.f,0.f }, iRotate);
+						}
+
+						if (eType != CONTAINER::CONTAINER_END)
+						{
+							MOBJ tNew(eType, fResult, _float(iRotate), iIndex);
+							m_vecObjInfo.push_back(tNew);
+						}
+						else
+						{
+							MOBJ tNew(eInter, fResult, _float(iRotate), iIndex);
+							m_vecObjInfo.push_back(tNew);
+						}
+					}
 				}
 		}
 	
@@ -1151,7 +1416,7 @@ void CTerrainManager::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pShaderCom_Gray);
 	Safe_Release(m_pColliderCom);
-	
+	//Safe_Release(m_pSky);
 
 	for (auto& iterX : m_vecLcubeInfo)
 	{

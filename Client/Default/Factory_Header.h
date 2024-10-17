@@ -2,11 +2,14 @@
 
 #include "BackGround.h"
 #include "SurFace.h"
+#include "Sky.h"
 #include "Collider.h"
 
 #include "Container_Player.h"
 #include "Container_Enemy.h"
 #include "AI_Enemy.h"
+#include "AI_Boss.h"
+
 
 #include "Body.h"
 #include "Body_Human.h"
@@ -21,3 +24,4 @@
 #include "Tool_LandMine.h"
 #include "Tool_FireThrower.h"
 #include "Tool_Bow.h"
+#include "Tool_Machete.h"

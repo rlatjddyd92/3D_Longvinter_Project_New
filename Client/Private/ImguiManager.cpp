@@ -34,6 +34,16 @@ HRESULT CImguiManager::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	//for (_int i = 0; i < _int(INTERACTION::INTER_END); ++i)
+	//	szLandObject[i] = { "없음" };
+
+	//szLandObject[_int(INTERACTION::INTER_APPLETREE)] = { "사과나무" };
+	//szLandObject[_int(INTERACTION::INTER_ROCK)] = { "바위" };
+	//szLandObject[_int(INTERACTION::INTER_BUSH)] = { "덤불" };
+	//szLandObject[_int(INTERACTION::INTER_ITEM)] = { "아이템" };
+	//szLandObject[_int(INTERACTION::INTER_TREE)] = { "나무" };
+
+
 	return S_OK;
 }
 
@@ -104,62 +114,26 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	else if (m_iSelectMode == 1)
 	{
 		ImGui::Combo("SelectObject", &m_iSelectObject, szObject, IM_ARRAYSIZE(szObject));
+		ImGui::InputInt("Angle", &m_iRotate);
+
+		if ((m_iRotate < 0) || (m_iRotate >= 360))
+			m_iRotate = 0;
+
+		if (m_iSelectObject == 4)
+		{
+			ImGui::Combo("LandObject", &m_iSelectLandObject, szLandObject, IM_ARRAYSIZE(szLandObject));
+		}
 	}
 	else if (m_iSelectMode == 2)
 	{
-		if (ImGui::PushButtonRepeat)
-		if (ImGui::Button("TURN_X"))
-		{
-			GET_INSTANCE->Turn_Model({ 1.f,0.f,0.f }, fTimeDelta);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("TURN_Y"))
-		{
-			GET_INSTANCE->Turn_Model({ 0.f,1.f,0.f }, fTimeDelta);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("TURN_Z"))
-		{
-			GET_INSTANCE->Turn_Model({ 0.f,0.f,1.f }, fTimeDelta);
-		}
 		
-		if (ImGui::Button("Scale_Up"))
-		{
-			GET_INSTANCE->Scaling_Model(1.01f);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Scale_Down"))
-		{
-			GET_INSTANCE->Scaling_Model(0.99f);
-		}
-
-		if (ImGui::InputInt("BaseSize", &m_iAnimation))
-		{
-
-		}
-
-		if (ImGui::Button("Change_Animation"))
-		{
-			GET_INSTANCE->Change_Animation(m_iAnimation);
-		}
-
-
-		if (ImGui::Button("Camera_First"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Camera_Third"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Camera_Editor"))
-		{
-			GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
-		}
-
-
+	}
+	else if (m_iSelectMode == 3)
+	{
+		//ImGui::Text("MakeSpecialLand");
+		//ImGui::InputInt3("LandSize", m_iLand);
+		////ImGui::Combo("SelectTexTure", &m_iSelectTexture, szTexture, IM_ARRAYSIZE(szTexture));
+		////GET_INSTANCE->ChangeIndex(m_iSelectTexture);
 	}
 
 	if (ImGui::Button("SAVE_MODEL"))
@@ -171,20 +145,31 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 
 	ImGui::End();
 
+	
+		_bool bPressing = m_iSelectMode == 0;
 
-	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON))
-	{
-		_bool bTop = m_iSelectMode == 1;
+		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, bPressing))
+		{
+			_bool bTop = m_iSelectMode == 1;
 
-		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
-	}
+			if (m_iSelectObject != 4)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
+			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject), m_iRotate);
+		}
 
-	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
-	{
-		_bool bTop = m_iSelectMode == 1;
+		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON, bPressing))
+		{
+			_bool bTop = m_iSelectMode == 1;
 
-		GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
-	}
+			if (m_iSelectObject != 4)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
+			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject));
+		}
+	
+
+	
 }
 
 void CImguiManager::Update(_float fTimeDelta)

@@ -21,3 +21,34 @@ enum class LANDCOMMAND
 	LCOMMAND_CHANGE_SURFACE,
 	LCOMMAND_END
 };
+
+enum class LANDNAME
+{
+	LNAME_PAVEDROCK, // 도로
+	LNAME_ROCK, // 도로, 지형
+	LNAME_PAVEDROCK_LIGHT, // <- 이거 이상함
+	LNAME_GRASS, // 어두운 느낌의 숲
+	LNAME_GRASS_FALL, // 이상함 
+	LNAME_DIRT_RED, // 이거 주로 사용 
+	LNAME_DIRT_BROWN_1, // 똥
+	LNAME_DIRT_BROWN_2, // 똥 
+	LNAME_DESERT_ROCK_LIGHT, // 이상함 
+	LNAME_DESERT_ROCK_AND_DIRT, // 조금만 쓸 것 
+	LNAME_DESERT_ROCK, //  이상함 
+	LNAME_DESERT_SAND_WHITE, // 
+	LNAME_DESERT_SAND, // 
+	LNAME_DESERT_SAND_LIGHT, // 이거 주로 쓸 것 
+	LANME_WALL_ROCK_1, // 건설 
+	LANME_ROCK_LIGHT, // 이상함 
+	LANME_ROCK_WHITE, // 대리석 느낌, 건설 
+	LNAME_GRASS_LIGHT, // 밝은 느낌의 숲
+	LNAME_GRASS_LIGHT_FLOWER, // 이상함
+	LANME_WALL_ROCK_2, // 건설 
+	LNAME_GRASS_ROCK, // LNAME_GRASS_LIGHT에 조금만 섞어 쓰기 
+	LNAME_WALL_BRICK, // 건설 
+	LNAME_WALL_NORMAL, // 건물 파괴 시 사용 
+	LNAME_WALL_WOOD, // 건물 지붕 등에 조금만 사용 -> 나무 더미에 가까운 느낌임 
+	LANME_WALL_DARK, // 건설 
+	LNAME_WALL_OLD, // LNAME_WALL_NORMAL와 섞어 쓰기
+	LNAME_END
+};

@@ -43,12 +43,15 @@ HRESULT CAnimation::Initialize(const aiAnimation* pAIAnimation, const class CMod
 _bool CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _bool isLoop, _float fTimeDelta)
 {
 	/* 현재 재생위치를 계산하낟. */
+
 	m_CurrentTrackPosition += m_SpeedPerSec * fTimeDelta;
+
+	_bool bResult = false; 
 
 	if (m_CurrentTrackPosition >= m_Duration)
 	{
 		if (false == isLoop)
-			return true;
+			bResult = true;
 
 		m_CurrentTrackPosition = 0.f;
 	}
@@ -60,7 +63,7 @@ _bool CAnimation::Update_TransformationMatrices(const vector<CBone*>& Bones, _bo
 		pChannel->Update_TransformationMatrix(Bones, &m_CurrentKeyFrameIndices[iChannelIndex++], m_CurrentTrackPosition);
 	}
 
-	return false;
+	return bResult;
 }
 
 void CAnimation::SaveModel(HANDLE hHandle, DWORD* byte)
@@ -92,6 +95,20 @@ HRESULT CAnimation::LoadModel(HANDLE hHandle, DWORD* byte, const class CModel* p
 	}
 
 	return S_OK;
+}
+
+void CAnimation::AnimReset(const vector<CBone*>& Bones)
+{
+
+	m_CurrentTrackPosition = 0.f;
+
+	/* 현재 재생위치에 맞게 현재 애니메이션이 컨트롤해야 할 뼈의 상태들을 갱신해준다. */
+	_uint		iChannelIndex = { 0 };
+	for (auto& pChannel : m_Channels)
+	{
+		pChannel->Update_TransformationMatrix(Bones, &m_CurrentKeyFrameIndices[iChannelIndex++], m_CurrentTrackPosition);
+	}
+
 }
 
 CAnimation* CAnimation::Create(const aiAnimation* pAIAnimation, const class CModel* pModel)

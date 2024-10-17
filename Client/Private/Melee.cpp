@@ -14,20 +14,33 @@ CMelee::CMelee(const CMelee& Prototype)
 
 HRESULT CMelee::Initialize_Prototype()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMelee::Initialize(void* pArg)
 {
-	return E_NOTIMPL;
+	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_PartObjects()))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 void CMelee::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CMelee::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CMelee::Late_Update(_float fTimeDelta)
@@ -38,7 +51,9 @@ void CMelee::Late_Update(_float fTimeDelta)
 
 HRESULT CMelee::Render()
 {
-	return E_NOTIMPL;
+	__super::Render();
+
+	return S_OK;
 }
 void CMelee::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
 {
@@ -48,35 +63,45 @@ void CMelee::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex,
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CMelee::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CMelee::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CMelee::Ready_Components()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMelee::Ready_PartObjects()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 CMelee* CMelee::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	return nullptr;
+	CMelee* pInstance = new CMelee(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CMelee"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CGameObject* CMelee::Clone(void* pArg)
 {
-	return nullptr;
+	CMelee* pInstance = new CMelee(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CMelee"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CMelee::Free()
 {
+	__super::Free();
 }

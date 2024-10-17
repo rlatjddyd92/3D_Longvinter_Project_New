@@ -18,6 +18,8 @@ public:
 	void SaveModel(HANDLE hHandle, DWORD* byte);
 	HRESULT LoadModel(HANDLE hHandle, DWORD* byte, const class CModel* pModel);
 
+	void AnimReset(const vector<CBone*>& Bones);
+
 private:
 	/* 이 애니메이션이 사용하는 뼈의 갯수 */
 	_uint						m_iNumChannels = { 0 };

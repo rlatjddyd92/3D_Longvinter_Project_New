@@ -63,14 +63,7 @@ void CMissile::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eInde
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CMissile::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CMissile::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CMissile::Ready_Components()
 {

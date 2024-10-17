@@ -46,6 +46,7 @@ void CInterAction::Priority_Update(_float fTimeDelta)
 	}
 
 
+
 }
 
 void CInterAction::Update(_float fTimeDelta)
@@ -101,7 +102,8 @@ void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER e
 
 
 
-void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, TERRAIN_ACTION eAction)
+
+void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, TERRAIN_ACTION eAction, _float fAngle)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
@@ -145,6 +147,8 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 	
 
 	//Safe_AddRef(pNew->pCollider);
+	pNew->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(fAngle));
+
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
 
 	pNew->eAction = eAction;
@@ -152,7 +156,7 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 	m_Actionlist.push_back(pNew);
 }
 
-void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
@@ -194,8 +198,17 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 		pNew->pCollider = CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE, &ColliderDesc);
 	}
 
+	if (eInterType == INTERACTION::INTER_BUSH)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 3.f));
+	else if (eInterType == INTERACTION::INTER_TREE)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 2.f));
+	else if (eInterType == INTERACTION::INTER_ROCK)
+		pNew->iIndex = _int(m_pGameInstance->Get_Random(0.f, 7.f));
+
 
 	//Safe_AddRef(pNew->pCollider);
+	pNew->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(fAngle));
+
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
 	pNew->fTime = m_fSpec_Time;
 

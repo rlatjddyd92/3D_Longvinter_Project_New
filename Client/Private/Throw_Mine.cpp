@@ -160,14 +160,7 @@ void CThrow_Mine::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eI
 
 
 }
-//
-//void CThrow_Mine::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CThrow_Mine::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CThrow_Mine::Ready_Components()
 {

@@ -39,11 +39,21 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 
+	m_fRotate = 0.4f;
+
 	return S_OK;
 }
 
 void CContainer_Enemy::Priority_Update(_float fTimeDelta)
 {
+
+	/*if (m_bRotate)
+	{
+		m_pTransformCom->Rotation({ 0.f,1.f,0.f }, -m_fRotate);
+		m_bRotate = false;
+	}
+		*/
+
 	__super::Priority_Update(fTimeDelta);
 
 	
@@ -71,6 +81,18 @@ void CContainer_Enemy::Update(_float fTimeDelta)
 	tResult = GET_INSTANCE->Total_Physics(*m_pTransformCom, *m_pColliderCom, true, true, true, fTimeDelta);
 	GET_INSTANCE->Update_By_P_Result(m_pTransformCom, m_pColliderCom, tResult);
 
+
+	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
+		if (m_fMakeEffect >= 0.05f)
+		{
+			for (_int i = 0; i < 5; ++i)
+				GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, m_pColliderCom->GetBoundingCenter());
+		}
+
+	m_fMakeEffect -= fTimeDelta;
+	if (m_fMakeEffect < 0.f)
+		m_fMakeEffect = 0.05f;
+
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
 }
@@ -79,18 +101,43 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	if (m_bNonLoopAnimReset)
+		static_cast<CBody*>(m_Parts[PART_BODY])->Start_NonLoopAnim();
+
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
+
+	if (bMove == false)
+	{
+		if (static_cast<CBody*>(m_Parts[PART_BODY])->GetEnd())
+		{
+			if (m_iState == STATE_GRANADE)
+				m_iState = STATE_THROW_WAIT;
+			else if ((m_iState == STATE_HANDGUN) || (m_iState == STATE_GUN))
+				m_iState = STATE_AIM;
+			else if (m_iState == STATE_CHAINSAW)
+				m_iState = STATE_CHAINSAW;
+			else if (m_iState == STATE_HIT)
+				m_iState = STATE_IDEL;
+		}
+
+	}
 
 	m_pTransformCom->Save_BeforePosition();
 
 	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
 
-
 	GET_INSTANCE->InputRenderlist(m_eWeapon, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 
-
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+	/*if (m_iState == STATE::STATE_GUN)
+		m_bRotate = true;
+	else if (m_iState == STATE::STATE_HANDGUN)
+		m_bRotate = true;
+
+	if (m_bRotate)
+		m_pTransformCom->Rotation({ 0.f,1.f,0.f }, m_fRotate);*/
 }
 
 HRESULT CContainer_Enemy::Render()
@@ -116,6 +163,12 @@ void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAIN
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
+void CContainer_Enemy::DeadAction()
+{
+	__super::DeadAction();
+}
+
+
 void CContainer_Enemy::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
@@ -124,6 +177,98 @@ void CContainer_Enemy::Moving_Control(_float fTimeDelta)
 void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 {
 	__super::Weapon_Control(fTimeDelta);
+
+	if (abs(m_fMove_Angle) < 0.5f)
+	{
+		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_HANDGUN;
+		else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+			m_iState = STATE_GUN;
+		else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+			m_iState = STATE_GUN;
+		else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+			m_iState = STATE_AIM;
+		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_GRANADE;
+		else if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
+			m_iState = STATE_HIT;
+
+		if (m_fAttackDelay == 0.f)
+		{
+
+			m_bNonLoopAnimReset = true;
+
+			
+			if (m_iState == STATE_GRANADE)
+			{
+				m_fPreAttackDelay = 1.3f;
+			}
+			else if (m_iState == STATE_HIT)
+			{
+				m_fAttackDelay = 3.f;
+				m_fPreAttackDelay = 0.5f;
+			}
+			else 
+			{
+				_float3 fStartPostion{};
+				_float3 fPushedDirec{};
+
+				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f };
+				XMStoreFloat3(&fStartPostion, vStartPosition);
+
+				_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
+				XMStoreFloat3(&fPushedDirec, vPushedDirec);
+
+				
+				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+
+				__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
+			}
+
+		}
+	}
+
+	if (m_fPreAttackDelay > 0.f)
+	{
+		m_fPreAttackDelay -= fTimeDelta;
+
+		if (m_fPreAttackDelay <= 0.f)
+		{
+			_float3 fStartPostion{};
+			_float3 fPushedDirec{};
+			_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
+			XMStoreFloat3(&fStartPostion, vStartPosition);
+
+			XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+			__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
+
+			m_fPreAttackDelay = 0.f;
+		}
+	}
+
+	if (bMove == false)
+		if ((m_iState != STATE_GRANADE) && (m_iState != STATE_HANDGUN))
+			if ((m_iState != STATE_GUN) && (m_iState != STATE_HIT))
+			{
+				if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+					m_iState = STATE_CHAINSAW;
+				else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+					m_iState = STATE_THROW_WAIT;
+				else
+					m_iState = STATE_IDEL;
+			}
 }
 
 void CContainer_Enemy::Camera_Control(_float fTimeDelta)
@@ -148,14 +293,13 @@ void CContainer_Enemy::Burning()
 	m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] = true;
 	m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_BURN)] = BURN_TIME;
 
-	_float3 fPosition = m_pColliderCom->GetBoundingCenter();
-	fPosition.y += m_pColliderCom->GetBoundingExtents().y;
-
-	GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, this, fPosition, { 0.f,0.f,0.f });
 	m_fActionTimer = BURN_TIME;
 	m_iFace = _int(HUMAN_FACE::FACE_SAD);
 	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+
+	__super::Start_Panic();
 }
+
 
 
 HRESULT CContainer_Enemy::Ready_Components()

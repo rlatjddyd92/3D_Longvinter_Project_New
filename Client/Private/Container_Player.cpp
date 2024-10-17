@@ -48,67 +48,69 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 
 void CContainer_Player::Priority_Update(_float fTimeDelta)
 {
-	//cout << "[1]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 	__super::Priority_Update(fTimeDelta);
-
-	//cout << "[2]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Priority_Update(fTimeDelta);
-
-	//cout << "[3]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
 }
 
 void CContainer_Player::Update(_float fTimeDelta)
 {
-	//cout << "[4]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	__super::Update(fTimeDelta);
-	//cout << "[5]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	Camera_Control(fTimeDelta);
 	
 	Moving_Control(fTimeDelta);
 	
 	Weapon_Control(fTimeDelta);
-	//cout << "[8]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	Test_Control(fTimeDelta);
 	
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
 	CPhysicsManager::P_RESULT tResult = {};
-	//cout << "[9]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	tResult = GET_INSTANCE->Total_Physics(*m_pTransformCom, *m_pColliderCom, true, true, true, fTimeDelta);
 	GET_INSTANCE->Update_By_P_Result(m_pTransformCom, m_pColliderCom, tResult);
-	//cout << "[10]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Update(fTimeDelta);
-	//cout << "[11]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 }
 
 void CContainer_Player::Late_Update(_float fTimeDelta)
 {
-	//cout << "[12]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	__super::Late_Update(fTimeDelta);
-	//cout << "[13]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
+	
+	if (m_bNonLoopAnimReset)
+		static_cast<CBody*>(m_Parts[PART_BODY])->Start_NonLoopAnim();
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
-	//cout << "[14]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
 
+	if (bMove == false)
+	{
+		if (static_cast<CBody*>(m_Parts[PART_BODY])->GetEnd())
+		{
+			if (m_iState == STATE_GRANADE)
+				m_iState = STATE_THROW_WAIT;
+			else if ((m_iState == STATE_HANDGUN) || (m_iState == STATE_GUN))
+				m_iState = STATE_AIM;
+			else if (m_iState == STATE_CHAINSAW)
+				m_iState = STATE_CHAINSAW;
+			else if (m_iState == STATE_HIT)
+				m_iState = STATE_IDEL;
+		}
+
+	}
+	
 	m_pTransformCom->Save_BeforePosition();
-	//cout << "[15]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
+	
 	const _float4x4* fSocket = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("Hand_Right");
-	//cout << "[16]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
-
+	
 	if (m_eWeaponType == WEAPON_MAIN)
 		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_MAINWEAPON).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	else if (m_eWeaponType == WEAPON_SUB)
@@ -116,10 +118,11 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 	else if (m_eWeaponType == WEAPON_THROW)
 		GET_INSTANCE->InputRenderlist(GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex, &m_iState, fSocket, m_pTransformCom->Get_WorldMatrix());
 	
-	//cout << "[17]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << " -> ";
-
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	//cout << "[18]" << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1] << " " << m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2] << "\n";
+	
+	
+	
+
 
 }
 
@@ -143,40 +146,51 @@ void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAI
 {
 }
 
+void CContainer_Player::DeadAction()
+{
+	__super::DeadAction();
+}
+
+
 void CContainer_Player::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
 	
 	if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
 	{
-		m_iState = STATE_IDEL;
+		
 
 		// 이동 조작 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, true) & 0x80)
 		{
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
 			m_iState = STATE_WALK;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, true) & 0x80)
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
 			m_iState = STATE_WALK;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, true) & 0x80)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta, true);
 			m_iState = STATE_WALK_L;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, true) & 0x80)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta, true);
 			m_iState = STATE_WALK_R;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
 			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 		}
+		
 		
 		_long		MouseMove = { 0 };
 
@@ -194,28 +208,32 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 	}
 	else if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_THIRD)
 	{
-		m_iState = STATE_IDEL;
+		
 
 		// 이동 조작 
 		if (m_pGameInstance->Get_DIKeyState(DIK_W, true) & 0x80)
 		{
 			m_pTransformCom->Go_Straight(fTimeDelta, true);
 			m_iState = STATE_WALK;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_S, true) & 0x80)
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
 			m_iState = STATE_WALK;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_A, true) & 0x80)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta, true);
 			m_iState = STATE_WALK_L;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_D, true) & 0x80)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta, true);
 			m_iState = STATE_WALK_R;
+			bMove = true;
 		}
 		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
 		{
@@ -286,30 +304,61 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 	if (m_eWeaponType == WEAPON_THROW)
 		eNowType = GET_INSTANCE->GetEquipInfo(EQUIPSLOT::SLOT_THROW).eIndex;
 
-	if (m_iState == STATE_IDEL)
-	{
-		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if ((eNowType == ITEMINDEX::ITEM_FIRETHROWER) || (eNowType == ITEMINDEX::ITEM_MACHINEGUN))
-			m_iState = STATE_AIM;
-		else if (eNowType == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_AIM;
-		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_THROW_WAIT;
-	}
+	
 
 	if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true) & 0x80) 
 	{
 		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
 			m_iState = STATE_CHAINSAW;
-		else if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
-			m_iState = STATE_GUN;
 		else if (eNowType == ITEMINDEX::ITEM_ARROW)
 			m_iState = STATE_HANDGUN;
+		else if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
+			m_iState = STATE_GUN;
+		else if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
+			m_iState = STATE_GUN;
+		else if (eNowType == ITEMINDEX::ITEM_FIRETHROWER)
+			m_iState = STATE_AIM;
 		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
 			m_iState = STATE_GRANADE;
+		else if (eNowType == ITEMINDEX::ITEM_MACHETE)
+			m_iState = STATE_HIT;
 
 		if (m_fAttackDelay == 0.f)
+		{
+			m_bNonLoopAnimReset = true;
+
+			if (m_iState == STATE_GRANADE)
+			{
+				m_fPreAttackDelay = 1.3f;
+			}
+			else if (m_iState == STATE_HIT)
+			{
+				m_fAttackDelay = 0.5f;
+				m_fPreAttackDelay = 0.5f;
+			}
+			else 
+			{
+				_float3 fStartPostion{};
+				_float3 fPushedDirec{};
+				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
+				XMStoreFloat3(&fStartPostion, vStartPosition);
+
+				if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
+					XMStoreFloat3(&fPushedDirec, GET_INSTANCE->GetCameraLook());
+				else
+					XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+
+				__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
+			}
+		}
+	}
+
+	if (m_fPreAttackDelay > 0.f)
+	{
+		m_fPreAttackDelay -= fTimeDelta;
+
+		if (m_fPreAttackDelay <= 0.f)
 		{
 			_float3 fStartPostion{};
 			_float3 fPushedDirec{};
@@ -322,7 +371,38 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
 			__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
+
+			m_fPreAttackDelay = 0.f;
 		}
+
+		
+	}
+
+
+
+
+
+
+	if (bMove == false)
+		if ((m_iState != STATE_GRANADE) && (m_iState != STATE_HANDGUN))
+			if ((m_iState != STATE_GUN) && (m_iState != STATE_HIT))
+	{
+		if (eNowType == ITEMINDEX::ITEM_CHAINSAW)
+			m_iState = STATE_CHAINSAW;
+		else if (eNowType == ITEMINDEX::ITEM_ARROW)
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_FIRETHROWER)
+			m_iState = STATE_AIM;
+		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_THROW_WAIT;
+		else if (eNowType == ITEMINDEX::ITEM_GRANADE)
+			m_iState = STATE_THROW_WAIT;
+		else 
+			m_iState = STATE_IDEL;
 	}
 }
 
@@ -334,16 +414,19 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
 		GET_INSTANCE->ShowInformMessage(TEXT("F키 : 숄더뷰 모드"));
+		GET_INSTANCE->SetLenderLength(35.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_E) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
 		GET_INSTANCE->ShowInformMessage(TEXT("E키 : 에디터 카메라 모드"));
+		GET_INSTANCE->SetLenderLength(50.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
 		GET_INSTANCE->ShowInformMessage(TEXT("T키 : 3인칭 모드"));
+		GET_INSTANCE->SetLenderLength(20.f);
 	}
 }
 
@@ -383,6 +466,21 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 		if (m_iFace >= _int(HUMAN_FACE::FACE_END))
 			m_iFace = 0;
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+	}
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true) & 0x80)
+	{
+		_float fLength = GET_INSTANCE->GetLenderLength();
+
+		if (m_pGameInstance->Get_DIKeyState(DIK_UP, true) & 0x80)
+		{
+			GET_INSTANCE->SetLenderLength(fLength + fTimeDelta);
+		}
+		else if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, true) & 0x80)
+		{
+			GET_INSTANCE->SetLenderLength(fLength - fTimeDelta);
+		}
+			
 	}
 }
 

@@ -49,7 +49,7 @@ public:
 	/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	_bool Play_Animation(_float fTimeDelta);
-
+	void AnimReset();
 
 public:
 	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, aiTextureType eMaterialType, _uint iMeshIndex);
@@ -60,7 +60,6 @@ public:
 
 	void SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture);
 	
-
 
 
 private:

@@ -50,6 +50,10 @@ HRESULT CFactory::Setting_Program_Start()
 		CSurFace::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	if (FAILED(Ready_Prototype_UIPart()))
 		return E_FAIL;
 	if (FAILED(Ready_Prototype_UIPage()))
@@ -91,16 +95,18 @@ void CFactory::Save_Prototype_Model_Data()
 	}
 }
 
-void CFactory::Make_Container_Player(_float3 Position)
+void CFactory::Make_Container_Player(_float3 Position, _float fAngle)
 {
 	CGameObject::GAMEOBJECT_DESC		pTemp{};
 	pTemp.fPosition = Position;
 	pTemp.fSpeedPerSec = 5.0f;
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), TEXT("Prototype_GameObject_Container_Player"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Player"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
+
 }
 
-void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
+void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle)
 {
 	CAI_Enemy::AI_Enemy_Desc		pTemp{};
 	pTemp.fPosition = Position;
@@ -108,6 +114,18 @@ void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType)
 	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
 	pTemp.eType = eType;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), TEXT("Prototype_GameObject_Container_AI_Enemy"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
+}
+
+void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle)
+{
+	CAI_Enemy::AI_Enemy_Desc		pTemp{};
+	pTemp.fPosition = Position;
+	pTemp.fSpeedPerSec = 3.0f;
+	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
+	pTemp.eType = eType;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), TEXT("Prototype_GameObject_Container_AI_Boss"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
 HRESULT CFactory::Ready_Prototype_Texture()
@@ -141,6 +159,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cell/InvenCell_Empty.dds"), 1))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Symbol_Back"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Symbol/T_Rounded32.dds"), 1))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_ShotGun"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconAutoShotgun.dds"), 1))))
 		return E_FAIL;
@@ -157,9 +179,13 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Cursor%d.dds"), 3))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Fire"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Particle/Fire/T_SmokeDissolve1a_%d.dds"), 64))))
-		return E_FAIL;*/
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_SkyBox"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/SkyBox/SkyBox0.dds"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Crosshair"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Crosshair.dds"), 1))))
+		return E_FAIL;
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Christmas_Hat"),
@@ -231,10 +257,12 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconMine"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconMine.dds"), 1))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_T_IconMachete"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Item/Item_2DTexture/T_IconMachete.dds"), 1))))
+		return E_FAIL;
 
 	
-
+	
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Body_Red"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Body_Red.dds"), 1))))
 		return E_FAIL;
@@ -268,6 +296,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sad.dds"), 1))))
 		return E_FAIL;
+
+
+
+	
 
 	return S_OK;
 }
@@ -322,6 +354,9 @@ HRESULT CFactory::Ready_Prototype_Part()
 		CTool_Bow::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tool_Machete"),
+		CTool_Machete::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
@@ -337,6 +372,10 @@ HRESULT CFactory::Ready_Prototype_Container()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Enemy"),
 		CAI_Enemy::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Boss"),
+		CAI_Boss::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -414,7 +453,81 @@ HRESULT CFactory::Ready_Prototype_Model()
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_MachineGun"), "../Bin/Resources/Models/MachineGun/HeavyMachineGun", PreTransformMatrix)))
 		return E_FAIL;
 
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Machete"), "../Bin/Resources/Models/Machete/Machete", PreTransformMatrix)))
+		return E_FAIL;
 
+	// LANDOBJECT
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_AppleTree"), "../Bin/Resources/Models/LandObject/AppleTree", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_1"), "../Bin/Resources/Models/LandObject/Bush_1", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_2"), "../Bin/Resources/Models/LandObject/Bush_2", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bush_3"), "../Bin/Resources/Models/LandObject/Bush_3", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_ItemPocket"), "../Bin/Resources/Models/LandObject/ItemPocket", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_1"), "../Bin/Resources/Models/LandObject/Rock_1", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_2"), "../Bin/Resources/Models/LandObject/Rock_2", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_3"), "../Bin/Resources/Models/LandObject/Rock_3", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_4"), "../Bin/Resources/Models/LandObject/Rock_4", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_5"), "../Bin/Resources/Models/LandObject/Rock_5", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_6"), "../Bin/Resources/Models/LandObject/Rock_6", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_7"), "../Bin/Resources/Models/LandObject/Rock_7", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Rock_8"), "../Bin/Resources/Models/LandObject/Rock_8", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Tree_Fine"), "../Bin/Resources/Models/LandObject/Tree_Fine", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Tree_Normal"), "../Bin/Resources/Models/LandObject/Tree_Normal", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Door"), "../Bin/Resources/Models/LandObject/Door", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_MonsterMaker"), "../Bin/Resources/Models/LandObject/MonsterMaker", PreTransformMatrix)))
+		return E_FAIL;
+	
 
 	return S_OK;
 }
@@ -490,6 +603,11 @@ HRESULT CFactory::Ready_Prototype_Buffer()
 		CVIBuffer_Rect3D::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_VIBuffer_Rect */
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -511,6 +629,9 @@ HRESULT CFactory::Ready_Prototype_UIPart()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Bar"), CUIPart_Bar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPart_Symbol"), CUIPart_Symbol::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -539,6 +660,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_ToolTip"), CUIPage_ToolTip::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_User"), CUIPage_User::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -562,8 +686,8 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Fire"), CFire::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ChainSaw"), CMelee_ChainSaw::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;
@@ -572,6 +696,13 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 	//	return E_FAIL;
 
 
+	// LandObject
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_LandObject_NonAnim"), CLandObject_NonAnim::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_LandObject_Anim"), CLandObject_Anim::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
 
 
 	return S_OK;
@@ -732,6 +863,20 @@ CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eT
 	return static_cast<CUIPart_TextBox*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), -1));
 }
 
+CUIPart_Symbol* CFactory::MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost)
+{
+	CUIPart_Symbol::UISymbol_DESC		pTemp{};
+	pTemp.eType = eType;
+	pTemp.fX = fX;
+	pTemp.fY = fY;
+	pTemp.fSizeX = fSizeX;
+	pTemp.fSizeY = fSizeY;
+	pTemp.pHost = pHost;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Symbol"), TEXT("Prototype_UIPart_Symbol"), &pTemp);
+
+	return static_cast<CUIPart_Symbol*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Symbol"), -1));
+}
+
 CUIPage_Main* CFactory::MakeUIPage_Main()
 {
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Main"), TEXT("Prototype_UIPage_Main"));
@@ -779,6 +924,13 @@ CUIPage_ToolTip* CFactory::MakeUIPage_ToolTip()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), TEXT("Prototype_UIPage_ToolTip"));
 
 	return static_cast<CUIPage_ToolTip*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_ToolTip"), -1));
+}
+
+CUIPage_User* CFactory::MakeUIPage_User()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), TEXT("Prototype_UIPage_User"));
+
+	return static_cast<CUIPage_User*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

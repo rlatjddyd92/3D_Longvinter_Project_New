@@ -186,7 +186,7 @@ void CUIPage_ToolTip::ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray
 
 
 
-	fCellX += 10.f + (m_fSizeX * 0.5f) + INVEN_CELLSIZE;
+	fCellX += 3.f + (m_fSizeX * 0.5f) + INVEN_CELLSIZE;
 	_float fBackY = fCellY + (m_fSizeY * 0.5f);
 	fCellY += (m_fSizeY_NoneTag * 0.5f);
 	

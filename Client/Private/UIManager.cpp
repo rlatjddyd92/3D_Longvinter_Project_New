@@ -107,11 +107,27 @@ void CUIManager::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	m_pPage_User->AddRender_UIPage();
+
+
 	for (list<CUIPart_Bar*>::iterator iter = m_EnemyHplist.begin(); iter != m_EnemyHplist.end();)
 	{
 		if (((*iter) == nullptr) || ((*iter)->GetDead()))
 		{
 			iter = m_EnemyHplist.erase(iter);
+		}
+		else
+		{
+			(*iter)->AddRender_UIPart();
+			++iter;
+		}
+	}
+
+	for (list<CUIPart_Symbol*>::iterator iter = m_Symbollist.begin(); iter != m_Symbollist.end();)
+	{
+		if (((*iter) == nullptr) || ((*iter)->GetDead()))
+		{
+			iter = m_Symbollist.erase(iter);
 		}
 		else
 		{
@@ -280,6 +296,12 @@ void CUIManager::MakeEnemyHpBar(CLongvinter_Container* pHost)
 	m_EnemyHplist.push_back(pNew);
 }
 
+void CUIManager::MakeSymbol(CLongvinter_Container* pHost)
+{
+	CUIPart_Symbol* pNew = GET_INSTANCE->MakeUIPart_Symbol(CUIPart_Symbol::SYMBOL_END, 0.f, 0.f, 0.f, 0.f, pHost);
+	m_Symbollist.push_back(pNew);
+}
+
 HRESULT CUIManager::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -326,6 +348,9 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_ToolTip = GET_INSTANCE->MakeUIPage_ToolTip();
 	Safe_AddRef(m_pPage_ToolTip);
+
+	m_pPage_User = GET_INSTANCE->MakeUIPage_User();
+	Safe_AddRef(m_pPage_User);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -365,6 +390,8 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Crafting);
 	Safe_Release(m_pPage_Option);
 	Safe_Release(m_pPage_ToolTip);
+	Safe_Release(m_pPage_User);
+	
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
@@ -377,8 +404,13 @@ void CUIManager::Free()
 
 	for (auto& iter : m_EnemyHplist)
 		Safe_Release(iter);
-
+	
 	m_EnemyHplist.clear();
+
+	for (auto& iter : m_Symbollist)
+		Safe_Release(iter);
+
+	m_Symbollist.clear();
 
 	m_Pagelist.clear();
 }

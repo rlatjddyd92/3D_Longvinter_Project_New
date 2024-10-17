@@ -34,6 +34,8 @@ public:
 	_vector GetCameraPosition() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
 	_vector GetCameraLook() { return m_pTransformCom->Get_State(CTransform::STATE_LOOK); }
 
+	_bool IsBackOfCamera(_vector vPosition);
+
 private:
 	void SetFirstCamera();
 	void SetThirdCamera();
@@ -44,7 +46,7 @@ private:
 	CAMERAMODE			m_eCameraMode = CAMERAMODE::CAMERA_OFF;
 	_float				m_fCameraUp_First = 1.f; // <- 1인칭 모드에서 카메라 위치 조정 
 
-	_float3				m_fCamera_Third = { 0.f,10.f,-10.f }; 
+	_float3				m_fCamera_Third = { 0.f,5.f,-5.f }; 
 	_float3				m_fCamera_Third_Look = { 0.f,0.f,0.f };
 
 	_long				m_lCamera_Y_move_First = 0.f;

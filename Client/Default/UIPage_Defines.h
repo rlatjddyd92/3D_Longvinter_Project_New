@@ -8,3 +8,4 @@
 #include "UIPage_Crfting.h"
 #include "UIPage_Option.h"
 #include "UIPage_ToolTip.h"
+#include "UIPage_User.h"

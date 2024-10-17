@@ -156,14 +156,7 @@ void CThrow_Granade::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CThrow_Granade::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CThrow_Granade::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CThrow_Granade::Ready_Components()
 {

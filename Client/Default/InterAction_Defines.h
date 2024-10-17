@@ -11,5 +11,10 @@
 #include "Melee_ShotGun.h"
 #include "Melee_ChainSaw.h"
 #include "Explosion_Normal.h"
+
+
+#include "LandObject.h"
+#include "LandObject_Anim.h"
+#include "LandObject_NonAnim.h"
 #include "Fire.h"
 

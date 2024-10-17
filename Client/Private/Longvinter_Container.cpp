@@ -35,6 +35,9 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 {
+	m_bNonLoopAnimReset = false;
+	bMove = false;
+
 	if (m_fActionTimer > 0.f)
 	{
 		m_fActionTimer -= fTimeDelta;
@@ -56,13 +59,18 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
-	if (m_eAI_Status == AI_STATUS::AI_SERACH)
+	
+
+
+
+	if ((m_eAI_Status == AI_STATUS::AI_SERACH) || (m_eAI_Status == AI_STATUS::AI_PANIC))
 	if (m_fSearch_Time_Now < m_fSearch_Time)
 	{
 		m_fSearch_Time_Now += fTimeDelta;
 		if (m_fSearch_Time_Now > m_fSearch_Time)
 		{
-			End_Search();
+			if (m_eAI_Status == AI_STATUS::AI_SERACH)
+				End_Search();
 		}	
 	}
 
@@ -75,14 +83,21 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 		{
 			m_vecCrowdControl_Time[i] = 0.f;
 			m_vecCrowdControl[i] = false;
+
+			if (i == _int(CROWDCONTROL::CC_BURN))
+				End_Panic();
 		}
 	}
+
+	
+		
 
 }
 
 void CLongvinter_Container::Update(_float fTimeDelta)
 {
 	
+
 }
 
 void CLongvinter_Container::Late_Update(_float fTimeDelta)
@@ -98,15 +113,27 @@ HRESULT CLongvinter_Container::Render()
 
 void CLongvinter_Container::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
+	
+
 }
 
 void CLongvinter_Container::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
+	
 }
 
 void CLongvinter_Container::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+	
 }
+
+void CLongvinter_Container::DeadAction()
+{
+	
+
+}
+
+
 
 void CLongvinter_Container::Moving_Control(_float fTimeDelta)
 {
@@ -139,45 +166,73 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 	Update_Distance_From_Player();
 	XMStoreFloat3(fPlayerPosition, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
 
-	if (m_fDistance_from_Player > m_fDetective_Length)
+	if (!m_bMonsterMake)
 	{
-		*bCanSee = false;
-		*fTurnAngle = 0.f;
-		return;
+		if (m_fDistance_from_Player > m_fDetective_Length)
+		{
+			*bCanSee = false;
+			*fTurnAngle = 0.f;
+			return;
+		}
+
+		_float3 fPoint = {};
+		XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
+		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
+		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
+		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		_float fDot = XMVector3Dot({ fPoint.x,fPoint.y, fPoint.z, 0.f }, { vLook.m128_f32[0], vLook.m128_f32[1], vLook.m128_f32[2], 0.f }).m128_f32[0];
+		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
+		_float fAngle = acos(fDot / fCos);
+
+		if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
+		{
+			*bCanSee = false;
+			*fTurnAngle = 0.f;
+			return;
+		}
+
+		*bCanSee = true;
+
+		fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+		fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+		*fTurnAngle = acos(fDot / fCos);
+
+		if (isnan(*fTurnAngle))
+			*fTurnAngle = 0.f;
+
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+		if (bResult)
+			*fTurnAngle *= -1;
+	}
+	else
+	{
+		_float3 fPoint = {};
+		XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
+		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
+		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
+		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		*bCanSee = true;
+
+		_float fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+		*fTurnAngle = acos(fDot / fCos);
+
+		if (isnan(*fTurnAngle))
+			*fTurnAngle = 0.f;
+
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+		if (bResult)
+			*fTurnAngle *= -1;
 	}
 
-	_float3 fPoint = {};
-	XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
-	fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
-	fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
-	fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
-
-	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-	_float fDot = XMVector3Dot({ fPoint.x,fPoint.y, fPoint.z, 0.f }, { vLook.m128_f32[0], vLook.m128_f32[1], vLook.m128_f32[2], 0.f }).m128_f32[0];
-	_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
-	_float fAngle = acos(fDot / fCos);
-
-	if ((isnan(fAngle)) || (fAngle > m_fLook_Angle))
-	{
-		*bCanSee = false;
-		*fTurnAngle = 0.f;
-		return;
-	}
-
-	*bCanSee = true;
-
-	
-
-
-	fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
-	fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
-	*fTurnAngle = acos(fDot / fCos);
-
-	_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
-
-	if (bResult)
-		*fTurnAngle *= -1;
 }
 
 void CLongvinter_Container::Get_Sound(_float3* fSoundPosition, _float* fVolume, _float* fTurnAngle)
@@ -189,24 +244,48 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 	if (eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-
-		
-
 		m_fAttackDelay = 0.1f;
 	}
-	if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
+	else if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_MINE, this, fPosition, fDirec);
-		m_fAttackDelay = 0.5f;
+		m_fAttackDelay = 1.f;
 	}
-	if (eWeapon == ITEMINDEX::ITEM_GRANADE)
+	else if (eWeapon == ITEMINDEX::ITEM_GRANADE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fPosition, fDirec);
+		m_fAttackDelay = 1.f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 0.f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_ARROW)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
 		m_fAttackDelay = 0.5f;
 	}
+	else if (eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 0.1f;
+	}
+	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_SHOTGUN, this, fPosition, fDirec);
+		m_fAttackDelay = 1.f;
+	}
+	
 
+}
 
+void CLongvinter_Container::AimWeapon_Anim(ITEMINDEX eWeapon)
+{
+}
 
+void CLongvinter_Container::FireWeapon_Anim(ITEMINDEX eWeapon)
+{
 }
 
 void CLongvinter_Container::Set_AI_Status(_float fTimeDelta)
@@ -227,6 +306,24 @@ void CLongvinter_Container::Start_Serach()
 }
 
 void CLongvinter_Container::End_Search()
+{
+	m_eAI_Status = AI_STATUS::AI_IDLE;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 20.f;
+	m_fSearch_Interval = 5.f;
+	m_iSearch_Count = 0;
+}
+
+void CLongvinter_Container::Start_Panic()
+{
+	m_eAI_Status = AI_STATUS::AI_PANIC;
+	m_fSearch_Time_Now = 0.f;
+	m_fSearch_Time = 1000.f;
+	m_fSearch_Interval = 0.5f;
+	m_iSearch_Count = 0;
+}
+
+void CLongvinter_Container::End_Panic()
 {
 	m_eAI_Status = AI_STATUS::AI_IDLE;
 	m_fSearch_Time_Now = 0.f;

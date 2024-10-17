@@ -34,6 +34,7 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	m_fRGB[1] = 0.f / 255.f;
 	m_fRGB[2] = 0.f / 255.f;
 
+
 	m_bTransParent = true;
 	m_fAlpah = 0.3f;
 

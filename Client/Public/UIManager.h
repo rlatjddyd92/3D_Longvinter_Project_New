@@ -55,7 +55,7 @@ public: // 툴팁 관련 함수
 
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
-
+	void MakeSymbol(CLongvinter_Container* pHost);
 
 private:
 	HRESULT Ready_Components();
@@ -80,9 +80,13 @@ private:
 	CUIPage_Crafting* m_pPage_Crafting = { nullptr };
 	CUIPage_Option* m_pPage_Option = { nullptr };
 	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
+	CUIPage_User* m_pPage_User = { nullptr };
+
+
 
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
+	list<CUIPart_Symbol*> m_Symbollist;
 
 	_int m_iMaxInform = 10;
 

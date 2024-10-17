@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AI_Boss.h" />
     <ClInclude Include="..\Public\AI_Enemy.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
@@ -191,6 +192,9 @@
     <ClInclude Include="..\Public\InterAction.h" />
     <ClInclude Include="..\Public\InterActionManager.h" />
     <ClInclude Include="..\Public\ItemManager.h" />
+    <ClInclude Include="..\Public\LandObject.h" />
+    <ClInclude Include="..\Public\LandObject_Anim.h" />
+    <ClInclude Include="..\Public\LandObject_NonAnim.h" />
     <ClInclude Include="..\Public\Level_Editor.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -206,6 +210,7 @@
     <ClInclude Include="..\Public\Effect_Particle.h" />
     <ClInclude Include="..\Public\Particle_FIre.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
+    <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundManager.h" />
     <ClInclude Include="..\Public\SurFace.h" />
     <ClInclude Include="..\Public\TerrainManager.h" />
@@ -219,6 +224,7 @@
     <ClInclude Include="..\Public\Tool_Empty.h" />
     <ClInclude Include="..\Public\Tool_FireThrower.h" />
     <ClInclude Include="..\Public\Tool_LandMine.h" />
+    <ClInclude Include="..\Public\Tool_Machete.h" />
     <ClInclude Include="..\Public\Tool_MachineGun.h" />
     <ClInclude Include="..\Public\Tool_ShotGun.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -230,11 +236,13 @@
     <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
+    <ClInclude Include="..\Public\UIPage_User.h" />
     <ClInclude Include="..\Public\UIPart.h" />
     <ClInclude Include="..\Public\UIPart_Back.h" />
     <ClInclude Include="..\Public\UIPart_Bar.h" />
     <ClInclude Include="..\Public\UIPart_Button.h" />
     <ClInclude Include="..\Public\UIPart_Cell.h" />
+    <ClInclude Include="..\Public\UIPart_Symbol.h" />
     <ClInclude Include="..\Public\UIPart_TextBox.h" />
     <ClInclude Include="..\Public\UIPart_Picture.h" />
     <ClInclude Include="..\Public\UIPage_Test.h" />
@@ -260,6 +268,7 @@
     <ClInclude Include="UIPart_Defines.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AI_Boss.cpp" />
     <ClCompile Include="..\Private\AI_Enemy.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />
@@ -281,6 +290,9 @@
     <ClCompile Include="..\Private\InterAction.cpp" />
     <ClCompile Include="..\Private\InterActionManager.cpp" />
     <ClCompile Include="..\Private\ItemManager.cpp" />
+    <ClCompile Include="..\Private\LandObject.cpp" />
+    <ClCompile Include="..\Private\LandObject_Anim.cpp" />
+    <ClCompile Include="..\Private\LandObject_NonAnim.cpp" />
     <ClCompile Include="..\Private\Level_Editor.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
@@ -296,6 +308,7 @@
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
     <ClCompile Include="..\Private\Particle_FIre.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
+    <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\Private\SurFace.cpp" />
     <ClCompile Include="..\Private\TerrainManager.cpp" />
@@ -309,6 +322,7 @@
     <ClCompile Include="..\Private\Tool_Empty.cpp" />
     <ClCompile Include="..\Private\Tool_FireThrower.cpp" />
     <ClCompile Include="..\Private\Tool_LandMine.cpp" />
+    <ClCompile Include="..\Private\Tool_Machete.cpp" />
     <ClCompile Include="..\Private\Tool_MachineGun.cpp" />
     <ClCompile Include="..\Private\Tool_ShotGun.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
@@ -320,11 +334,13 @@
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
+    <ClCompile Include="..\Private\UIPage_User.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
     <ClCompile Include="..\private\UIPart_Back.cpp" />
     <ClCompile Include="..\Private\UIPart_Bar.cpp" />
     <ClCompile Include="..\Private\UIPart_Button.cpp" />
     <ClCompile Include="..\Private\UIPart_Cell.cpp" />
+    <ClCompile Include="..\Private\UIPart_Symbol.cpp" />
     <ClCompile Include="..\Private\UIPart_TextBox.cpp" />
     <ClCompile Include="..\Private\UIPart_Picture.cpp" />
     <ClCompile Include="..\Private\UIPage_Test.cpp" />

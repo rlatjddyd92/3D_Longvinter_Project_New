@@ -43,16 +43,69 @@ private:
 	// 상태 제어
 	_int m_iMax[3] = {0,0,0}; // <- 맵의 기반 설정
 	_int m_iLand[3] = { 0,0,0 };
-	_char* szMode[3] = { "Terrain", "Object", "Move_Model"};
+	_char* szMode[4] = { "Terrain", "Object", "Move_Model", "SpecialLand" };
 	_int m_iSelectMode = 0;
-	_char* szObject[3] = { "Player","NPC", "Enemy"};
+	_char* szObject[5] = { "Player","NPC", "Enemy","Boss", "LandObject"};
 	_int m_iSelectObject = 0;
-	_char* szTexture[8] = { "0","1" ,"2" ,"3" ,"4", "5", "6", "7"};
+	_char* szTexture[LTEXTUREMAX]
+		= {
+		"LNAME_PAVEDROCK",
+	"LNAME_ROCK",
+	"LNAME_PAVEDROCK_LIGHT",
+	"LNAME_GRASS",
+	"LNAME_GRASS_FALL",
+	"LNAME_DIRT_RED",
+	"LNAME_DIRT_BROWN_1",
+	"LNAME_DIRT_BROWN_2",
+	"LNAME_DESERT_ROCK_LIGHT",
+	"LNAME_DESERT_ROCK_AND_DIRT",
+	"LNAME_DESERT_ROCK",
+	"LNAME_DESERT_SAND_WHITE",
+	"LNAME_DESERT_SAND",
+	"LNAME_DESERT_SAND_LIGHT",
+	"LANME_WALL_ROCK_1",
+	"LANME_ROCK_LIGHT",
+	"LANME_ROCK_WHITE",
+	"LNAME_GRASS_LIGHT",
+	"LNAME_GRASS_LIGHT_FLOWER",
+	"LANME_WALL_ROCK_2",
+	"LNAME_GRASS_ROCK",
+	"LNAME_WALL_BRICK",
+	"LNAME_WALL_NORMAL",
+	"LNAME_WALL_WOOD",
+	"LANME_WALL_DARK",
+	"LNAME_WALL_OLD"
+	};
 	_int m_iSelectTexture = 0;
+
+
+	_char* szLandObject[_int(INTERACTION::INTER_END)]
+		= {
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"없음",
+"ITEM",
+"Tree",
+"AppleTree",
+"Rock",
+"Bush",
+	};
+	_int m_iSelectLandObject = _int(INTERACTION::INTER_END);
 
 	_int m_iAnimation = 0;
 
 	_int m_iRenderLimit = -1;
+
+	_int m_iRotate = 0;
 
 	// Class
 

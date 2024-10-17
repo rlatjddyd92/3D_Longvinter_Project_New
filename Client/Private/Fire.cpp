@@ -87,7 +87,7 @@ void CFire::Update(_float fTimeDelta)
 
 			if (m_fMakeEffect >= 0.1f)
 			{
-				for (_int i = 0; i < 5; ++i)
+				for (_int i = 0; i < 3; ++i)
 					GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, iter->pCollider->GetBoundingCenter());
 			}
 		
@@ -142,14 +142,7 @@ void CFire::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, 
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 }
-//
-//void CFire::Collision_Reaction_InterAction(CInterAction* pPoint)
-//{
-//}
-//
-//void CFire::Collision_Reaction_Container(CLongvinter_Container* pPoint)
-//{
-//}
+
 
 HRESULT CFire::Ready_Components()
 {

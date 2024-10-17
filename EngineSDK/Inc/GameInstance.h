@@ -34,11 +34,12 @@ public:
 	
 #pragma region GRAPHIC_DEVICE
 public:
+	ID3D11ShaderResourceView* Get_BackBuffer_SRV() const;
 	void Render_Begin();
 	void Render_End();
 #pragma endregion
 
-#pragma region GRAPHIC_DEVICE
+#pragma region INPUT_DEVICE
 	_byte	Get_DIKeyState(_ubyte byKeyID, _bool IsPressing = false);
 	_byte	Get_DIMouseState(MOUSEKEYSTATE eMouse, _bool IsPressing = false);
 	_long	Get_DIMouseMove(MOUSEMOVESTATE eMouseState);
@@ -108,7 +109,7 @@ public:
 #pragma region TARGET_MANAGER
 	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
-	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT End_MRT();
 	HRESULT Bind_RT_ShaderResource(class CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName);
 	HRESULT Copy_RenderTarget(const _wstring& strTargetTag, ID3D11Texture2D* pTexture);
@@ -125,6 +126,13 @@ public:
 
 #pragma endregion
 
+#pragma region FRUSTUM
+	public:
+		_bool isIn_Frustum_WorldSpace(_fvector vPosition, _float fRadius = 0.f);
+		_bool isIn_Frustum_LocalSpace(_fvector vPosition, _float fRadius);
+		void Transform_ToLocalSpace(_fmatrix WorldMatrix);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -138,6 +146,7 @@ private:
 	class CLight_Manager*			m_pLight_Manager = { nullptr };
 	class CFont_Manager*			m_pFont_Manager = { nullptr };
 	class CTarget_Manager*			m_pTarget_Manager = { nullptr };
+	class CFrustum*					m_pFrustum = { nullptr };
 
 public:	
 	void Release_Engine();

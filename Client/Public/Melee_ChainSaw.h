@@ -4,14 +4,15 @@
 #include "Melee.h"
 
 BEGIN(Engine)
-
+class CShader;
+class CModel;
 END
 
 BEGIN(Client)
 
 class CMelee_ChainSaw : public CMelee
 {
-private:
+protected:
 	CMelee_ChainSaw(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMelee_ChainSaw(const CMelee_ChainSaw& Prototype);
 	virtual ~CMelee_ChainSaw() = default;
@@ -27,14 +28,14 @@ public:
 	virtual void Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction) override;
 
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 
-
-
 private:
-
+	class CShader* m_pShaderCom = { nullptr };
+	class CModel* m_pModelCom = { nullptr };
 
 
 
@@ -51,3 +52,5 @@ public:
 };
 
 END
+
+

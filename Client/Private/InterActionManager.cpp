@@ -51,8 +51,8 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), TEXT("Prototype_Inter_Fire"));
 	m_vecInterAction[_int(INTERACTION::INTER_FIRE)] = static_cast<CFire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Fire"), -1));
 
-	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
-	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), TEXT("Prototype_Inter_Melee_ShotGun"));
+	m_vecInterAction[_int(INTERACTION::INTER_MELEE_SHOTGUN)] = static_cast<CMelee_ShotGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), -1));
 
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
@@ -64,7 +64,34 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
 
+	// LANDOBJECT
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_AppleTree"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_APPLETREE)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_AppleTree"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_APPLETREE)])->SetLandObject(INTERACTION::INTER_APPLETREE);
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Bush"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_BUSH)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Bush"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_BUSH)])->SetLandObject(INTERACTION::INTER_BUSH);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Rock"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_ROCK)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Rock"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_ROCK)])->SetLandObject(INTERACTION::INTER_ROCK);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Tree"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_TREE)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Tree"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_TREE)])->SetLandObject(INTERACTION::INTER_TREE);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Item"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_ITEM)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Item"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_ITEM)])->SetLandObject(INTERACTION::INTER_ITEM);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Door"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_DOOR)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Door"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_DOOR)])->SetLandObject(INTERACTION::INTER_DOOR);
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)])->SetLandObject(INTERACTION::INTER_MONSTERMAKER);
 
 	return S_OK;
 }
@@ -88,6 +115,17 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_TREE);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_APPLETREE);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_TREE);
+
+
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -106,9 +144,9 @@ HRESULT CInterActionManager::Ready_PartObjects()
 	return S_OK;
 }
 
-void CInterActionManager::Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction)
+void CInterActionManager::Add_InterActionObject(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType, CInterAction::TERRAIN_ACTION eAction, _float fAngle)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject(pHost, fPosition, fPushedDirec, fPushedPower, fExtent, fDecreasePushedPower, eColliderType, eAction, fAngle);
 }
 
 void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType, CLongvinter_Container* pHost, CCollider* pCollider)
@@ -125,9 +163,14 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
-void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec)
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
+}
+
+void CInterActionManager::Delete_LastInterAction(INTERACTION eInterType)
+{
+	m_vecInterAction[_int(eInterType)]->Delete_LastInterAction();
 }
 
 void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERACTION eSecond)
@@ -170,13 +213,39 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			}
 
 
-			CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
-	
+			//CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
+			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
 
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{
 				m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterB)->pHost, eSecond, *iterA);
 				m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterA)->pHost, eFirst, *iterB);
+			}
+			else if (m_vecInterAction[_int(eFirst)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eFirst)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterB)->pHost, eSecond, *iterA);
+					m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterA)->pHost, eFirst, *iterB);
+				}
+			}
+			else if (m_vecInterAction[_int(eSecond)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eSecond)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterB)->pHost, eFirst, *iterA);
+					m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterA)->pHost, eSecond, *iterB);
+				}
 			}
 
 			++iterB;
@@ -312,7 +381,6 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 }
 
 
-
 CInterActionManager* CInterActionManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CInterActionManager* pInstance = new CInterActionManager(pDevice, pContext);
@@ -359,6 +427,7 @@ void CInterActionManager::Free()
 		iter.clear();
 	}
 		
+	
 	m_vecConInterlist.clear();
 }
 

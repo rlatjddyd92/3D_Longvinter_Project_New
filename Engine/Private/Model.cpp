@@ -269,6 +269,19 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 	return isFinished;
 }
 
+void CModel::AnimReset()
+{
+	/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
+	m_Animations[m_iCurrentAnimIndex]->AnimReset(m_Bones);
+
+	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
+	for (auto& pBone : m_Bones)
+	{
+		/* 내 뼈의 행렬 * 부모의 컴바인드 */
+		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+	}
+}
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, aiTextureType eMaterialType, _uint iMeshIndex)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();
@@ -398,7 +411,6 @@ void CModel::SetTexture(_int iMetarial, _int iTextureType, CTexture* pTexture)
 
 	Safe_AddRef(pTexture);
 }
-
 
 CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, _bool bTexture, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool IsLoad)
 {

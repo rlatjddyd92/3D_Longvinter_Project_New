@@ -166,6 +166,9 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Rect">
       <UniqueIdentifier>{c9388939-9e42-462a-82b3-2a7381a5d2fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\10.Frustum">
+      <UniqueIdentifier>{29a81c07-1653-49da-b045-2b522db97e10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -320,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Rect_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Frustum.cpp">
+      <Filter>01.Utility\10.Frustum</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,17 +494,20 @@
     <ClInclude Include="..\Public\VIBuffer_Rect_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Rect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Frustum.h">
+      <Filter>01.Utility\10.Frustum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Cell.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="Shader_Deferred.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Client\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">
+    <None Include="..\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </None>
   </ItemGroup>

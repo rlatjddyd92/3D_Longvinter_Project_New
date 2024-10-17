@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "SurFace.h"
 #include "Monster.h"
+#include "Sky.h"
 
 BEGIN(Engine)
 class CShader;
@@ -20,6 +21,8 @@ class CTerrainManager;
 class CTerrainManager final : public CGameObject
 {
 public:
+	
+
 	enum class LANDCOMMAND
 	{
 		LCOMMAND_REMOVE_LAND = 0,
@@ -49,10 +52,15 @@ public:
 
 	typedef struct MAKEOBJ
 	{
-		MAKEOBJ(CONTAINER eType, _float3 Position) { eCon_Type = eType; fPosition = Position; }
+		MAKEOBJ(CONTAINER eType, _float3 Position, _float Rotate = 0.f, _int Index = 0) { eCon_Type = eType; fPosition = Position; fRotate = Rotate; iIndex = Index; }
+
+		MAKEOBJ(INTERACTION eType, _float3 Position, _float Rotate = 0.f, _int Index = 0) { eInter_Type = eType; fPosition = Position; fRotate = Rotate;  iIndex = Index; }
 
 		CONTAINER eCon_Type = CONTAINER::CONTAINER_END;
+		INTERACTION eInter_Type = INTERACTION::INTER_END;
 		_float3 fPosition = { 0.f,0.f,0.f };
+		_float fRotate = 0.f;
+		_int iIndex = 0;
 	}MOBJ;
 
 private:
@@ -72,7 +80,9 @@ public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
 
-	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END);
+	void IndexMarkHeight(_int iHeight) { m_iIndexY = iHeight; }
+
+	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0);
 
 	_float3 CheckPicking();
 
@@ -116,13 +126,13 @@ public:
 	_bool Check_Terrain_Collision(_float3 fCenter, _float3 fExtents); // <- 단순히 충돌만 검출
 	_bool Check_IsTerrain(_float3 fPosition) 
 	{
-		fPosition.x = max(0.f, fPosition.x);
-		fPosition.y = max(0.f, fPosition.y);
-		fPosition.z = max(0.f, fPosition.z);
-		fPosition.x = min((LCUBESIZE * LMAX_X) - 1.f, fPosition.x);
-		fPosition.y = min((LCUBESIZE * LMAX_Y) - 1.f, fPosition.y);
-		fPosition.z = min((LCUBESIZE * LMAX_Z) - 1.f, fPosition.z);
-		return m_vecLcubeInfo[_int(fPosition.x / LCUBESIZE)][_int(fPosition.y / LCUBESIZE)][_int(fPosition.z / LCUBESIZE)].m_bLand;}
+		_int iX = _int(fPosition.x / LCUBESIZE);
+		_int iY = _int(fPosition.y / LCUBESIZE);
+		_int iZ = _int(fPosition.z / LCUBESIZE);
+
+		Adjust_Index(&iX, &iY, &iZ);
+
+		return m_vecLcubeInfo[iX][iY][iZ].m_bLand;}
 
 
 #pragma endregion
@@ -138,10 +148,20 @@ private:
 	void SetPosition_Surface(_int iX, _int iY, _int iZ, LCUBEDIRECION eDirec, _float4x4* fSurface);
 	_float3 IsPicking_Instancing(SURFACE* pSurface);
 
+	void Adjust_Index(_int* iX, _int* iY, _int* iZ);
+
+	void Delete_LastObject();
+
+	void ShowIndex(_int iX, _int iZ, _matrix mHost);
+
 private:
 	
 	// 설정
 	_int m_iBedRock = 2.f; //<- 인게임 플레이에서 Y 축 기준으로 해당 인덱스 미만의 지형 파괴 불가 
+
+	_bool m_bModifyLand = true;
+	_float m_fInterval_Now = 0.0f;
+	_float m_fInterval = 0.2f;
 
 	//test
 	_float fTest = 0.f;
@@ -162,11 +182,18 @@ private:
 	// 객체 정보 저장 
 	list<MAKEOBJ> m_vecObjInfo;
 
+
 	// texture
 	_int m_iTextureIndex = 0;
 
 	// 지형 렌더 범위 설정 
 	_float m_fRender_Length = -1.f;
+
+	_float m_fRender_Index = 50.f;
+	_int m_iIndexY = 5; // <- 인덱스 표시하는 높이 (에디터 전용) 
+
+
+
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -174,6 +201,7 @@ public:
 	class CTexture* m_pTextureCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	class CCollider* m_pColliderCom = { nullptr };
+	class CSky* m_pSky = { nullptr };
 
 public:
 	static CTerrainManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

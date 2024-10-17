@@ -41,7 +41,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Bar* MakeUIPart_Bar(CUIPart_Bar::UIBAR_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr);
 	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f);
-	
+	CUIPart_Symbol* MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr);
 #pragma endregion
 
 #pragma region UIPage
@@ -52,13 +52,14 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_Crafting* MakeUIPage_Crafting();
 	CUIPage_Option* MakeUIPage_Option();
 	CUIPage_ToolTip* MakeUIPage_ToolTip();
+	CUIPage_User* MakeUIPage_User();
 #pragma endregion
 
 
 
 	// Container 제작 
 #pragma region Container_Player
-	void Make_Container_Player(_float3 Position);
+	void Make_Container_Player(_float3 Position, _float fAngle = 0.f);
 #pragma endregion
 
 #pragma region Container_NPC
@@ -66,7 +67,8 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 #pragma endregion
 
 #pragma region Container_Enemy
-	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType);
+	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
+	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
 #pragma endregion
 
 #pragma region Container_Animal
