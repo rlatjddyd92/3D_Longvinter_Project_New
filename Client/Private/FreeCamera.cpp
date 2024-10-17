@@ -133,6 +133,23 @@ void CFreeCamera::ShakeCamera(_float fDeltaTime)
 {
 }
 
+_bool CFreeCamera::IsBackOfCamera(_vector vPosition)
+{
+	_vector vDirec = vPosition - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	_float fDot = XMVector3Dot(vDirec, vLook).m128_f32[0];
+	_float fCos = (sqrt(pow(vDirec.m128_f32[0], 2) + pow(vDirec.m128_f32[1], 2) + pow(vDirec.m128_f32[2], 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
+	_float fAngle = acos(fDot / fCos);
+
+	if ((isnan(fAngle)) || (abs(fAngle) > XMConvertToRadians(90)))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void CFreeCamera::SetFirstCamera()
 {
 	_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);

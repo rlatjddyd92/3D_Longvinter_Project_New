@@ -53,6 +53,13 @@ private:
 	_int m_iItemPageKey = -1; // <- 아이템 보따리 전용
 	_bool m_bTexture = false;
 
+	_float m_fMakeEffect = 0.1f;
+	_float m_fMakeFire = 1.f;
+
+	// 몬스터 메이커 
+	_int m_iMonsterMake = 0;
+	_bool m_bActive = false;
+
 public:
 	static CLandObject_NonAnim* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

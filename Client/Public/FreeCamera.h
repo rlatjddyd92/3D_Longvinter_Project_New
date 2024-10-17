@@ -34,6 +34,8 @@ public:
 	_vector GetCameraPosition() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
 	_vector GetCameraLook() { return m_pTransformCom->Get_State(CTransform::STATE_LOOK); }
 
+	_bool IsBackOfCamera(_vector vPosition);
+
 private:
 	void SetFirstCamera();
 	void SetThirdCamera();

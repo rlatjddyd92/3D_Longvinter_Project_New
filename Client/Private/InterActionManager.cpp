@@ -85,7 +85,13 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_vecInterAction[_int(INTERACTION::INTER_ITEM)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Item"), -1));
 	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_ITEM)])->SetLandObject(INTERACTION::INTER_ITEM);
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Door"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_DOOR)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Door"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_DOOR)])->SetLandObject(INTERACTION::INTER_DOOR);
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)])->SetLandObject(INTERACTION::INTER_MONSTERMAKER);
 
 	return S_OK;
 }
@@ -110,6 +116,16 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_TREE);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_APPLETREE);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);
+	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_TREE);
+
+
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 }
 
@@ -197,13 +213,39 @@ void CInterActionManager::Check_Collision_InterAction(INTERACTION eFirst, INTERA
 			}
 
 
-			CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
-	
+			//CCollider::TYPE eType = CCollider::TYPE(m_vecInterAction[_int(eFirst)]->Get_ColliderType());
+			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
 
 			if ((*iterA)->pCollider->GetCollision(eType, (*iterB)->pCollider))
 			{
 				m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterB)->pHost, eSecond, *iterA);
 				m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterA)->pHost, eFirst, *iterB);
+			}
+			else if (m_vecInterAction[_int(eFirst)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eFirst)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterB)->pHost, eSecond, *iterA);
+					m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterA)->pHost, eFirst, *iterB);
+				}
+			}
+			else if (m_vecInterAction[_int(eSecond)]->Get_Sensor_Range() > 0.f)
+			{
+				_float3 fInter = (*iterA)->pCollider->GetBoundingCenter();
+				_float3 fContainer = (*iterB)->pCollider->GetBoundingCenter();
+
+				_float fDistance = sqrt(pow((fInter.x - fContainer.x), 2) + pow((fInter.y - fContainer.y), 2) + pow((fInter.z - fContainer.z), 2));
+
+				if (m_vecInterAction[_int(eSecond)]->Get_Sensor_Range() + (*iterB)->pCollider->GetBoundingExtents().x > fDistance)
+				{
+					m_vecInterAction[_int(eSecond)]->Collision_Reaction_InterAction((*iterB)->pHost, eFirst, *iterA);
+					m_vecInterAction[_int(eFirst)]->Collision_Reaction_InterAction((*iterA)->pHost, eSecond, *iterB);
+				}
 			}
 
 			++iterB;

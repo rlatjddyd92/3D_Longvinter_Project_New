@@ -519,6 +519,14 @@ HRESULT CFactory::Ready_Prototype_Model()
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Tree_Normal"), "../Bin/Resources/Models/LandObject/Tree_Normal", PreTransformMatrix)))
 		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Door"), "../Bin/Resources/Models/LandObject/Door", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_MonsterMaker"), "../Bin/Resources/Models/LandObject/MonsterMaker", PreTransformMatrix)))
+		return E_FAIL;
 	
 
 	return S_OK;

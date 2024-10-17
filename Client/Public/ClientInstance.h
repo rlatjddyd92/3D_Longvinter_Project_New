@@ -73,6 +73,12 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma region LEVEL
 	HRESULT ChangeLevel(LEVELID eLevel);
 	LEVELID GetNowLevel() { return m_eLevel; }
+	_bool GetPlayerDead() { return m_bPlayerDead; }
+	_bool GetMonsterMake() { return m_bMakeMonster; }
+	void SetMakeMonster(_bool bIsMake) { m_bMakeMonster = bIsMake; }
+
+
+
 #pragma endregion
 
 
@@ -179,6 +185,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ShakeCamera(_float fDeltaTime) { m_pCamera->ShakeCamera(fDeltaTime); }
 	_vector GetCameraPosition() { return m_pCamera->GetCameraPosition(); }
 	_vector GetCameraLook() { return m_pCamera->GetCameraLook();}
+	_bool IsBackOfCamera(_vector vPosition) { return m_pCamera->IsBackOfCamera(vPosition); }
 #pragma endregion
 
 
@@ -282,6 +289,10 @@ private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;
 	LEVELID					m_eLevel = LEVELID::LEVEL_END;
 	_float					m_fRenderLength = 35.f;
+
+private: // <- 게임 플레이 조정 
+	_bool					m_bPlayerDead = false;
+	_bool					m_bMakeMonster = false; 
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };

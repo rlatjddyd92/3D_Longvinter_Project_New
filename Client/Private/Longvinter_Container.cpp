@@ -166,48 +166,73 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 	Update_Distance_From_Player();
 	XMStoreFloat3(fPlayerPosition, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
 
-	if (m_fDistance_from_Player > m_fDetective_Length)
+	if (!m_bMonsterMake)
 	{
-		*bCanSee = false;
-		*fTurnAngle = 0.f;
-		return;
+		if (m_fDistance_from_Player > m_fDetective_Length)
+		{
+			*bCanSee = false;
+			*fTurnAngle = 0.f;
+			return;
+		}
+
+		_float3 fPoint = {};
+		XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
+		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
+		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
+		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		_float fDot = XMVector3Dot({ fPoint.x,fPoint.y, fPoint.z, 0.f }, { vLook.m128_f32[0], vLook.m128_f32[1], vLook.m128_f32[2], 0.f }).m128_f32[0];
+		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
+		_float fAngle = acos(fDot / fCos);
+
+		if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
+		{
+			*bCanSee = false;
+			*fTurnAngle = 0.f;
+			return;
+		}
+
+		*bCanSee = true;
+
+		fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+		fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+		*fTurnAngle = acos(fDot / fCos);
+
+		if (isnan(*fTurnAngle))
+			*fTurnAngle = 0.f;
+
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+		if (bResult)
+			*fTurnAngle *= -1;
+	}
+	else
+	{
+		_float3 fPoint = {};
+		XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
+		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
+		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
+		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		*bCanSee = true;
+
+		_float fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+		*fTurnAngle = acos(fDot / fCos);
+
+		if (isnan(*fTurnAngle))
+			*fTurnAngle = 0.f;
+
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+		if (bResult)
+			*fTurnAngle *= -1;
 	}
 
-	_float3 fPoint = {};
-	XMStoreFloat3(&fPoint, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION));
-	fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
-	fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
-	fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
-
-	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-	_float fDot = XMVector3Dot({ fPoint.x,fPoint.y, fPoint.z, 0.f }, { vLook.m128_f32[0], vLook.m128_f32[1], vLook.m128_f32[2], 0.f }).m128_f32[0];
-	_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.y, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2) + pow(vLook.m128_f32[2], 2)));
-	_float fAngle = acos(fDot / fCos);
-
-	if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
-	{
-		*bCanSee = false;
-		*fTurnAngle = 0.f;
-		return;
-	}
-
-	*bCanSee = true;
-
-	
-
-
-	fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
-	fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
-	*fTurnAngle = acos(fDot / fCos);
-
-	if (isnan(*fTurnAngle))
-		*fTurnAngle = 0.f;
-
-	_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
-
-	if (bResult)
-		*fTurnAngle *= -1;
 }
 
 void CLongvinter_Container::Get_Sound(_float3* fSoundPosition, _float* fVolume, _float* fTurnAngle)

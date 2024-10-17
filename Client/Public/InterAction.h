@@ -38,6 +38,8 @@ public:
 		_bool bSetting = false;
 
 		_int iIndex = 0; // <- 인터랙션의 스펙에 따라 사용
+
+		_float fBurning = 0.f;
 	}INTER_INFO;
 
 	

@@ -41,6 +41,11 @@ public:
 	_bool Get_CC(CROWDCONTROL eType) { return m_vecCrowdControl[_int(eType)]; }
 	AI_STATUS Get_AI_Status() { return m_eAI_Status; }
 
+	void SetMonsterMake(_bool bIsMonsterMaker) 
+	{ 
+		m_bMonsterMake = bIsMonsterMaker; 
+	}
+
 
 protected:
 	CONTAINER eContainerType = CONTAINER::CONTAINER_END;
@@ -134,6 +139,8 @@ protected:
 	_float m_fSearch_Time = 20.f;
 	_float m_fSearch_Interval = 5.f;
 	_int m_iSearch_Count = 0;
+
+	_bool m_bMonsterMake = false;
 
 public:
 	static CLongvinter_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

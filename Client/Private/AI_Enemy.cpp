@@ -335,6 +335,11 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 	{
 		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
 
+		_float fDetectiveLength = m_fDetective_Length;
+
+		if (m_bMonsterMake)
+			fDetectiveLength = 100000.f;
+
 		if (m_fDistance_from_Player < m_fClosuerLimit_Length) 
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
@@ -344,7 +349,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		{
 			Weapon_Control(fTimeDelta);
 		}
-		else if (m_fDistance_from_Player < m_fDetective_Length)
+		else if (m_fDistance_from_Player < fDetectiveLength)
 		{
 			_float3 fLook{};
 			XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));

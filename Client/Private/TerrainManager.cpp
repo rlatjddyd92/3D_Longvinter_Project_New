@@ -86,12 +86,14 @@ HRESULT CTerrainManager::Render()
 
 		if (m_fRender_Length >= 0.f)
 		{
-			
 			if (Length > m_fRender_Length)
 				continue;
-			else if (Length > m_fRender_Length * 0.5f)
-				bGray = true;
 		}
+
+		_vector vPosition = { iter.second->m_vMat.m[3][0], iter.second->m_vMat.m[3][1], iter.second->m_vMat.m[3][2], iter.second->m_vMat.m[3][3] };
+
+		if (GET_INSTANCE->IsBackOfCamera(vPosition))
+			continue;
 
 		
 		if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_EDITOR)
@@ -1201,12 +1203,80 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 					if (m_fInterval_Now > 0.f)
 						return fResult;
 
-					_int iIndex[3] = { 0, };
+					_int iIndex[3] = { 0,0,0 };
 					LCUBEDIRECION eDirec = LCUBEDIRECION::LDIREC_TOP;
 					InterpretKey(strKey, &iIndex[0], &iIndex[1], &iIndex[2], &eDirec);
 
 					if ((m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON)) || (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, true)))
+					{
+						if (eDirec == LCUBEDIRECION::LDIREC_TOP)
+						{
+							iIndex[1] += 1;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_BOTTOM)
+						{
+							iIndex[1] -= iCY;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_NORTH)
+						{
+							iIndex[2] += 1;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_SOUTH)
+						{
+							iIndex[2] -= iCZ;
+
+							if (iIndex[0] > 2)
+								iIndex[0] -= iCX / 2;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_WEST)
+						{
+							iIndex[0] -= iCX;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+						if (eDirec == LCUBEDIRECION::LDIREC_EAST)
+						{
+							iIndex[0] += 1;
+
+							if (iIndex[1] > 2)
+								iIndex[1] -= iCY / 2;
+
+							if (iIndex[2] > 2)
+								iIndex[2] -= iCZ / 2;
+						}
+
+						Adjust_Index(&iIndex[0], &iIndex[1], &iIndex[2]);
+
+
+
 						Make_NewCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ, m_iTextureIndex);
+					}
+						
 					else
 						Make_DeleteCube(iIndex[0], iIndex[1], iIndex[2], iCX, iCY, iCZ);
 

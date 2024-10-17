@@ -40,6 +40,7 @@ void CLandObject_NonAnim::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
+	
 
 }
 
@@ -49,6 +50,31 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 	for (auto& iter : m_Actionlist)
 	{
+		if (iter->fBurning > 0.f)
+		{
+			iter->fBurning -= fTimeDelta;
+			if (iter->fBurning < 0.f)
+			{
+				iter->bDead = true;
+			}
+
+			if (m_fMakeEffect >= 0.1f)
+			{
+				for (_int i = 0; i < 3; ++i)
+					GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, iter->pCollider->GetBoundingCenter());
+			}
+
+			if (m_fMakeFire >= 1.f)
+			{
+				_float3 fDirec = { _float((rand() % 1000) - (rand() % 1000)) / 1000.f, 0.5f, _float((rand() % 1000) - (rand() % 1000)) / 1000.f };
+				GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, nullptr, iter->pCollider->GetBoundingCenter(), fDirec);
+			}
+
+
+			
+		}
+
+
 		if ((!iter->bSetting) || (m_eType == INTERACTION::INTER_ITEM))
 		{
 			CPhysicsManager::P_RESULT tResult = {};
@@ -61,12 +87,39 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 		}
 		else
 		{
-			if (!GET_INSTANCE->Check_OnGround(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
-				DestroyAction(iter);
+			
 		}
 
 
+		if (m_eType == INTERACTION::INTER_MONSTERMAKER)
+		{
+			if (m_fShowTime == 0.f)
+				m_fShowTime = 1.0f;
+			else
+				continue;
+
+			_vector vPlayer = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
+			_vector vThis = iter->pTransform->Get_State(CTransform::STATE_POSITION);
+
+			_float fDistance = sqrt(pow(vPlayer.m128_f32[0] - vThis.m128_f32[0], 2) + pow(vPlayer.m128_f32[1] - vThis.m128_f32[1], 2) + pow(vPlayer.m128_f32[2] - vThis.m128_f32[2], 2));
+
+			if (fDistance < 20.f)
+			{
+
+			}
+		}
+		
+
+
 	}
+
+	m_fMakeEffect -= fTimeDelta;
+	if (m_fMakeEffect < 0.f)
+		m_fMakeEffect = 0.1f;
+
+	m_fMakeFire -= fTimeDelta;
+	if (m_fMakeFire < 0.f)
+		m_fMakeFire = 1.f;
 }
 
 void CLandObject_NonAnim::Late_Update(_float fTimeDelta)
@@ -153,12 +206,19 @@ void CLandObject_NonAnim::Collision_Reaction_InterAction(CGameObject* pPoint, IN
 
 	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 	{
-		DestroyAction(pAction);
+		if (!GET_INSTANCE->Check_OnGround(pAction->pCollider->GetBoundingCenter(), pAction->pCollider->GetBoundingExtents()))
+			DestroyAction(pAction);
+		else if (pAction->fBurning == 0.f)
+			pAction->fBurning = 10.f;
+	}
+	else if (eIndex == INTERACTION::INTER_FIRE)
+	{
+		if (pAction->fBurning == 0.f)
+			pAction->fBurning = 10.f;
 	}
 
 
-
-
+	
 
 }
 
@@ -277,12 +337,40 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		m_fSpec_PushedPower_Decrease = 5.f;
 		m_bTexture = false;
 	}
+	else if (eIndex == INTERACTION::INTER_DOOR)
+	{
+		// 문
+		m_vecModelCom.resize(1);
 
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Door"), TEXT("Com_Model_15"), reinterpret_cast<CComponent**>(&m_vecModelCom[0]))))
+			return E_FAIL;
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+			return E_FAIL;
+
+		m_fSpec_Extent = { 0.5f,1.f,0.5f };
+		m_fSpec_Scale = 2.f;
+		m_bTexture = false;
+	}
+	else if (eIndex == INTERACTION::INTER_MONSTERMAKER)
+	{
+		// 몬스터 생성기 
+		m_vecModelCom.resize(1);
+
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_MonsterMaker"), TEXT("Com_Model_16"), reinterpret_cast<CComponent**>(&m_vecModelCom[0]))))
+			return E_FAIL;
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+			return E_FAIL;
+
+		m_fSpec_Extent = { 0.5f,1.f,0.5f };
+		m_fSpec_Scale = 2.f;
+		m_bTexture = false;
+	}
+	
 }
 
 void CLandObject_NonAnim::DestroyAction(INTER_INFO* pAction)
 {
-	//pAction->bDead = true; 
+	pAction->bDead = true; 
 }
 
 HRESULT CLandObject_NonAnim::Ready_Components()
