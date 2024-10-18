@@ -38,7 +38,17 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	m_bTransParent = true;
 	m_fAlpah = 0.3f;
 
-	m_fSize = 0.7f;
+	if (m_eType == UITEXTBOX_TYPE::TEXTBOX_INTER_NAME)
+		m_fSize = 0.5f;
+	else if (m_eType == UITEXTBOX_TYPE::TEXTBOX_INTER_FUNCTION)
+	{
+		m_Font = TEXT("Font_Test3");
+		m_fSize = 0.4f;
+	}
+	else 
+		m_fSize = 0.7f;
+
+	
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(Desc)))
@@ -52,7 +62,8 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 
 void CUIPart_TextBox::Priority_Update(_float fTimeDelta)
 {
-	
+	if ((m_eType == UITEXTBOX_TYPE::TEXTBOX_INTER_NAME) || (m_eType == UITEXTBOX_TYPE::TEXTBOX_INTER_FUNCTION))
+		__super::SetOff(true);
 
 	
 

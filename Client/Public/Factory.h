@@ -69,6 +69,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 #pragma region Container_Enemy
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
 	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
+	void Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle = 0.f);
 #pragma endregion
 
 #pragma region Container_Animal

@@ -133,7 +133,7 @@ HRESULT CUIPart::Ready_Components()
 	return S_OK;
 }
 
-_bool CUIPart::SetPositionByObject(_float* fX, _float* fY, _matrix mHost)
+_bool CUIPart::SetPositionByObject(_matrix mHost)
 {
 	_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
 	_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));

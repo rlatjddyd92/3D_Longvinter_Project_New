@@ -268,6 +268,9 @@
     <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim">
       <UniqueIdentifier>{5f6d5fe5-4386-43ef-b9cb-e9b35c0e8ee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Container\01.Container_NPC\00.AI_NPC">
+      <UniqueIdentifier>{2ab0723a-3f63-49e5-902c-5b7ef36d97a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -561,6 +564,15 @@
     <ClInclude Include="..\Public\LandObject_Anim.h">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Container_NPC.h">
+      <Filter>03.Container\01.Container_NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_NPC.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AI_NPC.h">
+      <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -799,6 +811,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\LandObject_Anim.cpp">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Container_NPC.cpp">
+      <Filter>03.Container\01.Container_NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AI_NPC.cpp">
+      <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

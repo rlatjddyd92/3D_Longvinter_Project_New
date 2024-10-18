@@ -128,6 +128,17 @@ void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fA
 	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
+void CFactory::Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle)
+{
+	CAI_NPC::AI_NPC_Desc		pTemp{};
+	pTemp.fPosition = Position;
+	pTemp.fSpeedPerSec = 3.0f;
+	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
+	pTemp.eType = eType;
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), TEXT("Prototype_GameObject_Container_AI_NPC"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
+}
+
 HRESULT CFactory::Ready_Prototype_Texture()
 {
 
@@ -376,6 +387,10 @@ HRESULT CFactory::Ready_Prototype_Container()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Boss"),
 		CAI_Boss::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_NPC"),
+		CAI_NPC::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

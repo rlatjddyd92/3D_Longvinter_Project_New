@@ -21,6 +21,10 @@ public:
 		PART_CRAFTING_BUTTON,
 		PART_OPTION_BUTTON,
 		PART_HP_BAR,
+		PART_INTER_NAME,
+		PART_INTER_F,
+		PART_INTER_G,
+		PART_INTER_E,
 		PART_END
 	};
 
@@ -44,6 +48,9 @@ public:
 	virtual void Ready_UIPart() override;
 
 	virtual _bool Key_Action() override;
+
+public: // <- 페이지 조정용
+	void Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"));
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

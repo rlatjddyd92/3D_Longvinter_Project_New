@@ -131,7 +131,8 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 
 	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
 	{
-		__super::Add_Hp(-10.f);
+		__super::Add_Hp(-10.f * fTimeDelta);
+
 	}
 
 
@@ -249,7 +250,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 
 		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
 		{
-			__super::Add_Hp(-100.f);
+			__super::Add_Hp(-10.f);
 		}
 		else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 		{
@@ -257,7 +258,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 				return;
 
 
-			__super::Add_Hp(-100.f);
+			__super::Add_Hp(-10.f);
 			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
 			_float3 fDirec{};
 			XMStoreFloat3(&fDirec, vDirec);
@@ -273,7 +274,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 
 
 
-			__super::Add_Hp(-100.f);
+			__super::Add_Hp(-30.f);
 
 			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
 			fDirec.y = 0.1f;

@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\AI_Boss.h" />
     <ClInclude Include="..\Public\AI_Enemy.h" />
+    <ClInclude Include="..\Public\AI_NPC.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
     <ClInclude Include="..\Public\Body_Human.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\Public\ClientInstance.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Container_Enemy.h" />
+    <ClInclude Include="..\Public\Container_NPC.h" />
     <ClInclude Include="..\Public\Container_Player.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\Effect.h" />
@@ -250,6 +252,7 @@
     <ClInclude Include="Client_Struct.h" />
     <ClInclude Include="Effect_Defines.h" />
     <ClInclude Include="Enum_Effect.h" />
+    <ClInclude Include="Enum_NPC.h" />
     <ClInclude Include="Enum_Sound.h" />
     <ClInclude Include="Tool_Granade.h" />
     <ClInclude Include="Enum_Enemy.h" />
@@ -270,6 +273,7 @@
   <ItemGroup>
     <ClCompile Include="..\Private\AI_Boss.cpp" />
     <ClCompile Include="..\Private\AI_Enemy.cpp" />
+    <ClCompile Include="..\Private\AI_NPC.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />
     <ClCompile Include="..\Private\Body_Human.cpp" />
@@ -277,6 +281,7 @@
     <ClCompile Include="..\Private\Bullet_Straight.cpp" />
     <ClCompile Include="..\Private\ClientInstance.cpp" />
     <ClCompile Include="..\Private\Container_Enemy.cpp" />
+    <ClCompile Include="..\Private\Container_NPC.cpp" />
     <ClCompile Include="..\Private\Container_Player.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />

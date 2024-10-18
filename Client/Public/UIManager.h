@@ -53,6 +53,17 @@ public: // 툴팁 관련 함수
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_bShowTooltip = true;  m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 
 
+public: 
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"))
+	{
+		if (m_bActiveInteraction)
+			return false;
+
+		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E);
+		m_bActiveInteraction = true;
+		return true;
+	}
+
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
 	void MakeSymbol(CLongvinter_Container* pHost);
@@ -91,6 +102,8 @@ private:
 	_int m_iMaxInform = 10;
 
 	_bool m_bShowTooltip = false;
+
+	_bool m_bActiveInteraction = false;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

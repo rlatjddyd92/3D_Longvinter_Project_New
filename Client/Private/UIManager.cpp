@@ -47,6 +47,7 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 {
 	m_iTextureIndex = 0;
 
+	m_bActiveInteraction = false;
 	m_bShowTooltip = false;
 
 	POINT mousePos{};

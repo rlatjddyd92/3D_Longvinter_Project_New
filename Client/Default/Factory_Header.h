@@ -7,9 +7,10 @@
 
 #include "Container_Player.h"
 #include "Container_Enemy.h"
+#include "Container_NPC.h"
 #include "AI_Enemy.h"
 #include "AI_Boss.h"
-
+#include "AI_NPC.h"
 
 #include "Body.h"
 #include "Body_Human.h"

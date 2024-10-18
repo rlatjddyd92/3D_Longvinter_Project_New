@@ -286,6 +286,10 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		{
 			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
 		}
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
+		{
+			GET_INSTANCE->Make_Container_NPC(tTemp.fPosition, NPC_TYPE::NPC_SHOP, tTemp.fRotate);
+		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_END)
 		{
 			GET_INSTANCE->Add_InterActionObject_BySpec(tTemp.eInter_Type, nullptr, tTemp.fPosition, _float3(0.f, 0.f, 0.f), tTemp.fRotate);
@@ -591,7 +595,12 @@ void CTerrainManager::Delete_LastObject()
 		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), pTemp);
 		m_vecObjInfo.pop_back();
 	}
-
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_NPC)
+	{
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), pTemp);
+		m_vecObjInfo.pop_back();
+	}
 
 
 
@@ -1303,6 +1312,8 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 
 
 						}
+						else if (eType == CONTAINER::CONTAINER_NPC)
+							GET_INSTANCE->Make_Container_NPC(fResult, NPC_TYPE::NPC_SHOP, iRotate);
 						else if (eType == CONTAINER::CONTAINER_ENEMY)
 							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
 						else if (eType == CONTAINER::CONTAINER_BOSS)

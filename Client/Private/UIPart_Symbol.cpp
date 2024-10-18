@@ -103,7 +103,7 @@ HRESULT CUIPart_Symbol::Render()
 	if (!GET_INSTANCE->GetIsLender(fPosition))
 		return S_OK;
 
-	if (!SetPositionByObject(&m_fX, &m_fY, XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
+	if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
 		return S_OK;
 
 	if (m_eType == SYMBOL_SEARCHING)

@@ -101,6 +101,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void Make_Container_Player(_float3 Position, _float fAngle = 0.f) { m_pFactory->Make_Container_Player(Position, fAngle); }
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Enemy(Position, eType, fAngle); }
 	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Boss(Position, eType, fAngle); }
+	void Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_NPC(Position, eType, fAngle); }
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
@@ -221,6 +222,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 	void MakeEnemyHpBar(CLongvinter_Container* pHost) { m_pUIManager->MakeEnemyHpBar(pHost); }
 	void MakeSymbol(CLongvinter_Container* pHost) { m_pUIManager->MakeSymbol(pHost); }
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"))
+	{
+		return m_pUIManager->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E);
+	}
 #pragma endregion
 
 

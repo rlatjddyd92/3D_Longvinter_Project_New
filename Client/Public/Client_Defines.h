@@ -15,6 +15,7 @@ namespace Client
 #include "../Default/Enum_Human.h"
 #include "../Default/Enum_Sound.h"
 #include "../Default/Enum_Effect.h"
+#include "../Default/Enum_NPC.h"
 
 	const unsigned int			g_iWinSizeX = { 1280 };
 	const unsigned int			g_iWinSizeY = { 720 };
