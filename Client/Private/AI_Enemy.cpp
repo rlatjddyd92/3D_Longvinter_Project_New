@@ -24,8 +24,8 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	AI_Enemy_Desc* pTemp = static_cast<AI_Enemy_Desc*>(pArg);
 
 	eContainerType = CONTAINER::CONTAINER_ENEMY;
-
-
+	m_eEnemy_Type = pTemp->eType;
+	
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -35,6 +35,23 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
+
+	if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+	{
+		m_iBody = _int(HUMAN_BODY::BODY_RED);
+		m_fDetective_Length = 20.f;
+		m_fClosuerLimit_Length = 0.f;
+		m_fAttack_Length = 0.f;
+		m_eWeapon = ITEMINDEX::ITEM_END;
+
+		GET_INSTANCE->MakeEnemyHpBar(this);
+		GET_INSTANCE->MakeSymbol(this);
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
+
+		return S_OK;
+	}
+
+
 
 	
 	
@@ -57,14 +74,14 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		
 	else if (iWeapon == 1)
 	{
-		m_fClosuerLimit_Length = 1.f;
-		m_fAttack_Length = 3.f;
+		m_fClosuerLimit_Length = 2.f;
+		m_fAttack_Length = 4.f;
 		m_eWeapon = ITEMINDEX::ITEM_SHOTGUN;
 	}
 		
 	else if (iWeapon == 2)
 	{
-		m_fClosuerLimit_Length = 0.f;
+		m_fClosuerLimit_Length = 1.f;
 		m_fAttack_Length = 1.f;
 		m_eWeapon = ITEMINDEX::ITEM_MACHETE;
 	}
@@ -131,7 +148,29 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 void CAI_Enemy::Update(_float fTimeDelta)
 {
 	if (m_fHp <= 0.f)
-		DeadAction();
+	{
+		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, this, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+		else
+			DeadAction();
+		
+	}
+		
+
+	if (m_bExplosionActive)
+	{
+		m_fExplosionWaitTime -= fTimeDelta;
+		if (m_fExplosionWaitTime < 0.f)
+		{
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+			__super::SetDead();
+		}
+		else if (m_fMakeEffect >= 0.05f)
+		{
+			for (_int i = 0; i < 5; ++i)
+				GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, m_pColliderCom->GetBoundingCenter());
+		}
+	}
 
 	if (m_eAI_Status == AI_STATUS::AI_DEAD)
 	{
@@ -191,8 +230,14 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 	}
 
 	if (eIndex == INTERACTION::INTER_FIRE)
+	{
+		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+			return;
+
 		if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
 			__super::Burning();
+	}
+	
 
 	if (eType == CONTAINER::CONTAINER_PLAYER)
 	{
@@ -208,6 +253,10 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 		}
 		else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 		{
+			if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+				return;
+
+
 			__super::Add_Hp(-100.f);
 			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
 			_float3 fDirec{};
@@ -258,6 +307,12 @@ void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eInd
 	if (m_eAI_Status == AI_STATUS::AI_DEAD) return;
 
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+
+	
+
+
+
+
 }
 
 void CAI_Enemy::DeadAction()
@@ -287,7 +342,7 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 			if (_int(m_fSearch_Time_Now / m_fSearch_Interval) > m_iSearch_Count)
 			{
 
-				m_fMove_Angle = m_pGameInstance->Get_Random(2.f, 4.f);
+				m_fMove_Angle = m_pGameInstance->Get_Random(2.f, 100.f);
 
 				if (m_pGameInstance->Get_Random(0.f, 2.f) > 1.f)
 					m_fMove_Angle *= -1;
@@ -327,8 +382,13 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 			
 
 		bMove = true;
-		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
-		m_iState = STATE_WALK;
+
+		if (m_iSearch_Count % 2 == 0)
+		{
+			m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
+			m_iState = STATE_WALK;
+		}
+			
 
 	}
 	else if (m_eAI_Status == AI_STATUS::AI_ATTACK)
@@ -340,7 +400,18 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		if (m_bMonsterMake)
 			fDetectiveLength = 100000.f;
 
-		if (m_fDistance_from_Player < m_fClosuerLimit_Length) 
+		if ((m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION) && (m_bExplosionActive))
+		{
+			if (m_fDistance_from_Player < 1.f)
+			{
+				GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, this, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+				__super::SetDead();
+			}
+			
+		}
+
+
+		if (m_fDistance_from_Player < m_fClosuerLimit_Length)
 		{
 			m_pTransformCom->Go_Backward(fTimeDelta, true);
 			m_iState = STATE_WALK;
@@ -365,9 +436,16 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 				}
 			}
 			bMove = true;
-			m_pTransformCom->Go_Straight(fTimeDelta, true);
+
+			if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+				m_pTransformCom->Go_Straight(fTimeDelta * 1.2f, true);
+			else 
+				m_pTransformCom->Go_Straight(fTimeDelta, true);
+			
 			m_iState = STATE_WALK;
 		}
+		else
+			Start_Serach();
 	}
 	else if (m_eAI_Status == AI_STATUS::AI_PANIC)
 	{
@@ -468,6 +546,13 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 	{
 		m_fDestination = fPlayerPosition;
 		m_eAI_Status = AI_STATUS::AI_ATTACK;
+
+		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+		{
+			m_bExplosionActive = true;
+			m_fDetective_Length = 10000.f;
+			m_bCanSeeTransparent = true;
+		}
 	}
 	else
 	{

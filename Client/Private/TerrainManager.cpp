@@ -68,19 +68,15 @@ void CTerrainManager::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrainManager::Render()
 {
-
+	_vector vCamera = GET_INSTANCE->GetCameraPosition();
 
 	for (auto& iter : m_mapInstancing_SurFace)
 	{
-		_vector vCamera = GET_INSTANCE->GetCameraPosition();
-
 		_float3 fLook{};
 
 		fLook.x = vCamera.m128_f32[0] - iter.second->m_vMat.m[3][0];
 		fLook.y = vCamera.m128_f32[1] - iter.second->m_vMat.m[3][1];
 		fLook.z = vCamera.m128_f32[2] - iter.second->m_vMat.m[3][2];
-
-		_bool bGray = false;
 
 		_float Length = sqrt(pow(fLook.x, 2) + pow(fLook.y, 2) + pow(fLook.z, 2));
 
@@ -94,27 +90,6 @@ HRESULT CTerrainManager::Render()
 
 		if (GET_INSTANCE->IsBackOfCamera(vPosition))
 			continue;
-
-		
-		if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_EDITOR)
-			if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true))
-				if (Length <= m_fRender_Index)
-				{
-			
-
-					_int iX = -1;
-					_int iY = -1;
-					_int iZ = -1;
-					LCUBEDIRECION Derec = LCUBEDIRECION::LDIREC_END;
-
-					InterpretKey(iter.first, &iX, &iY, &iZ, &Derec);
-
-
-					if ((iX % 10 == 0) && (iZ % 10 == 0))
-						ShowIndex(iX, iZ, XMLoadFloat4x4(&iter.second->m_vMat));
-
-				}
-
 		
 
 
@@ -145,25 +120,18 @@ HRESULT CTerrainManager::Render()
 				continue;
 
 
-		CShader* pShader = nullptr;
-
-		if (bGray)
-			pShader = m_pShaderCom;
-		else
-			pShader = m_pShaderCom;
-
-		if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &iter.second->m_vMat)))
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter.second->m_vMat)))
 			return E_FAIL;
 
-		if (FAILED(pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
 			return E_FAIL;
-		if (FAILED(pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-			return E_FAIL;
-
-		if (FAILED(m_pTextureCom->Bind_ShadeResource(pShader, "g_DiffuseTexture", iter.second->m_iTextureNum)))
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
 			return E_FAIL;
 
-		if (FAILED(pShader->Begin(0)))
+		if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", iter.second->m_iTextureNum)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
 
 
@@ -178,6 +146,29 @@ HRESULT CTerrainManager::Render()
 	}
 
 	return S_OK;
+}
+
+HRESULT CTerrainManager::RenderSurface(SURFACE* pSurface)
+{
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &pSurface->m_vMat)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", pSurface->m_iTextureNum)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+
+	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+		return E_FAIL;
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
 }
 
 void CTerrainManager::SaveMap(const _char* pPath)

@@ -76,8 +76,25 @@ void CThrow_Granade::Update(_float fTimeDelta)
 		iter->fTime -= fTimeDelta;
 
 		if (iter->fTime < 0.f)
+
+
+
+
+
 		{
 			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, iter->pHost, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
+			if (iter->pHost != nullptr)
+			{
+				for (_int i = 0; i < 3; ++i)
+				{
+					_float3 fDirec = { _float((rand() % 1000) - (rand() % 1000)) / 1000.f, 0.5f, _float((rand() % 1000) - (rand() % 1000)) / 1000.f };
+					GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, nullptr, iter->pCollider->GetBoundingCenter(), fDirec);
+				}
+				
+			}
+				
+
+
 			iter->bDead = true;
 		}
 	}

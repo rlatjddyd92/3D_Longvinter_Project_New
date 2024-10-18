@@ -26,6 +26,8 @@ HRESULT CUIPart_Bar::Initialize(void* pArg)
 	m_eType = Desc->eType;
 	m_pHost = Desc->pHost;
 
+	Safe_AddRef(m_pHost);
+
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -86,7 +88,7 @@ HRESULT CUIPart_Bar::Render()
 {
 	if (m_eType == BAR_ENEMY_HP)
 	{
-		if ((m_pHost == nullptr) && (m_pHost->GetDead()))
+		if ((m_pHost == nullptr) || (m_pHost->GetDead()))
 		{
 			__super::SetDead();
 			return S_OK;

@@ -6,5 +6,6 @@ enum class ENEMY_MODE
 };
 enum class ENEMY_TYPE
 {
+	ENEMY_TYPE_EXPLOSION,
 	ENEMY_TYPE_END
 };

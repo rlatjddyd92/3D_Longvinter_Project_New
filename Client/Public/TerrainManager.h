@@ -76,6 +76,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	HRESULT RenderSurface(SURFACE* pSurface);
+
 public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);

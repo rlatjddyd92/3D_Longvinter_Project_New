@@ -60,8 +60,10 @@ void CContainerObject::Free()
 {
 	__super::Free();
 
-	for (auto& pPartObject : m_Parts)
-		Safe_Release(pPartObject);
+
+	if (m_Parts.size() > 0)
+		for (auto& pPartObject : m_Parts)
+			Safe_Release(pPartObject);
 
 	m_Parts.clear();
 }

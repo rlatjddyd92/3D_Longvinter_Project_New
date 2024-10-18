@@ -98,6 +98,8 @@ private:
 "AppleTree",
 "Rock",
 "Bush",
+"Door",
+"MonsterMaker"
 	};
 	_int m_iSelectLandObject = _int(INTERACTION::INTER_END);
 

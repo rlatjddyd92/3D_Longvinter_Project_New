@@ -90,9 +90,17 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			
 		}
 
+		m_bActive = GET_INSTANCE->GetMonsterMake();
+
 
 		if (m_eType == INTERACTION::INTER_MONSTERMAKER)
 		{
+			if (!m_bActive)
+				continue;
+
+			if (iter->iActCount >= m_iMonsterMake)
+				continue;
+			
 			if (m_fShowTime == 0.f)
 				m_fShowTime = 1.0f;
 			else
@@ -103,9 +111,68 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 			_float fDistance = sqrt(pow(vPlayer.m128_f32[0] - vThis.m128_f32[0], 2) + pow(vPlayer.m128_f32[1] - vThis.m128_f32[1], 2) + pow(vPlayer.m128_f32[2] - vThis.m128_f32[2], 2));
 
-			if (fDistance < 20.f)
-			{
+			_float3 fCheck{};
+			XMStoreFloat3(&fCheck, vThis);
 
+			if (fDistance < 30.f)
+			{
+				_int iDirec = _int(m_pGameInstance->Get_Random(0.f, 4.f));
+
+				if (iDirec == 0)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 1.0f, 0.5f, 0.f }, 1))
+					{
+						fCheck.x += 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+				
+				if (iDirec == 1)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { -1.0f, 0.5f, 0.f }, 1))
+					{
+						fCheck.x -= 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+
+				if (iDirec == 2)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 0.f, 0.5f, 1.f }, 1))
+					{
+						fCheck.z += 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+
+				if (iDirec == 3)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 0.f, 0.5f, -1.f }, 1))
+					{
+						fCheck.z -= 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						fCheck.x = -1.f;
+				}
+
+				if (fCheck.x != -1.f)
+				{
+					GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, 0.f);
+					static_cast<CLongvinter_Container*>(m_pGameInstance->Find_Object(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->SetMonsterMake(true);
+				}
+					
+						
 			}
 		}
 		
@@ -362,7 +429,7 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 			return E_FAIL;
 
 		m_fSpec_Extent = { 0.5f,1.f,0.5f };
-		m_fSpec_Scale = 2.f;
+		m_fSpec_Scale = 1.f;
 		m_bTexture = false;
 	}
 	

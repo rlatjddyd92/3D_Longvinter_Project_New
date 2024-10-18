@@ -68,7 +68,7 @@ private:
 
 
 	// test 
-	_int				m_iBody = 0;
+	_int				m_iBody = _int(HUMAN_BODY::BODY_BLUE);
 	_int				m_iFace = 0;
 	
 private:

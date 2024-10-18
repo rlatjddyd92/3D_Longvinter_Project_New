@@ -81,11 +81,11 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 		m_vecCrowdControl_Time[i] -= fTimeDelta;
 		if (m_vecCrowdControl_Time[i] < 0.f)
 		{
+			if ((i == _int(CROWDCONTROL::CC_BURN)) && (m_vecCrowdControl[i]))
+				End_Panic();
+
 			m_vecCrowdControl_Time[i] = 0.f;
 			m_vecCrowdControl[i] = false;
-
-			if (i == _int(CROWDCONTROL::CC_BURN))
-				End_Panic();
 		}
 	}
 
@@ -96,7 +96,7 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 
 void CLongvinter_Container::Update(_float fTimeDelta)
 {
-	
+	__super::Update(fTimeDelta);
 
 }
 

@@ -414,19 +414,19 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
 		GET_INSTANCE->ShowInformMessage(TEXT("F키 : 숄더뷰 모드"));
-		GET_INSTANCE->SetLenderLength(35.f);
+		GET_INSTANCE->SetLenderLength(100.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_E) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
 		GET_INSTANCE->ShowInformMessage(TEXT("E키 : 에디터 카메라 모드"));
-		GET_INSTANCE->SetLenderLength(50.f);
+		GET_INSTANCE->SetLenderLength(100.f);
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
 		GET_INSTANCE->ShowInformMessage(TEXT("T키 : 3인칭 모드"));
-		GET_INSTANCE->SetLenderLength(20.f);
+		GET_INSTANCE->SetLenderLength(100.f);
 	}
 }
 
@@ -468,19 +468,20 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 	}
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true) & 0x80)
-	{
-		_float fLength = GET_INSTANCE->GetLenderLength();
 
-		if (m_pGameInstance->Get_DIKeyState(DIK_UP, true) & 0x80)
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, false) & 0x80)
+	{
+		if (GET_INSTANCE->GetMonsterMake())
 		{
-			GET_INSTANCE->SetLenderLength(fLength + fTimeDelta);
+			GET_INSTANCE->SetMakeMonster(false);
+			GET_INSTANCE->ShowInformMessage(TEXT("몬스터 생성기 OFF"));
 		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, true) & 0x80)
+		else 
 		{
-			GET_INSTANCE->SetLenderLength(fLength - fTimeDelta);
+			GET_INSTANCE->SetMakeMonster(true);
+			GET_INSTANCE->ShowInformMessage(TEXT("몬스터 생성기 ON"));
 		}
-			
 	}
 }
 

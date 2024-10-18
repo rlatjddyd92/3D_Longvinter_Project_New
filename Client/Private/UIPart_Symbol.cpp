@@ -25,6 +25,9 @@ HRESULT CUIPart_Symbol::Initialize(void* pArg)
 
 	m_eType = Desc->eType;
 	m_pHost = Desc->pHost;
+
+	Safe_AddRef(m_pHost);
+
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -63,7 +66,7 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	if ((m_pHost == nullptr) && (m_pHost->GetDead()))
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
 	{
 		__super::SetDead();
 		return;
@@ -87,6 +90,12 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Symbol::Render()
 {
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
+	{
+		__super::SetDead();
+		return S_OK;
+	}
+
 	_float3 fPosition{};
 	_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
 	XMStoreFloat3(&fPosition, vPosition);
