@@ -130,6 +130,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_Option* MakeUIPage_Option() { return m_pFactory->MakeUIPage_Option(); }
 	CUIPage_ToolTip* MakeUIPage_ToolTip() { return m_pFactory->MakeUIPage_ToolTip(); }
 	CUIPage_User* MakeUIPage_User() { return m_pFactory->MakeUIPage_User(); }
+	CUIPage_Shop* MakeUIPage_Shop() { return m_pFactory->MakeUIPage_Shop(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
@@ -226,6 +227,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		return m_pUIManager->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E);
 	}
+
+	void OpenShopPage(_int iShopNum) { m_pUIManager->OpenShopPage(iShopNum); }
 #pragma endregion
 
 
@@ -248,6 +251,13 @@ public: // <- 싱글톤을 통한 외부 접근용
 	wstring Get_TagName(ITEMTAG eType) { return m_pItemManager->Get_TagName(eType); }
 	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_pItemManager->Get_TagState(iIndex, eType);}
 
+	void Set_AllNew(_bool bIsNew) {m_pItemManager->Set_AllNew(bIsNew);}
+	_int Get_PlayerCash() { return m_pItemManager->Get_PlayerCash(); }
+	_bool Add_PlayerCash(_int iCash) { return m_pItemManager->Add_PlayerCash(iCash); }
+	void Add_PlayerCash_Force(_int iCash) // <- 보유금액을 마이너스로 변경하는 것에 주의 
+	{
+		m_pItemManager->Add_PlayerCash_Force(iCash);
+	}
 #pragma endregion
 
 

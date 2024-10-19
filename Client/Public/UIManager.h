@@ -54,12 +54,12 @@ public: // 툴팁 관련 함수
 
 
 public: 
-	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"))
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"))
 	{
 		if (m_bActiveInteraction)
 			return false;
 
-		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E);
+		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_E, Function_F, Function_C);
 		m_bActiveInteraction = true;
 		return true;
 	}
@@ -67,6 +67,9 @@ public:
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
 	void MakeSymbol(CLongvinter_Container* pHost);
+
+public: // <- 상점 관련 함수 
+	void OpenShopPage(_int iShopNum);
 
 private:
 	HRESULT Ready_Components();
@@ -92,7 +95,7 @@ private:
 	CUIPage_Option* m_pPage_Option = { nullptr };
 	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
 	CUIPage_User* m_pPage_User = { nullptr };
-
+	CUIPage_Shop* m_pPage_Shop = { nullptr };
 
 
 	list<CUIPart_TextBox*> m_Informlist;

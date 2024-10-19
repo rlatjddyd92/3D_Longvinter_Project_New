@@ -18,6 +18,7 @@ public:
 	{
 		PICTUER_BGA,
 		PICTUER_MAINLOGO,
+		PICTUER_CASH,
 		PICTUER_END
 	};
 

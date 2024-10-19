@@ -42,7 +42,7 @@ HRESULT CUIPage_Inven::Initialize(void* pArg)
 	m_fY = 300.f;
 
 	m_fSizeX = ((m_fInvenCellSize * 1.0f) * _float(m_iInvenCol)) + 20.f;
-	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(m_iInvenRow)) + 60.f;
+	m_fSizeY = ((m_fInvenCellSize * 1.0f) * _float(m_iInvenRow)) + 110.f;
 
 	__super::SetOff(true);
 
@@ -74,12 +74,20 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
 			m_vecInvenCell[i]->Empty_Cell();
 		else
-			m_vecInvenCell[i]->Input_Item(_int(tInfo.eIndex));
+		{
+			_int iCount = -1;
+			if (tInfo.bStack)
+				iCount = tInfo.iCount;
+
+			m_vecInvenCell[i]->Input_Item(_int(tInfo.eIndex), iCount);
+		}
+			
 
 		m_vecInvenCell[i]->Set_Picked(tInfo.bPicked);
+		m_vecInvenCell[i]->Set_New(tInfo.bNew);
 	}
 
-
+	m_pTextBox_Cash->SetCash(GET_INSTANCE->Get_PlayerCash());
 
 
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
@@ -88,6 +96,9 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPage_Inven::Render()
 {
+	
+
+
 
 	return S_OK;
 }
@@ -106,6 +117,10 @@ void CUIPage_Inven::AddRender_UIPage()
 
 	m_pBack_Window_Header->AddRender_UIPart();
 	m_pButton_Close->AddRender_UIPart();
+	m_pPicture_Cash->AddRender_UIPart();
+	m_pTextBox_Cash->AddRender_UIPart();
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 void CUIPage_Inven::Ready_UIPart()
@@ -124,13 +139,20 @@ void CUIPage_Inven::Ready_UIPart()
 		{
 			m_vecInvenCell[(i * m_iInvenCol)+j] = GET_INSTANCE->MakeUIPart_Cell(CUIPart_Cell::CELL_INVEN, fStartX + (m_fInvenCellSize * 1.f * j), fStartY + (m_fInvenCellSize * 1.f * i), m_fInvenCellSize, m_fInvenCellSize);
 		}
+
+	m_pPicture_Cash = GET_INSTANCE->MakeUIPart_Picture(CUIPart_Picture::PICTUER_CASH, fStartX, fStartY + (m_fInvenCellSize * 1.f * m_iInvenRow), m_fInvenCellSize* 0.8, m_fInvenCellSize * 0.8);
+	m_pTextBox_Cash = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_CASH, fStartX + (m_fInvenCellSize * 1.f) + 30.f, fStartY + (m_fInvenCellSize * 1.f * m_iInvenRow), 100.f, 20.f, false);
 }
 
 _bool CUIPage_Inven::Key_Action()
 {
 
 	if (m_pButton_Close->IsPushed())
+	{
+		GET_INSTANCE->Set_AllNew(false);
 		__super::SetOff(true);
+	}
+		
 
 	_bool Check = false;
 
@@ -162,6 +184,8 @@ _bool CUIPage_Inven::Key_Action()
 		m_pButton_Close->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window_Header->Move_UI(fMovingX, fMovingY);
 		m_pBack_Window->Move_UI(fMovingX, fMovingY);
+		m_pPicture_Cash->Move_UI(fMovingX, fMovingY);
+		m_pTextBox_Cash->Move_UI(fMovingX, fMovingY);
 		for (auto& iter : m_vecInvenCell)
 			iter->Move_UI(fMovingX, fMovingY);
 	}
@@ -249,9 +273,11 @@ void CUIPage_Inven::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pButton_Close);
+	Safe_Release(m_pBack_Window);
+	Safe_Release(m_pBack_Window_Header);
+	Safe_Release(m_pPicture_Cash);
+	Safe_Release(m_pTextBox_Cash);
 
 	for (auto& iter : m_vecInvenCell)
 		Safe_Release(iter);

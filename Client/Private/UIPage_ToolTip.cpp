@@ -263,8 +263,12 @@ void CUIPage_ToolTip::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pBack_Window);
+
+	for (auto& iter : m_vecText)
+		Safe_Release(iter);
+
+	m_vecText.clear();
+
 	m_vecSize.clear();
 }

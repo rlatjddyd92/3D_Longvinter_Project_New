@@ -43,7 +43,17 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	else if (m_eType == UITEXTBOX_TYPE::TEXTBOX_INTER_FUNCTION)
 	{
 		m_Font = TEXT("Font_Test3");
-		m_fSize = 0.4f;
+		m_fSize = 0.3f;
+	}
+	else if (m_eType == UITEXTBOX_TYPE::TEXTBOX_CASH)
+	{
+		m_Font = TEXT("Font_Test3");
+		m_fSize = 0.5f;
+
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 0 / 255.f;
+		m_fRGB[1] = 0 / 255.f;
+		m_fRGB[2] = 0 / 255.f;
 	}
 	else 
 		m_fSize = 0.7f;
@@ -95,8 +105,8 @@ void CUIPart_TextBox::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_TextBox::Render()
 {
-
-	__super::Render();
+	if (m_eType != CUIPart_TextBox::TEXTBOX_CASH)
+		__super::Render();
 
 	XMVECTOR vCenter = { m_fX,m_fY,0.f,0.f };
 
@@ -106,14 +116,68 @@ HRESULT CUIPart_TextBox::Render()
 		vCenter.m128_f32[1] -= m_fSizeY * 0.5f;
 	}
 
-	_tchar* strTemp = new _tchar[m_Text.size() + 1];
 
-	for (_int i = 0; i <= m_Text.size(); ++i)
-		strTemp[i] = m_Text[i];
 
-	m_pGameInstance->Render_Text(m_Font, strTemp, vCenter, m_fSize, m_bCenter, XMLoadFloat4(&m_fTextColor));
+	if (m_eType == CUIPart_TextBox::TEXTBOX_CASH)
+	{
+		_tchar* tTemp_Origin = new _tchar[30];
+		swprintf(tTemp_Origin, 30, L"%d", m_iCash);
+		
+		_int iCount = 0;
 
-	Safe_Delete_Array(strTemp);
+		for (_int i = 0; i < 30; ++i)
+		{
+			if (tTemp_Origin[i] == '\0')
+			{
+				iCount = i;
+				break;
+			}
+		}
+
+		_int iNow_Origin = 0;
+		_int iNow_New = 0;
+		_tchar* tTemp_New = new _tchar[30];
+
+		while (iCount > iNow_Origin)
+		{
+			if ((iCount - iNow_Origin) % 3 == 0)
+			{
+				if (iNow_New > 0)
+				{
+					tTemp_New[iNow_New] = ',';
+					++iNow_New;
+				}
+			}
+			tTemp_New[iNow_New] = tTemp_Origin[iNow_Origin];
+			++iNow_Origin;
+			++iNow_New;
+		}
+
+		tTemp_New[iNow_New] = '\0';
+
+		if (m_iCash < 0)
+			m_fTextColor = { 1.f,0.f,0.f,1.f };
+		else 
+			m_fTextColor = { 0.f,0.f,0.f,1.f };
+
+		m_pGameInstance->Render_Text(m_Font, tTemp_New, vCenter, m_fSize, m_bCenter, XMLoadFloat4(&m_fTextColor));
+		Safe_Delete_Array(tTemp_Origin);
+		Safe_Delete_Array(tTemp_New);
+
+	}
+	else
+	{
+		_tchar* strTemp = new _tchar[m_Text.size() + 1];
+
+		for (_int i = 0; i <= m_Text.size(); ++i)
+			strTemp[i] = m_Text[i];
+
+		m_pGameInstance->Render_Text(m_Font, strTemp, vCenter, m_fSize, m_bCenter, XMLoadFloat4(&m_fTextColor));
+		Safe_Delete_Array(strTemp);
+	}
+
+
+	
 
 	return S_OK;
 }
@@ -163,7 +227,5 @@ void CUIPart_TextBox::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+
 }

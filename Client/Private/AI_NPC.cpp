@@ -67,16 +67,16 @@ void CAI_NPC::Update(_float fTimeDelta)
 	{
 		if (m_eNPC_Type == NPC_TYPE::NPC_SHOP)
 		{
-			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("상인"), TEXT("F키 : 대화하기"), TEXT("G키 : 사기"), TEXT("E키 : 팔기"));
+			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("상인"), TEXT("E키 : 대화하기"), TEXT("F키 : 사기"), TEXT("C키 : 팔기"));
 
 			if (bActive)
 			{
-				if (m_pGameInstance->Get_DIKeyState(DIK_F))
+				if (m_pGameInstance->Get_DIKeyState(DIK_E))
 					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
-				else if (m_pGameInstance->Get_DIKeyState(DIK_G))
-					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
-				else if (m_pGameInstance->Get_DIKeyState(DIK_E))
-					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				else if (m_pGameInstance->Get_DIKeyState(DIK_F))
+					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 구매 기능 작동"));
+				else if (m_pGameInstance->Get_DIKeyState(DIK_C))
+					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 판매 기능 작동"));
 			}
 
 		}

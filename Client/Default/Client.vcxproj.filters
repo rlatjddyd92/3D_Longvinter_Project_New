@@ -76,9 +76,6 @@
     <Filter Include="03.Container\02.Container_Enemy">
       <UniqueIdentifier>{bcf3b35d-58c2-4d75-a86c-1b0ef91465f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Container\03.Container_Animal">
-      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Container\02.Container_Enemy\00.AI_Enemy">
       <UniqueIdentifier>{c144e254-c3c5-418a-aa07-f212c983f894}</UniqueIdentifier>
     </Filter>
@@ -270,6 +267,12 @@
     </Filter>
     <Filter Include="03.Container\01.Container_NPC\00.AI_NPC">
       <UniqueIdentifier>{2ab0723a-3f63-49e5-902c-5b7ef36d97a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\03.Container_Turret">
+      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\06.Body\01.Body_Turret">
+      <UniqueIdentifier>{900994fe-8d3a-4b8d-8132-196063b135ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -573,6 +576,9 @@
     <ClInclude Include="..\Public\AI_NPC.h">
       <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Body_Turret.h">
+      <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -817,6 +823,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AI_NPC.cpp">
       <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Body_Turret.cpp">
+      <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

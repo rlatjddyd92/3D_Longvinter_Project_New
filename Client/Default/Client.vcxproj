@@ -175,6 +175,7 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
     <ClInclude Include="..\Public\Body_Human.h" />
+    <ClInclude Include="..\Public\Body_Turret.h" />
     <ClInclude Include="..\Public\Bullet_MachineGun.h" />
     <ClInclude Include="..\Public\Bullet_Straight.h" />
     <ClInclude Include="..\Public\ClientInstance.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />
     <ClCompile Include="..\Private\Body_Human.cpp" />
+    <ClCompile Include="..\Private\Body_Turret.cpp" />
     <ClCompile Include="..\Private\Bullet_MachineGun.cpp" />
     <ClCompile Include="..\Private\Bullet_Straight.cpp" />
     <ClCompile Include="..\Private\ClientInstance.cpp" />

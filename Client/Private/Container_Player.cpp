@@ -410,22 +410,22 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 {
 	__super::Camera_Control(fTimeDelta);
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_F) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_B) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
-		GET_INSTANCE->ShowInformMessage(TEXT("F키 : 숄더뷰 모드"));
+		GET_INSTANCE->ShowInformMessage(TEXT("B키 : 숄더뷰 모드"));
 		GET_INSTANCE->SetLenderLength(100.f);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_E) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_N) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
-		GET_INSTANCE->ShowInformMessage(TEXT("E키 : 에디터 카메라 모드"));
+		GET_INSTANCE->ShowInformMessage(TEXT("N키 : 에디터 카메라 모드"));
 		GET_INSTANCE->SetLenderLength(100.f);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_M) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
-		GET_INSTANCE->ShowInformMessage(TEXT("T키 : 3인칭 모드"));
+		GET_INSTANCE->ShowInformMessage(TEXT("M키 : 3인칭 모드"));
 		GET_INSTANCE->SetLenderLength(100.f);
 	}
 }
@@ -452,25 +452,9 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 	}
 		
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_9, false) & 0x80)
-	{
-		++m_iBody;
-		if (m_iBody >= _int(HUMAN_BODY::BODY_END))
-			m_iBody = 0;
-		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
-	}
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_8, false) & 0x80)
-	{
-		++m_iFace;
-		if (m_iFace >= _int(HUMAN_FACE::FACE_END))
-			m_iFace = 0;
-		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
-	}
 
 
-
-	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, false) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_0, false) & 0x80)
 	{
 		if (GET_INSTANCE->GetMonsterMake())
 		{

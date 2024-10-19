@@ -353,7 +353,16 @@ HRESULT CItemManager::Setting_ItemInfo()
 	
 	// 인벤 초기 세팅 
 	for (_int i = 0; i < _int(ITEMINDEX::ITEM_END); ++i)
+	{
 		m_vecInvenInfo[i] = m_vecItemInfo[i];
+		m_vecInvenInfo[i].bNew = true;
+	}
+		
+
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_AMMO)].iCount = 100;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_ARROW)].iCount = 100;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_IRON_INGOT)].iCount = 10;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_FISH)].iCount = 50;
 
 	return S_OK;
 }
@@ -451,6 +460,8 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 			
 		if ((!m_tPickedItem.bStack) || (!bPlus))
 		{
+			
+
 			TINFO tTemp = m_tPickedItem;
 			_int iBefore = m_iBeforeIndex;
 			ITEMARRAY eBefore = m_eBeforeArray;
@@ -466,6 +477,7 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 
 			m_vecInvenInfo[iIndex] = tTemp;
 			m_vecInvenInfo[iIndex].bPicked = false;
+			m_vecInvenInfo[iIndex].bNew = true;
 		}
 	}
 	if (eArray == ITEMARRAY::ARRAY_EQUIP)

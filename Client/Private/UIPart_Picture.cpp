@@ -80,6 +80,13 @@ HRESULT CUIPart_Picture::Ready_Components()
 			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 1))
 			return E_FAIL;
 
+	if (m_eType == PICTUER_CASH)
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cash"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 1))
+			return E_FAIL;
+
+	
+
 
 	return S_OK;
 }
@@ -116,7 +123,5 @@ void CUIPart_Picture::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+
 }

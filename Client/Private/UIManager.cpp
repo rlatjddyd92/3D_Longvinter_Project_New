@@ -303,6 +303,15 @@ void CUIManager::MakeSymbol(CLongvinter_Container* pHost)
 	m_Symbollist.push_back(pNew);
 }
 
+void CUIManager::OpenShopPage(_int iShopNum)
+{
+	if (m_pPage_Shop->GetOff())
+	{
+		static_cast<CUIPage_Shop*>(m_pPage_Shop)->OpenShop(iShopNum);
+		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Shop));
+	}
+}
+
 HRESULT CUIManager::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -392,6 +401,7 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Option);
 	Safe_Release(m_pPage_ToolTip);
 	Safe_Release(m_pPage_User);
+	Safe_Release(m_pPage_Shop);
 	
 
 	Safe_Release(m_pShaderCom);

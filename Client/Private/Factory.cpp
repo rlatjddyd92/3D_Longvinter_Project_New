@@ -150,6 +150,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Picture/BGA%d.dds"), 6))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cash"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Picture/T_IconCash.dds"), 1))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_MainLogo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Picture/MainLogo.dds"), 1))))
 		return E_FAIL;
@@ -196,6 +200,10 @@ HRESULT CFactory::Ready_Prototype_Texture()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Crosshair"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Cursor/Crosshair.dds"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Check"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Button/T_SettingsCheckTrue.dds"), 1))))
 		return E_FAIL;
 
 
@@ -678,6 +686,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_User"), CUIPage_User::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Shop"), CUIPage_Shop::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -946,6 +957,13 @@ CUIPage_User* CFactory::MakeUIPage_User()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), TEXT("Prototype_UIPage_User"));
 
 	return static_cast<CUIPage_User*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_User"), -1));
+}
+
+CUIPage_Shop* CFactory::MakeUIPage_Shop()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Shop"), TEXT("Prototype_UIPage_Shop"));
+
+	return static_cast<CUIPage_Shop*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Shop"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

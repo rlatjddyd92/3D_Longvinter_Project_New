@@ -123,6 +123,87 @@ HRESULT CUIPart_Cell::Inven_Render()
 	if (FAILED(m_pVIBufferCom->Render()))
 		return E_FAIL;
 
+	// 수량 표시 
+	if (m_iItemCount > -1)
+	{
+		m_pTransformCom->Set_Scaled(20.f, 15.f, 1.f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+			XMVectorSet((m_fX + 11.f) - m_fViewWidth * 0.5f,  - (m_fY + 11.f) + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom_Count, "g_WorldMatrix")))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom_Count->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom_Count->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom_Count->Bind_ShadeResource(m_pShaderCom_Count, "g_Texture", 0)))
+			return E_FAIL;
+
+		_float* m_fCount = new _float[3];
+		m_fCount[0] = 0.f;
+		m_fCount[1] = 0.f;
+		m_fCount[2] = 0.f;
+
+		if (FAILED(m_pShaderCom_Count->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor_CountNew, m_fCount)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom_Count->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+			return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+
+		_tchar* tTemp = new _tchar[5];
+
+		swprintf(tTemp, 5, L"%d", m_iItemCount);
+		m_pGameInstance->Render_Text(TEXT("Font_Test3"), tTemp, { m_fX + 10.f,m_fY + 11.f,0.f,0.f }, 0.25f, true, { 1.f,1.f,1.f,1.f });
+
+		Safe_Delete_Array(m_fCount);
+		Safe_Delete_Array(tTemp);
+	}
+
+	// 신규 아이템 표시 
+	if (m_bNew)
+	{
+		m_pTransformCom->Set_Scaled(20.f, 20.f, 1.f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+			XMVectorSet((m_fX - 11.f) - m_fViewWidth * 0.5f, -(m_fY - 11.f) + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom_New, "g_WorldMatrix")))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom_New->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom_New->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom_New->Bind_ShadeResource(m_pShaderCom_New, "g_Texture", 0)))
+			return E_FAIL;
+
+		_float* m_fCheck = new _float[3];
+		m_fCheck[0] = 255.f/255.f;
+		m_fCheck[1] = 0.f/ 255.f;
+		m_fCheck[2] = 0.f/ 255.f;
+
+		if (FAILED(m_pShaderCom_New->Bind_ChangeColor("g_IsChange", "g_ChangeColor", m_bChangeColor_CountNew, m_fCheck)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom_New->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+			return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+
+		Safe_Delete_Array(m_fCheck);
+	}
+		
+
 	//if (m_bPicked)
 	//	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Picked"), _vector{ m_fX,m_fY,0.f,0.f }, 0.5f, true);
 
@@ -131,10 +212,27 @@ HRESULT CUIPart_Cell::Inven_Render()
 
 HRESULT CUIPart_Cell::Ready_Components()
 {
-	if (m_eType == CELL_INVEN)
-		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cell_InvenEmpty"),
-			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 6))
-			return E_FAIL;
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Cell_InvenEmpty"),
+		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 1))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Check"),
+		TEXT("Com_Texture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom_New)), 1))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Symbol_Back"),
+		TEXT("Com_Texture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom_Count)), 1))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+		TEXT("Com_Shader_1"), reinterpret_cast<CComponent**>(&m_pShaderCom_Count))))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
+		TEXT("Com_Shader_2"), reinterpret_cast<CComponent**>(&m_pShaderCom_New))))
+		return E_FAIL;
 	
 
 	return S_OK;
@@ -153,8 +251,6 @@ CUIPart_Cell* CUIPart_Cell::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-
-
 CGameObject* CUIPart_Cell::Clone(void* pArg)
 {
 	CUIPart_Cell* pInstance = new CUIPart_Cell(*this);
@@ -172,7 +268,10 @@ void CUIPart_Cell::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTextureCom_New);
+	Safe_Release(m_pTextureCom_Count);
+	Safe_Release(m_pShaderCom_Count);
+	Safe_Release(m_pShaderCom_New);
+
+	
 }

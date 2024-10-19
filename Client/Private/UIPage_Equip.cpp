@@ -74,8 +74,14 @@ void CUIPage_Equip::Late_Update(_float fTimeDelta)
 		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
 			m_vecEquipCell[i]->Empty_Cell();
 		else
-			m_vecEquipCell[i]->Input_Item(_int(tInfo.eIndex));
+		{
+			_int iCount = -1;
+			if (tInfo.bStack)
+				iCount = tInfo.iCount;
 
+			m_vecEquipCell[i]->Input_Item(_int(tInfo.eIndex), iCount);
+		}
+		
 		m_vecEquipCell[i]->Set_Picked(tInfo.bPicked);
 	}
 
@@ -249,9 +255,9 @@ void CUIPage_Equip::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pButton_Close);
+	Safe_Release(m_pBack_Window);
+	Safe_Release(m_pBack_Window_Header);
 
 	for (auto& iter : m_vecEquipCell)
 		Safe_Release(iter);

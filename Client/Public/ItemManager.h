@@ -38,6 +38,7 @@ public:
 
 		_int iCount = 1;
 		_bool bPicked = false;
+		_bool bNew = true;
 
 	}TINFO;
 
@@ -108,6 +109,31 @@ public:
 	wstring Get_TagName(ITEMTAG eType) { return m_vecTagName[_int(eType)]; }
 	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_vecItemTag[_int(iIndex)][_int(eType)]; }
 
+	void Set_AllNew(_bool bIsNew)
+	{
+		for (auto& iter : m_vecInvenInfo)
+			if (iter.eIndex != ITEMINDEX::ITEM_END)
+				iter.bNew = bIsNew;
+	}
+
+	_int Get_PlayerCash() { return m_iPlayerCash; }
+	_bool Add_PlayerCash(_int iCash)
+	{
+		if (m_iPlayerCash + iCash < 0)
+			return false;
+
+		m_iPlayerCash += iCash;
+		return true;
+	}
+
+	void Add_PlayerCash_Force(_int iCash) // <- 보유금액을 마이너스로 변경하는 것에 주의 
+	{
+		m_iPlayerCash += iCash;
+	}
+
+
+
+
 
 public: // <- 아이템 매니저 초반 세팅용 함수 
 
@@ -157,6 +183,8 @@ private: // <- 아이템 관련 변수
 
 	vector<wstring> m_vecTypeName; // <- 타입의 인게임 노출 이름 목록
 	vector<wstring> m_vecTagName; // <- 태그의 인게임 노출 이름 목록 
+
+	_int m_iPlayerCash = 1000000;
 
 private: // <- 상점, 상자 관련 변수
 	_int m_iNowKey = 1; // <- 상점, 상자 생성 시, 키를 배정하기 위한 변수, 사용할 때 마다 증가하며 이미 사용한 키는 재사용하지 않는다 

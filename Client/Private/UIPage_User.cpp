@@ -108,12 +108,12 @@ void CUIPage_User::AddRender_UIPage()
 {
 	if (!m_vecPart[_int(PART_INTER_NAME)]->GetOff())
 		m_vecPart[_int(PART_INTER_NAME)]->AddRender_UIPart();
-	if (!m_vecPart[_int(PART_INTER_F)]->GetOff())
-		m_vecPart[_int(PART_INTER_F)]->AddRender_UIPart();
-	if (!m_vecPart[_int(PART_INTER_G)]->GetOff())
-		m_vecPart[_int(PART_INTER_G)]->AddRender_UIPart();
 	if (!m_vecPart[_int(PART_INTER_E)]->GetOff())
 		m_vecPart[_int(PART_INTER_E)]->AddRender_UIPart();
+	if (!m_vecPart[_int(PART_INTER_F)]->GetOff())
+		m_vecPart[_int(PART_INTER_F)]->AddRender_UIPart();
+	if (!m_vecPart[_int(PART_INTER_C)]->GetOff())
+		m_vecPart[_int(PART_INTER_C)]->AddRender_UIPart();
 
 
 
@@ -130,9 +130,9 @@ void CUIPage_User::Ready_UIPart()
 
 
 	m_vecPart[_int(PART_INTER_NAME)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_NAME,0.f,0.f,120.f,15.f,false,false));
-	m_vecPart[_int(PART_INTER_F)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_NAME, 0.f, 0.f, 100.f, 12.f, false, false));
-	m_vecPart[_int(PART_INTER_G)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_NAME, 0.f, 0.f, 100.f, 12.f, false, false));
-	m_vecPart[_int(PART_INTER_E)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_NAME, 0.f, 0.f, 100.f, 12.f, false, false));
+	m_vecPart[_int(PART_INTER_E)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
+	m_vecPart[_int(PART_INTER_F)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
+	m_vecPart[_int(PART_INTER_C)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
 
 
 
@@ -153,7 +153,7 @@ _bool CUIPage_User::Key_Action()
 	return true;
 }
 
-void CUIPage_User::Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F, wstring Function_G, wstring Function_E)
+void CUIPage_User::Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E, wstring Function_F, wstring Function_C)
 {
 	_vector vAdjust = { 0.f,1.f,0.f,0.f };
 
@@ -167,33 +167,33 @@ void CUIPage_User::Show_Interaction_Function(_matrix mHost, wstring InterName, w
 	m_vecPart[_int(PART_INTER_NAME)]->AddRender_UIPart();
 	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_NAME)])->SetText(InterName);
 
-	if (Function_F == TEXT("없음"))
-		return;
-
-	m_vecPart[_int(PART_INTER_F)]->SetOn();
-	m_vecPart[_int(PART_INTER_F)]->SetPositionByObject(mHost);
-	m_vecPart[_int(PART_INTER_F)]->Move_UI(190.f, -60.f);
-	m_vecPart[_int(PART_INTER_F)]->AddRender_UIPart();
-	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_F)])->SetText(Function_F);
-
-	if (Function_G == TEXT("없음"))
-		return;
-
-	m_vecPart[_int(PART_INTER_G)]->SetOn();
-	m_vecPart[_int(PART_INTER_G)]->SetPositionByObject(mHost);
-	m_vecPart[_int(PART_INTER_G)]->Move_UI(190.f, -40.f);
-	m_vecPart[_int(PART_INTER_G)]->AddRender_UIPart();
-	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_G)])->SetText(Function_G);
-
-
 	if (Function_E == TEXT("없음"))
 		return;
 
 	m_vecPart[_int(PART_INTER_E)]->SetOn();
 	m_vecPart[_int(PART_INTER_E)]->SetPositionByObject(mHost);
-	m_vecPart[_int(PART_INTER_E)]->Move_UI(190.f, -20.f);
+	m_vecPart[_int(PART_INTER_E)]->Move_UI(190.f, -60.f);
 	m_vecPart[_int(PART_INTER_E)]->AddRender_UIPart();
 	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_E)])->SetText(Function_E);
+
+	if (Function_F == TEXT("없음"))
+		return;
+
+	m_vecPart[_int(PART_INTER_F)]->SetOn();
+	m_vecPart[_int(PART_INTER_F)]->SetPositionByObject(mHost);
+	m_vecPart[_int(PART_INTER_F)]->Move_UI(190.f, -40.f);
+	m_vecPart[_int(PART_INTER_F)]->AddRender_UIPart();
+	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_F)])->SetText(Function_F);
+
+
+	if (Function_C == TEXT("없음"))
+		return;
+
+	m_vecPart[_int(PART_INTER_C)]->SetOn();
+	m_vecPart[_int(PART_INTER_C)]->SetPositionByObject(mHost);
+	m_vecPart[_int(PART_INTER_C)]->Move_UI(190.f, -20.f);
+	m_vecPart[_int(PART_INTER_C)]->AddRender_UIPart();
+	static_cast<CUIPart_TextBox*>(m_vecPart[_int(PART_INTER_C)])->SetText(Function_C);
 
 }
 
@@ -251,9 +251,7 @@ void CUIPage_User::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+
 
 	for (auto& iter : m_vecPart)
 		Safe_Release(iter);
