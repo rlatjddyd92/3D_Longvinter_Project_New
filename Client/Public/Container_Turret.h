@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CCContainer_Turret : public CLongvinter_Container
+class CContainer_Turret : public CLongvinter_Container
 {
 public:
 	
@@ -17,9 +17,9 @@ public:
 
 
 protected:
-	CCContainer_Turret(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCContainer_Turret(const CCContainer_Turret& Prototype);
-	virtual ~CCContainer_Turret() = default;
+	CContainer_Turret(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CContainer_Turret(const CContainer_Turret& Prototype);
+	virtual ~CContainer_Turret() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -32,6 +32,8 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
+	void SetHack(_int iFunc) { m_bHack[iFunc] = true; }
+	_bool GetHack(_int iFunc) { return m_bHack[iFunc]; }
 
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
@@ -49,7 +51,7 @@ protected: // AI 관련 함수
 
 protected:
 	_uint				m_iState = {  };
-
+	_bool				m_bHack[3] = { false,false,false };
 
 
 
@@ -66,7 +68,7 @@ protected:
 	_bool m_bCanSeeTransparent = false;
 
 public:
-	static CCContainer_Turret* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CContainer_Turret* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

@@ -401,7 +401,7 @@ HRESULT CFactory::Ready_Prototype_Container()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_Turret"),
-		CCContainer_Turret::Create(m_pDevice, m_pContext))))
+		CContainer_Turret::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -707,6 +707,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Shop"), CUIPage_Shop::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Hack"), CUIPage_Hack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -982,6 +985,13 @@ CUIPage_Shop* CFactory::MakeUIPage_Shop()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Shop"), TEXT("Prototype_UIPage_Shop"));
 
 	return static_cast<CUIPage_Shop*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Shop"), -1));
+}
+
+CUIPage_Hack* CFactory::MakeUIPage_Hack()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Hack"), TEXT("Prototype_UIPage_Hack"));
+
+	return static_cast<CUIPage_Hack*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Hack"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

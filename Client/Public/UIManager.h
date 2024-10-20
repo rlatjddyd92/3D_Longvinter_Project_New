@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "UIObject.h"
 #include "../Default/UIPage_Defines.h"
+#include "Container_Turret.h"
 
 // [UIManager]
 // 1. 각종 UI창, 시스템 클래스를 보관하고 필요에 따라 사용할 수 있게 하는 매니저 
@@ -54,12 +55,12 @@ public: // 툴팁 관련 함수
 
 
 public: 
-	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"))
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"), _vector Adjust = { 0.f,1.f,0.f,0.f })
 	{
 		if (m_bActiveInteraction)
 			return false;
 
-		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_E, Function_F, Function_C);
+		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_E, Function_F, Function_C, Adjust);
 		m_bActiveInteraction = true;
 		return true;
 	}
@@ -70,6 +71,10 @@ public:
 
 public: // <- 상점 관련 함수 
 	void OpenShopPage(_int iShopNum);
+	void OpenHackPage(CContainer_Turret* pTurret);
+
+	_bool GetOpenShop() { return m_bIsShopOpen; }
+	_bool GetOpenHack() { return m_bIsHackOpen; }
 
 private:
 	HRESULT Ready_Components();
@@ -96,7 +101,7 @@ private:
 	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
 	CUIPage_User* m_pPage_User = { nullptr };
 	CUIPage_Shop* m_pPage_Shop = { nullptr };
-
+	CUIPage_Hack* m_pPage_Hack = { nullptr };
 
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
@@ -107,6 +112,9 @@ private:
 	_bool m_bShowTooltip = false;
 
 	_bool m_bActiveInteraction = false;
+
+	_bool m_bIsShopOpen = false;
+	_bool m_bIsHackOpen = false;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -227,7 +227,7 @@ void CGameInstance::Delete_CloneObject_ByLevel(_uint iLevelIndex)
 _int CGameInstance::GetLayerSize(_int iLevelIndex, const _wstring& strLayerTag)
 {
 
-	return _int();
+	return m_pObject_Manager->GetLayerSize(iLevelIndex, strLayerTag);
 }
 
 #pragma endregion

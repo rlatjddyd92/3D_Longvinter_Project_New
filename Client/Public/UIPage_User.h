@@ -50,7 +50,7 @@ public:
 	virtual _bool Key_Action() override;
 
 public: // <- 페이지 조정용
-	void Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"));
+	void Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"), _vector Adjust = {0.f,1.f,0.f,0.f});
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

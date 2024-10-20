@@ -274,6 +274,9 @@
     <Filter Include="02.PartObject\06.Body\01.Body_Turret">
       <UniqueIdentifier>{900994fe-8d3a-4b8d-8132-196063b135ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack">
+      <UniqueIdentifier>{4d1bed2f-887c-4b3c-8fcc-2d6a5cbc806c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -579,6 +582,9 @@
     <ClInclude Include="..\Public\Container_Turret.h">
       <Filter>03.Container\03.Container_Turret</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Hack.h">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -826,6 +832,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Container_Turret.cpp">
       <Filter>03.Container\03.Container_Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Hack.cpp">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

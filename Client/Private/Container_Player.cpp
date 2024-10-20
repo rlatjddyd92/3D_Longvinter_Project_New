@@ -43,6 +43,8 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
+
+	GET_INSTANCE->Input_ContainerColliderPointer(eContainerType, static_cast<CLongvinter_Container*>(this), m_pColliderCom);
 	return S_OK;
 }
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LandObject_NonAnim.h"
 #include "ClientInstance.h"
-
+#include "Container_Turret.h"
 
 CLandObject_NonAnim::CLandObject_NonAnim(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject{ pDevice, pContext }
@@ -303,7 +303,7 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 			
 
 			_vector vPlayer = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
-			_vector vThis = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_vector vThis = pAction->pTransform->Get_State(CTransform::STATE_POSITION);
 
 			vPlayer -= vThis;
 		
@@ -314,27 +314,26 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 			{
 				if ((pAction->pTrace == nullptr) || (pAction->pTrace->GetDead()))
 				{
-					_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("Error : 연결된 터렛이 nullptr입니다."));
-
-					if (bActive)
-					{
-						return;
-					}
+					_vector vAdjust = { 0.f,2.f,0.f,0.f };
+					_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("Error : 연결된 터렛이 nullptr입니다."), TEXT("없음"), TEXT("없음"), vAdjust);
 
 					
-					
+					return;
+	
 				}
 					
+				_vector vAdjust = { 0.f,2.f,0.f,0.f };
 
-
-				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("E키 : 위치 확인"), TEXT("F키 : 해킹"));
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("E키 : 위치 확인"), TEXT("F키 : 해킹"), TEXT("없음"), vAdjust);
 
 				if (bActive)
 				{
 					if (m_pGameInstance->Get_DIKeyState(DIK_E))
 						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 확인 기능 작동"));
 					else if (m_pGameInstance->Get_DIKeyState(DIK_F))
-						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 해킹 기능 작동"));
+					{
+						GET_INSTANCE->OpenHackPage(static_cast<CContainer_Turret*>(pAction->pTrace));
+					}
 				}
 			}
 
@@ -493,8 +492,9 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		m_fSpec_Extent = { 0.5f,1.f,0.5f };
-		m_fSpec_Scale = 1.f;
+		m_fSpec_Extent = { 0.5f,0.5f,0.5f };
+		m_fSpec_Scale = 1.5f;
+		m_fSpec_Sensor = 20.f;
 		m_bTexture = true;
 	}
 	

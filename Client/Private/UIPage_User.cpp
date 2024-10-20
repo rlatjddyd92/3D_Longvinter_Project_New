@@ -153,9 +153,9 @@ _bool CUIPage_User::Key_Action()
 	return true;
 }
 
-void CUIPage_User::Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E, wstring Function_F, wstring Function_C)
+void CUIPage_User::Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E, wstring Function_F, wstring Function_C, _vector Adjust)
 {
-	_vector vAdjust = { 0.f,1.f,0.f,0.f };
+	_vector vAdjust = Adjust;
 
 	mHost.r[3] += vAdjust;
 

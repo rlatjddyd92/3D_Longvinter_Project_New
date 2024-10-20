@@ -234,6 +234,7 @@
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Crfting.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
+    <ClInclude Include="..\Public\UIPage_Hack.h" />
     <ClInclude Include="..\public\UIPage_Inven.h" />
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Option.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="..\private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Crfting.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
+    <ClCompile Include="..\Private\UIPage_Hack.cpp" />
     <ClCompile Include="..\Private\UIPage_Inven.cpp" />
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Option.cpp" />

@@ -57,6 +57,9 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 
 	m_fX = mousePos.x + (m_fSizeX * 0.5f);
 	m_fY = mousePos.y + (m_fSizeY * 0.5f);
+
+	m_bIsShopOpen = false;
+	m_bIsHackOpen = false;
 }
 
 void CUIManager::Update(_float fTimeDelta)
@@ -305,12 +308,26 @@ void CUIManager::MakeSymbol(CLongvinter_Container* pHost)
 
 void CUIManager::OpenShopPage(_int iShopNum)
 {
+	m_bIsShopOpen = true;
+
 	if (m_pPage_Shop->GetOff())
 	{
 		static_cast<CUIPage_Shop*>(m_pPage_Shop)->OpenShop(iShopNum);
 		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Shop));
 	}
 }
+
+void CUIManager::OpenHackPage(CContainer_Turret* pTurret)
+{
+	m_bIsHackOpen = true;
+
+	if (m_pPage_Hack->GetOff())
+	{
+		m_pPage_Hack->SetHost(pTurret);
+		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Hack));
+	}
+}
+
 
 HRESULT CUIManager::Ready_Components()
 {
@@ -361,6 +378,9 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_User = GET_INSTANCE->MakeUIPage_User();
 	Safe_AddRef(m_pPage_User);
+
+	m_pPage_Hack = GET_INSTANCE->MakeUIPage_Hack();
+	Safe_AddRef(m_pPage_Hack);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -401,8 +421,8 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Option);
 	Safe_Release(m_pPage_ToolTip);
 	Safe_Release(m_pPage_User);
-	Safe_Release(m_pPage_Shop);
-	
+	Safe_Release(m_pPage_Shop); 
+	Safe_Release(m_pPage_Hack);
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);

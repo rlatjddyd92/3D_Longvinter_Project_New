@@ -5,22 +5,22 @@
 #include "ClientInstance.h"
 #include "Tool.h"
 
-CCContainer_Turret::CCContainer_Turret(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CContainer_Turret::CContainer_Turret(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLongvinter_Container{ pDevice, pContext }
 {
 }
 
-CCContainer_Turret::CCContainer_Turret(const CCContainer_Turret& Prototype)
+CContainer_Turret::CContainer_Turret(const CContainer_Turret& Prototype)
 	: CLongvinter_Container{ Prototype }
 {
 }
 
-HRESULT CCContainer_Turret::Initialize_Prototype()
+HRESULT CContainer_Turret::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CCContainer_Turret::Initialize(void* pArg)
+HRESULT CContainer_Turret::Initialize(void* pArg)
 {
 	CGameObject::GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
@@ -35,16 +35,18 @@ HRESULT CCContainer_Turret::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	
+	GET_INSTANCE->MakeEnemyHpBar(this);
+	GET_INSTANCE->MakeSymbol(this);
+
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
-	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
+	//m_pTransformCom->Set_Scaled(1.5f, 1.5f, 1.5f);
 	
 	m_fRotate = 0.4f;
-
+	
 	return S_OK;
 }
 
-void CCContainer_Turret::Priority_Update(_float fTimeDelta)
+void CContainer_Turret::Priority_Update(_float fTimeDelta)
 {
 
 	/*if (m_bRotate)
@@ -56,6 +58,23 @@ void CCContainer_Turret::Priority_Update(_float fTimeDelta)
 
 	__super::Priority_Update(fTimeDelta);
 
+	if (m_bHack[0])
+	{
+		m_vecCrowdControl[_int(CROWDCONTROL::CC_STRN)] = true;
+		m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_STRN)] = 1000.f;
+		m_eAI_Status = AI_STATUS::AI_OFF;
+	}
+	if (m_bHack[1])
+	{
+		m_vecCrowdControl[_int(CROWDCONTROL::CC_STRN)] = false;
+		m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_STRN)] = 0.f;
+		m_eAI_Status = AI_STATUS::AI_ATTACK;
+	}
+
+	if (m_bHack[2])
+	{
+		m_bExplosionActive = true;
+	}
 
 
 
@@ -65,9 +84,26 @@ void CCContainer_Turret::Priority_Update(_float fTimeDelta)
 	Set_AI_Status(fTimeDelta);
 }
 
-void CCContainer_Turret::Update(_float fTimeDelta)
+void CContainer_Turret::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+
+	if (m_bHack[2])
+	{
+		m_fExplosionWaitTime -= fTimeDelta;
+		if (m_fExplosionWaitTime < 0.f)
+		{
+			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, nullptr, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+			__super::SetDead();
+		}
+		else if (m_fMakeEffect >= 0.05f)
+		{
+			for (_int i = 0; i < 5; ++i)
+				GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, m_pColliderCom->GetBoundingCenter());
+		}
+	}
+
+
 
 
 	Moving_Control(fTimeDelta);
@@ -97,7 +133,7 @@ void CCContainer_Turret::Update(_float fTimeDelta)
 		pPartObject->Update(fTimeDelta);
 }
 
-void CCContainer_Turret::Late_Update(_float fTimeDelta)
+void CContainer_Turret::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
@@ -109,36 +145,36 @@ void CCContainer_Turret::Late_Update(_float fTimeDelta)
 	m_pTransformCom->Save_BeforePosition();
 }
 
-HRESULT CCContainer_Turret::Render()
+HRESULT CContainer_Turret::Render()
 {
 	m_pColliderCom->Render();
 
 	return S_OK;
 }
 
-void CCContainer_Turret::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
+void CContainer_Turret::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
 }
 
-void CCContainer_Turret::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
+void CContainer_Turret::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
 {
 	__super::Collision_Reaction_MadeInterAction(pPoint, eIndex);
 }
 
-void CCContainer_Turret::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
+void CContainer_Turret::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 }
 
-void CCContainer_Turret::DeadAction()
+void CContainer_Turret::DeadAction()
 {
 	__super::DeadAction();
 }
 
 
-void CCContainer_Turret::Moving_Control(_float fTimeDelta)
+void CContainer_Turret::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
 
@@ -150,13 +186,13 @@ void CCContainer_Turret::Moving_Control(_float fTimeDelta)
 	}
 	else if (m_eAI_Status == AI_STATUS::AI_ATTACK)
 	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.5f * m_fMove_Angle);
 
 		Weapon_Control(fTimeDelta);
 	}
 }
 
-void CCContainer_Turret::Weapon_Control(_float fTimeDelta)
+void CContainer_Turret::Weapon_Control(_float fTimeDelta)
 {
 	__super::Weapon_Control(fTimeDelta);
 
@@ -178,17 +214,17 @@ void CCContainer_Turret::Weapon_Control(_float fTimeDelta)
 	}
 }
 
-void CCContainer_Turret::Camera_Control(_float fTimeDelta)
+void CContainer_Turret::Camera_Control(_float fTimeDelta)
 {
 	__super::Camera_Control(fTimeDelta);
 }
 
-void CCContainer_Turret::Test_Control(_float fTimeDelta)
+void CContainer_Turret::Test_Control(_float fTimeDelta)
 {
 	__super::Test_Control(fTimeDelta);
 }
 
-void CCContainer_Turret::Set_AI_Status(_float fTimeDelta)
+void CContainer_Turret::Set_AI_Status(_float fTimeDelta)
 {
 	__super::Set_AI_Status(fTimeDelta);
 
@@ -209,8 +245,42 @@ void CCContainer_Turret::Set_AI_Status(_float fTimeDelta)
 	_float3 fPlayerPosition{};
 	_bool bCanSee = false;
 
-	
-	__super::Look_Player(&fPlayerPosition, &bCanSee, &m_fMove_Angle);
+	if (!m_bHack[1])
+		__super::Look_Player(&fPlayerPosition, &bCanSee, &m_fMove_Angle);
+	else
+	{
+		_int iSize = m_pGameInstance->GetLayerSize(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"));
+
+		for (_int i = 0; i < iSize; ++i)
+		{
+			CLongvinter_Container* pTarget = static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), i));
+
+			_vector vDistance = pTarget->GetTransform(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			_float fDistance = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
+
+			if (fDistance < 10.f)
+			{
+				_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+				bCanSee = true;
+
+				_float fDot = XMVector3Dot({ vDistance.m128_f32[0], 0.f, vDistance.m128_f32[2], 0.f}, {vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f}).m128_f32[0];
+				_float fCos = (sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[2], 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+				m_fMove_Angle = acos(fDot / fCos);
+
+				if (isnan(m_fMove_Angle))
+					m_fMove_Angle = 0.f;
+
+				_bool bResult = GET_INSTANCE->Check_CCW_XZ({ vDistance.m128_f32[0], 0.f, vDistance.m128_f32[2] }, {0.f,0.f,0.f}, {vLook.m128_f32[0], 0.f, vLook.m128_f32[2]});
+
+				if (bResult)
+					m_fMove_Angle *= -1;
+			}
+		}
+		
+
+	}
 
 	if (bCanSee)
 	{
@@ -224,21 +294,21 @@ void CCContainer_Turret::Set_AI_Status(_float fTimeDelta)
 	
 }
 
-void CCContainer_Turret::Burning()
+void CContainer_Turret::Burning()
 {
 	
 }
 
 
 
-HRESULT CCContainer_Turret::Ready_Components()
+HRESULT CContainer_Turret::Ready_Components()
 {
 
 
 	return S_OK;
 }
 
-HRESULT CCContainer_Turret::Ready_PartObjects()
+HRESULT CContainer_Turret::Ready_PartObjects()
 {
 	/* 실제 추가하고 싶은 파트오브젝트의 갯수만큼 밸류를 셋팅해놓자. */
 	m_Parts.resize(1);
@@ -267,9 +337,9 @@ HRESULT CCContainer_Turret::Ready_PartObjects()
 	return S_OK;
 }
 
-CCContainer_Turret* CCContainer_Turret::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CContainer_Turret* CContainer_Turret::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CCContainer_Turret* pInstance = new CCContainer_Turret(pDevice, pContext);
+	CContainer_Turret* pInstance = new CContainer_Turret(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -282,9 +352,9 @@ CCContainer_Turret* CCContainer_Turret::Create(ID3D11Device* pDevice, ID3D11Devi
 
 
 
-CGameObject* CCContainer_Turret::Clone(void* pArg)
+CGameObject* CContainer_Turret::Clone(void* pArg)
 {
-	CCContainer_Turret* pInstance = new CCContainer_Turret(*this);
+	CContainer_Turret* pInstance = new CContainer_Turret(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -295,7 +365,7 @@ CGameObject* CCContainer_Turret::Clone(void* pArg)
 	return pInstance;
 }
 
-void CCContainer_Turret::Free()
+void CContainer_Turret::Free()
 {
 	__super::Free();
 

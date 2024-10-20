@@ -131,6 +131,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_ToolTip* MakeUIPage_ToolTip() { return m_pFactory->MakeUIPage_ToolTip(); }
 	CUIPage_User* MakeUIPage_User() { return m_pFactory->MakeUIPage_User(); }
 	CUIPage_Shop* MakeUIPage_Shop() { return m_pFactory->MakeUIPage_Shop(); }
+	CUIPage_Hack* MakeUIPage_Hack() { return m_pFactory->MakeUIPage_Hack(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
@@ -223,12 +224,16 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 	void MakeEnemyHpBar(CLongvinter_Container* pHost) { m_pUIManager->MakeEnemyHpBar(pHost); }
 	void MakeSymbol(CLongvinter_Container* pHost) { m_pUIManager->MakeSymbol(pHost); }
-	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"))
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"), _vector Adjust = { 0.f,1.f,0.f,0.f })
 	{
-		return m_pUIManager->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E);
+		return m_pUIManager->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E, Adjust);
 	}
 
 	void OpenShopPage(_int iShopNum) { m_pUIManager->OpenShopPage(iShopNum); }
+	void OpenHackPage(CContainer_Turret* pTurret) { m_pUIManager->OpenHackPage(pTurret); }
+
+	_bool GetOpenShop() { return m_pUIManager->GetOpenShop(); }
+	_bool GetOpenHack() { return m_pUIManager->GetOpenHack(); }
 #pragma endregion
 
 

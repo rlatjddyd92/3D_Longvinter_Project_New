@@ -126,6 +126,8 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_PLAYER);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
@@ -137,6 +139,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 
 
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
+
 }
 
 HRESULT CInterActionManager::Render()

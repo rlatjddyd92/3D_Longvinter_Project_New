@@ -42,7 +42,7 @@ HRESULT CUIPart_Back::Initialize(void* pArg)
 		m_fRGB[1] = 180.f / 255.f;
 		m_fRGB[2] = 140.f / 255.f;
 	}
-	if (m_eType == BACK_INGAME_TOOLTIP)
+	if ((m_eType == BACK_INGAME_TOOLTIP) || (m_eType == BACK_INGAME_SELECT))
 	{
 		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
 		m_fRGB[0] = 0.f / 255.f;
@@ -100,6 +100,27 @@ void CUIPart_Back::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Back::Render()
 {
+	if (m_eType == BACK_INGAME_SELECT)
+	{
+		if (m_bOnCursor)
+		{
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+			m_fRGB[0] = 50.f / 255.f;
+			m_fRGB[1] = 50.f / 255.f;
+			m_fRGB[2] = 50.f / 255.f;
+		}
+		else
+		{
+			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+			m_fRGB[0] = 0.f / 255.f;
+			m_fRGB[1] = 0.f / 255.f;
+			m_fRGB[2] = 0.f / 255.f;
+		}
+		
+	}
+	
+
+
 	__super::Render();
 
 	return S_OK;
