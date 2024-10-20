@@ -274,17 +274,13 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		{
 			GET_INSTANCE->Make_Container_Player(tTemp.fPosition, tTemp.fRotate);
 		}
-		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ANIMAL)
-		{
-
-		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
 		{
 			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
 		}
-		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_BOSS)
+		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_TURRET)
 		{
-			GET_INSTANCE->Make_Container_Boss(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
+			GET_INSTANCE->Make_Container_Turret(tTemp.fPosition, tTemp.fRotate);
 		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
 		{
@@ -589,10 +585,10 @@ void CTerrainManager::Delete_LastObject()
 		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), pTemp);
 		m_vecObjInfo.pop_back();
 	}
-	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_BOSS)
+	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_TURRET)
 	{
-		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1);
-		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), pTemp);
+		CGameObject* pTemp = m_pGameInstance->Get_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Turret"), -1);
+		m_pGameInstance->Delete_CloneObject_ByLayer(_int(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Turret"), pTemp);
 		m_vecObjInfo.pop_back();
 	}
 	else if (tTemp.eCon_Type == CONTAINER::CONTAINER_NPC)
@@ -1316,8 +1312,8 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 							GET_INSTANCE->Make_Container_NPC(fResult, NPC_TYPE::NPC_SHOP, iRotate);
 						else if (eType == CONTAINER::CONTAINER_ENEMY)
 							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
-						else if (eType == CONTAINER::CONTAINER_BOSS)
-							GET_INSTANCE->Make_Container_Boss(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						else if (eType == CONTAINER::CONTAINER_TURRET)
+							GET_INSTANCE->Make_Container_Turret(fResult, iRotate);
 						else if (eType == CONTAINER::CONTAINER_END)
 						{
 							if (eInter != INTERACTION::INTER_END)

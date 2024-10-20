@@ -117,17 +117,6 @@ void CFactory::Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float f
 	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
-void CFactory::Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle)
-{
-	CAI_Enemy::AI_Enemy_Desc		pTemp{};
-	pTemp.fPosition = Position;
-	pTemp.fSpeedPerSec = 3.0f;
-	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
-	pTemp.eType = eType;
-	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), TEXT("Prototype_GameObject_Container_AI_Boss"), &pTemp);
-	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Boss"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
-}
-
 void CFactory::Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle)
 {
 	CAI_NPC::AI_NPC_Desc		pTemp{};
@@ -137,6 +126,16 @@ void CFactory::Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngl
 	pTemp.eType = eType;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), TEXT("Prototype_GameObject_Container_AI_NPC"), &pTemp);
 	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_NPC"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
+}
+
+void CFactory::Make_Container_Turret(_float3 Position, _float fAngle)
+{
+	CGameObject::GAMEOBJECT_DESC		pTemp{};
+	pTemp.fPosition = Position;
+	pTemp.fSpeedPerSec = 3.0f;
+	pTemp.fRotationPerSec = XMConvertToRadians(180.0f);
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Turret"), TEXT("Prototype_GameObject_Container_Turret"), &pTemp);
+	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Turret"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
 HRESULT CFactory::Ready_Prototype_Texture()
@@ -341,6 +340,10 @@ HRESULT CFactory::Ready_Prototype_Part()
 		CBody_Human::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Body_Turret"),
+		CBody_Turret::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tool_Empty"),
 		CTool_Empty::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -393,12 +396,12 @@ HRESULT CFactory::Ready_Prototype_Container()
 		CAI_Enemy::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_Boss"),
-		CAI_Boss::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_AI_NPC"),
 		CAI_NPC::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Container_Turret"),
+		CCContainer_Turret::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -479,6 +482,21 @@ HRESULT CFactory::Ready_Prototype_Model()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Machete"), "../Bin/Resources/Models/Machete/Machete", PreTransformMatrix)))
+		return E_FAIL;
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Turret_Base"), "../Bin/Resources/Models/Turret/Turret_Base", PreTransformMatrix)))
+		return E_FAIL;
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Turret_Gun"), "../Bin/Resources/Models/Turret/Turret_Gun", PreTransformMatrix)))
+		return E_FAIL;
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, true, TEXT("Prototype_Component_Model_Turret_Control"), "../Bin/Resources/Models/Turret/Turret_Control", PreTransformMatrix)))
 		return E_FAIL;
 
 	// LANDOBJECT

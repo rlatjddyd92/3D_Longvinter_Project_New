@@ -93,6 +93,10 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), -1));
 	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)])->SetLandObject(INTERACTION::INTER_MONSTERMAKER);
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Control"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_CONTROL)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Control"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_CONTROL)])->SetLandObject(INTERACTION::INTER_CONTROL);
+
 	return S_OK;
 }
 
@@ -116,6 +120,12 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);

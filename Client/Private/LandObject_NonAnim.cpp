@@ -31,7 +31,7 @@ HRESULT CLandObject_NonAnim::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
+	
 
 	return S_OK;
 }
@@ -176,7 +176,10 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			}
 		}
 		
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
 
+		}
 
 	}
 
@@ -217,7 +220,7 @@ HRESULT CLandObject_NonAnim::Render()
 		_float3 fPosition{};
 		_vector vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if (m_eType == INTERACTION::INTER_ITEM)
+		if ((m_eType == INTERACTION::INTER_ITEM) || (m_eType == INTERACTION::INTER_CONTROL))
 		{
 			vPosition += _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
 			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -256,7 +259,7 @@ HRESULT CLandObject_NonAnim::Render()
 		iter->pCollider->Render();
 #endif
 
-		if (m_eType == INTERACTION::INTER_ITEM)
+		if ((m_eType == INTERACTION::INTER_ITEM) || (m_eType == INTERACTION::INTER_CONTROL))
 		{
 			vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION) - _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
 			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -295,7 +298,55 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 
 	if (eIndex == CONTAINER::CONTAINER_PLAYER)
 	{
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
+			
+
+			_vector vPlayer = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
+			_vector vThis = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			vPlayer -= vThis;
 		
+
+			_float fDistance = sqrt(pow(vPlayer.m128_f32[0], 2) + pow(vPlayer.m128_f32[1], 2) + pow(vPlayer.m128_f32[2], 2));
+
+			if (fDistance <= 1.f)
+			{
+				if ((pAction->pTrace == nullptr) || (pAction->pTrace->GetDead()))
+				{
+					_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("Error : 연결된 터렛이 nullptr입니다."));
+
+					if (bActive)
+					{
+						return;
+					}
+
+					
+					
+				}
+					
+
+
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("E키 : 위치 확인"), TEXT("F키 : 해킹"));
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 확인 기능 작동"));
+					else if (m_pGameInstance->Get_DIKeyState(DIK_F))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 해킹 기능 작동"));
+				}
+			}
+
+
+		}
+	}
+	else if (eIndex == CONTAINER::CONTAINER_TURRET)
+	{
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
+			pAction->pTrace = static_cast<CLongvinter_Container*>(pPoint);
+		}
 	}
 }
 
@@ -432,6 +483,23 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		m_fSpec_Scale = 1.f;
 		m_bTexture = false;
 	}
+	else if (eIndex == INTERACTION::INTER_CONTROL)
+	{
+		// 터렛 콘솔
+		m_vecModelCom.resize(1);
+
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Turret_Control"), TEXT("Com_Model_17"), reinterpret_cast<CComponent**>(&m_vecModelCom[0]))))
+			return E_FAIL;
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+			return E_FAIL;
+
+		m_fSpec_Extent = { 0.5f,1.f,0.5f };
+		m_fSpec_Scale = 1.f;
+		m_bTexture = true;
+	}
+	
+
+
 	
 }
 

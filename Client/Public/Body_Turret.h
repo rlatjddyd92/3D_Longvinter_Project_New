@@ -33,6 +33,8 @@ private:
 	HRESULT Ready_Components();
 	class CModel* m_pModelCom_Body = { nullptr };
 
+	_float4x4 m_fParentMatrix_Origin{};
+
 public:
 	static CBody_Turret* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -169,7 +169,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Public\AI_Boss.h" />
     <ClInclude Include="..\Public\AI_Enemy.h" />
     <ClInclude Include="..\Public\AI_NPC.h" />
     <ClInclude Include="..\public\BackGround.h" />
@@ -183,6 +182,7 @@
     <ClInclude Include="..\Public\Container_Enemy.h" />
     <ClInclude Include="..\Public\Container_NPC.h" />
     <ClInclude Include="..\Public\Container_Player.h" />
+    <ClInclude Include="..\Public\Container_Turret.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\Effect.h" />
     <ClInclude Include="..\Public\EffectManager.h" />
@@ -272,7 +272,6 @@
     <ClInclude Include="UIPart_Defines.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Private\AI_Boss.cpp" />
     <ClCompile Include="..\Private\AI_Enemy.cpp" />
     <ClCompile Include="..\Private\AI_NPC.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
@@ -285,6 +284,7 @@
     <ClCompile Include="..\Private\Container_Enemy.cpp" />
     <ClCompile Include="..\Private\Container_NPC.cpp" />
     <ClCompile Include="..\Private\Container_Player.cpp" />
+    <ClCompile Include="..\Private\Container_Turret.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
     <ClCompile Include="..\Private\EffectManager.cpp" />

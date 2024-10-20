@@ -45,7 +45,7 @@ private:
 	_int m_iLand[3] = { 0,0,0 };
 	_char* szMode[4] = { "Terrain", "Object", "Move_Model", "SpecialLand" };
 	_int m_iSelectMode = 0;
-	_char* szObject[5] = { "Player","NPC", "Enemy","Boss", "LandObject"};
+	_char* szObject[5] = { "Player","NPC", "Enemy","Turret", "LandObject"};
 	_int m_iSelectObject = 0;
 	_char* szTexture[LTEXTUREMAX]
 		= {

@@ -549,9 +549,6 @@
     <ClInclude Include="..\Public\UIPart_Symbol.h">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AI_Boss.h">
-      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Tool_Machete.h">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClInclude>
@@ -578,6 +575,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Body_Turret.h">
       <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Container_Turret.h">
+      <Filter>03.Container\03.Container_Turret</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -800,9 +800,6 @@
     <ClCompile Include="..\Private\UIPart_Symbol.cpp">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AI_Boss.cpp">
-      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Tool_Machete.cpp">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClCompile>
@@ -826,6 +823,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Body_Turret.cpp">
       <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Container_Turret.cpp">
+      <Filter>03.Container\03.Container_Turret</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
