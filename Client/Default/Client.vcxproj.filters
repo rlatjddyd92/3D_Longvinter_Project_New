@@ -277,6 +277,9 @@
     <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack">
       <UniqueIdentifier>{4d1bed2f-887c-4b3c-8fcc-2d6a5cbc806c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96..Utillity">
+      <UniqueIdentifier>{4a94c030-73db-489b-bedb-eb55025c5e26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -585,6 +588,30 @@
     <ClInclude Include="..\Public\UIPage_Hack.h">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
     </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -889,5 +916,30 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxFireSmoke.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmodL_vc.lib">
+      <Filter>96..Utillity</Filter>
+    </Library>
+    <Library Include="fmod_vc.lib">
+      <Filter>96..Utillity</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod.dll">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmodL.dll">
+      <Filter>96..Utillity</Filter>
+    </None>
   </ItemGroup>
 </Project>

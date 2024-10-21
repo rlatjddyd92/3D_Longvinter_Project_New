@@ -73,6 +73,8 @@ void CContainer_Turret::Priority_Update(_float fTimeDelta)
 
 	if (m_bHack[2])
 	{
+		
+
 		m_bExplosionActive = true;
 	}
 
@@ -103,7 +105,8 @@ void CContainer_Turret::Update(_float fTimeDelta)
 		}
 	}
 
-
+	if (m_bExplosionActive)
+		GET_INSTANCE->SetChannelVolume(SOUND_NAME::SOUND_FIRE, SOUND_CHANNEL::CH_INGAME_FIRE, 10.f, m_pColliderCom->GetBoundingCenter());
 
 
 	Moving_Control(fTimeDelta);
@@ -166,6 +169,14 @@ void CContainer_Turret::Collision_Reaction_MadeInterAction(CGameObject* pPoint, 
 void CContainer_Turret::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+}
+
+void CContainer_Turret::SetHack(_int iFunc)
+{
+	if ((iFunc == 2) && (m_bHack[iFunc] == false))
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_FIRE, SOUND_CHANNEL::CH_INGAME_FIRE, 10.f, m_pColliderCom->GetBoundingCenter());
+
+	m_bHack[iFunc] = true;
 }
 
 void CContainer_Turret::DeadAction()
@@ -259,7 +270,7 @@ void CContainer_Turret::Set_AI_Status(_float fTimeDelta)
 
 			_float fDistance = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
 
-			if (fDistance < 10.f)
+			if ((fDistance < 10.f) && (_int(m_pGameInstance->Get_Random(0.f,1.f)) % 2 == 0))
 			{
 				_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
@@ -287,7 +298,7 @@ void CContainer_Turret::Set_AI_Status(_float fTimeDelta)
 		
 		m_fDestination = fPlayerPosition;
 		m_eAI_Status = AI_STATUS::AI_ATTACK;
-
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_BEEP, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 	
 		
 	}

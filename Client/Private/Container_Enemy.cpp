@@ -224,6 +224,16 @@ void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 				
 				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
+				if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_MONSTER_GUN, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_LANDMINE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_MONSTER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_MONSTER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_MELEE, SOUND_CHANNEL::CH_MONSTER_MELEE, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_SHOTGUN, SOUND_CHANNEL::CH_MONSTER_SHOTGUN, 10.f, m_pColliderCom->GetBoundingCenter());
 
 				__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
 			}

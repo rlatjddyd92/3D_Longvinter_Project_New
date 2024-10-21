@@ -96,7 +96,13 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 		return E_FAIL;
 	m_pEffectManager = dynamic_cast<CEffectManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_EffectManager"), -1));
 
+	// SoundManager
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SoundManager"), CSoundManager::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_SoundManager"), TEXT("Prototype_GameObject_SoundManager"))))
+		return E_FAIL;
+	m_pSoundManager = dynamic_cast<CSoundManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_SoundManager"), -1));
 
 
 

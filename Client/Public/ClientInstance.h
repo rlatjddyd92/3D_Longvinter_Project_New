@@ -14,6 +14,7 @@
 #include "ItemManager.h"
 #include "InterActionManager.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -289,6 +290,20 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 
 #pragma endregion
+
+
+
+#pragma region SOUND
+	void PlaySound(SOUND_NAME eSound, SOUND_CHANNEL eChannel, _float fVolume, _float3 fPosition = _float3(-1.f, -1.f, -1.f))
+	{
+		m_pSoundManager->PlaySound(eSound, eChannel, fVolume, fPosition);
+	}
+	void SetChannelVolume(SOUND_NAME eSound, SOUND_CHANNEL eChannel, _float fVolume, _float3 fPosition = _float3(-1.f, -1.f, -1.f))
+	{
+		m_pSoundManager->SetChannelVolume(eSound, eChannel, fVolume, fPosition);
+	}
+
+#pragma endregion
 	
 
 private: // <- 보유 중인 포인터 목록 
@@ -304,6 +319,7 @@ private: // <- 보유 중인 포인터 목록
 	CItemManager*			m_pItemManager = { nullptr };
 	CInterActionManager*	m_pInterActionManager = { nullptr };
 	CEffectManager*			m_pEffectManager = { nullptr };
+	CSoundManager*			m_pSoundManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;

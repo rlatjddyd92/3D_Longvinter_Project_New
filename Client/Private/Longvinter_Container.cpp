@@ -256,20 +256,10 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fPosition, fDirec);
 		m_fAttackDelay = 1.f;
 	}
-	else if (eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+	else if (eWeapon == ITEMINDEX::ITEM_MACHETE)
 	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		//GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
 		m_fAttackDelay = 0.f;
-	}
-	else if (eWeapon == ITEMINDEX::ITEM_ARROW)
-	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.5f;
-	}
-	else if (eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
-	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.1f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
 	{

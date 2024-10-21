@@ -187,11 +187,25 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			m_iState = STATE_WALK_R;
 			bMove = true;
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		{
-			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+			if (m_bJump)
+			{
+				m_bJump = false;
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_JUMP, SOUND_CHANNEL::CH_PLAYER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+			}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+			}
 		}
+	
+		
+
+	
 		
 		
 		_long		MouseMove = { 0 };
@@ -237,10 +251,20 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			m_iState = STATE_WALK_R;
 			bMove = true;
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+		
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		{
-			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+			if (m_bJump)
+			{
+				m_bJump = false;
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_JUMP, SOUND_CHANNEL::CH_PLAYER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+			}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+			}
 		}
 		
 		_float3 fPoint = GET_INSTANCE->CheckPicking();
@@ -279,21 +303,25 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
 	{
 		m_eWeaponType = WEAPON_MAIN;
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 		GET_INSTANCE->ShowInformMessage(TEXT("주 무기로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
 	{
 		m_eWeaponType = WEAPON_SUB;
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 		GET_INSTANCE->ShowInformMessage(TEXT("보조 무기로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
 	{
 		m_eWeaponType = WEAPON_THROW;
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 		GET_INSTANCE->ShowInformMessage(TEXT("투척 무기로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
 	{
 		m_eWeaponType = WEAPON_END;
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
 	}
 
@@ -350,6 +378,14 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 				else
 					XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
+				if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_LANDMINE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_MACHETE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_MELEE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_SHOTGUN, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
 
 				__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 			}
@@ -371,6 +407,9 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 				XMStoreFloat3(&fPushedDirec, GET_INSTANCE->GetCameraLook());
 			else
 				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+			if (eNowType == ITEMINDEX::ITEM_GRANADE)
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
 
 			__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 

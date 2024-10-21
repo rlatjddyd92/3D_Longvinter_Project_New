@@ -168,7 +168,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 				if (fCheck.x != -1.f)
 				{
-					GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, 0.f);
+					GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_END, 0.f);
 					static_cast<CLongvinter_Container*>(m_pGameInstance->Find_Object(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->SetMonsterMake(true);
 				}
 					

@@ -81,7 +81,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		
 	else if (iWeapon == 2)
 	{
-		m_fClosuerLimit_Length = 1.f;
+		m_fClosuerLimit_Length = 0.f;
 		m_fAttack_Length = 1.f;
 		m_eWeapon = ITEMINDEX::ITEM_MACHETE;
 	}
@@ -547,6 +547,7 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 	{
 		m_fDestination = fPlayerPosition;
 		m_eAI_Status = AI_STATUS::AI_ATTACK;
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WARNING, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
 
 		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
 		{

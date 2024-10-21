@@ -32,7 +32,8 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
-	void SetHack(_int iFunc) { m_bHack[iFunc] = true; }
+	void SetHack(_int iFunc);
+	
 	_bool GetHack(_int iFunc) { return m_bHack[iFunc]; }
 
 protected:

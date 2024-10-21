@@ -69,18 +69,21 @@ void CThrow_Granade::Update(_float fTimeDelta)
 		_vector vNow = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
 	
+		if (iter->iActCount == 0)
+		{
+			if (iter->pHost == nullptr)
+			{
+				_float fAdjust = m_pGameInstance->Get_Random(0.f, 1.f) - m_pGameInstance->Get_Random(0.f, 1.f);
+				iter->fTime += fAdjust;
+			}
+		}
 
-
+		++iter->iActCount;
 
 
 		iter->fTime -= fTimeDelta;
 
 		if (iter->fTime < 0.f)
-
-
-
-
-
 		{
 			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, iter->pHost, iter->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
 			if (iter->pHost != nullptr)
