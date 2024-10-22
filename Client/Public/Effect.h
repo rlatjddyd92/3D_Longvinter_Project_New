@@ -25,6 +25,9 @@ public:
 		_float fPower = 0.f;
 		_float fPowerDecrease = 0.f;
 		_float fTime = 0.f;
+
+		_bool bAction = false;
+		_bool bShort = false;
 		_bool bDead = false;
 	}E_INFO;
 
@@ -44,7 +47,7 @@ public:
 	_float BillBoard(CTransform* pTransform);
 
 
-	void AddEffectBySpec(_float3 fPosition);
+	void AddEffectBySpec(_float3 fPosition, _float3 fDirec = { -1.f,-1.f,-1.f }, _float fTime = -1.f);
 
 protected:
 

@@ -93,50 +93,50 @@ void CMelee_ShotGun::Late_Update(_float fTimeDelta)
 HRESULT CMelee_ShotGun::Render()
 {
 	__super::Render();
-
-	for (auto& iter : m_Actionlist)
-	{
-		_float3 fPosition{};
-		XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
-
-		if (!GET_INSTANCE->GetIsLender(fPosition))
-			continue;
-
-
-
-
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
-			return E_FAIL;
-
-
-
-		if (FAILED(m_pShaderCom->Bind_ChangeAlpah("g_Istransparency", "g_TransAlpah", &m_bTransParent, &m_fAlpah)))
-			return E_FAIL;
-
-		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-		for (size_t i = 0; i < iNumMeshes; i++)
-		{
-			/*if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, i)))
-				return E_FAIL;*/
-
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-
-			if (FAILED(m_pModelCom->Render(i)))
-				return E_FAIL;
-		}
-#ifdef _DEBUG
-		iter->pCollider->Render();
-#endif
-	}
-
 	return S_OK;
+	//for (auto& iter : m_Actionlist)
+	//{
+	//	_float3 fPosition{};
+	//	XMStoreFloat3(&fPosition, iter->pTransform->Get_State(CTransform::STATE_POSITION));
+
+	//	if (!GET_INSTANCE->GetIsLender(fPosition))
+	//		continue;
+
+
+
+
+	//	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &iter->pTransform->Get_WorldMatrix())))
+	//		return E_FAIL;
+
+	//	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+	//		return E_FAIL;
+	//	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+	//		return E_FAIL;
+
+
+
+	//	if (FAILED(m_pShaderCom->Bind_ChangeAlpah("g_Istransparency", "g_TransAlpah", &m_bTransParent, &m_fAlpah)))
+	//		return E_FAIL;
+
+	//	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	//	for (size_t i = 0; i < iNumMeshes; i++)
+	//	{
+	//		/*if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", aiTextureType_DIFFUSE, i)))
+	//			return E_FAIL;*/
+
+	//		if (FAILED(m_pShaderCom->Begin(0)))
+	//			return E_FAIL;
+
+	//		if (FAILED(m_pModelCom->Render(i)))
+	//			return E_FAIL;
+	//	}
+//#ifdef _DEBUG
+//		iter->pCollider->Render();
+//#endif
+//	}
+
+	
 }
 
 void CMelee_ShotGun::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, INTER_INFO* pAction)
@@ -154,15 +154,15 @@ void CMelee_ShotGun::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER
 
 HRESULT CMelee_ShotGun::Ready_Components()
 {
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture_Alpah"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
+	///* FOR.Com_Shader */
+	//if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel_NonTexture_Alpah"),
+	//	TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	//	return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Explosion"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Explosion"),
+	//	TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -203,6 +203,6 @@ void CMelee_ShotGun::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
+	//Safe_Release(m_pShaderCom);
+	//Safe_Release(m_pModelCom);
 }

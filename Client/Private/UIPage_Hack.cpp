@@ -147,6 +147,7 @@ void CUIPage_Hack::AddRender_UIPage()
 	m_pBack_Window_Header->AddRender_UIPart();
 	m_pButton_Close->AddRender_UIPart();
 
+	
 
 	for (auto& iter : m_vecBack_Func)
 		iter->AddRender_UIPart();

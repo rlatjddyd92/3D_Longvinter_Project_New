@@ -45,6 +45,11 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
 
 	GET_INSTANCE->Input_ContainerColliderPointer(eContainerType, static_cast<CLongvinter_Container*>(this), m_pColliderCom);
+
+	m_fHp = 1000.f;
+	m_fHp_Max = 1000.f;
+
+
 	return S_OK;
 }
 

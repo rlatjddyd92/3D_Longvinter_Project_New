@@ -82,6 +82,12 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 #pragma endregion
 
+#pragma region LIGHT
+	HRESULT MakeGunFireLight(_float4 fPosition);
+
+
+#pragma endregion
+
 
 
 #pragma region PLAYER
@@ -286,7 +292,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma endregion
 
 #pragma region EFFECT
-	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition) { m_pEffectManager->MakeEffect(eType, fPosition); }
+	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition, _float3 fDirec = { -1.f,-1.f,-1.f }, _float fTime = -1.f) { m_pEffectManager->MakeEffect(eType, fPosition, fDirec, fTime); }
 
 
 #pragma endregion

@@ -431,7 +431,7 @@ HRESULT CFactory::Ready_Prototype_Model()
 
 	/* For. Prototype_Component_Model_Bullet*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Bullet_Normal"), "../Bin/Resources/Particle/Bullet_Normal", PreTransformMatrix)))
 		return E_FAIL;
 
@@ -759,7 +759,15 @@ HRESULT CFactory::Ready_Prototype_Effect()
 {
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Fire"), CParticle_Fire::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Debris"), CParticle_Debris::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Trail"), CParticle_Trail::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Hit"), CParticle_Hit::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Effect_Particle_Flame"), CParticle_Flame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	return S_OK;

@@ -51,43 +51,53 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		return S_OK;
 	}
 
-
+	m_fHp = 300.f;
+	m_fHp_Max = 300.f;
 
 	
 	
-	m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
+	
 
-	GET_INSTANCE->MakeEnemyHpBar(this);
-	GET_INSTANCE->MakeSymbol(this);
+	
 
 	_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
 
 	
 	m_fDetective_Length = 20.f;
 
+	_float fAdjust = m_pGameInstance->Get_Random(0.f, 3.f) - m_pGameInstance->Get_Random(0.f, 3.f);
+
+
 	if (iWeapon == 0)
 	{
-		m_fClosuerLimit_Length = 5.f;
-		m_fAttack_Length = 15.f;
+		m_fClosuerLimit_Length = 5.f + fAdjust;
+		m_fAttack_Length = 15.f + fAdjust;
 		m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
+		m_iBody = _int(HUMAN_BODY::BODY_GREEN);
 	}
 		
 	else if (iWeapon == 1)
 	{
-		m_fClosuerLimit_Length = 2.f;
-		m_fAttack_Length = 4.f;
+		fAdjust *= 0.2f;
+
+		m_fClosuerLimit_Length = 2.f + fAdjust;
+		m_fAttack_Length = 4.f + fAdjust;
 		m_eWeapon = ITEMINDEX::ITEM_SHOTGUN;
+		m_iBody = _int(HUMAN_BODY::BODY_BROWN);
 	}
 		
 	else if (iWeapon == 2)
 	{
+		fAdjust *= 0.4f;
 		m_fClosuerLimit_Length = 0.f;
-		m_fAttack_Length = 1.f;
+		m_fAttack_Length = 1.f + fAdjust;
 		m_eWeapon = ITEMINDEX::ITEM_MACHETE;
+		m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
 	}
 		
 
-
+	GET_INSTANCE->MakeEnemyHpBar(this);
+	GET_INSTANCE->MakeSymbol(this);
 	
 
 
@@ -239,6 +249,21 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 			__super::Burning();
 	}
 	
+	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
+	{
+		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+			return;
+
+
+		__super::Add_Hp(-10.f);
+		_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{ 0.f, 0.2f, 0.f, 0.f };
+		_float3 fDirec{};
+		XMStoreFloat3(&fDirec, vDirec);
+		m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 4.f);
+
+		if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
+			__super::Burning();
+	}
 
 	if (eType == CONTAINER::CONTAINER_PLAYER)
 	{
@@ -247,25 +272,18 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 		m_iFace = _int(HUMAN_FACE::FACE_SAD);
 		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
 
+		for (_int i = 0; i < 10; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_HIT, m_pColliderCom->GetBoundingCenter());
 
 		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
 		{
 			__super::Add_Hp(-10.f);
-		}
-		else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
-		{
-			if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
-				return;
 
 
-			__super::Add_Hp(-10.f);
-			_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{0.f, 0.2f, 0.f, 0.f};
-			_float3 fDirec{};
-			XMStoreFloat3(&fDirec, vDirec);
-			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 4.f);
+			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
+			fDirec.y = 0.7f;
 
-			if (!m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)])
-				__super::Burning();
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 0.5f);
 		}
 		else if (eIndex == INTERACTION::INTER_MELEE_SHOTGUN)
 		{

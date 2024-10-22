@@ -258,6 +258,22 @@ HRESULT CClientInstance::ChangeLevel(LEVELID eLevel)
 	return m_pGameInstance->Change_Level(_uint(LEVELID::LEVEL_LOADING), CLevel_Loading::Create(m_pDevice, m_pContext, eLevel));
 }
 
+HRESULT CClientInstance::MakeGunFireLight(_float4 fPosition)
+{
+	LIGHT_DESC			LightDesc{};
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = fPosition;
+	LightDesc.fRange = 2.f;
+	LightDesc.vDiffuse = _float4(255.f / 255.f, 255.f / 255.f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(255.f / 255.f, 255.f / 255.f, 0.f, 1.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc, 3)))
+		return E_FAIL;
+}
+
 void CClientInstance::Free()
 {
 	__super::Free();

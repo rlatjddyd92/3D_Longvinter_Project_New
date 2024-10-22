@@ -20,6 +20,7 @@ HRESULT CBullet_MachineGun::Initialize_Prototype()
 HRESULT CBullet_MachineGun::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
+	
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -32,12 +33,12 @@ HRESULT CBullet_MachineGun::Initialize(void* pArg)
 
 
 	m_pTransformCom->Set_Pushed_PowerDecrease(0.f); // <- 속도 감소 없음 
+	m_pTransformCom->Set_RotationPerSec(100.f);
 	m_fSpec_Extent = { 0.2f,0.2f,0.2f };
 	m_fSpec_Scale = 0.1f;
 	m_fSpec_PushedPower = 65.f;
 	m_fSpec_PushedPower_Decrease = 0.f;
 	m_iColliderType = _int(CCollider::TYPE_SPHERE);
-
 	return S_OK;
 }
 
@@ -53,14 +54,49 @@ void CBullet_MachineGun::Update(_float fTimeDelta)
 	{
 		CPhysicsManager::P_RESULT tResult = {};
 
-		
+		if (iter->iActCount == 0)
+		{
+			_vector vLook = iter->pTransform->Get_State(CTransform::STATE_RIGHT);
+			_vector vDirec = XMLoadFloat3(&iter->pTransform->Get_Pushed_Dir());
+
+			_float fDot = XMVector3Dot({ vDirec.m128_f32[0], 0.f, vDirec.m128_f32[2], 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+			_float fCos = (sqrt(pow(vDirec.m128_f32[0], 2) + pow(vDirec.m128_f32[2], 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+			_float m_fMove_Angle_Y = acos(fDot / fCos);
+
+			if (isnan(m_fMove_Angle_Y))
+				m_fMove_Angle_Y = 0.f;
+
+			_bool bResult = GET_INSTANCE->Check_CCW_XZ({ vDirec.m128_f32[0], 0.f, vDirec.m128_f32[2] }, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+			if (bResult)
+				m_fMove_Angle_Y *= -1;
+
+			 fDot = XMVector3Dot({ vDirec.m128_f32[0], vDirec.m128_f32[1], 0.f, 0.f }, { vLook.m128_f32[0],vLook.m128_f32[1], 0.f,  0.f }).m128_f32[0];
+			 fCos = (sqrt(pow(vDirec.m128_f32[0], 2) + pow(vDirec.m128_f32[1], 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[1], 2)));
+			 _float m_fMove_Angle_Z = acos(fDot / fCos);
+
+			if (isnan(m_fMove_Angle_Z))
+				m_fMove_Angle_Z = 0.f;
+
+			bResult = GET_INSTANCE->Check_CCW_XZ({ vDirec.m128_f32[0], vDirec.m128_f32[1], 0.f }, { 0.f,0.f,0.f }, { vLook.m128_f32[0], vLook.m128_f32[1], 0.f });
+
+			if (bResult)
+				m_fMove_Angle_Z *= -1;
+
+			iter->pTransform->Rotation(0.f, m_fMove_Angle_Y, 0.f);
+			++iter->iActCount;
+		}
+			
 
 		tResult = GET_INSTANCE->Total_Physics(*iter->pTransform, *iter->pCollider, false, false, false, fTimeDelta);
 		GET_INSTANCE->Update_By_P_Result(iter->pTransform, iter->pCollider, tResult);
 
+		//GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_TRAIL, iter->pCollider->GetBoundingCenter());
 		
 		if (GET_INSTANCE->Check_Terrain_Collision(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 		{
+			for (_int i = 0; i < 10; ++i)
+				GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_DEBRIS, iter->pCollider->GetBoundingCenter());
 			iter->bDead = true;
 		}
 	}

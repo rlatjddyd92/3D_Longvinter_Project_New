@@ -280,6 +280,21 @@
     <Filter Include="96..Utillity">
       <UniqueIdentifier>{4a94c030-73db-489b-bedb-eb55025c5e26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\01.Hit">
+      <UniqueIdentifier>{3dd22043-2e02-4aeb-acc9-30c4341b5c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\02.Debris">
+      <UniqueIdentifier>{387a3280-3aa4-428c-ac64-1611502e0652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\03.Flame">
+      <UniqueIdentifier>{0e68c2ba-faad-48e3-9220-4fd941a047b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\04.Trail">
+      <UniqueIdentifier>{98c5e590-93a1-4bbf-84cc-75b65c103434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk">
+      <UniqueIdentifier>{e0f21be5-ac9b-4a57-9306-7cf86bd5934b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -612,6 +627,21 @@
     <ClInclude Include="fmod_output.h">
       <Filter>96..Utillity</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Particle_Hit.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\01.Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Debris.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\02.Debris</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Flame.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\03.Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Trail.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\04.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Talk.h">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -862,6 +892,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Hack.cpp">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Hit.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\01.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Debris.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\02.Debris</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Flame.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\03.Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Trail.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\04.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Talk.cpp">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

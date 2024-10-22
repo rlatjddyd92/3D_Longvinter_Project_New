@@ -306,9 +306,9 @@ _vector CGameInstance::Get_CamPosition_Vector() const
 	return m_pPipeLine->Get_CamPosition_Vector();
 }
 
-HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc, _int iFrame)
 {
-	return m_pLight_Manager->Add_Light(LightDesc);
+	return m_pLight_Manager->Add_Light(LightDesc, iFrame);
 }
 const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex) const
 {

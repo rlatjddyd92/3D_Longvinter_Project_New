@@ -169,7 +169,13 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
 	//Safe_AddRef(pNew->pTransform);
 	pNew->pTransform->Set_State(CTransform::STATE_POSITION, { fPosition.x, fPosition.y,fPosition.z });
-	pNew->pTransform->Set_Scaled(m_fSpec_Scale, m_fSpec_Scale, m_fSpec_Scale);
+	
+	if (eInterType == INTERACTION::INTER_BULLET_MACHINEGUN)
+		pNew->pTransform->Set_Scaled(m_fSpec_Scale * 20.f, m_fSpec_Scale, m_fSpec_Scale);
+	else 
+		pNew->pTransform->Set_Scaled(m_fSpec_Scale, m_fSpec_Scale, m_fSpec_Scale);
+
+
 	pNew->pTransform->Set_Pushed_Power(fPushedDirec, m_fSpec_PushedPower);
 	pNew->pTransform->Set_Pushed_PowerDecrease(m_fSpec_PushedPower_Decrease);
 

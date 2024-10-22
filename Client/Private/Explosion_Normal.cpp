@@ -62,7 +62,10 @@ void CExplosion_Normal::Update(_float fTimeDelta)
 			_float3 fDirec = { _float((rand() % 1000) - (rand() % 1000)) / 1000.f, 0.5f, _float((rand() % 1000) - (rand() % 1000)) / 1000.f };
 
 			if (iter->iActCount == 0)
+			{
 				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_EXPLOSION_HUGE, SOUND_CHANNEL::CH_INGAME_EXPLOSION, 10.f, iter->pCollider->GetBoundingCenter());
+				GET_INSTANCE->ShakeCamera(fTimeDelta);
+			}
 			else 
 				GET_INSTANCE->SetChannelVolume(SOUND_NAME::SOUND_EXPLOSION_HUGE, SOUND_CHANNEL::CH_INGAME_EXPLOSION, 10.f, iter->pCollider->GetBoundingCenter());
 

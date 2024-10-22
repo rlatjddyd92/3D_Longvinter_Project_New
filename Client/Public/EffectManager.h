@@ -36,7 +36,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition);
+	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition, _float3 fDirec = {-1.f,-1.f,-1.f}, _float fTime = -1.f);
 
 
 

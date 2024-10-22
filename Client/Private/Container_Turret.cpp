@@ -159,6 +159,41 @@ void CContainer_Turret::Collision_Reaction_InterAction(CGameObject* pPoint, INTE
 {
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
+	
+
+	CONTAINER eType = CONTAINER::CONTAINER_END;
+
+	if (pPoint)
+	{
+		CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+		eType = pOpponent->GetContainerType();
+	}
+
+	else if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
+	{
+		__super::SetDead();
+	}
+
+	if ((eType == CONTAINER::CONTAINER_PLAYER) || (eType == CONTAINER::CONTAINER_ENEMY))
+	{
+		for (_int i = 0; i < 10; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_DEBRIS, m_pColliderCom->GetBoundingCenter());
+
+		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			__super::Add_Hp(-10.f);
+		}
+		else if (eIndex == INTERACTION::INTER_MELEE_SHOTGUN)
+		{
+			if (pPoint == nullptr)
+				return;
+
+			__super::Add_Hp(-30.f);
+
+		}
+	}
+
+	
 }
 
 void CContainer_Turret::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)

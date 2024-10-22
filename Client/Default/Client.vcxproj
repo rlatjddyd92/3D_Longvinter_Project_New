@@ -211,7 +211,11 @@
     <ClInclude Include="..\Public\Melee_ShotGun.h" />
     <ClInclude Include="..\Public\Missile.h" />
     <ClInclude Include="..\Public\Effect_Particle.h" />
+    <ClInclude Include="..\Public\Particle_Debris.h" />
     <ClInclude Include="..\Public\Particle_FIre.h" />
+    <ClInclude Include="..\Public\Particle_Flame.h" />
+    <ClInclude Include="..\Public\Particle_Hit.h" />
+    <ClInclude Include="..\Public\Particle_Trail.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundManager.h" />
@@ -239,6 +243,7 @@
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
+    <ClInclude Include="..\Public\UIPage_Talk.h" />
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIPage_User.h" />
     <ClInclude Include="..\Public\UIPart.h" />
@@ -322,7 +327,11 @@
     <ClCompile Include="..\Private\Melee_ShotGun.cpp" />
     <ClCompile Include="..\Private\Missile.cpp" />
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
+    <ClCompile Include="..\Private\Particle_Debris.cpp" />
     <ClCompile Include="..\Private\Particle_FIre.cpp" />
+    <ClCompile Include="..\Private\Particle_Flame.cpp" />
+    <ClCompile Include="..\Private\Particle_Hit.cpp" />
+    <ClCompile Include="..\Private\Particle_Trail.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
@@ -350,6 +359,7 @@
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
+    <ClCompile Include="..\Private\UIPage_Talk.cpp" />
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIPage_User.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />

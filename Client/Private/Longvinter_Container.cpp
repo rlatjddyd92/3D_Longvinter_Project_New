@@ -241,9 +241,17 @@ void CLongvinter_Container::Get_Sound(_float3* fSoundPosition, _float* fVolume, 
 
 void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _float3 fDirec)
 {
+	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPosition.m128_f32[1] += 0.5f;
+
 	if (eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		GET_INSTANCE->MakeGunFireLight({ vPosition.m128_f32[0], vPosition.m128_f32[1], vPosition.m128_f32[2], 1.f });
+
+		for (_int i = 0; i < 5; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec, 0.1f);
+
 		m_fAttackDelay = 0.1f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
@@ -264,6 +272,10 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_SHOTGUN, this, fPosition, fDirec);
+		GET_INSTANCE->MakeGunFireLight({ vPosition.m128_f32[0], vPosition.m128_f32[1], vPosition.m128_f32[2], 1.f });
+
+		for (_int i = 0; i < 20; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec);
 		m_fAttackDelay = 1.f;
 	}
 	
