@@ -26,3 +26,4 @@
 #include "Tool_FireThrower.h"
 #include "Tool_Bow.h"
 #include "Tool_Machete.h"
+#include "Tool_Head.h"

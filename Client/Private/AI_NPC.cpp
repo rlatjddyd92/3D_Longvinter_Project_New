@@ -67,16 +67,65 @@ void CAI_NPC::Update(_float fTimeDelta)
 	{
 		if (m_eNPC_Type == NPC_TYPE::NPC_SHOP)
 		{
-			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("상인"), TEXT("E키 : 대화하기"), TEXT("F키 : 사기"), TEXT("C키 : 팔기"));
+			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("상인"), TEXT("E키 : 퀘스트"), TEXT("F키 : 거래"), TEXT("없음"));
 
 			if (bActive)
 			{
 				if (m_pGameInstance->Get_DIKeyState(DIK_E))
-					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				{
+					GET_INSTANCE->OpenTalkPage(static_cast<CContainer_NPC*>(this));
+				}
 				else if (m_pGameInstance->Get_DIKeyState(DIK_F))
 					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 구매 기능 작동"));
-				else if (m_pGameInstance->Get_DIKeyState(DIK_C))
-					GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 판매 기능 작동"));
+			}
+
+		}
+		else if (m_eNPC_Type == NPC_TYPE::NPC_INTERN)
+		{
+			if (m_iScriptNum == 0)
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("???"), TEXT("E키 : 대화하기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				}
+			}
+			else
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("황건적 인턴"), TEXT("E키 : 대화하기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				}
+			}
+			
+
+		}
+		if (m_eNPC_Type == NPC_TYPE::NPC_LAST)
+		{
+			if (m_iScriptNum == 0)
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("육식주의자"), TEXT("E키 : 대화하기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				}
+			}
+			else
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("진상"), TEXT("E키 : 유언듣기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 대화 기능 작동"));
+				}
 			}
 
 		}

@@ -161,6 +161,26 @@ void CContainer_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, I
 void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+
+	/*if (eIndex == CONTAINER::CONTAINER_ENEMY)
+	{
+		_vector vDirec = XMLoadFloat3(&m_pTransformCom->Get_Pushed_Dir());
+		_float fPower = m_pTransformCom->Get_Pushed_Power();
+
+		_vector vNewDirec = static_cast<CLongvinter_Container*>(pPoint)->GetTransform(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float fNewPower = sqrt(pow(vNewDirec.m128_f32[0], 2) + pow(vNewDirec.m128_f32[1], 2) + pow(vNewDirec.m128_f32[2], 2));
+
+		vDirec += (vNewDirec / fNewPower);
+		fPower += fNewPower;
+
+		_float3 fResult{};
+		XMStoreFloat3(&fResult, vDirec);
+
+		m_pTransformCom->Set_Pushed_Power(fResult, fPower);
+
+	}*/
+		
+
 }
 
 void CContainer_Enemy::DeadAction()
@@ -220,9 +240,11 @@ void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 
 				_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
 				XMStoreFloat3(&fPushedDirec, vPushedDirec);
+				_float fDivide = sqrt(pow(fPushedDirec.x, 2) + pow(fPushedDirec.y, 2) + pow(fPushedDirec.z, 2));
+				fPushedDirec = { fPushedDirec.x / fDivide , fPushedDirec.y / fDivide ,fPushedDirec.z / fDivide };
 
 				
-				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+				//XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
 				if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_MONSTER_GUN, 10.f, m_pColliderCom->GetBoundingCenter());

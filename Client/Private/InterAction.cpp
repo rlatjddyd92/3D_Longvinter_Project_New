@@ -98,6 +98,13 @@ void CInterAction::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTI
 
 void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	if (pAction->pHost != nullptr)
+		if (pAction->pHost->GetContainerType() == eIndex)
+			return;
+
+
+
+	pAction->bDead = true;
 }
 
 

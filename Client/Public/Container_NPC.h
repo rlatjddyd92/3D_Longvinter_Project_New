@@ -60,6 +60,10 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
+	NPC_TYPE Get_NPC_Type() { return m_eNPC_Type; }
+
+	_int Get_ScriptNum() { return m_iScriptNum; }
+	void Add_ScriptNum(_int iNum) { m_iScriptNum += iNum; }
 
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
@@ -98,6 +102,8 @@ protected:
 	_bool m_bCanSeeTransparent = false;
 
 	_float m_fInterActionRange = 3.f;
+
+	_int m_iScriptNum = 0;
 
 public:
 	static CContainer_NPC* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

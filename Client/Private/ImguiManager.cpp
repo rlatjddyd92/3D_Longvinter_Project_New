@@ -119,6 +119,11 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		if ((m_iRotate < 0) || (m_iRotate >= 360))
 			m_iRotate = 0;
 
+		if (m_iSelectObject == 2)
+		{
+			ImGui::Combo("NPC", &m_iSelectNPC, szNPC, IM_ARRAYSIZE(szNPC));
+		}
+
 		if (m_iSelectObject == 4)
 		{
 			ImGui::Combo("LandObject", &m_iSelectLandObject, szLandObject, IM_ARRAYSIZE(szLandObject));
@@ -152,7 +157,9 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		{
 			_bool bTop = m_iSelectMode == 1;
 
-			if (m_iSelectObject != 4)
+			if (m_iSelectObject ==2 )
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
+			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
 			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject), m_iRotate);
@@ -162,7 +169,9 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		{
 			_bool bTop = m_iSelectMode == 1;
 
-			if (m_iSelectObject != 4)
+			if (m_iSelectObject == 2)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
+			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));
 			else if (szLandObject[_int(m_iSelectLandObject)] != "없음")
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_END, INTERACTION(m_iSelectLandObject));

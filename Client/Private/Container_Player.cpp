@@ -5,6 +5,7 @@
 #include "Body.h"
 #include "ClientInstance.h"
 #include "Tool.h"
+#include "Tool_Head.h"
 
 CContainer_Player::CContainer_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLongvinter_Container{ pDevice, pContext }
@@ -49,6 +50,16 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	m_fHp = 1000.f;
 	m_fHp_Max = 1000.f;
 
+	//CTool_Head::HEAD_DESC ToolDesc{};
+	//ToolDesc.eType = CTool_Head::TYPE_NORMAL_1;
+	//ToolDesc.pParentState = &m_iState;
+	//ToolDesc.pParentWorldMatrix = &m_pTransformCom->Get_WorldMatrix();
+	//ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+
+	//if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &ToolDesc)))
+	//	return E_FAIL;
+
+	
 
 	return S_OK;
 }
@@ -135,7 +146,7 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CContainer_Player::Render()
 {
-
+	//m_Parts[PART_HEAD]->Render();
 	m_pColliderCom->Render();
 
 	return S_OK;
@@ -375,7 +386,7 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 			{
 				_float3 fStartPostion{};
 				_float3 fPushedDirec{};
-				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
+				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 1.2f + _vector{ 0.f, 1.f, 0.f, 0.f };
 				XMStoreFloat3(&fStartPostion, vStartPosition);
 
 				if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
@@ -539,20 +550,18 @@ HRESULT CContainer_Player::Ready_PartObjects()
 	if (FAILED(__super::Add_PartObject(PART_BODY, TEXT("Prototype_GameObject_Body_Human"), &BodyDesc)))
 		return E_FAIL;
 
+	CTool_Head::HEAD_DESC		HeadDesc{};
+	HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_1;
+	HeadDesc.pParentState = &m_iState;
+	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HeadDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+
+	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &HeadDesc)))
+		return E_FAIL;
+
 	CTool::TOOL_DESC		ToolDesc{};
 	ToolDesc.pParentState = &m_iState;
 	ToolDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-
-
-
-
-
-	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
-
-	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
-		return E_FAIL;
-
-
 
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("spine_01");
 

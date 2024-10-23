@@ -55,6 +55,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_User* MakeUIPage_User();
 	CUIPage_Shop* MakeUIPage_Shop();
 	CUIPage_Hack* MakeUIPage_Hack();
+	CUIPage_Talk* MakeUIPage_Talk();
 #pragma endregion
 
 
@@ -74,20 +75,9 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	void Make_Container_Turret(_float3 Position, _float fAngle = 0.f);
 #pragma endregion
 
-#pragma region Container_Animal
 
-#pragma endregion
-
-#pragma region Container_Item
-
-#pragma endregion
-
-#pragma region Container_InterAction
-
-#pragma endregion
-
-#pragma region Container_Effect
-
+#pragma region Container_Etc
+	CPartObject* Make_Tool_Head(_int iHeadIndex, _uint* pParentState, const _float4x4* pMatrix, const _float4x4* pParent);
 #pragma endregion
 
 private: // <- 프로토타입 제작

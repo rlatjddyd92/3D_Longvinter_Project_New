@@ -1309,7 +1309,7 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 
 						}
 						else if (eType == CONTAINER::CONTAINER_NPC)
-							GET_INSTANCE->Make_Container_NPC(fResult, NPC_TYPE::NPC_SHOP, iRotate);
+							GET_INSTANCE->Make_Container_NPC(fResult, NPC_TYPE(iIndex), iRotate);
 						else if (eType == CONTAINER::CONTAINER_ENEMY)
 							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
 						else if (eType == CONTAINER::CONTAINER_TURRET)

@@ -57,7 +57,7 @@ private:
 	_float m_fMakeFire = 1.f;
 
 	// 몬스터 메이커 
-	_int m_iMonsterMake = 20;
+	_int m_iMonsterMake = 5;
 	_bool m_bActive = false;
 
 public:

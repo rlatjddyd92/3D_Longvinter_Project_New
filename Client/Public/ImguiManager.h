@@ -109,6 +109,10 @@ private:
 
 	_int m_iRotate = 0;
 
+	_char* szNPC[_int(NPC_TYPE::NPC_END)];
+
+	_int m_iSelectNPC = _int(NPC_TYPE::NPC_END);
+
 	// Class
 
 public:

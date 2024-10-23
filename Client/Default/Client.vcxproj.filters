@@ -295,6 +295,9 @@
     <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk">
       <UniqueIdentifier>{e0f21be5-ac9b-4a57-9306-7cf86bd5934b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.PartObject\07.Tool\08.Tool_Head">
+      <UniqueIdentifier>{fabe9f88-bd36-4f36-a793-270a707e866c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -642,6 +645,9 @@
     <ClInclude Include="..\Public\UIPage_Talk.h">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tool_Head.h">
+      <Filter>02.PartObject\07.Tool\08.Tool_Head</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -907,6 +913,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Talk.cpp">
       <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_Head.cpp">
+      <Filter>02.PartObject\07.Tool\08.Tool_Head</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -72,7 +72,11 @@ public:
 
 	void Rotation(_float3 fAxis, _float fAngle) { m_pTransformCom->Rotation(XMLoadFloat3(&fAxis), XMConvertToRadians(fAngle)); }
 
-	void Delete_LastInterAction() { m_Actionlist.back()->bDead = true; }
+	void Delete_LastInterAction()
+	{
+		if (!m_Actionlist.empty())
+			m_Actionlist.back()->bDead = true;
+	}
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);

@@ -4,6 +4,7 @@
 #include "UIObject.h"
 #include "../Default/UIPage_Defines.h"
 #include "Container_Turret.h"
+#include "Container_NPC.h"
 
 // [UIManager]
 // 1. 각종 UI창, 시스템 클래스를 보관하고 필요에 따라 사용할 수 있게 하는 매니저 
@@ -72,9 +73,11 @@ public:
 public: // <- 상점 관련 함수 
 	void OpenShopPage(_int iShopNum);
 	void OpenHackPage(CContainer_Turret* pTurret);
+	void OpenTalkPage(CContainer_NPC* pNPC);
 
 	_bool GetOpenShop() { return m_bIsShopOpen; }
 	_bool GetOpenHack() { return m_bIsHackOpen; }
+	_bool GetOpenTalk() { return m_bIsTalkOpen; }
 
 private:
 	HRESULT Ready_Components();
@@ -102,6 +105,7 @@ private:
 	CUIPage_User* m_pPage_User = { nullptr };
 	CUIPage_Shop* m_pPage_Shop = { nullptr };
 	CUIPage_Hack* m_pPage_Hack = { nullptr };
+	CUIPage_Talk* m_pPage_Talk = { nullptr };
 
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
@@ -115,6 +119,7 @@ private:
 
 	_bool m_bIsShopOpen = false;
 	_bool m_bIsHackOpen = false;
+	_bool m_bIsTalkOpen = false;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

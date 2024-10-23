@@ -109,6 +109,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Enemy(Position, eType, fAngle); }
 	void Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_NPC(Position, eType, fAngle); }
 	void Make_Container_Turret(_float3 Position, _float fAngle = 0.f) { m_pFactory->Make_Container_Turret(Position, fAngle); }
+	CPartObject* Make_Tool_Head(_int iHeadIndex, _uint* pParentState, const _float4x4* pMatrix, const _float4x4* pParent)
+	{
+		m_pFactory->Make_Tool_Head(iHeadIndex, pParentState, pMatrix, pParent);
+	}
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
@@ -139,6 +143,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_User* MakeUIPage_User() { return m_pFactory->MakeUIPage_User(); }
 	CUIPage_Shop* MakeUIPage_Shop() { return m_pFactory->MakeUIPage_Shop(); }
 	CUIPage_Hack* MakeUIPage_Hack() { return m_pFactory->MakeUIPage_Hack(); }
+	CUIPage_Talk* MakeUIPage_Talk() { return m_pFactory->MakeUIPage_Talk(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
@@ -238,9 +243,11 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	void OpenShopPage(_int iShopNum) { m_pUIManager->OpenShopPage(iShopNum); }
 	void OpenHackPage(CContainer_Turret* pTurret) { m_pUIManager->OpenHackPage(pTurret); }
+	void OpenTalkPage(CContainer_NPC* pNPC) { m_pUIManager->OpenTalkPage(pNPC); }
 
 	_bool GetOpenShop() { return m_pUIManager->GetOpenShop(); }
 	_bool GetOpenHack() { return m_pUIManager->GetOpenHack(); }
+	_bool GetOpenTalk() { return m_pUIManager->GetOpenTalk(); }
 #pragma endregion
 
 

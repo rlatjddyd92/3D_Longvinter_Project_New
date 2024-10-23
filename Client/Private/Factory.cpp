@@ -138,6 +138,18 @@ void CFactory::Make_Container_Turret(_float3 Position, _float fAngle)
 	static_cast<CLongvinter_Container*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Turret"), -1))->Rotation({ 0.f,1.f,0.f }, fAngle);
 }
 
+CPartObject* CFactory::Make_Tool_Head(_int iHeadIndex, _uint* pParentState, const _float4x4* pMatrix, const _float4x4* pParent)
+{
+	CTool_Head::HEAD_DESC ToolDesc{};
+	ToolDesc.eType = CTool_Head::HEAD_TYPE(iHeadIndex);
+	ToolDesc.pParentState = pParentState;
+	ToolDesc.pParentWorldMatrix = pMatrix;
+	ToolDesc.pSocketBoneMatrix = pParent;
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_Head"), TEXT("Prototype_GameObject_Tool_Head"), &ToolDesc);
+	return static_cast<CPartObject*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Tool_Head"), -1));
+}
+
 HRESULT CFactory::Ready_Prototype_Texture()
 {
 
@@ -380,6 +392,9 @@ HRESULT CFactory::Ready_Prototype_Part()
 		CTool_Machete::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tool_Head"),
+		CTool_Head::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -568,6 +583,42 @@ HRESULT CFactory::Ready_Prototype_Model()
 	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_MonsterMaker"), "../Bin/Resources/Models/LandObject/MonsterMaker", PreTransformMatrix)))
 		return E_FAIL;
+
+	// Head
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Normal_1"), "../Bin/Resources/Models/Hair/Hair_Normal", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Normal_2"), "../Bin/Resources/Models/Hair/Hair_Normal1", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Normal_3"), "../Bin/Resources/Models/Hair/Hair_Normal2", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Brown"), "../Bin/Resources/Models/Hair/Hair_Brown", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Yellow"), "../Bin/Resources/Models/Hair/Hair_Yellow", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Pink"), "../Bin/Resources/Models/Hair/Hair_Pink", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_HeadGear"), "../Bin/Resources/Models/Hair/Hair_HeadGear", PreTransformMatrix)))
+		return E_FAIL;
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	PreTransformMatrix *= XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(Ready_Prototype_Model_Single(CModel::TYPE_NONANIM, false, TEXT("Prototype_Component_Model_Head_Blue"), "../Bin/Resources/Models/Hair/Hair_Blue", PreTransformMatrix)))
+		return E_FAIL;
+
+
 	
 
 	return S_OK;
@@ -708,6 +759,9 @@ HRESULT CFactory::Ready_Prototype_UIPage()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Hack"), CUIPage_Hack::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_UIPage_Talk"), CUIPage_Talk::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1000,6 +1054,13 @@ CUIPage_Hack* CFactory::MakeUIPage_Hack()
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Hack"), TEXT("Prototype_UIPage_Hack"));
 
 	return static_cast<CUIPage_Hack*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Hack"), -1));
+}
+
+CUIPage_Talk* CFactory::MakeUIPage_Talk()
+{
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Talk"), TEXT("Prototype_UIPage_Talk"));
+
+	return static_cast<CUIPage_Talk*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPage_Talk"), -1));
 }
 
 CFactory* CFactory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGameInstance)

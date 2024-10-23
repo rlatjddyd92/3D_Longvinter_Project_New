@@ -74,7 +74,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			
 		}
 
-
+		
 		if ((!iter->bSetting) || (m_eType == INTERACTION::INTER_ITEM))
 		{
 			CPhysicsManager::P_RESULT tResult = {};
@@ -85,10 +85,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			if (GET_INSTANCE->Check_OnGround(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 				iter->bSetting = true;
 		}
-		else
-		{
-			
-		}
+	
 
 		m_bActive = GET_INSTANCE->GetMonsterMake();
 
@@ -102,7 +99,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 				continue;
 			
 			if (m_fShowTime == 0.f)
-				m_fShowTime = 1.0f;
+				m_fShowTime = 2.0f;
 			else
 				continue;
 
@@ -314,7 +311,7 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 			{
 				if ((pAction->pTrace == nullptr) || (pAction->pTrace->GetDead()))
 				{
-					_vector vAdjust = { 0.f,2.f,0.f,0.f };
+					_vector vAdjust = { 0.f,1.f,0.f,0.f };
 					_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("Error : 연결된 터렛이 nullptr입니다."), TEXT("없음"), TEXT("없음"), vAdjust);
 
 					
@@ -322,7 +319,7 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 	
 				}
 					
-				_vector vAdjust = { 0.f,2.f,0.f,0.f };
+				_vector vAdjust = { 0.f,1.f,0.f,0.f };
 
 				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("E키 : 위치 확인"), TEXT("F키 : 해킹"), TEXT("없음"), vAdjust);
 
@@ -492,7 +489,7 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		m_fSpec_Extent = { 0.5f,0.5f,0.5f };
+		m_fSpec_Extent = { 0.2f,0.2f,0.2f };
 		m_fSpec_Scale = 1.5f;
 		m_fSpec_Sensor = 20.f;
 		m_bTexture = true;

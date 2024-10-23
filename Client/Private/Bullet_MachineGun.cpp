@@ -172,7 +172,6 @@ void CBullet_MachineGun::Collision_Reaction_Container(CGameObject* pPoint, CONTA
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex, pAction);
 
-	pAction->bDead = true;
 }
 
 

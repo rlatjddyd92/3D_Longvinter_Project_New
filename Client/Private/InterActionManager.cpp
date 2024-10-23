@@ -139,7 +139,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 
 
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
-
+	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_ENEMY);
 }
 
 HRESULT CInterActionManager::Render()

@@ -14,6 +14,16 @@ BEGIN(Client)
 
 class CUIPage_Talk : public CUIPage
 {
+public: 
+	struct SCRIPT
+	{
+		_tchar* pName;
+		_tchar* pScript;
+		_tchar* pSelect;
+	};
+
+
+
 protected:
 	CUIPage_Talk(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIPage_Talk(const CUIPage_Talk& Prototype);
@@ -47,13 +57,13 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	void Ready_Script();
 
 	CUIPart_Button* m_pButton_Close = { nullptr };
 	CUIPart_Back* m_pBack_Window = { nullptr };
 	CUIPart_Back* m_pBack_Window_Header = { nullptr };
 	
-	CUIPart_Back* m_pBack_Upper = { nullptr };
-	CUIPart_Back* m_pBack_Lower = { nullptr };
+	CUIPart_Back* m_pBack_Select = { nullptr };
 
 	CContainer_NPC* m_pHost = { nullptr };
 
@@ -63,13 +73,13 @@ private:
 	_float m_fBeforeX = 0.f;
 	_float m_fBeforeY = 0.f;
 
-
+	vector<vector<SCRIPT*>> m_vecScript;
 
 	_int m_iFunction = 3;
 
 	_float m_fGap = 10.f;
 	_float m_fFunc_X = 400.f;
-	_float m_fFunc_Y = 100.f;
+	_float m_fFunc_Y = 50.f;
 
 
 public:
