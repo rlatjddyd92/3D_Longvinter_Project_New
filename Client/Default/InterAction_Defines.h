@@ -8,6 +8,7 @@
 #include "Throw_Mine.h"
 #include "Throw_Granade.h"
 #include "Throw_Dinamite.h"
+#include "Melee_Normal.h"
 #include "Melee_ShotGun.h"
 #include "Melee_ChainSaw.h"
 #include "Explosion_Normal.h"

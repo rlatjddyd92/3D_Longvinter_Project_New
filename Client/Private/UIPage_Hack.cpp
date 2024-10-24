@@ -96,7 +96,7 @@ HRESULT CUIPage_Hack::Render()
 				m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("While(true){int i = 0;} 추가하기"), { fX , fY, 0.f,0.f }, 0.8f);
 				fX += 20;
 				m_pGameInstance->Render_Text(TEXT("Font_Test3"), TEXT("무한반복문으로 터렛을 정지시킵니다."), { fX , fY + 30.f, 0.f,0.f }, 0.3f);
-				m_pGameInstance->Render_Text(TEXT("Font_Test3"), TEXT("몬스터를 터렛으로 유인합니다.(제작 중)"), { fX , fY + 50.f, 0.f,0.f }, 0.3f, false, { 1.f ,0.f, 0.f,0.f });
+				m_pGameInstance->Render_Text(TEXT("Font_Test3"), TEXT("몬스터를 터렛으로 유인합니다."), { fX , fY + 50.f, 0.f,0.f }, 0.3f, false, { 1.f ,0.f, 0.f,0.f });
 			}
 			if (i == 1)
 			{

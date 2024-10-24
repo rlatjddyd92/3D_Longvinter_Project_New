@@ -31,7 +31,7 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 	m_vecCrowdControl.resize(_int(CROWDCONTROL::CC_END));
 	m_vecCrowdControl_Time.resize(_int(CROWDCONTROL::CC_END));
 
-	//GET_INSTANCE->MakeScript(this);
+	GET_INSTANCE->MakeScript(this);
 
 	return S_OK;
 }
@@ -263,23 +263,26 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 
 		for (_int i = 0; i < 5; ++i)
 			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec, 0.1f);
-
+		
 		m_fAttackDelay = 0.1f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_MINE, this, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_GRANADE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_MACHETE)
 	{
-		//GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.f;
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_NORMAL, this, fPosition, fDirec);
+		
+		m_fAttackDelay = 0.2f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
 	{
@@ -288,6 +291,7 @@ void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _f
 
 		for (_int i = 0; i < 20; ++i)
 			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
 	

@@ -28,6 +28,9 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	m_bAutoRemove = Desc->AutoRemove;
 	m_pHost = Desc->pHost;
 
+	if (m_pHost != nullptr)
+		Safe_AddRef(m_pHost);
+
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -61,6 +64,8 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	{
 		m_Font = TEXT("Font_Test3");
 		m_fSize = 0.3f;
+
+		m_fAdjust = { 0.f,2.5f,0.f };
 
 		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
 		m_fRGB[0] = 255.f / 255.f;
@@ -131,9 +136,14 @@ HRESULT CUIPart_TextBox::Render()
 			
 		}
 
+		if (!m_pHost->Get_ShowScript())
+			return S_OK;
+
 		_float3 fPosition{};
 		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
 		XMStoreFloat3(&fPosition, vPosition);
+
+		SetText(m_pHost->Get_Script());
 
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			return S_OK;

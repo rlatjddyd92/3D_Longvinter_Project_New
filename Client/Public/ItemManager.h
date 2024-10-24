@@ -147,6 +147,8 @@ public:  // <- 아이템 집기, 이동을 위한 함수
 	const TINFO PickItem(ITEMARRAY eArray, _int iIndex);
 	void CancelPick();
 	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex);
+	HRESULT PutInItem_NoMouse(ITEMARRAY eArray, _int iIndex);
+	HRESULT SpendItem_NoMouse(ITEMARRAY eArray, _int iIndex);
 
 	ITEMINDEX GetPickedItemIndex() { return m_tPickedItem.eIndex; }
 

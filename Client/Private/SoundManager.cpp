@@ -37,7 +37,7 @@ HRESULT CSoundManager::Initialize(void* pArg)
 
 void CSoundManager::Priority_Update(_float fTimeDelta)
 {
-	for (_int i = 0; i < _int(SOUND_CHANNEL::CH_END); ++i)
+	for (_int i = 0; i < _int(SOUND_CHANNEL::CH_SYSTEM_BGM); ++i)
 	{
 		_bool bPlay = false;
 		m_vecPlay[i].fVolume_Origin = m_vecPlay[i].fVolume;
@@ -49,14 +49,29 @@ void CSoundManager::Priority_Update(_float fTimeDelta)
 		m_vecChannel[i]->isPlaying(&bPlay);
 		if (!bPlay)
 		{
+
 			m_vecPlay[i].eName = SOUND_NAME::SOUND_END;
 			m_vecPlay[i].fVolume_Origin = 0.f;
-			m_vecPlay[i].fPosition = {-1.f,-1.f,-1.f};
+			m_vecPlay[i].fPosition = { -1.f,-1.f,-1.f };
+		
 		}
 			
 	}
 
+	_bool bPlay = false;
+	m_vecChannel[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)]->isPlaying(&bPlay);
 
+	if (!bPlay)
+	{
+		FMOD_RESULT result = m_pSystem->playSound(m_vecSound[_int(m_vecPlay[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)].eName)], nullptr, false, &m_vecChannel[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)]);
+		if (result != FMOD_OK)
+			return;
+
+		FMOD::Channel* channel = m_vecChannel[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)];
+		channel->setVolume(m_vecPlay[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)].fVolume / 1.f);
+		m_pSystem->update();
+	}
+	
 }
 
 void CSoundManager::Update(_float fTimeDelta)
@@ -66,7 +81,7 @@ void CSoundManager::Update(_float fTimeDelta)
 
 void CSoundManager::Late_Update(_float fTimeDelta)
 {
-	for (_int i = 0; i < _int(SOUND_CHANNEL::CH_END); ++i)
+	for (_int i = 0; i < _int(SOUND_CHANNEL::CH_SYSTEM_BGM); ++i)
 	{
 		if (m_vecPlay[i].bStart)
 		{
@@ -87,6 +102,9 @@ void CSoundManager::Late_Update(_float fTimeDelta)
 			m_pSystem->update();
 		}
 	}
+
+
+
 }
 
 HRESULT CSoundManager::Render()
@@ -143,13 +161,16 @@ void CSoundManager::PlaySound(SOUND_NAME eSound, SOUND_CHANNEL eChannel, _float 
 		return;
 	}
 		
-
+	
 	m_vecPlay[_int(eChannel)].bStart = true;
 	m_vecPlay[_int(eChannel)].eName = eSound;
 	m_vecPlay[_int(eChannel)].fVolume = fVolume;
 	
 	m_vecPlay[_int(eChannel)].fVolume_Origin = fVolume;
 	m_vecPlay[_int(eChannel)].fPosition = fPosition;
+
+	if (eChannel == SOUND_CHANNEL::CH_SYSTEM_BGM)
+		m_vecChannel[_int(SOUND_CHANNEL::CH_SYSTEM_BGM)]->stop();
 }
 
 void CSoundManager::PlayBGM(TCHAR* pSoundKey, _float fVolume)
@@ -158,6 +179,7 @@ void CSoundManager::PlayBGM(TCHAR* pSoundKey, _float fVolume)
 
 void CSoundManager::StopSound(SOUND_CHANNEL eID)
 {
+
 }
 
 void CSoundManager::StopAll()

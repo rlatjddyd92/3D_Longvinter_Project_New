@@ -76,11 +76,26 @@ public: // <- 싱글톤을 통한 외부 접근용
 	LEVELID GetNowLevel() { return m_eLevel; }
 	_bool GetPlayerDead() { return m_bPlayerDead; }
 	_bool GetMonsterMake() { return m_bMakeMonster; }
-	void SetMakeMonster(_bool bIsMake) { m_bMakeMonster = bIsMake; }
+	void SetMakeMonster(_bool bIsMake) 
+	{ 
+		m_bMakeMonster = bIsMake;
+		m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_BATTLE, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
+	}
 
 	void SetLast() { m_bLastScene = true; }
 	_bool GetLast() { return m_bLastScene; }
 
+	void StartQuest() 
+	{ 
+		m_bGetQuest = true;
+	}
+	void EndQuest()
+	{
+		m_bFinishQuest = true;
+		m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_NORMAL, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
+	}
+	_bool IsStartQuest() { return m_bGetQuest; }
+	_bool IsFinishQuest() { return m_bFinishQuest; }
 
 #pragma endregion
 
@@ -263,6 +278,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
 
 	const CItemManager::TINFO PickItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
+
+	HRESULT PutInItem_NoMouse(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem_NoMouse(eArray, iIndex); }
+	HRESULT SpendItem_NoMouse(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->SpendItem_NoMouse(eArray, iIndex); }
+
 	void CancelPick() { m_pItemManager->CancelPick(); }
 	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
 
@@ -347,6 +366,9 @@ private: // <- 게임 플레이 조정
 	_bool					m_bPlayerDead = false;
 	_bool					m_bMakeMonster = false; 
 	_bool					m_bLastScene = false;
+
+	_bool					m_bGetQuest = false;
+	_bool					m_bFinishQuest = false;
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };

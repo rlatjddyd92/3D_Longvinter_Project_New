@@ -84,7 +84,8 @@ void CTool_Head::Late_Update(_float fTimeDelta)
 
 HRESULT CTool_Head::Render()
 {
-	//m_pTransformCom->Rotation(14.6963120f, 30.0189304f, 7.91829014f);
+	m_pTransformCom->Rotation(XMConvertToRadians(90.f), XMConvertToRadians(90.f), XMConvertToRadians(0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) - _vector{ 1.f,0.f,0.f,0.f });
 
 	//__super::Render();
 
@@ -123,6 +124,8 @@ HRESULT CTool_Head::Render()
 #ifdef _DEBUG
 	//m_pColliderCom->Render();
 #endif
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + _vector{ 1.f,0.f,0.f,0.f });
 
 	return S_OK;
 }

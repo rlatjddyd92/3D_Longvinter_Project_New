@@ -99,7 +99,11 @@ void CAI_NPC::Update(_float fTimeDelta)
 				if (bActive)
 				{
 					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+					{
+						
 						GET_INSTANCE->OpenTalkPage(static_cast<CContainer_NPC*>(this));
+					}
+						
 				}
 			}
 			else
@@ -124,7 +128,19 @@ void CAI_NPC::Update(_float fTimeDelta)
 				if (bActive)
 				{
 					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+					{
+						if (!GET_INSTANCE->IsFinishQuest())
+						{
+							GET_INSTANCE->SpendItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_MEAT));
+							GET_INSTANCE->ShowInformMessage(TEXT("Äù½ºÆ® ¿Ï·á"));
+						}
+							
+
+						GET_INSTANCE->EndQuest();
+						
 						GET_INSTANCE->OpenTalkPage(static_cast<CContainer_NPC*>(this));
+					}
+						
 				}
 			}
 			else if (m_iScriptNum == 3)
@@ -150,6 +166,23 @@ void CAI_NPC::Update(_float fTimeDelta)
 
 		}
 
+	}
+
+	if (m_eNPC_Type == NPC_TYPE::NPC_SHOP)
+	{
+		if (m_iScriptNum == 4)
+		{
+			if (!GET_INSTANCE->IsStartQuest())
+			{
+				GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_MEAT));
+				GET_INSTANCE->ShowInformMessage(TEXT("Äù½ºÆ® ¼ö¶ô"));
+			}
+				
+
+			GET_INSTANCE->StartQuest();
+			
+		}
+			
 	}
 
 	if (m_eNPC_Type == NPC_TYPE::NPC_INTERN)
@@ -454,11 +487,23 @@ void CAI_NPC::Moving_Control(_float fTimeDelta)
 
 			m_pTransformCom->Turn({ 0.f,1.f,0.f }, fTimeDelta * 10.f* fTurn);
 
+			_float3 fLook{};
+
+			XMStoreFloat3(&fLook, vLook);
+
+
 			if (m_fMove_Time > 0.f)
 			{
-				m_pTransformCom->Go_Straight(fTimeDelta * 1.5f, true);
-				m_iState = STATE_WALK;
+				if (!GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
+				{
+					m_pTransformCom->Go_Straight(fTimeDelta * 1.5f, true);
+					m_iState = STATE_WALK;
+				}
+				else 
+					m_iState = STATE_IDEL;
+
 			}
+				
 			
 			
 		}

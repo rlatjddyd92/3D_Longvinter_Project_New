@@ -423,7 +423,31 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 						
 			}
 		}
+		if (m_eType == INTERACTION::INTER_ITEM)
+		{
+			_vector vAdjust = { 0.f,1.f,0.f,0.f };
+			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("전리품"), TEXT("E키 : 줍기"), TEXT("없음"), TEXT("없음"), vAdjust);
 
+			if (bActive)
+				if (m_pGameInstance->Get_DIKeyState(DIK_E))
+				{
+
+					_int iItem = _int(m_pGameInstance->Get_Random(0.f, 5.f));
+
+					if (iItem == 0)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_AMMO));
+					if (iItem == 1)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_FISH));
+					if (iItem == 2)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_GRANADE));
+					if (iItem == 3)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_LANDMINE));
+					if (iItem == 4)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_GOLD_INGOT));
+					
+					pAction->bDead = true;
+				}
+		}
 		
 	}
 	else if (eIndex == CONTAINER::CONTAINER_TURRET)

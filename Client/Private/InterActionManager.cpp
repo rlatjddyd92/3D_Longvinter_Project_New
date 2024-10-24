@@ -54,6 +54,9 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), TEXT("Prototype_Inter_Melee_ShotGun"));
 	m_vecInterAction[_int(INTERACTION::INTER_MELEE_SHOTGUN)] = static_cast<CMelee_ShotGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), -1));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_Normal"), TEXT("Prototype_Inter_Melee_Normal"));
+	m_vecInterAction[_int(INTERACTION::INTER_MELEE_NORMAL)] = static_cast<CMelee_Normal*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_Normal"), -1));
+
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
@@ -120,6 +123,15 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
+
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_ITEM, CONTAINER::CONTAINER_PLAYER);
+
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_TURRET);
@@ -127,7 +139,9 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_TURRET);
+
 	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_PLAYER);
+
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_NPC);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_NPC);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_NPC);
@@ -136,11 +150,13 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_NPC);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_NPC);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_PLAYER);
+
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_TREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_DOOR);
+
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);

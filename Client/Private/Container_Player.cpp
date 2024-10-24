@@ -154,6 +154,74 @@ HRESULT CContainer_Player::Render()
 
 void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
+
+	CONTAINER eType = CONTAINER::CONTAINER_END;
+
+	if (pPoint)
+	{
+		CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+		eType = pOpponent->GetContainerType();
+	}
+
+	
+
+	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
+	{
+		
+		__super::Add_Hp(-10.f);
+		_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{ 0.f, 0.2f, 0.f, 0.f };
+		_float3 fDirec{};
+		XMStoreFloat3(&fDirec, vDirec);
+		m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.5f);
+
+		
+	}
+
+	if ((eType == CONTAINER::CONTAINER_ENEMY) || (eType == CONTAINER::CONTAINER_TURRET))
+	{
+		m_fActionTimer = 0.5f;
+
+		m_iFace = _int(HUMAN_FACE::FACE_SAD);
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+
+		for (_int i = 0; i < 10; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_HIT, m_pColliderCom->GetBoundingCenter());
+
+		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			__super::Add_Hp(-10.f);
+
+
+			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
+			fDirec.y = 0.7f;
+
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 0.3f);
+		}
+		if (eIndex == INTERACTION::INTER_MELEE_NORMAL)
+		{
+			__super::Add_Hp(-10.f);
+
+			
+		}
+		else if (eIndex == INTERACTION::INTER_MELEE_SHOTGUN)
+		{
+			if (pPoint == nullptr)
+				return;
+
+
+
+			__super::Add_Hp(-30.f);
+
+			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
+			fDirec.y = 0.1f;
+
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.f);
+		}
+
+	}
+
+
 }
 
 void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
@@ -162,6 +230,7 @@ void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, 
 
 void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+
 }
 
 void CContainer_Player::DeadAction()
@@ -209,6 +278,7 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			if (m_bJump)
 			{
 				m_bJump = false;
+				m_bTwiceJump = false;
 				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_JUMP, SOUND_CHANNEL::CH_PLAYER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
 			}
 
@@ -216,9 +286,17 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
 				m_bJump = true;
+				m_bTwiceJump = true;
 			}
 		}
-	
+		else if (m_bTwiceJump)
+		{
+ 			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 3.f);
+				m_bTwiceJump = false;
+			}
+		}
 		
 
 	
@@ -228,7 +306,8 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.1f * fTimeDelta * MouseMove);
+			if (!m_bCameraFix)
+				m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.1f * fTimeDelta * MouseMove);
 		}
 
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
@@ -485,13 +564,28 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 		GET_INSTANCE->ShowInformMessage(TEXT("M키 : 3인칭 모드"));
 		GET_INSTANCE->SetLenderLength(100.f);
 	}
+
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_L) & 0x80)
+	{
+		if (m_bCameraFix)
+		{
+			m_bCameraFix = false;
+			GET_INSTANCE->ShowInformMessage(TEXT("L키 : 카메라 고정 해제"));
+		}
+		else if (!m_bCameraFix)
+		{
+			m_bCameraFix = true;
+			GET_INSTANCE->ShowInformMessage(TEXT("L키 : 카메라 고정"));
+		}
+	}
 }
 
 void CContainer_Player::Test_Control(_float fTimeDelta)
 {
 	__super::Test_Control(fTimeDelta);
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
+	/*if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 	{
 		++m_iState;
 		
@@ -523,7 +617,7 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 			GET_INSTANCE->SetMakeMonster(true);
 			GET_INSTANCE->ShowInformMessage(TEXT("몬스터 생성기 ON"));
 		}
-	}
+	}*/
 }
 
 void CContainer_Player::Set_AI_Status(_float fTimeDelta)

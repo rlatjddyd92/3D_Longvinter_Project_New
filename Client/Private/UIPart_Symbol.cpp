@@ -79,10 +79,22 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 
 	if (m_pHost->Get_AI_Status() == AI_STATUS::AI_ATTACK)
 		m_eType = SYMBOL_FIGHT;
-	else if (m_pHost->Get_AI_Status() == AI_STATUS::AI_SERACH)
+	else if ((m_pHost->Get_AI_Status() == AI_STATUS::AI_SERACH) && (m_pHost->GetContainerType() != CONTAINER::CONTAINER_NPC))
 		m_eType = SYMBOL_SEARCHING;
 	else if (m_pHost->Get_AI_Status() == AI_STATUS::AI_PANIC)
 		m_eType = SYMBOL_PANIC;
+	else if (m_pHost->GetContainerType() == CONTAINER::CONTAINER_NPC)
+	{
+		if (static_cast<CContainer_NPC*>(m_pHost)->Get_NPC_Type() == NPC_TYPE::NPC_LAST)
+		{
+			if ((GET_INSTANCE->IsStartQuest()) && (!GET_INSTANCE->IsFinishQuest()))
+				m_eType = SYMBOL_QUEST;
+			else
+				__super::SetRender(false);
+		}
+		else
+			__super::SetRender(false);
+	}
 	else
 		__super::SetRender(false);
 
@@ -96,17 +108,29 @@ HRESULT CUIPart_Symbol::Render()
 		return S_OK;
 	}
 
-	_float3 fPosition{};
-	_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
-	XMStoreFloat3(&fPosition, vPosition);
+	if (m_eType != SYMBOL_QUEST)
+	{
+		_float3 fPosition{};
+		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
+		XMStoreFloat3(&fPosition, vPosition);
 
-	if (!GET_INSTANCE->GetIsLender(fPosition))
-		return S_OK;
+		if (!GET_INSTANCE->GetIsLender(fPosition))
+			return S_OK;
+
+		
+	}
 
 	if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
 		return S_OK;
-
-	if (m_eType == SYMBOL_SEARCHING)
+	
+	if (m_eType == SYMBOL_QUEST)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 0.f / 255.f;
+		m_fRGB[1] = 255.f / 255.f;
+		m_fRGB[2] = 0.f / 255.f;
+	}
+	else if (m_eType == SYMBOL_SEARCHING)
 	{
 		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
 		m_fRGB[0] = 255.f / 255.f;
@@ -134,18 +158,13 @@ HRESULT CUIPart_Symbol::Render()
 		m_fRGB[1] = 000.f / 255.f;
 		m_fRGB[2] = 000.f / 255.f;
 	}
-	else if (m_eType == SYMBOL_QUEST)
-	{
-		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
-		m_fRGB[0] = 105.f / 255.f;
-		m_fRGB[1] = 105.f / 255.f;
-		m_fRGB[2] = 105.f / 255.f;
-	}
-
+	
 
 	__super::Render();
 
-	if (m_eType == SYMBOL_SEARCHING)
+	if (m_eType == SYMBOL_QUEST)
+		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Q"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
+	else if (m_eType == SYMBOL_SEARCHING)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("??"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
 	else if (m_eType == SYMBOL_STUN)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("ZZ"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 255.f,255.f,255.f,1.f });
@@ -153,8 +172,7 @@ HRESULT CUIPart_Symbol::Render()
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("!!!"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
 	else if (m_eType == SYMBOL_PANIC)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("!!!"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 255.f,255.f,255.f,1.f });
-	else if (m_eType == SYMBOL_QUEST)
-		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Q"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,0.f });
+
 
 
 	return S_OK;

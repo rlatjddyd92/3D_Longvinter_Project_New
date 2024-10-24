@@ -48,7 +48,7 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 	
-
+	_bool GetCameraFix() { return m_bCameraFix; }
 
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
@@ -66,10 +66,13 @@ protected: // AI 관련 함수
 private:
 	_uint				m_iState = {  };
 
+	_bool				m_bTwiceJump = false;
 
 	// test 
 	_int				m_iBody = _int(HUMAN_BODY::BODY_BLUE);
 	_int				m_iFace = 0;
+
+	_bool				m_bCameraFix = false;
 	
 private:
 	HRESULT Ready_Components();

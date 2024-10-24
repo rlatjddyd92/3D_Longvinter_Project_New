@@ -258,6 +258,8 @@ void CContainer_Turret::Weapon_Control(_float fTimeDelta)
 
 		XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_MONSTER_GUN, 10.f, m_pColliderCom->GetBoundingCenter());
+
 		__super::UsingWeapon(ITEMINDEX::ITEM_MACHINEGUN, fStartPostion, fPushedDirec);
 	}
 }

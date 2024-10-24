@@ -97,7 +97,7 @@ protected:
 	NPC_TYPE m_eNPC_Type = NPC_TYPE::NPC_END;
 
 	_bool m_bExplosionActive = false;
-	_float m_fExplosionWaitTime = 10.f;
+	_float m_fExplosionWaitTime = 7.f;
 
 	_bool m_bCanSeeTransparent = false;
 

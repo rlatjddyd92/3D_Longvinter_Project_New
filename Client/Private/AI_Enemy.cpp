@@ -26,16 +26,6 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	eContainerType = CONTAINER::CONTAINER_ENEMY;
 	m_eEnemy_Type = pTemp->eType;
 	
-
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
-
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
-	if (FAILED(Ready_PartObjects()))
-		return E_FAIL;
-
 	if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
 	{
 		m_iBody = _int(HUMAN_BODY::BODY_RED);
@@ -43,63 +33,79 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		m_fClosuerLimit_Length = 0.f;
 		m_fAttack_Length = 0.f;
 		m_eWeapon = ITEMINDEX::ITEM_END;
-
-		GET_INSTANCE->MakeEnemyHpBar(this);
-		GET_INSTANCE->MakeSymbol(this);
-		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
-
-		return S_OK;
 	}
+	else
+	{
+		_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
+
+		_float fAdjust = m_pGameInstance->Get_Random(0.f, 3.f) - m_pGameInstance->Get_Random(0.f, 3.f);
+
+
+		if (iWeapon == 0)
+		{
+			m_fClosuerLimit_Length = 5.f + fAdjust;
+			m_fAttack_Length = 8.f + fAdjust;
+			m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
+			m_iBody = _int(HUMAN_BODY::BODY_GREEN);
+		}
+
+		else if (iWeapon == 1)
+		{
+			fAdjust *= 0.2f;
+
+			m_fClosuerLimit_Length = 2.f + fAdjust;
+			m_fAttack_Length = 4.f + fAdjust;
+			m_eWeapon = ITEMINDEX::ITEM_SHOTGUN;
+			m_iBody = _int(HUMAN_BODY::BODY_BROWN);
+		}
+
+		else if (iWeapon == 2)
+		{
+			fAdjust *= 0.4f;
+			m_fClosuerLimit_Length = 0.f;
+			m_fAttack_Length = 1.f + fAdjust;
+			m_eWeapon = ITEMINDEX::ITEM_MACHETE;
+			m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
+		}
+	}
+
+	
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	
+
+	if (FAILED(Ready_PartObjects()))
+		return E_FAIL;
+
+	
 
 	m_fHp = 200.f;
 	m_fHp_Max = 200.f;
 
 	
 	
+	static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
 	
 
 	
 
-	_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
+	
 
 	
 	m_fDetective_Length = 10.f;
 
-	_float fAdjust = m_pGameInstance->Get_Random(0.f, 3.f) - m_pGameInstance->Get_Random(0.f, 3.f);
-
-
-	if (iWeapon == 0)
-	{
-		m_fClosuerLimit_Length = 5.f + fAdjust;
-		m_fAttack_Length = 8.f + fAdjust;
-		m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
-		m_iBody = _int(HUMAN_BODY::BODY_GREEN);
-	}
-		
-	else if (iWeapon == 1)
-	{
-		fAdjust *= 0.2f;
-
-		m_fClosuerLimit_Length = 2.f + fAdjust;
-		m_fAttack_Length = 4.f + fAdjust;
-		m_eWeapon = ITEMINDEX::ITEM_SHOTGUN;
-		m_iBody = _int(HUMAN_BODY::BODY_BROWN);
-	}
-		
-	else if (iWeapon == 2)
-	{
-		fAdjust *= 0.4f;
-		m_fClosuerLimit_Length = 0.f;
-		m_fAttack_Length = 1.f + fAdjust;
-		m_eWeapon = ITEMINDEX::ITEM_MACHETE;
-		m_iBody = _int(HUMAN_BODY::BODY_YELLOW);
-	}
+	
 		
 
 	GET_INSTANCE->MakeEnemyHpBar(this);
 	GET_INSTANCE->MakeSymbol(this);
 	
-
+	m_iState = STATE_IDEL;
 
 	return S_OK;
 }
@@ -223,7 +229,7 @@ void CAI_Enemy::Update(_float fTimeDelta)
 
 void CAI_Enemy::Late_Update(_float fTimeDelta)
 {
-
+	
 
 
 	__super::Late_Update(fTimeDelta);
@@ -388,7 +394,9 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 {
 	__super::Moving_Control(fTimeDelta);
 
-	m_iState = STATE_IDEL;
+	/*if ((m_iState != STATE_GRANADE) && (m_iState != STATE_HANDGUN))
+		if ((m_iState != STATE_GUN) && (m_iState != STATE_HIT))
+			m_iState = STATE_IDEL;*/
 
 	if (m_eAI_Status == AI_STATUS::AI_SERACH)
 	{
@@ -435,13 +443,13 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		}
 			
 
-		bMove = true;
+	/*	bMove = true;
 
 		if (m_iSearch_Count % 2 == 0)
 		{
 			m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
 			m_iState = STATE_WALK;
-		}
+		}*/
 			
 
 	}
@@ -709,9 +717,9 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 			if (iScript == 2)
 				__super::Change_Script(TEXT("돈이 많아보이는 친구에요!"));
 			if (iScript == 3)
-				__super::Change_Script(TEXT("함께 폭사해요!"));
+				__super::Change_Script(TEXT("발할라로 보내줄께요"));
 			if (iScript == 4)
-				__super::Change_Script(TEXT("돈이 많아보이는 친구에요!"));
+				__super::Change_Script(TEXT("나도 CPlayer 하고 싶었는데..."));
 			
 		}
 	}

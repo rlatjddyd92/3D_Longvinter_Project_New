@@ -104,7 +104,7 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 		return E_FAIL;
 	m_pSoundManager = dynamic_cast<CSoundManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_SoundManager"), -1));
 
-
+	m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_NORMAL, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
 
 	return S_OK;
 }

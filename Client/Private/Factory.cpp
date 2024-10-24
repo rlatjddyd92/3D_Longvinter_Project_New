@@ -326,9 +326,11 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sad.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Bar/T_EnergyBar_Single.dds"), 1))))
+		return E_FAIL;
 
-
-
+	
 	
 
 	return S_OK;
@@ -789,6 +791,10 @@ HRESULT CFactory::Ready_Prototype_InterAction()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ShotGun"), CMelee_ShotGun::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_Normal"), CMelee_Normal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_Inter_Melee_ChainSaw"), CMelee_ChainSaw::Create(m_pDevice, m_pContext))))
 	//	return E_FAIL;

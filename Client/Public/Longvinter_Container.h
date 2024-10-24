@@ -47,6 +47,8 @@ public:
 	}
 	wstring Get_Script() { return m_strScript; }
 
+	_bool Get_ShowScript() { return m_bShowScript; }
+
 protected:
 	CONTAINER eContainerType = CONTAINER::CONTAINER_END;
 
@@ -96,6 +98,8 @@ protected: // AI 관련 함수
 			m_strScript = strScript;
 		}
 	}
+
+
 
 
 

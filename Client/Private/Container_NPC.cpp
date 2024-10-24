@@ -325,12 +325,21 @@ HRESULT CContainer_NPC::Ready_PartObjects()
 	ToolDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
 
+	
+	
 
+	CTool_Head::HEAD_DESC		HeadDesc{};
+	if (m_eNPC_Type == NPC_TYPE::NPC_SHOP)
+		HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_1;
+	if (m_eNPC_Type == NPC_TYPE::NPC_INTERN)
+		HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_2;
+	if (m_eNPC_Type == NPC_TYPE::NPC_LAST)
+		HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_PINK;
+	HeadDesc.pParentState = &m_iState;
+	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HeadDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
 
-
-	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
-
-	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
+	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &HeadDesc)))
 		return E_FAIL;
 
 
