@@ -59,7 +59,13 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
-	
+	if (m_fChangeScript_Now < m_fChangeScript_Interval)
+	{
+		m_fChangeScript_Now += fTimeDelta;
+		if (m_fChangeScript_Now > m_fChangeScript_Interval)
+			m_fChangeScript_Now = m_fChangeScript_Interval;
+	}
+
 
 
 

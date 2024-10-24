@@ -53,6 +53,9 @@ protected:
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta) override;
 
+
+	_float m_fLastExplosion = 5.f;
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();

@@ -48,6 +48,40 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 
+	
+	if (m_eType == INTERACTION::INTER_MONSTERMAKER)
+	if (!m_bActive)
+	{
+		m_bActive = GET_INSTANCE->GetMonsterMake();
+
+		if (m_bActive)
+		{
+			m_fWait -= fTimeDelta;
+
+			if (m_fWait > 0.f)
+			{
+				if (m_iMessageCount > m_fWait)
+				{
+					GET_INSTANCE->ShowInformMessage(TEXT("무료나눔 '받기' 전문가 도착까지"));
+
+					--m_iMessageCount;
+
+					_tchar* tTemp = new _tchar[5];
+
+					swprintf(tTemp, 5, L"%d", m_iMessageCount);
+
+					wstring wstrMaessage = tTemp;
+
+					GET_INSTANCE->ShowInformMessage(wstrMaessage);
+				}
+				m_bActive = false;
+			}
+			else
+				GET_INSTANCE->ShowInformMessage(TEXT("무료나눔 '받기' 전문가 도착."));
+		}
+	}
+
+
 	for (auto& iter : m_Actionlist)
 	{
 		if (iter->fBurning > 0.f)
@@ -86,14 +120,36 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 				iter->bSetting = true;
 		}
 	
+		if (m_eType == INTERACTION::INTER_DOOR)
+		{
+			if (!m_bEnding)
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 문 두드리기"), TEXT("없음"), TEXT("없음"));
 
-		m_bActive = GET_INSTANCE->GetMonsterMake();
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("문을 열어주지 않습니다."));
+			}
+			else 
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 택배왔어요!"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("진상이 나오고 있습니다."));
+			}
+		}
+		
+
+		
 
 
 		if (m_eType == INTERACTION::INTER_MONSTERMAKER)
 		{
 			if (!m_bActive)
 				continue;
+
+			
 
 			if (iter->iActCount >= m_iMonsterMake)
 				continue;
@@ -283,8 +339,8 @@ void CLandObject_NonAnim::Collision_Reaction_InterAction(CGameObject* pPoint, IN
 		if (pAction->fBurning == 0.f)
 			pAction->fBurning = 10.f;
 	}
-
-
+	else if (eIndex == INTERACTION::INTER_THORW_MINE)
+		m_bEnding = true;
 	
 
 }

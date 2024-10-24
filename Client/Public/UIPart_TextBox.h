@@ -23,6 +23,7 @@ public:
 		TEXTBOX_INTER_FUNCTION,
 		TEXTBOX_CASH,
 		TEXTBOX_3D,
+		TEXTBOX_SCRIPT,
 		TEXTBOX_END
 	};
 
@@ -33,6 +34,7 @@ public:
 		UITEXTBOX_TYPE eType = UITEXTBOX_TYPE::TEXTBOX_END;
 		_bool bCenter = false;
 		_bool AutoRemove = false;
+		CLongvinter_Container* pHost = { nullptr };
 	} UITextBox_DESC;
 
 
@@ -79,6 +81,8 @@ protected:
 	_float4 m_fTextColor = { 1.f,1.f,1.f,1.f };
 
 	_bool m_bAutoRemove = false;
+
+	CLongvinter_Container* m_pHost = { nullptr };
 
 private:
 	HRESULT Ready_Components();

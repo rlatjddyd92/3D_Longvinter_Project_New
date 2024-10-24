@@ -2,6 +2,7 @@
 #include "..\Public\UIPart_TextBox.h"
 
 #include "GameInstance.h"
+#include "ClientInstance.h"
 
 CUIPart_TextBox::CUIPart_TextBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPart{ pDevice, pContext }
@@ -25,6 +26,7 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	m_eType = Desc->eType;
 	m_bCenter = Desc->bCenter;
 	m_bAutoRemove = Desc->AutoRemove;
+	m_pHost = Desc->pHost;
 
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
@@ -54,6 +56,16 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 		m_fRGB[0] = 0 / 255.f;
 		m_fRGB[1] = 0 / 255.f;
 		m_fRGB[2] = 0 / 255.f;
+	}
+	else if (m_eType == UITEXTBOX_TYPE::TEXTBOX_SCRIPT)
+	{
+		m_Font = TEXT("Font_Test3");
+		m_fSize = 0.3f;
+
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 255.f / 255.f;
+		m_fRGB[1] = 255.f / 255.f;
+		m_fRGB[2] = 255.f / 255.f;
 	}
 	else 
 		m_fSize = 0.7f;
@@ -107,6 +119,27 @@ HRESULT CUIPart_TextBox::Render()
 {
 	if (m_eType != CUIPart_TextBox::TEXTBOX_CASH)
 		__super::Render();
+
+	if (m_eType != CUIPart_TextBox::TEXTBOX_SCRIPT)
+	{
+		if ((m_pHost == nullptr) || (m_pHost->GetDead()))
+		{
+			__super::SetDead();
+			return S_OK;
+
+			_float3 fPosition{};
+			_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
+			XMStoreFloat3(&fPosition, vPosition);
+
+			if (!GET_INSTANCE->GetIsLender(fPosition))
+				return S_OK;
+
+			if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
+				return S_OK;
+		}
+	}
+
+
 
 	XMVECTOR vCenter = { m_fX,m_fY,0.f,0.f };
 
@@ -227,5 +260,5 @@ void CUIPart_TextBox::Free()
 {
 	__super::Free();
 
-
+	Safe_Release(m_pHost);
 }

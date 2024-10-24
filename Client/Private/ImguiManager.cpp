@@ -119,7 +119,7 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		if ((m_iRotate < 0) || (m_iRotate >= 360))
 			m_iRotate = 0;
 
-		if (m_iSelectObject == 2)
+		if (m_iSelectObject == 1)
 		{
 			ImGui::Combo("NPC", &m_iSelectNPC, szNPC, IM_ARRAYSIZE(szNPC));
 		}
@@ -157,7 +157,7 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		{
 			_bool bTop = m_iSelectMode == 1;
 
-			if (m_iSelectObject ==2 )
+			if (m_iSelectObject ==1 )
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
 			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
@@ -169,7 +169,7 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		{
 			_bool bTop = m_iSelectMode == 1;
 
-			if (m_iSelectObject == 2)
+			if (m_iSelectObject == 1)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
 			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));

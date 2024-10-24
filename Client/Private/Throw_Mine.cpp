@@ -157,7 +157,11 @@ void CThrow_Mine::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eI
 		pAction->bDead = true;
 	}
 
-
+	if (eType == CONTAINER::CONTAINER_NPC)
+	{
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, pAction->pHost, pAction->pCollider->GetBoundingCenter(), { 0.f,0.f,0.f });
+		pAction->bDead = true;
+	}
 
 }
 

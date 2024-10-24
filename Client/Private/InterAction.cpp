@@ -103,8 +103,7 @@ void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER e
 			return;
 
 
-
-	pAction->bDead = true;
+	//pAction->bDead = true;
 }
 
 
@@ -163,7 +162,7 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 	m_Actionlist.push_back(pNew);
 }
 
-void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
+void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle, _float fTime)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
@@ -223,7 +222,11 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 	pNew->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(fAngle));
 
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
-	pNew->fTime = m_fSpec_Time;
+
+	if (fTime == -1.f)
+		pNew->fTime = m_fSpec_Time;
+	else
+		pNew->fTime = fTime;
 
 	m_Actionlist.push_back(pNew);
 }

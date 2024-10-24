@@ -322,6 +322,27 @@ void CContainer_Enemy::Set_AI_Status(_float fTimeDelta)
 
 void CContainer_Enemy::Burning()
 {
+	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] == false)
+	{
+		m_fChangeScript_Now = m_fChangeScript_Interval;
+
+		_int iScript = _int(m_pGameInstance->Get_Random(0.f, 4.f));
+
+		if (iScript == 0)
+			__super::Change_Script(TEXT("¾îÈæ! ¸¶ÀÌ±ö"));
+		if (iScript == 1)
+			__super::Change_Script(TEXT("¾Æºô¸³¾ÆÄµÇÃ¶óÀÌ!"));
+		if (iScript == 2)
+			__super::Change_Script(TEXT("¾û¾û¾û¾û ¾û¾û¾û¾û"));
+		if (iScript == 3)
+			__super::Change_Script(TEXT("³» ¸öÀÌ ºÒÅ¸°í ÀÖ¾î¿ä!"));
+		if (iScript == 4)
+			__super::Change_Script(TEXT("¾îÈæ! ¸¶ÀÌ±ö"));
+	}
+
+
+
+
 	m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] = true;
 	m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_BURN)] = BURN_TIME;
 

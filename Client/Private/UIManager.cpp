@@ -322,6 +322,15 @@ void CUIManager::OpenHackPage(CContainer_Turret* pTurret)
 
 void CUIManager::OpenTalkPage(CContainer_NPC* pNPC)
 {
+	if (pNPC == nullptr)
+	{
+		m_bIsTalkOpen = false;
+		m_pPage_Talk->SetHost(pNPC);
+		return;
+	}
+		
+
+
 	m_bIsTalkOpen = true;
 
 	if (m_pPage_Talk->GetOff())

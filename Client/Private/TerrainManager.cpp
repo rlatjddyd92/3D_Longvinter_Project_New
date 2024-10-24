@@ -284,7 +284,7 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_NPC)
 		{
-			GET_INSTANCE->Make_Container_NPC(tTemp.fPosition, NPC_TYPE::NPC_SHOP, tTemp.fRotate);
+			GET_INSTANCE->Make_Container_NPC(tTemp.fPosition, NPC_TYPE(tTemp.iIndex), tTemp.fRotate);
 		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_END)
 		{

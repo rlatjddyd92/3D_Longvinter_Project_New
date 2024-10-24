@@ -75,8 +75,14 @@ void CExplosion_Normal::Update(_float fTimeDelta)
 			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_FIRE, nullptr, iter->pCollider->GetBoundingCenter(), fDirec);
 			GET_INSTANCE->Destroy_Terrain_Explosion(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingRadius_Sphere());
 			iter->pTransform->Set_Scaled(fSize, fSize, fSize);
-			if (fSize > 3.f)
-				iter->bDead = true;
+			if (iter->fTime == 0.f)
+			{
+				if (fSize > 3.f)
+					iter->bDead = true;
+			}
+			else 
+				if (fSize > 15.f)
+					iter->bDead = true;
 
 	}
 }

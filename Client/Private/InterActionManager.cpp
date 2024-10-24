@@ -128,6 +128,14 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_TURRET);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_PLAYER);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
@@ -136,7 +144,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_TREE);
-
+	Check_Collision_InterAction(INTERACTION::INTER_DOOR, INTERACTION::INTER_THORW_MINE);
 
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_ENEMY);
@@ -176,9 +184,9 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
-void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle, _float fTime)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle, fTime);
 }
 
 void CInterActionManager::Delete_LastInterAction(INTERACTION eInterType)

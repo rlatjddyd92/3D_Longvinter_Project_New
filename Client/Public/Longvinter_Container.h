@@ -45,7 +45,7 @@ public:
 	{ 
 		m_bMonsterMake = bIsMonsterMaker; 
 	}
-
+	wstring Get_Script() { return m_strScript; }
 
 protected:
 	CONTAINER eContainerType = CONTAINER::CONTAINER_END;
@@ -87,6 +87,15 @@ protected: // AI 관련 함수
 
 	void Start_Panic();
 	void End_Panic();
+	
+	void Change_Script(wstring strScript)
+	{
+		if (m_fChangeScript_Now == m_fChangeScript_Interval)
+		{
+			m_fChangeScript_Now = 0;
+			m_strScript = strScript;
+		}
+	}
 
 
 
@@ -141,6 +150,12 @@ protected:
 	_int m_iSearch_Count = 0;
 
 	_bool m_bMonsterMake = false;
+
+	// script
+	_bool m_bShowScript = false;
+	_float m_fChangeScript_Interval = 10.f;
+	_float m_fChangeScript_Now = m_fChangeScript_Interval;
+	wstring m_strScript = TEXT("없음");
 
 public:
 	static CLongvinter_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

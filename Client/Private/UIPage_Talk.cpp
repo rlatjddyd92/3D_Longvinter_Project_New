@@ -65,6 +65,9 @@ void CUIPage_Talk::Priority_Update(_float fTimeDelta)
 
 void CUIPage_Talk::Update(_float fTimeDelta)
 {
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
+		return;
+
 
 	int a = 10;
 }
@@ -79,6 +82,9 @@ void CUIPage_Talk::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPage_Talk::Render()
 {
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
+		return S_OK;
+
 	_float fX = 0.f;
 	_float fY = 0.f;
 
@@ -282,7 +288,7 @@ void CUIPage_Talk::Ready_Script()
 	m_vecScript[_int(NPC_TYPE::NPC_LAST)][0]->pSelect = new _tchar[100];
 	m_vecScript[_int(NPC_TYPE::NPC_LAST)][0]->pName = TEXT("육식주의자");
 	m_vecScript[_int(NPC_TYPE::NPC_LAST)][0]->pScript = TEXT("주문했던 고기네요! 고마워요");
-	m_vecScript[_int(NPC_TYPE::NPC_LAST)][0]->pSelect = TEXT("이제 돈을 주세요.");
+	m_vecScript[_int(NPC_TYPE::NPC_LAST)][0]->pSelect = TEXT("Mission을 완수했으니 Reward를 주세요");
 
 	m_vecScript[_int(NPC_TYPE::NPC_LAST)][1] = new SCRIPT;
 	m_vecScript[_int(NPC_TYPE::NPC_LAST)][1]->pName = new _tchar[10];

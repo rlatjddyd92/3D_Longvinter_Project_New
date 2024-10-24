@@ -66,7 +66,7 @@ public:
 public:
 	void Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END, _float fAngle = 0.f);
 	list<INTERACTION_INFO*>* Get_Actionlist() {return &m_Actionlist;}
-	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f);
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f, _float fTime = -1.f);
 	_int Get_ColliderType() { return m_iColliderType; }
 	_float Get_Sensor_Range() { return m_fSpec_Sensor; }
 

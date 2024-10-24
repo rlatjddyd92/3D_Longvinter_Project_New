@@ -51,8 +51,8 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		return S_OK;
 	}
 
-	m_fHp = 300.f;
-	m_fHp_Max = 300.f;
+	m_fHp = 250.f;
+	m_fHp_Max = 250.f;
 
 	
 	
@@ -154,6 +154,9 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 		}
 			
 	Set_AI_Status(fTimeDelta);
+
+	if (m_eAI_Status != AI_STATUS::AI_IDLE)
+		m_bShowScript = true;
 }
 
 void CAI_Enemy::Update(_float fTimeDelta)
@@ -340,6 +343,21 @@ void CAI_Enemy::DeadAction()
 
 	if (m_eAI_Status == AI_STATUS::AI_DEAD)
 		return;
+
+	m_fChangeScript_Now = m_fChangeScript_Interval;
+
+	_int iScript = _int(m_pGameInstance->Get_Random(0.f, 3.f));
+
+	if (iScript == 0)
+		__super::Change_Script(TEXT("모두 발할라에서 만나요!"));
+	if (iScript == 1)
+		__super::Change_Script(TEXT("다음에는 미소녀로 태어나게 해주세요"));
+	if (iScript == 2)
+		__super::Change_Script(TEXT("이제 아프지 않아요!"));
+
+
+
+
 
 	m_eAI_Status = AI_STATUS::AI_DEAD;
 	m_fActionTimer = 3.f;
@@ -563,6 +581,9 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 
 	if (bCanSee)
 	{
+		
+
+
 		m_fDestination = fPlayerPosition;
 		m_eAI_Status = AI_STATUS::AI_ATTACK;
 		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WARNING, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
@@ -572,6 +593,29 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 			m_bExplosionActive = true;
 			m_fDetective_Length = 10000.f;
 			m_bCanSeeTransparent = true;
+
+			_int iScript = _int(m_pGameInstance->Get_Random(0.f, 2.f));
+
+			if (iScript == 0)
+				__super::Change_Script(TEXT("안아줘요!"));
+			if (iScript == 1)
+				__super::Change_Script(TEXT("함께 폭사해요!"));
+		}
+		else
+		{
+			_int iScript = _int(m_pGameInstance->Get_Random(0.f, 5.f));
+
+			if (iScript == 0)
+				__super::Change_Script(TEXT("돈이 많아보이는 친구에요!"));
+			if (iScript == 1)
+				__super::Change_Script(TEXT("나도 CPlayer 하고 싶었는데..."));
+			if (iScript == 2)
+				__super::Change_Script(TEXT("돈이 많아보이는 친구에요!"));
+			if (iScript == 3)
+				__super::Change_Script(TEXT("함께 폭사해요!"));
+			if (iScript == 4)
+				__super::Change_Script(TEXT("돈이 많아보이는 친구에요!"));
+			
 		}
 	}
 	else
