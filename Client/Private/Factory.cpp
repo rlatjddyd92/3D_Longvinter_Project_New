@@ -956,7 +956,7 @@ CUIPart_Bar* CFactory::MakeUIPart_Bar(CUIPart_Bar::UIBAR_TYPE eType, _float fX, 
 	return static_cast<CUIPart_Bar*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_Bar"), -1));
 }
 
-CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove, _float fShowTime)
+CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove, _float fShowTime, CLongvinter_Container* pHost)
 {
 	CUIPart_TextBox::UITextBox_DESC		pTemp{};
 	pTemp.eType = eType;
@@ -967,6 +967,7 @@ CUIPart_TextBox* CFactory::MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eT
 	pTemp.fTime = fShowTime;
 	pTemp.AutoRemove = bAutoRemove;
 	pTemp.bCenter = bCenter;
+	pTemp.pHost = pHost;
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), TEXT("Prototype_UIPart_TextBox"), &pTemp);
 
 	return static_cast<CUIPart_TextBox*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_UIPart_TextBox"), -1));

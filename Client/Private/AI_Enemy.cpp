@@ -39,7 +39,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
 	{
 		m_iBody = _int(HUMAN_BODY::BODY_RED);
-		m_fDetective_Length = 20.f;
+		m_fDetective_Length = 10.f;
 		m_fClosuerLimit_Length = 0.f;
 		m_fAttack_Length = 0.f;
 		m_eWeapon = ITEMINDEX::ITEM_END;
@@ -51,8 +51,8 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 		return S_OK;
 	}
 
-	m_fHp = 250.f;
-	m_fHp_Max = 250.f;
+	m_fHp = 200.f;
+	m_fHp_Max = 200.f;
 
 	
 	
@@ -63,7 +63,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
 
 	
-	m_fDetective_Length = 20.f;
+	m_fDetective_Length = 10.f;
 
 	_float fAdjust = m_pGameInstance->Get_Random(0.f, 3.f) - m_pGameInstance->Get_Random(0.f, 3.f);
 
@@ -71,7 +71,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (iWeapon == 0)
 	{
 		m_fClosuerLimit_Length = 5.f + fAdjust;
-		m_fAttack_Length = 15.f + fAdjust;
+		m_fAttack_Length = 8.f + fAdjust;
 		m_eWeapon = ITEMINDEX::ITEM_MACHINEGUN;
 		m_iBody = _int(HUMAN_BODY::BODY_GREEN);
 	}
@@ -164,12 +164,20 @@ void CAI_Enemy::Update(_float fTimeDelta)
 	if (m_fHp <= 0.f)
 	{
 		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
+		{
 			GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_EXPLOSION_NORMAL, this, m_pColliderCom->GetBoundingCenter(), { 0.f,0.f,0.f });
+			__super::SetDead();
+		}
 		else
 			DeadAction();
 		
 	}
 		
+	if (m_pColliderCom->GetBoundingCenter().y < 0.f)
+		__super::SetDead();
+
+
+
 
 	if (m_bExplosionActive)
 	{
@@ -330,7 +338,16 @@ void CAI_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eInd
 
 	__super::Collision_Reaction_Container(pPoint, eIndex);
 
-	
+	if (eIndex == CONTAINER::CONTAINER_TURRET)
+	{
+		m_eAI_Status = AI_STATUS::AI_TURRET;
+
+		pTurret = static_cast<CContainer_Turret*>(pPoint);
+
+		
+		
+	}
+		
 
 
 
@@ -531,6 +548,43 @@ void CAI_Enemy::Moving_Control(_float fTimeDelta)
 		m_pTransformCom->Go_Straight(fTimeDelta * 1.5f, true);
 		m_iState = STATE_WALK;
 	}
+	if (m_eAI_Status == AI_STATUS::AI_TURRET)
+	{
+		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * m_fMove_Angle);
+
+		if (m_fMove_Angle < 0.f)
+		{
+			m_fMove_Angle += fTimeDelta;
+			if (m_fMove_Angle > 0.f)
+				m_fMove_Angle = 0.f;
+		}
+		else if (m_fMove_Angle > 0.f)
+		{
+			m_fMove_Angle -= fTimeDelta;
+			if (m_fMove_Angle < 0.f)
+				m_fMove_Angle = 0.f;
+		}
+
+		_float3 fLook{};
+		XMStoreFloat3(&fLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+		{
+			m_bJump = false;
+
+			if (GET_INSTANCE->Check_Wall(m_pColliderCom->GetBoundingCenter(), fLook, max(m_pColliderCom->GetBoundingExtents().x, m_pColliderCom->GetBoundingExtents().z) * 1.2f))
+			{
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+			}
+		}
+
+
+		bMove = true;
+
+		m_pTransformCom->Go_Straight(fTimeDelta * 0.5f, true);
+		m_iState = STATE_WALK;
+	}
 }
 
 void CAI_Enemy::Weapon_Control(_float fTimeDelta)
@@ -570,6 +624,49 @@ void CAI_Enemy::Set_AI_Status(_float fTimeDelta)
 	{
 		m_eAI_Status = AI_STATUS::AI_PANIC;
 		return;
+	}
+
+	if (m_eAI_Status == AI_STATUS::AI_TURRET)
+	{
+		if (pTurret == nullptr)
+		{
+			m_eAI_Status = AI_STATUS::AI_IDLE;
+			return;
+		}
+
+
+		_vector vDistance = pTurret->GetTransform(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float fDistance = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
+
+		if (fDistance < 1.f)
+		{
+			m_eAI_Status = AI_STATUS::AI_IDLE;
+			return;
+		}
+
+
+		_float3 fPoint = {};
+		XMStoreFloat3(&fPoint, pTurret->GetTransform(CTransform::STATE_POSITION));
+		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
+		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
+		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+
+
+		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		_float fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+		_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+		m_fMove_Angle = acos(fDot / fCos);
+
+		if (isnan(m_fMove_Angle))
+			m_fMove_Angle = 0.f;
+
+		_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+		if (bResult)
+			m_fMove_Angle *= -1;
+
 	}
 
 	__super::Get_Sound(&m_fSoundPosition, &m_fVolume, &m_fMove_Angle);
@@ -675,4 +772,6 @@ CGameObject* CAI_Enemy::Clone(void* pArg)
 void CAI_Enemy::Free()
 {
 	__super::Free();
+
+	//Safe_Release(pTurret);
 }

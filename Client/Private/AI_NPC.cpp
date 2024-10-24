@@ -42,11 +42,12 @@ HRESULT CAI_NPC::Initialize(void* pArg)
 	GET_INSTANCE->MakeEnemyHpBar(this);
 	GET_INSTANCE->MakeSymbol(this);
 
-	m_fDetective_Length = 20.f;
+	m_fDetective_Length = 10.f;
 
-	m_fHp = 100.f;
-	m_fHp_Max = 100.f;
+	m_fHp = 10.f;
+	m_fHp_Max = 10.f;
 
+	XMStoreFloat3(&m_fLook_Origin, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
 	return S_OK;
 }
@@ -155,6 +156,7 @@ void CAI_NPC::Update(_float fTimeDelta)
 		if (m_iScriptNum == 4)
 		{
 			m_eAI_Status = AI_STATUS::AI_SERACH;
+			
 			GET_INSTANCE->SetMakeMonster(true);
 			m_iScriptNum = 5;
 		}
@@ -170,7 +172,20 @@ void CAI_NPC::Update(_float fTimeDelta)
 			// µµ¸Á ±â´É 
 
 			if (m_eAI_Status == AI_STATUS::AI_IDLE)
+			{
 				m_eAI_Status = AI_STATUS::AI_SERACH;
+				m_fMove_Time = 2.f;
+			}
+				
+			m_fMove_Time -= fTimeDelta;
+			if (m_fMove_Time < 0.f)
+			{
+				m_fMove_Time = 0.f;
+			}
+			
+			if (m_eAI_Status == AI_STATUS::AI_SERACH)
+				if (GET_INSTANCE->GetLast())
+					m_fMove_Time = 2.f;
 
 
 			if (m_eAI_Status != AI_STATUS::AI_DEAD)
@@ -405,7 +420,48 @@ void CAI_NPC::Moving_Control(_float fTimeDelta)
 	}
 	else if (m_eAI_Status == AI_STATUS::AI_SERACH)
 	{
+		if (m_eNPC_Type == NPC_TYPE::NPC_LAST)
+		{
+			_float3 fPoint = { 0.f,0.f,0.f };
 
+			if (!GET_INSTANCE->GetLast())
+			{
+				fPoint.x = -1;
+				fPoint.y = 0.f;
+				fPoint.z = 0.f;
+			}
+			else
+			{
+				fPoint.x = 1.f;
+				fPoint.y = 0.f;
+				fPoint.z = 0.f;
+			}
+			
+
+			_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+			_float fDot = XMVector3Dot({ fPoint.x, 0.f, fPoint.z, 0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2], 0.f }).m128_f32[0];
+			_float fCos = (sqrt(pow(fPoint.x, 2) + pow(fPoint.z, 2)) * sqrt(pow(vLook.m128_f32[0], 2) + pow(vLook.m128_f32[2], 2)));
+			_float fTurn = acos(fDot / fCos);
+
+			if (isnan(fTurn))
+				fTurn = 0.f;
+
+			_bool bResult = GET_INSTANCE->Check_CCW_XZ(fPoint, { 0.f,0.f,0.f }, { vLook.m128_f32[0], 0.f, vLook.m128_f32[2] });
+
+			if (bResult)
+				fTurn *= -1;
+
+			m_pTransformCom->Turn({ 0.f,1.f,0.f }, fTimeDelta * 10.f* fTurn);
+
+			if (m_fMove_Time > 0.f)
+			{
+				m_pTransformCom->Go_Straight(fTimeDelta * 1.5f, true);
+				m_iState = STATE_WALK;
+			}
+			
+			
+		}
 	}
 }
 

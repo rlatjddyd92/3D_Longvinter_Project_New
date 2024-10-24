@@ -69,6 +69,7 @@ public:
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
 	void MakeSymbol(CLongvinter_Container* pHost);
+	void MakeScript(CLongvinter_Container* pHost);
 
 public: // <- 상점 관련 함수 
 	void OpenShopPage(_int iShopNum);
@@ -110,6 +111,7 @@ private:
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
 	list<CUIPart_Symbol*> m_Symbollist;
+	list<CUIPart_TextBox*> m_Scriptlist;
 
 	_int m_iMaxInform = 10;
 

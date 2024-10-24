@@ -140,6 +140,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_TREE);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_DOOR);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);
@@ -148,6 +149,7 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_TURRET);
 }
 
 HRESULT CInterActionManager::Render()
@@ -382,6 +384,23 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 				continue;
 			}
 
+			if ((eFirst == CONTAINER::CONTAINER_ENEMY) && (eSecond == CONTAINER::CONTAINER_TURRET))
+			{
+				if (static_cast<CContainer_Turret*>((*iterB)->pPoint)->GetHack(0))
+				{
+					_vector vDistance = XMLoadFloat3(&(*iterA)->pCollider->GetBoundingCenter()) - XMLoadFloat3(&(*iterB)->pCollider->GetBoundingCenter());
+					_float fDistance = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
+					if (fDistance < 10.f)
+					{
+						(*iterA)->pPoint->Collision_Reaction_Container((*iterB)->pPoint, eSecond);
+					}
+				}
+
+				
+			}
+
+
+
 
 			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
 			// 추후 상대방 콘테이너 객체에 따라 값을 변경하는 코드 추가 필요 
@@ -391,6 +410,7 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 				(*iterA)->pPoint->Collision_Reaction_Container((*iterB)->pPoint, eSecond);
 				(*iterB)->pPoint->Collision_Reaction_Container((*iterA)->pPoint, eFirst);
 			}
+			
 
 			++iterB;
 		}

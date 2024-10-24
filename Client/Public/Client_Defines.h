@@ -98,6 +98,7 @@ namespace Client
 		AI_DEFENCE,
 		AI_ATTACK,
 		AI_DEAD,
+		AI_TURRET,
 		AI_END
 	};
 

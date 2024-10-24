@@ -40,6 +40,8 @@ HRESULT CContainer_Turret::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	//m_pTransformCom->Set_Scaled(1.5f, 1.5f, 1.5f);
+
+	m_fDetective_Length = 7.f;
 	
 	m_fRotate = 0.4f;
 	

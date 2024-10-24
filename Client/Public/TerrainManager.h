@@ -88,6 +88,8 @@ public:
 
 	_float3 CheckPicking();
 
+	_bool CheckPicking(_float3 fLook);
+
 	void SetBedRock(_int iX, _int iY, _int iZ);
 	void HighLight_Surface(_bool bLinked); // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
 	void HighLight_NewCube(_float3 fSize);

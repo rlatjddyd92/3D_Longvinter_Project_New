@@ -135,11 +135,13 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 	}
 	else if (m_iSelectMode == 3)
 	{
-		//ImGui::Text("MakeSpecialLand");
-		//ImGui::InputInt3("LandSize", m_iLand);
-		////ImGui::Combo("SelectTexTure", &m_iSelectTexture, szTexture, IM_ARRAYSIZE(szTexture));
-		////GET_INSTANCE->ChangeIndex(m_iSelectTexture);
+		ImGui::Text("Exp");
+		ImGui::InputInt("Angle", &m_iRotate);
+		
+		if ((m_iRotate < 0) || (m_iRotate >= 360))
+			m_iRotate = 0;
 	}
+	
 
 	if (ImGui::Button("SAVE_MODEL"))
 	{
@@ -156,8 +158,11 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_LBUTTON, bPressing))
 		{
 			_bool bTop = m_iSelectMode == 1;
+			bTop = m_iSelectMode == 3;
 
-			if (m_iSelectObject ==1 )
+			if (m_iSelectMode == 3)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_ENEMY, INTERACTION::INTER_END, m_iRotate, 10);
+			else if (m_iSelectObject ==1 )
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
 			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate);
@@ -168,8 +173,11 @@ void CImguiManager::Priority_Update(_float fTimeDelta)
 		if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON, bPressing))
 		{
 			_bool bTop = m_iSelectMode == 1;
+			bTop = m_iSelectMode == 3;
 
-			if (m_iSelectObject == 1)
+			if (m_iSelectMode == 3)
+				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER::CONTAINER_ENEMY, INTERACTION::INTER_END, m_iRotate, 10);
+			else if (m_iSelectObject == 1)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject), INTERACTION::INTER_END, m_iRotate, m_iSelectNPC);
 			else if (m_iSelectObject != 4)
 				GET_INSTANCE->CheckPicking(m_iSelectMode, m_iLand[0], m_iLand[1], m_iLand[2], bTop, CONTAINER(m_iSelectObject));

@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPart.h"
+#include "Longvinter_Container.h"
 
 BEGIN(Engine)
 class CShader;

@@ -126,6 +126,7 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 
 	pNew->pTransform->Set_Pushed_Power(fPushedDirec, fPushedPower);
 	pNew->pTransform->Set_Pushed_PowerDecrease(fDecreasePushedPower);
+	pNew->pTransform->Set_RotationPerSec(XMConvertToRadians(180.0f));
 
 	CBounding::BOUNDING_DESC* pBoundingDesc{};
 

@@ -134,8 +134,7 @@ void CUIPage_User::Ready_UIPart()
 	m_vecPart[_int(PART_INTER_F)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
 	m_vecPart[_int(PART_INTER_C)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
 
-
-
+	
 }
 
 _bool CUIPage_User::Key_Action()

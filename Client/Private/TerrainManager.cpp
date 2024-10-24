@@ -53,6 +53,7 @@ void CTerrainManager::Update(_float fTimeDelta)
 	if (!m_CommandBuffer.empty())
 		ChangeLandInfo_Normal();
 
+	_int iNum = m_vecObjInfo.size();
 
 	int a = 10;
 }
@@ -276,7 +277,10 @@ void CTerrainManager::LoadMap(const _char* pPath)
 		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_ENEMY)
 		{
-			GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
+			if (tTemp.iIndex != 10)
+				GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_END, tTemp.fRotate);
+			else
+				GET_INSTANCE->Make_Container_Enemy(tTemp.fPosition, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, tTemp.fRotate);
 		}
 		else if (m_vecObjInfo.back().eCon_Type == CONTAINER::CONTAINER_TURRET)
 		{
@@ -1278,7 +1282,7 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 
 					m_fInterval_Now = m_fInterval;
 				}
-				if (iMode == 1)
+				if ((iMode == 1) || (iMode == 3))
 				{
 					if (m_pGameInstance->Get_DIMouseState(MOUSEKEYSTATE::DIMK_RBUTTON))
 					{
@@ -1311,7 +1315,12 @@ _float3 CTerrainManager::CheckPicking(_int iMode, _int iCX, _int iCY, _int iCZ, 
 						else if (eType == CONTAINER::CONTAINER_NPC)
 							GET_INSTANCE->Make_Container_NPC(fResult, NPC_TYPE(iIndex), iRotate);
 						else if (eType == CONTAINER::CONTAINER_ENEMY)
-							GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+						{
+							if (iIndex != 10)
+								GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_END, iRotate);
+							else 
+								GET_INSTANCE->Make_Container_Enemy(fResult, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, iRotate);
+						}
 						else if (eType == CONTAINER::CONTAINER_TURRET)
 							GET_INSTANCE->Make_Container_Turret(fResult, iRotate);
 						else if (eType == CONTAINER::CONTAINER_END)
@@ -1362,6 +1371,27 @@ _float3 CTerrainManager::CheckPicking()
 	}
 
 	return fResult;
+}
+
+_bool CTerrainManager::CheckPicking(_float3 fLook)
+{
+	_vector vCamera = XMLoadFloat3(&fLook);
+	_double fDistance = -1.f;
+	_wstring strKey = {};
+	_bool bResult = false;
+
+	for (auto& pair : m_mapInstancing_SurFace)
+	{
+		_float3 fTempResult = IsPicking_Instancing(pair.second);
+		if (fTempResult.x == -1)
+			continue;
+
+		bResult = true;
+
+		return bResult;
+	}
+
+	return bResult;
 }
 
 CTerrainManager* CTerrainManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

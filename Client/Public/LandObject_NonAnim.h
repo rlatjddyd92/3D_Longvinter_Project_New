@@ -64,6 +64,8 @@ private:
 
 	// ¹®
 	_bool m_bEnding = false;
+	_bool m_bOpen = false;
+	_bool m_bClose = false;
 
 public:
 	static CLandObject_NonAnim* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

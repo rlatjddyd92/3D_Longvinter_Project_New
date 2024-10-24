@@ -22,6 +22,8 @@ HRESULT CLandObject_NonAnim::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
+	
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -47,6 +49,7 @@ void CLandObject_NonAnim::Priority_Update(_float fTimeDelta)
 void CLandObject_NonAnim::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+
 
 	
 	if (m_eType == INTERACTION::INTER_MONSTERMAKER)
@@ -122,22 +125,20 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 	
 		if (m_eType == INTERACTION::INTER_DOOR)
 		{
-			if (!m_bEnding)
+			if (m_bOpen == true)
 			{
-				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 문 두드리기"), TEXT("없음"), TEXT("없음"));
-
-				if (bActive)
-					if (m_pGameInstance->Get_DIKeyState(DIK_E))
-						GET_INSTANCE->ShowInformMessage(TEXT("문을 열어주지 않습니다."));
+				iter->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(90.f));
+				m_bClose = true;
 			}
-			else 
+			else if (m_bClose == true)
 			{
-				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 택배왔어요!"), TEXT("없음"), TEXT("없음"));
-
-				if (bActive)
-					if (m_pGameInstance->Get_DIKeyState(DIK_E))
-						GET_INSTANCE->ShowInformMessage(TEXT("진상이 나오고 있습니다."));
+				m_bClose = false;
+				iter->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(0.f));
 			}
+		
+			m_bOpen = false;
+
+
 		}
 		
 
@@ -329,6 +330,13 @@ void CLandObject_NonAnim::Collision_Reaction_InterAction(CGameObject* pPoint, IN
 
 	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+		{
+			DestroyAction(pAction);
+			return;
+		}
+			
+
 		if (!GET_INSTANCE->Check_OnGround(pAction->pCollider->GetBoundingCenter(), pAction->pCollider->GetBoundingExtents()))
 			DestroyAction(pAction);
 		else if (pAction->fBurning == 0.f)
@@ -392,6 +400,31 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 
 
 		}
+		if (m_eType == INTERACTION::INTER_DOOR)
+		{
+			if (!m_bEnding)
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 문 두드리기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("문을 열어주지 않습니다."));
+			}
+			else
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 택배왔어요!"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+					{
+						GET_INSTANCE->SetLast();
+						GET_INSTANCE->ShowInformMessage(TEXT("진상이 나오고 있습니다."));
+					}
+						
+			}
+		}
+
+		
 	}
 	else if (eIndex == CONTAINER::CONTAINER_TURRET)
 	{
@@ -400,6 +433,19 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 			pAction->pTrace = static_cast<CLongvinter_Container*>(pPoint);
 		}
 	}
+
+
+	if (eIndex == CONTAINER::CONTAINER_NPC)
+	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+			m_bOpen = true;
+	}
+	/*if (eIndex == CONTAINER::CONTAINER_PLAYER)
+	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+			m_bOpen = true;
+			
+	}*/
 }
 
 HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)

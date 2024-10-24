@@ -70,7 +70,8 @@ HRESULT CUIPart_TextBox::Initialize(void* pArg)
 	else 
 		m_fSize = 0.7f;
 
-	
+
+
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(Desc)))
@@ -120,24 +121,28 @@ HRESULT CUIPart_TextBox::Render()
 	if (m_eType != CUIPart_TextBox::TEXTBOX_CASH)
 		__super::Render();
 
-	if (m_eType != CUIPart_TextBox::TEXTBOX_SCRIPT)
+	if (m_eType == CUIPart_TextBox::TEXTBOX_SCRIPT)
 	{
 		if ((m_pHost == nullptr) || (m_pHost->GetDead()))
 		{
 			__super::SetDead();
 			return S_OK;
 
-			_float3 fPosition{};
-			_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
-			XMStoreFloat3(&fPosition, vPosition);
-
-			if (!GET_INSTANCE->GetIsLender(fPosition))
-				return S_OK;
-
-			if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
-				return S_OK;
+			
 		}
+
+		_float3 fPosition{};
+		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
+		XMStoreFloat3(&fPosition, vPosition);
+
+		if (!GET_INSTANCE->GetIsLender(fPosition))
+			return S_OK;
+
+		if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
+			return S_OK;
 	}
+	
+
 
 
 
@@ -219,6 +224,7 @@ HRESULT CUIPart_TextBox::Render()
 
 HRESULT CUIPart_TextBox::Ready_Components()
 {
+
 
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Button_Base"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))

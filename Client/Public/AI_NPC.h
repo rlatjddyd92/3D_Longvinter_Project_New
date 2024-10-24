@@ -54,7 +54,12 @@ protected: // AI 관련 함수
 	virtual void Set_AI_Status(_float fTimeDelta) override;
 
 
-	_float m_fLastExplosion = 5.f;
+	_float m_fLastExplosion = 10.f;
+
+	// 육식주의자 전용
+	_float3 m_fLook_Origin = { 0.f,0.f,0.f };
+	_float m_fMove_Time = 2.f;
+
 
 private:
 	HRESULT Ready_Components();

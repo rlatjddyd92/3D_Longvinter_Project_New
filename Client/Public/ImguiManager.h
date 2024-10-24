@@ -43,7 +43,7 @@ private:
 	// 상태 제어
 	_int m_iMax[3] = {0,0,0}; // <- 맵의 기반 설정
 	_int m_iLand[3] = { 0,0,0 };
-	_char* szMode[4] = { "Terrain", "Object", "Move_Model", "SpecialLand" };
+	_char* szMode[4] = { "Terrain", "Object", "Move_Model", "Exp" };
 	_int m_iSelectMode = 0;
 	_char* szObject[5] = { "Player","NPC", "Enemy","Turret", "LandObject"};
 	_int m_iSelectObject = 0;
@@ -112,6 +112,8 @@ private:
 	_char* szNPC[_int(NPC_TYPE::NPC_END)];
 
 	_int m_iSelectNPC = _int(NPC_TYPE::NPC_END);
+
+	_int m_iIsExp = 0;
 
 	// Class
 

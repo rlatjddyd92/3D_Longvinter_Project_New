@@ -113,6 +113,18 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 	m_pPage_User->AddRender_UIPage();
 
+	for (list<CUIPart_TextBox*>::iterator iter = m_Scriptlist.begin(); iter != m_Scriptlist.end();)
+	{
+		if (((*iter) == nullptr) || ((*iter)->GetDead()))
+		{
+			iter = m_Scriptlist.erase(iter);
+		}
+		else
+		{
+			(*iter)->AddRender_UIPart();
+			++iter;
+		}
+	}
 
 	for (list<CUIPart_Bar*>::iterator iter = m_EnemyHplist.begin(); iter != m_EnemyHplist.end();)
 	{
@@ -298,6 +310,12 @@ void CUIManager::MakeSymbol(CLongvinter_Container* pHost)
 	m_Symbollist.push_back(pNew);
 }
 
+void CUIManager::MakeScript(CLongvinter_Container* pHost)
+{
+	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_SCRIPT, 0.f, 0.f, 0.f, 0.f, true, false, 0.f, pHost);
+	m_Scriptlist.push_back(pNew);
+}
+
 void CUIManager::OpenShopPage(_int iShopNum)
 {
 	m_bIsShopOpen = true;
@@ -458,6 +476,11 @@ void CUIManager::Free()
 		Safe_Release(iter);
 
 	m_Symbollist.clear();
+
+	for (auto& iter : m_Scriptlist)
+		Safe_Release(iter);
+
+	m_Scriptlist.clear();
 
 	m_Pagelist.clear();
 }

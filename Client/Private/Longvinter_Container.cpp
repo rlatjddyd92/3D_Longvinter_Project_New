@@ -30,6 +30,9 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 	m_vecCrowdControl.resize(_int(CROWDCONTROL::CC_END));
 	m_vecCrowdControl_Time.resize(_int(CROWDCONTROL::CC_END));
+
+	//GET_INSTANCE->MakeScript(this);
+
 	return S_OK;
 }
 
@@ -177,7 +180,7 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		if (m_fDistance_from_Player > m_fDetective_Length)
 		{
 			*bCanSee = false;
-			*fTurnAngle = 0.f;
+			//*fTurnAngle = 0.f;
 			return;
 		}
 
@@ -186,6 +189,9 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
 		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
 		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		
+
 
 		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
@@ -196,7 +202,7 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
 		{
 			*bCanSee = false;
-			*fTurnAngle = 0.f;
+			//*fTurnAngle = 0.f;
 			return;
 		}
 

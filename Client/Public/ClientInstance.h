@@ -78,6 +78,8 @@ public: // <- 싱글톤을 통한 외부 접근용
 	_bool GetMonsterMake() { return m_bMakeMonster; }
 	void SetMakeMonster(_bool bIsMake) { m_bMakeMonster = bIsMake; }
 
+	void SetLast() { m_bLastScene = true; }
+	_bool GetLast() { return m_bLastScene; }
 
 
 #pragma endregion
@@ -123,9 +125,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		return m_pFactory->MakeUIPart_Bar(eType, fX, fY, fSizeX, fSizeY, pHost);
 	}
-	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f)
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f, CLongvinter_Container* pHost = nullptr)
 	{
-		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
+		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime, pHost);
 	}
 	CUIPart_Symbol* MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr) 
 	{ 
@@ -152,6 +154,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType, eInter, iRotate,  iIndex); }
 	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
+	_bool CheckPicking(_float3 fLook) { return m_pTerrainManager->CheckPicking(fLook); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -244,6 +247,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void OpenShopPage(_int iShopNum) { m_pUIManager->OpenShopPage(iShopNum); }
 	void OpenHackPage(CContainer_Turret* pTurret) { m_pUIManager->OpenHackPage(pTurret); }
 	void OpenTalkPage(CContainer_NPC* pNPC) { m_pUIManager->OpenTalkPage(pNPC); }
+	void MakeScript(CLongvinter_Container* pHost) { m_pUIManager->MakeScript(pHost); }
 
 	_bool GetOpenShop() { return m_pUIManager->GetOpenShop(); }
 	_bool GetOpenHack() { return m_pUIManager->GetOpenHack(); }
@@ -342,6 +346,7 @@ private: // <- 프로그램 상태관리
 private: // <- 게임 플레이 조정 
 	_bool					m_bPlayerDead = false;
 	_bool					m_bMakeMonster = false; 
+	_bool					m_bLastScene = false;
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };
