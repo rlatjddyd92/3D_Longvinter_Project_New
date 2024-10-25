@@ -64,7 +64,7 @@ protected:
 	CCollider* m_pColliderCom = { nullptr };
 
 	_bool m_bExplosionActive = false;
-	_float m_fExplosionWaitTime = 10.f;
+	_float m_fExplosionWaitTime = 5.f;
 
 	_bool m_bCanSeeTransparent = false;
 

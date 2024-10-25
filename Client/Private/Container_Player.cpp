@@ -76,6 +76,8 @@ void CContainer_Player::Priority_Update(_float fTimeDelta)
 void CContainer_Player::Update(_float fTimeDelta)
 {
 	
+	Add_Hp(fTimeDelta * 10.f);
+
 	__super::Update(fTimeDelta);
 	
 	Camera_Control(fTimeDelta);
@@ -169,7 +171,7 @@ void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTE
 	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 	{
 		
-		__super::Add_Hp(-10.f);
+		__super::Add_Hp(-2.f);
 		_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{ 0.f, 0.2f, 0.f, 0.f };
 		_float3 fDirec{};
 		XMStoreFloat3(&fDirec, vDirec);
@@ -190,17 +192,17 @@ void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTE
 
 		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
 		{
-			__super::Add_Hp(-10.f);
+			__super::Add_Hp(-2.f);
 
 
-			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
-			fDirec.y = 0.7f;
+			_float3 fDirec = { 0.f,0.4f,0.f };
+			
 
 			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 0.3f);
 		}
 		if (eIndex == INTERACTION::INTER_MELEE_NORMAL)
 		{
-			__super::Add_Hp(-10.f);
+			__super::Add_Hp(-2.f);
 
 			
 		}
@@ -211,10 +213,9 @@ void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTE
 
 
 
-			__super::Add_Hp(-30.f);
+			__super::Add_Hp(-2.f);
 
-			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
-			fDirec.y = 0.1f;
+			_float3 fDirec = { 0.f,1.f,0.f };
 
 			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.f);
 		}
@@ -399,25 +400,25 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 	{
 		m_eWeaponType = WEAPON_MAIN;
 		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
-		GET_INSTANCE->ShowInformMessage(TEXT("주 무기로 변경"));
+		GET_INSTANCE->ShowInformMessage(TEXT("1번 키 : 무기 1로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
 	{
 		m_eWeaponType = WEAPON_SUB;
 		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
-		GET_INSTANCE->ShowInformMessage(TEXT("보조 무기로 변경"));
+		GET_INSTANCE->ShowInformMessage(TEXT("2번 키 : 무기 2로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
 	{
 		m_eWeaponType = WEAPON_THROW;
 		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
-		GET_INSTANCE->ShowInformMessage(TEXT("투척 무기로 변경"));
+		GET_INSTANCE->ShowInformMessage(TEXT("3번 키 : 무기 3로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
 	{
 		m_eWeaponType = WEAPON_END;
 		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
-		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
+		GET_INSTANCE->ShowInformMessage(TEXT("4번 키 : 무기 해제"));
 	}
 
 	ITEMINDEX eNowType = ITEMINDEX::ITEM_END;

@@ -59,8 +59,8 @@ private:
 	// 몬스터 메이커 
 	_int m_iMonsterMake = 5;
 	_bool m_bActive = false;
-	_float m_fWait = 20.f;
-	_int m_iMessageCount = 20;
+	_float m_fWait = 30.f;
+	_int m_iMessageCount = 30;
 
 	// 문
 	_bool m_bEnding = false;

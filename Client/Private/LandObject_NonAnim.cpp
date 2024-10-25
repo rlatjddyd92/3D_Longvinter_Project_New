@@ -156,7 +156,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 				continue;
 			
 			if (m_fShowTime == 0.f)
-				m_fShowTime = 2.0f;
+				m_fShowTime = 4.0f;
 			else
 				continue;
 
@@ -222,7 +222,13 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 				if (fCheck.x != -1.f)
 				{
-					GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_END, 0.f);
+					_int iMon = _int(m_pGameInstance->Get_Random(0.f, 10.f));
+
+					if (iMon == 0)
+						GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, 0.f);
+					else 
+						GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_END, 0.f);
+					
 					static_cast<CLongvinter_Container*>(m_pGameInstance->Find_Object(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->SetMonsterMake(true);
 				}
 					
@@ -615,7 +621,7 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		m_fSpec_Extent = { 0.2f,0.2f,0.2f };
+		m_fSpec_Extent = { 0.2f,0.15f,0.2f };
 		m_fSpec_Scale = 1.5f;
 		m_fSpec_Sensor = 20.f;
 		m_bTexture = true;

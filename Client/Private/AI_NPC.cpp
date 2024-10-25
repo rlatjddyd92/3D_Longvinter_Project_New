@@ -108,7 +108,7 @@ void CAI_NPC::Update(_float fTimeDelta)
 			}
 			else
 			{
-				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("황건적 인턴"), TEXT("E키 : 대화하기"), TEXT("없음"), TEXT("없음"));
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()), TEXT("도적단 인턴"), TEXT("E키 : 대화하기"), TEXT("없음"), TEXT("없음"));
 
 				if (bActive)
 				{
@@ -284,7 +284,7 @@ void CAI_NPC::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eI
 {
 	if (m_eAI_Status == AI_STATUS::AI_DEAD) return;
 
-	if (m_eAI_Status != AI_STATUS::AI_SERACH) return;
+	//if (m_eAI_Status != AI_STATUS::AI_SERACH) return;
 
 	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
 
@@ -392,7 +392,7 @@ void CAI_NPC::DeadAction()
 		return;
 
 	m_eAI_Status = AI_STATUS::AI_DEAD;
-	m_fActionTimer = 3.f;
+	m_fActionTimer = 300.f;
 	m_fMove_Angle = PI_DEFINE * 0.15f;
 	m_iState = STATE_IDEL;
 }
@@ -503,7 +503,8 @@ void CAI_NPC::Moving_Control(_float fTimeDelta)
 					m_iState = STATE_IDEL;
 
 			}
-				
+			else 
+				m_iState = STATE_IDEL;
 			
 			
 		}
@@ -536,6 +537,15 @@ void CAI_NPC::Set_AI_Status(_float fTimeDelta)
 	if (m_eAI_Status == AI_STATUS::AI_DEAD)
 	{
 		Update_Distance_From_Player();
+		if ((m_eNPC_Type == NPC_TYPE::NPC_LAST) && (m_iScriptNum == 4))
+		{
+			if (m_fHp <= 0.f)
+			{
+				m_bShowScript = true;
+				__super::Change_Script(TEXT("잠깐 내 마지막 말을 들어줘요..."));
+			}
+
+		}
 		return;
 	}
 
@@ -565,16 +575,26 @@ void CAI_NPC::Set_AI_Status(_float fTimeDelta)
 
 	m_eAI_Status == AI_STATUS::AI_IDLE;
 
+	m_bShowScript = false;
+
 	if (bCanSee)
 	{
+		
+
 		if (m_eNPC_Type == NPC_TYPE::NPC_SHOP)
+		{
+			m_bShowScript = true;
 			__super::Change_Script(TEXT("앗! 폭탄 신발보다 싸다!"));
+		}
 		else if ((m_eNPC_Type == NPC_TYPE::NPC_INTERN) && (m_iScriptNum == 0))
+		{
+			m_bShowScript = true;
 			__super::Change_Script(TEXT("저기요! 잠깐만요!"));
-		else if ((m_eNPC_Type == NPC_TYPE::NPC_LAST) && (m_iScriptNum == 4))
-			__super::Change_Script(TEXT("잠깐 내 마지막 말을 들어줘요..."));
+		}
+		
 	}
 
+	
 }
 
 

@@ -36,7 +36,7 @@ HRESULT CMelee_ShotGun::Initialize(void* pArg)
 	m_fSpec_PushedPower = 20.f;
 	m_fSpec_PushedPower_Decrease = 0.f;
 	m_iColliderType = _int(CCollider::TYPE_SPHERE);
-	m_fSpec_Time = 0.1f;
+	m_fSpec_Time = 0.15f;
 	m_bTransParent = true;
 	m_fAlpah = 0.5f;
 

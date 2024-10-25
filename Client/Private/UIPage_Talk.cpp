@@ -230,7 +230,7 @@ void CUIPage_Talk::Ready_Script()
 	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pScript = new _tchar[100];
 	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pSelect = new _tchar[100];
 	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pName = TEXT("도적단 인턴");
-	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pScript = TEXT("네! 강도단 인턴이에요.");
+	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pScript = TEXT("네! 도적단 인턴이에요.");
 	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][2]->pSelect = TEXT("저도 총은 있어요!");
 
 	m_vecScript[_int(NPC_TYPE::NPC_INTERN)][3] = new SCRIPT;

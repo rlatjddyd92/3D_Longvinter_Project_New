@@ -56,6 +56,29 @@ void CMainApp::Update(_float fTimeDelta)
 {
 	m_pGameInstance->Update_Engine(fTimeDelta);
 	m_fFPS = fTimeDelta;
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_0) & 0x80)
+	{
+		if (m_bClip)
+		{
+			ClipCursor(NULL);
+			m_bClip = false;
+		}
+		else
+		{
+			HWND hwnd = GetForegroundWindow();  // 현재 활성화된 윈도우를 가져옴
+			RECT windowRect;
+
+			// 윈도우의 좌표와 크기를 가져온다
+			if (GetWindowRect(hwnd, &windowRect)) {
+				// 윈도우 내부로 마우스 커서를 제한
+				ClipCursor(&windowRect);
+			}
+
+			m_bClip = true;
+		}
+			
+	}
 }
 
 HRESULT CMainApp::Render()
@@ -67,7 +90,7 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Draw_Engine();
 
-	m_fFPS = 1.f / m_fFPS;
+	/*m_fFPS = 1.f / m_fFPS;
 	_int iFPS = m_fFPS / 1;
 	_tchar* tTemp = new _tchar[5];
 
@@ -78,11 +101,11 @@ HRESULT CMainApp::Render()
 	if (iFPS < 30)
 		vFPSColor = { 220.f / 255.f,20.f / 255.f,60.f / 255.f,1.f };
 
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), tTemp, _vector{ 1200.f,100.f,0.f,0.f }, 0.8f, false, vFPSColor);
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), tTemp, _vector{ 1200.f,100.f,0.f,0.f }, 0.8f, false, vFPSColor);*/
 
 	m_pGameInstance->Render_End();
 
-	Safe_Delete_Array(tTemp);
+	//Safe_Delete_Array(tTemp);
 
 	
 

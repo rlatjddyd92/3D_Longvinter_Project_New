@@ -370,6 +370,8 @@ private: // <- 게임 플레이 조정
 	_bool					m_bGetQuest = false;
 	_bool					m_bFinishQuest = false;
 
+	
+
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };

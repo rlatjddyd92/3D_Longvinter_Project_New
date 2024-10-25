@@ -52,7 +52,12 @@ public: // 커서 관련 함수
 
 
 public: // 툴팁 관련 함수 
-	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_bShowTooltip = true;  m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) 
+	{ 
+		
+		m_bShowTooltip = true;  
+		m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex);
+	}
 
 
 public: 
@@ -93,6 +98,8 @@ public:
 
 private:
 	_uint m_iTextureIndex = 0;
+
+
 
 	list<CUIPage*> m_Pagelist;
 

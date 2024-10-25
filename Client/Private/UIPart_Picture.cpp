@@ -27,6 +27,13 @@ HRESULT CUIPart_Picture::Initialize(void* pArg)
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
+	if (m_eType == UIPICTURE_TYPE::PICTUER_HP)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 255.f / 255.f;
+		m_fRGB[1] = 215.f / 255.f;
+		m_fRGB[2] = 0.f / 255.f;
+	}
 	
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
@@ -85,7 +92,10 @@ HRESULT CUIPart_Picture::Ready_Components()
 			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 1))
 			return E_FAIL;
 
-	
+	if (m_eType == PICTUER_HP)
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Energy_Bar"),
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom)), 1))
+			return E_FAIL;
 
 
 	return S_OK;

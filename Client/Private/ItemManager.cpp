@@ -491,6 +491,11 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 			CancelPick();
 			return E_FAIL;
 		}
+		if ((iIndex == 0) || (iIndex == 1))
+		{
+			CancelPick();
+			return E_FAIL;
+		}
 			
 
 		TINFO tTemp = m_tPickedItem;

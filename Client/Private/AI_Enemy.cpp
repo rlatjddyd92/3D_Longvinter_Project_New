@@ -29,13 +29,15 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
 	{
 		m_iBody = _int(HUMAN_BODY::BODY_RED);
-		m_fDetective_Length = 10.f;
+		m_fDetective_Length = 7.f;
 		m_fClosuerLimit_Length = 0.f;
 		m_fAttack_Length = 0.f;
 		m_eWeapon = ITEMINDEX::ITEM_END;
 	}
 	else
 	{
+
+		m_fDetective_Length = 10.f;
 		_int iWeapon = _int(m_pGameInstance->Get_Random_Normal() * 1000) % 3;
 
 		_float fAdjust = m_pGameInstance->Get_Random(0.f, 3.f) - m_pGameInstance->Get_Random(0.f, 3.f);
@@ -97,7 +99,7 @@ HRESULT CAI_Enemy::Initialize(void* pArg)
 	
 
 	
-	m_fDetective_Length = 10.f;
+	
 
 	
 		
@@ -167,6 +169,14 @@ void CAI_Enemy::Priority_Update(_float fTimeDelta)
 
 void CAI_Enemy::Update(_float fTimeDelta)
 {
+	if (GET_INSTANCE->IsFinishQuest())
+	{
+		__super::SetDead();
+		return;
+	}
+		
+
+
 	if (m_fHp <= 0.f)
 	{
 		if (m_eEnemy_Type == ENEMY_TYPE::ENEMY_TYPE_EXPLOSION)
@@ -272,7 +282,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 			return;
 
 
-		__super::Add_Hp(-10.f);
+		__super::Add_Hp(-30.f);
 		_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{ 0.f, 0.2f, 0.f, 0.f };
 		_float3 fDirec{};
 		XMStoreFloat3(&fDirec, vDirec);
@@ -309,7 +319,7 @@ void CAI_Enemy::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION 
 
 
 
-			__super::Add_Hp(-30.f);
+			__super::Add_Hp(-10.f);
 
 			_float3 fDirec = tOpponent.pTransform->Get_Pushed_Dir();
 			fDirec.y = 0.1f;

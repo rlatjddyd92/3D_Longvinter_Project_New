@@ -64,6 +64,31 @@ void CUIPage_User::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
+
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		if (GET_INSTANCE->Get_Player_Pointer() != nullptr)
+	{
+		_int iHp = _int(GET_INSTANCE->Get_Player_Pointer()->Get_Hp());
+
+		_int iRender = (iHp / 100);
+		_int iMiddle = (iHp % 100);
+		_int iNotRender = 10 - iRender - 1;
+
+		for (_int i = 0; i < 10; ++i)
+		{
+			if (i < iNotRender)
+				m_vecHp[i]->Set_UISize(0.f, 0.f);
+			else if (i > iNotRender)
+				m_vecHp[i]->Set_UISize(20.f, 20.f);
+			else
+				m_vecHp[i]->Set_UISize(20.f * (_float(iMiddle) / 100.f), 20.f * (_float(iMiddle) / 100.f));
+
+		}
+	}
+	
+
+
+
 }
 
 HRESULT CUIPage_User::Render()
@@ -115,7 +140,9 @@ void CUIPage_User::AddRender_UIPage()
 	if (!m_vecPart[_int(PART_INTER_C)]->GetOff())
 		m_vecPart[_int(PART_INTER_C)]->AddRender_UIPart();
 
-
+	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
+		for (auto& iter : m_vecHp)
+			iter->AddRender_UIPart();
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
@@ -134,7 +161,15 @@ void CUIPage_User::Ready_UIPart()
 	m_vecPart[_int(PART_INTER_F)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
 	m_vecPart[_int(PART_INTER_C)] = static_cast<CUIPart*>(GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_INTER_FUNCTION, 0.f, 0.f, 100.f, 12.f, false, false));
 
+	m_vecHp.resize(10);
 	
+	for (_int i = 0; i < 10; ++i)
+	{
+		m_vecHp[i] = GET_INSTANCE->MakeUIPart_Picture(CUIPart_Picture::PICTUER_HP, 1000.f + (i * 25.f), 680.f, 20.f, 20.f);
+	}
+
+
+
 }
 
 _bool CUIPage_User::Key_Action()
@@ -250,7 +285,10 @@ void CUIPage_User::Free()
 {
 	__super::Free();
 
+	for (auto& iter : m_vecHp)
+		Safe_Release(iter);
 
+	m_vecHp.clear();
 
 	for (auto& iter : m_vecPart)
 		Safe_Release(iter);

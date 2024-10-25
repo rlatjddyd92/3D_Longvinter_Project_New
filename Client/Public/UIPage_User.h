@@ -61,6 +61,8 @@ private:
 	HRESULT Ready_Components();
 
 	vector<CUIPart*> m_vecPart;
+	vector<CUIPart_Picture*> m_vecHp;
+
 private:
 	// 창 이동, 크기 조절 관련 변수 
 	_bool m_bMoving = false;

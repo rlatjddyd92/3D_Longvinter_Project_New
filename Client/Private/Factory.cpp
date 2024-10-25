@@ -326,7 +326,7 @@ HRESULT CFactory::Ready_Prototype_Texture()
 	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Human/Human_Face_Sad.dds"), 1))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Human_Face_Sad"),
+	if (FAILED(m_pGameInstance->Add_Prototype(_uint(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Texture_Energy_Bar"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Bar/T_EnergyBar_Single.dds"), 1))))
 		return E_FAIL;
 

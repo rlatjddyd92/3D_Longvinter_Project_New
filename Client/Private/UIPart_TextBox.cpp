@@ -139,6 +139,9 @@ HRESULT CUIPart_TextBox::Render()
 		if (!m_pHost->Get_ShowScript())
 			return S_OK;
 
+		if (m_pHost->Get_Script() == TEXT("¾øÀ½"))
+			return S_OK;
+
 		_float3 fPosition{};
 		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
 		XMStoreFloat3(&fPosition, vPosition);
