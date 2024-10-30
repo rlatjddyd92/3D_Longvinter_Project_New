@@ -36,6 +36,18 @@ HRESULT CEffectManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Fire"), TEXT("Prototype_Effect_Particle_Fire"));
 	m_vecEffect[_int(EFFECT_TYPE::EFFECT_PARTICLE_FIRE)] = static_cast<CParticle_Fire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Fire"), -1));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Debris"), TEXT("Prototype_Effect_Particle_Debris"));
+	m_vecEffect[_int(EFFECT_TYPE::EFFECT_PARTICLE_DEBRIS)] = static_cast<CParticle_Debris*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Debris"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Trail"), TEXT("Prototype_Effect_Particle_Trail"));
+	m_vecEffect[_int(EFFECT_TYPE::EFFECT_PARTICLE_TRAIL)] = static_cast<CParticle_Trail*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Trail"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Hit"), TEXT("Prototype_Effect_Particle_Hit"));
+	m_vecEffect[_int(EFFECT_TYPE::EFFECT_PARTICLE_HIT)] = static_cast<CParticle_Fire*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Hit"), -1));
+
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Flame"), TEXT("Prototype_Effect_Particle_Flame"));
+	m_vecEffect[_int(EFFECT_TYPE::EFFECT_PARTICLE_FLAME)] = static_cast<CParticle_Flame*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Effect_Particle_Flame"), -1));
+	
 
 	return S_OK;
 }
@@ -60,9 +72,9 @@ HRESULT CEffectManager::Render()
 	return S_OK;
 }
 
-void CEffectManager::MakeEffect(EFFECT_TYPE eType, _float3 fPosition)
+void CEffectManager::MakeEffect(EFFECT_TYPE eType, _float3 fPosition, _float3 fDirec, _float fTime)
 {
-	m_vecEffect[_int(eType)]->AddEffectBySpec(fPosition);
+	m_vecEffect[_int(eType)]->AddEffectBySpec(fPosition, fDirec, fTime);
 }
 
 HRESULT CEffectManager::Ready_Components()

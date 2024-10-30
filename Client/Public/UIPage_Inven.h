@@ -48,6 +48,9 @@ private:
 
 	vector<CUIPart_Cell*> m_vecInvenCell;
 
+	CUIPart_Picture* m_pPicture_Cash = { nullptr };
+	CUIPart_TextBox* m_pTextBox_Cash = { nullptr };
+
 private:
 	// 창 이동, 크기 조절 관련 변수 
 	_bool m_bMoving = false;

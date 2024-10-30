@@ -32,6 +32,12 @@ public:
 
 	virtual _bool Key_Action() override;
 
+	void OpenShop(_int iShopNum)
+	{
+		__super::SetOn();
+		m_iNowShopNum = iShopNum;
+	}
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
@@ -49,6 +55,8 @@ private:
 	_bool m_bMoving = false;
 	_float m_fBeforeX = 0.f;
 	_float m_fBeforeY = 0.f;
+
+	_int m_iNowShopNum = -1;
 
 public:
 	static CUIPage_Shop* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

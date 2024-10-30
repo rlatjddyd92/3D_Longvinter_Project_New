@@ -176,8 +176,8 @@ CGameObject* CUIPage_Option::Clone(void* pArg)
 void CUIPage_Option::Free()
 {
 	__super::Free();
+	Safe_Release(m_pButton_Close);
+	Safe_Release(m_pBack_Window);
+	Safe_Release(m_pBack_Window_Header);
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
 }

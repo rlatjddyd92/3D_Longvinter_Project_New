@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPart.h"
+#include "Longvinter_Container.h"
 
 BEGIN(Engine)
 class CShader;
@@ -19,7 +20,11 @@ public:
 		TEXTBOX_NORMAL,
 		TEXTBOX_NOTICE,
 		TEXTBOX_SELECT,
+		TEXTBOX_INTER_NAME,
+		TEXTBOX_INTER_FUNCTION,
+		TEXTBOX_CASH,
 		TEXTBOX_3D,
+		TEXTBOX_SCRIPT,
 		TEXTBOX_END
 	};
 
@@ -30,6 +35,7 @@ public:
 		UITEXTBOX_TYPE eType = UITEXTBOX_TYPE::TEXTBOX_END;
 		_bool bCenter = false;
 		_bool AutoRemove = false;
+		CLongvinter_Container* pHost = { nullptr };
 	} UITextBox_DESC;
 
 
@@ -51,6 +57,9 @@ public:
 	{ 
 		m_Text = Text;
 	}
+
+	void SetCash(_int iCash) { m_iCash = iCash; }
+
 	void SetFont(wstring Font) 
 	{
 		m_Font = Font;
@@ -63,6 +72,8 @@ protected:
 	UITEXTBOX_TYPE m_eType = UITEXTBOX_TYPE::TEXTBOX_END;
 	wstring m_Text = TEXT("none");
 
+	_int m_iCash = 0; // <- TextCash Àü¿ë 
+
 	_float m_fSize = 1.f;
 	wstring m_Font = TEXT("Font_Test1");
 
@@ -71,6 +82,8 @@ protected:
 	_float4 m_fTextColor = { 1.f,1.f,1.f,1.f };
 
 	_bool m_bAutoRemove = false;
+
+	CLongvinter_Container* m_pHost = { nullptr };
 
 private:
 	HRESULT Ready_Components();

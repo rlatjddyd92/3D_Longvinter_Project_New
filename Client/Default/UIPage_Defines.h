@@ -9,3 +9,6 @@
 #include "UIPage_Option.h"
 #include "UIPage_ToolTip.h"
 #include "UIPage_User.h"
+#include "UIPage_Shop.h"
+#include "UIPage_Hack.h"
+#include "UIPage_Talk.h"

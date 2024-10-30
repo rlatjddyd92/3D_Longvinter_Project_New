@@ -5,6 +5,7 @@
 #include "Body.h"
 #include "ClientInstance.h"
 #include "Tool.h"
+#include "Tool_Head.h"
 
 CContainer_Player::CContainer_Player(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLongvinter_Container{ pDevice, pContext }
@@ -43,6 +44,23 @@ HRESULT CContainer_Player::Initialize(void* pArg)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
+
+	GET_INSTANCE->Input_ContainerColliderPointer(eContainerType, static_cast<CLongvinter_Container*>(this), m_pColliderCom);
+
+	m_fHp = 1000.f;
+	m_fHp_Max = 1000.f;
+
+	//CTool_Head::HEAD_DESC ToolDesc{};
+	//ToolDesc.eType = CTool_Head::TYPE_NORMAL_1;
+	//ToolDesc.pParentState = &m_iState;
+	//ToolDesc.pParentWorldMatrix = &m_pTransformCom->Get_WorldMatrix();
+	//ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+
+	//if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &ToolDesc)))
+	//	return E_FAIL;
+
+	
+
 	return S_OK;
 }
 
@@ -58,6 +76,8 @@ void CContainer_Player::Priority_Update(_float fTimeDelta)
 void CContainer_Player::Update(_float fTimeDelta)
 {
 	
+	Add_Hp(fTimeDelta * 10.f);
+
 	__super::Update(fTimeDelta);
 	
 	Camera_Control(fTimeDelta);
@@ -128,7 +148,7 @@ void CContainer_Player::Late_Update(_float fTimeDelta)
 
 HRESULT CContainer_Player::Render()
 {
-
+	//m_Parts[PART_HEAD]->Render();
 	m_pColliderCom->Render();
 
 	return S_OK;
@@ -136,6 +156,73 @@ HRESULT CContainer_Player::Render()
 
 void CContainer_Player::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTION eIndex, CInterAction::INTER_INFO& tOpponent)
 {
+	__super::Collision_Reaction_InterAction(pPoint, eIndex, tOpponent);
+
+	CONTAINER eType = CONTAINER::CONTAINER_END;
+
+	if (pPoint)
+	{
+		CLongvinter_Container* pOpponent = static_cast<CLongvinter_Container*>(pPoint);
+		eType = pOpponent->GetContainerType();
+	}
+
+	
+
+	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
+	{
+		
+		__super::Add_Hp(-2.f);
+		_vector vDirec = XMLoadFloat3(&m_pColliderCom->GetBoundingCenter()) - XMLoadFloat3(&tOpponent.pCollider->GetBoundingCenter()) + _vector{ 0.f, 0.2f, 0.f, 0.f };
+		_float3 fDirec{};
+		XMStoreFloat3(&fDirec, vDirec);
+		m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.5f);
+
+		
+	}
+
+	if ((eType == CONTAINER::CONTAINER_ENEMY) || (eType == CONTAINER::CONTAINER_TURRET))
+	{
+		m_fActionTimer = 0.5f;
+
+		m_iFace = _int(HUMAN_FACE::FACE_SAD);
+		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
+
+		for (_int i = 0; i < 10; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_HIT, m_pColliderCom->GetBoundingCenter());
+
+		if (eIndex == INTERACTION::INTER_BULLET_MACHINEGUN)
+		{
+			__super::Add_Hp(-2.f);
+
+
+			_float3 fDirec = { 0.f,0.4f,0.f };
+			
+
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 0.3f);
+		}
+		if (eIndex == INTERACTION::INTER_MELEE_NORMAL)
+		{
+			__super::Add_Hp(-2.f);
+
+			
+		}
+		else if (eIndex == INTERACTION::INTER_MELEE_SHOTGUN)
+		{
+			if (pPoint == nullptr)
+				return;
+
+
+
+			__super::Add_Hp(-2.f);
+
+			_float3 fDirec = { 0.f,1.f,0.f };
+
+			m_pTransformCom->Set_Pushed_Power(fDirec, GRAVITY_ACCELE * 1.f);
+		}
+
+	}
+
+
 }
 
 void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex)
@@ -144,6 +231,7 @@ void CContainer_Player::Collision_Reaction_MadeInterAction(CGameObject* pPoint, 
 
 void CContainer_Player::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
+
 }
 
 void CContainer_Player::DeadAction()
@@ -185,18 +273,42 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			m_iState = STATE_WALK_R;
 			bMove = true;
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		{
-			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+			if (m_bJump)
+			{
+				m_bJump = false;
+				m_bTwiceJump = false;
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_JUMP, SOUND_CHANNEL::CH_PLAYER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+			}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+				m_bTwiceJump = true;
+			}
 		}
+		else if (m_bTwiceJump)
+		{
+ 			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
+				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 3.f);
+				m_bTwiceJump = false;
+			}
+		}
+		
+
+	
 		
 		
 		_long		MouseMove = { 0 };
 
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{
-			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.1f * fTimeDelta * MouseMove);
+			if (!m_bCameraFix)
+				m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 0.1f * fTimeDelta * MouseMove);
 		}
 
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
@@ -235,10 +347,20 @@ void CContainer_Player::Moving_Control(_float fTimeDelta)
 			m_iState = STATE_WALK_R;
 			bMove = true;
 		}
-		if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+		
+		if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
 		{
-			if (GET_INSTANCE->Check_OnGround(m_pColliderCom->GetBoundingCenter(), m_pColliderCom->GetBoundingExtents()))
+			if (m_bJump)
+			{
+				m_bJump = false;
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_JUMP, SOUND_CHANNEL::CH_PLAYER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+			}
+
+			if (m_pGameInstance->Get_DIKeyState(DIK_SPACE) & 0x80)
+			{
 				m_pTransformCom->Set_Pushed_Power(_float3(0.f, 1.f, 0.f), GRAVITY_ACCELE * 2.f);
+				m_bJump = true;
+			}
 		}
 		
 		_float3 fPoint = GET_INSTANCE->CheckPicking();
@@ -277,22 +399,26 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 	if (m_pGameInstance->Get_DIKeyState(DIK_1) & 0x80)
 	{
 		m_eWeaponType = WEAPON_MAIN;
-		GET_INSTANCE->ShowInformMessage(TEXT("주 무기로 변경"));
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("1번 키 : 무기 1로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_2) & 0x80)
 	{
 		m_eWeaponType = WEAPON_SUB;
-		GET_INSTANCE->ShowInformMessage(TEXT("보조 무기로 변경"));
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("2번 키 : 무기 2로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_3) & 0x80)
 	{
 		m_eWeaponType = WEAPON_THROW;
-		GET_INSTANCE->ShowInformMessage(TEXT("투척 무기로 변경"));
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("3번 키 : 무기 3로 변경"));
 	}
 	if (m_pGameInstance->Get_DIKeyState(DIK_4) & 0x80)
 	{
 		m_eWeaponType = WEAPON_END;
-		GET_INSTANCE->ShowInformMessage(TEXT("무기 해제"));
+		GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_WEAPONSLOT, SOUND_CHANNEL::CH_SYSTEM_UI, 10.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("4번 키 : 무기 해제"));
 	}
 
 	ITEMINDEX eNowType = ITEMINDEX::ITEM_END;
@@ -340,7 +466,7 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 			{
 				_float3 fStartPostion{};
 				_float3 fPushedDirec{};
-				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.f + _vector{ 0.f, 1.f, 0.f, 0.f };
+				_vector vStartPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 1.2f + _vector{ 0.f, 1.f, 0.f, 0.f };
 				XMStoreFloat3(&fStartPostion, vStartPosition);
 
 				if (GET_INSTANCE->GetCameraMode() == CAMERAMODE::CAMERA_FIRST)
@@ -348,6 +474,14 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 				else
 					XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
+				if (eNowType == ITEMINDEX::ITEM_MACHINEGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_LANDMINE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_MACHETE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_MELEE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (eNowType == ITEMINDEX::ITEM_SHOTGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_SHOTGUN, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
 
 				__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 			}
@@ -369,6 +503,9 @@ void CContainer_Player::Weapon_Control(_float fTimeDelta)
 				XMStoreFloat3(&fPushedDirec, GET_INSTANCE->GetCameraLook());
 			else
 				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+
+			if (eNowType == ITEMINDEX::ITEM_GRANADE)
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_PLAYER_WEAPON, 10.f, m_pColliderCom->GetBoundingCenter());
 
 			__super::UsingWeapon(eNowType, fStartPostion, fPushedDirec);
 
@@ -410,23 +547,38 @@ void CContainer_Player::Camera_Control(_float fTimeDelta)
 {
 	__super::Camera_Control(fTimeDelta);
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_F) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_B) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
-		GET_INSTANCE->ShowInformMessage(TEXT("F키 : 숄더뷰 모드"));
-		GET_INSTANCE->SetLenderLength(35.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("B키 : 숄더뷰 모드"));
+		GET_INSTANCE->SetLenderLength(100.f);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_E) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_N) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_EDITOR);
-		GET_INSTANCE->ShowInformMessage(TEXT("E키 : 에디터 카메라 모드"));
-		GET_INSTANCE->SetLenderLength(50.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("N키 : 에디터 카메라 모드"));
+		GET_INSTANCE->SetLenderLength(100.f);
 	}
-	if (m_pGameInstance->Get_DIKeyState(DIK_T) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_M) & 0x80)
 	{
 		GET_INSTANCE->SetCameraMode(CAMERAMODE::CAMERA_THIRD);
-		GET_INSTANCE->ShowInformMessage(TEXT("T키 : 3인칭 모드"));
-		GET_INSTANCE->SetLenderLength(20.f);
+		GET_INSTANCE->ShowInformMessage(TEXT("M키 : 3인칭 모드"));
+		GET_INSTANCE->SetLenderLength(100.f);
+	}
+
+
+	if (m_pGameInstance->Get_DIKeyState(DIK_L) & 0x80)
+	{
+		if (m_bCameraFix)
+		{
+			m_bCameraFix = false;
+			GET_INSTANCE->ShowInformMessage(TEXT("L키 : 카메라 고정 해제"));
+		}
+		else if (!m_bCameraFix)
+		{
+			m_bCameraFix = true;
+			GET_INSTANCE->ShowInformMessage(TEXT("L키 : 카메라 고정"));
+		}
 	}
 }
 
@@ -434,7 +586,7 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 {
 	__super::Test_Control(fTimeDelta);
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
+	/*if (m_pGameInstance->Get_DIKeyState(DIK_5) & 0x80)
 	{
 		++m_iState;
 		
@@ -452,36 +604,21 @@ void CContainer_Player::Test_Control(_float fTimeDelta)
 	}
 		
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_9, false) & 0x80)
-	{
-		++m_iBody;
-		if (m_iBody >= _int(HUMAN_BODY::BODY_END))
-			m_iBody = 0;
-		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Body(HUMAN_BODY(m_iBody));
-	}
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_8, false) & 0x80)
-	{
-		++m_iFace;
-		if (m_iFace >= _int(HUMAN_FACE::FACE_END))
-			m_iFace = 0;
-		static_cast<CBody_Human*>(m_Parts[PART_BODY])->Set_Human_Face(HUMAN_FACE(m_iFace));
-	}
 
-	if (m_pGameInstance->Get_DIKeyState(DIK_LALT, true) & 0x80)
+	if (m_pGameInstance->Get_DIKeyState(DIK_0, false) & 0x80)
 	{
-		_float fLength = GET_INSTANCE->GetLenderLength();
-
-		if (m_pGameInstance->Get_DIKeyState(DIK_UP, true) & 0x80)
+		if (GET_INSTANCE->GetMonsterMake())
 		{
-			GET_INSTANCE->SetLenderLength(fLength + fTimeDelta);
+			GET_INSTANCE->SetMakeMonster(false);
+			GET_INSTANCE->ShowInformMessage(TEXT("몬스터 생성기 OFF"));
 		}
-		else if (m_pGameInstance->Get_DIKeyState(DIK_DOWN, true) & 0x80)
+		else 
 		{
-			GET_INSTANCE->SetLenderLength(fLength - fTimeDelta);
+			GET_INSTANCE->SetMakeMonster(true);
+			GET_INSTANCE->ShowInformMessage(TEXT("몬스터 생성기 ON"));
 		}
-			
-	}
+	}*/
 }
 
 void CContainer_Player::Set_AI_Status(_float fTimeDelta)
@@ -508,20 +645,18 @@ HRESULT CContainer_Player::Ready_PartObjects()
 	if (FAILED(__super::Add_PartObject(PART_BODY, TEXT("Prototype_GameObject_Body_Human"), &BodyDesc)))
 		return E_FAIL;
 
+	CTool_Head::HEAD_DESC		HeadDesc{};
+	HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_1;
+	HeadDesc.pParentState = &m_iState;
+	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HeadDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+
+	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &HeadDesc)))
+		return E_FAIL;
+
 	CTool::TOOL_DESC		ToolDesc{};
 	ToolDesc.pParentState = &m_iState;
 	ToolDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-
-
-
-
-
-	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
-
-	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
-		return E_FAIL;
-
-
 
 	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("spine_01");
 

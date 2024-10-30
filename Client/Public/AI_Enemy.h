@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Container_Enemy.h"
+#include "Container_Turret.h"
 
 // [AI 객체]
 // 1. NPC/몬스터 조작용 객체
@@ -52,6 +53,8 @@ protected:
 
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta) override;
+
+	CContainer_Turret* pTurret = { nullptr };
 
 private:
 	HRESULT Ready_Components();

@@ -26,6 +26,8 @@ HRESULT CUIPart_Bar::Initialize(void* pArg)
 	m_eType = Desc->eType;
 	m_pHost = Desc->pHost;
 
+	Safe_AddRef(m_pHost);
+
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -86,7 +88,7 @@ HRESULT CUIPart_Bar::Render()
 {
 	if (m_eType == BAR_ENEMY_HP)
 	{
-		if ((m_pHost == nullptr) && (m_pHost->GetDead()))
+		if ((m_pHost == nullptr) || (m_pHost->GetDead()))
 		{
 			__super::SetDead();
 			return S_OK;
@@ -99,7 +101,7 @@ HRESULT CUIPart_Bar::Render()
 		if (!GET_INSTANCE->GetIsLender(fPosition))
 			return S_OK;
 		
-		if (!SetPositionByObject(&m_fX, &m_fY, XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
+		if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
 			return S_OK;
 		
 		m_fFill_X = m_fX;
@@ -217,8 +219,6 @@ void CUIPart_Bar::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+
 	Safe_Release(m_pHost);
 }

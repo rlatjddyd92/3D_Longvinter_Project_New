@@ -54,6 +54,9 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), TEXT("Prototype_Inter_Melee_ShotGun"));
 	m_vecInterAction[_int(INTERACTION::INTER_MELEE_SHOTGUN)] = static_cast<CMelee_ShotGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_ShotGun"), -1));
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_Normal"), TEXT("Prototype_Inter_Melee_Normal"));
+	m_vecInterAction[_int(INTERACTION::INTER_MELEE_NORMAL)] = static_cast<CMelee_Normal*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Melee_Normal"), -1));
+
 	//m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), TEXT("Prototype_Inter_Bullet_MachineGun"));
 	//m_vecInterAction[_int(INTERACTION::INTER_BULLET_MACHINEGUN)] = static_cast<CBullet_MachineGun*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_Bullet_MachineGun"), -1));
 
@@ -93,6 +96,10 @@ HRESULT CInterActionManager::Initialize(void* pArg)
 	m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_MonsterMaker"), -1));
 	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_MONSTERMAKER)])->SetLandObject(INTERACTION::INTER_MONSTERMAKER);
 
+	m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Control"), TEXT("Prototype_Inter_LandObject_NonAnim"));
+	m_vecInterAction[_int(INTERACTION::INTER_CONTROL)] = static_cast<CLandObject_NonAnim*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Inter_LandObject_Control"), -1));
+	static_cast<CLandObject_NonAnim*>(m_vecInterAction[_int(INTERACTION::INTER_CONTROL)])->SetLandObject(INTERACTION::INTER_CONTROL);
+
 	return S_OK;
 }
 
@@ -116,17 +123,49 @@ void CInterActionManager::Late_Update(_float fTimeDelta)
 	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_ENEMY);
 	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_ENEMY);
+
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_PLAYER);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_ITEM, CONTAINER::CONTAINER_PLAYER);
+
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_TURRET);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_TURRET);
+
+	Check_Collision_InterAction_Container(INTERACTION::INTER_CONTROL, CONTAINER::CONTAINER_PLAYER);
+
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_STRAIGHT, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_BULLET_MACHINEGUN, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_EXPLOSION_NORMAL, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_FIRE, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_THORW_MINE, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_MELEE_SHOTGUN, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_NPC);
+	Check_Collision_InterAction_Container(INTERACTION::INTER_DOOR, CONTAINER::CONTAINER_PLAYER);
+
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_ROCK);
 	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_TREE);
+	Check_Collision_InterAction(INTERACTION::INTER_EXPLOSION_NORMAL, INTERACTION::INTER_DOOR);
+
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_APPLETREE);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_BUSH);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_ROCK);
 	Check_Collision_InterAction(INTERACTION::INTER_FIRE, INTERACTION::INTER_TREE);
-
+	Check_Collision_InterAction(INTERACTION::INTER_DOOR, INTERACTION::INTER_THORW_MINE);
 
 	Check_Collision_Container(CONTAINER::CONTAINER_PLAYER, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_ENEMY);
+	Check_Collision_Container(CONTAINER::CONTAINER_ENEMY, CONTAINER::CONTAINER_TURRET);
 }
 
 HRESULT CInterActionManager::Render()
@@ -163,9 +202,9 @@ void CInterActionManager::Input_ContainerColliderPointer(CONTAINER eContanerType
 	m_vecConInterlist[_int(eContanerType)].push_back(pNew);
 }
 
-void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
+void CInterActionManager::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle, _float fTime)
 {
-	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
+	m_vecInterAction[_int(eInterType)]->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle, fTime);
 }
 
 void CInterActionManager::Delete_LastInterAction(INTERACTION eInterType)
@@ -361,6 +400,23 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 				continue;
 			}
 
+			if ((eFirst == CONTAINER::CONTAINER_ENEMY) && (eSecond == CONTAINER::CONTAINER_TURRET))
+			{
+				if (static_cast<CContainer_Turret*>((*iterB)->pPoint)->GetHack(0))
+				{
+					_vector vDistance = XMLoadFloat3(&(*iterA)->pCollider->GetBoundingCenter()) - XMLoadFloat3(&(*iterB)->pCollider->GetBoundingCenter());
+					_float fDistance = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
+					if (fDistance < 10.f)
+					{
+						(*iterA)->pPoint->Collision_Reaction_Container((*iterB)->pPoint, eSecond);
+					}
+				}
+
+				
+			}
+
+
+
 
 			CCollider::TYPE eType = CCollider::TYPE::TYPE_AABB;
 			// 추후 상대방 콘테이너 객체에 따라 값을 변경하는 코드 추가 필요 
@@ -370,6 +426,7 @@ void CInterActionManager::Check_Collision_Container(CONTAINER eFirst, CONTAINER 
 				(*iterA)->pPoint->Collision_Reaction_Container((*iterB)->pPoint, eSecond);
 				(*iterB)->pPoint->Collision_Reaction_Container((*iterA)->pPoint, eFirst);
 			}
+			
 
 			++iterB;
 		}

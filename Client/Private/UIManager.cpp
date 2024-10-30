@@ -47,6 +47,7 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 {
 	m_iTextureIndex = 0;
 
+	m_bActiveInteraction = false;
 	m_bShowTooltip = false;
 
 	POINT mousePos{};
@@ -56,6 +57,9 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 
 	m_fX = mousePos.x + (m_fSizeX * 0.5f);
 	m_fY = mousePos.y + (m_fSizeY * 0.5f);
+
+	m_bIsShopOpen = false;
+	m_bIsHackOpen = false;
 }
 
 void CUIManager::Update(_float fTimeDelta)
@@ -109,6 +113,18 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 	m_pPage_User->AddRender_UIPage();
 
+	for (list<CUIPart_TextBox*>::iterator iter = m_Scriptlist.begin(); iter != m_Scriptlist.end();)
+	{
+		if (((*iter) == nullptr) || ((*iter)->GetDead()))
+		{
+			iter = m_Scriptlist.erase(iter);
+		}
+		else
+		{
+			(*iter)->AddRender_UIPart();
+			++iter;
+		}
+	}
 
 	for (list<CUIPart_Bar*>::iterator iter = m_EnemyHplist.begin(); iter != m_EnemyHplist.end();)
 	{
@@ -141,14 +157,6 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		m_pPage_Main->SetOn();
 		m_pPage_Main->AddRender_UIPage();
 	}
-
-	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
-		if (m_pGameInstance->Get_DIKeyState(DIK_L))
-			if (m_pPage_Test->GetOff())
-		{
-			m_pPage_Test->SetOn();
-			m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Test));
-		}
 
 	if (GET_INSTANCE->GetNowLevel() == LEVELID::LEVEL_GAMEPLAY)
 		if (m_pGameInstance->Get_DIKeyState(DIK_I))
@@ -302,6 +310,55 @@ void CUIManager::MakeSymbol(CLongvinter_Container* pHost)
 	m_Symbollist.push_back(pNew);
 }
 
+void CUIManager::MakeScript(CLongvinter_Container* pHost)
+{
+	CUIPart_TextBox* pNew = GET_INSTANCE->MakeUIPart_TextBox(CUIPart_TextBox::TEXTBOX_SCRIPT, 0.f, 0.f, 0.f, 0.f, true, false, 0.f, pHost);
+	m_Scriptlist.push_back(pNew);
+}
+
+void CUIManager::OpenShopPage(_int iShopNum)
+{
+	m_bIsShopOpen = true;
+
+	if (m_pPage_Shop->GetOff())
+	{
+		static_cast<CUIPage_Shop*>(m_pPage_Shop)->OpenShop(iShopNum);
+		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Shop));
+	}
+}
+
+void CUIManager::OpenHackPage(CContainer_Turret* pTurret)
+{
+	m_bIsHackOpen = true;
+
+	if (m_pPage_Hack->GetOff())
+	{
+		m_pPage_Hack->SetHost(pTurret);
+		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Hack));
+	}
+}
+
+void CUIManager::OpenTalkPage(CContainer_NPC* pNPC)
+{
+	if (pNPC == nullptr)
+	{
+		m_bIsTalkOpen = false;
+		m_pPage_Talk->SetHost(pNPC);
+		return;
+	}
+		
+
+
+	m_bIsTalkOpen = true;
+
+	if (m_pPage_Talk->GetOff())
+	{
+		m_pPage_Talk->SetHost(pNPC);
+		m_Pagelist.push_back(static_cast<CUIPage*>(m_pPage_Talk));
+	}
+}
+
+
 HRESULT CUIManager::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -351,6 +408,12 @@ void CUIManager::Ready_UIPage()
 
 	m_pPage_User = GET_INSTANCE->MakeUIPage_User();
 	Safe_AddRef(m_pPage_User);
+
+	m_pPage_Hack = GET_INSTANCE->MakeUIPage_Hack();
+	Safe_AddRef(m_pPage_Hack);
+
+	m_pPage_Talk = GET_INSTANCE->MakeUIPage_Talk();
+	Safe_AddRef(m_pPage_Talk);
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -391,7 +454,9 @@ void CUIManager::Free()
 	Safe_Release(m_pPage_Option);
 	Safe_Release(m_pPage_ToolTip);
 	Safe_Release(m_pPage_User);
-	
+	Safe_Release(m_pPage_Shop); 
+	Safe_Release(m_pPage_Hack);
+	Safe_Release(m_pPage_Talk);
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
@@ -411,6 +476,11 @@ void CUIManager::Free()
 		Safe_Release(iter);
 
 	m_Symbollist.clear();
+
+	for (auto& iter : m_Scriptlist)
+		Safe_Release(iter);
+
+	m_Scriptlist.clear();
 
 	m_Pagelist.clear();
 }

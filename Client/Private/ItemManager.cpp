@@ -353,7 +353,20 @@ HRESULT CItemManager::Setting_ItemInfo()
 	
 	// 인벤 초기 세팅 
 	for (_int i = 0; i < _int(ITEMINDEX::ITEM_END); ++i)
+	{
+
+
 		m_vecInvenInfo[i] = m_vecItemInfo[i];
+		m_vecInvenInfo[i].bNew = true;
+	}
+
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_MEAT)].iCount = 0;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_MEAT)].eIndex = ITEMINDEX::ITEM_END;
+
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_AMMO)].iCount = 100;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_ARROW)].iCount = 100;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_IRON_INGOT)].iCount = 10;
+	m_vecInvenInfo[_int(ITEMINDEX::ITEM_FISH)].iCount = 50;
 
 	return S_OK;
 }
@@ -451,6 +464,8 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 			
 		if ((!m_tPickedItem.bStack) || (!bPlus))
 		{
+			
+
 			TINFO tTemp = m_tPickedItem;
 			_int iBefore = m_iBeforeIndex;
 			ITEMARRAY eBefore = m_eBeforeArray;
@@ -466,11 +481,17 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 
 			m_vecInvenInfo[iIndex] = tTemp;
 			m_vecInvenInfo[iIndex].bPicked = false;
+			m_vecInvenInfo[iIndex].bNew = true;
 		}
 	}
 	if (eArray == ITEMARRAY::ARRAY_EQUIP)
 	{
 		if (!m_tPickedItem.bIsTool)
+		{
+			CancelPick();
+			return E_FAIL;
+		}
+		if ((iIndex == 0) || (iIndex == 1))
 		{
 			CancelPick();
 			return E_FAIL;
@@ -491,6 +512,97 @@ HRESULT CItemManager::PutInItem(ITEMARRAY eArray, _int iIndex)
 				m_vecEquipInfo[iBefore].eIndex = ITEMINDEX::ITEM_END;
 		m_vecEquipInfo[iIndex] = tTemp;
 		m_vecEquipInfo[iIndex].bPicked = false;
+	}
+
+
+	return S_OK;
+}
+
+HRESULT CItemManager::PutInItem_NoMouse(ITEMARRAY eArray, _int iIndex)
+{
+	if (eArray != ITEMARRAY::ARRAY_INVEN)
+		return E_FAIL;
+
+	if (iIndex == _int(ITEMINDEX::ITEM_END))
+		return E_FAIL;
+
+	if (eArray == ITEMARRAY::ARRAY_INVEN)
+	{
+		_bool bPlus = false;
+		if (m_vecItemInfo[iIndex].bStack)
+		{
+			for (auto& iter : m_vecInvenInfo)
+				if (iter.eIndex == ITEMINDEX(iIndex))
+				{
+					iter.iCount += 1;
+					iter.bNew = true;
+					bPlus = true;
+
+					wstring strMessage = m_vecItemInfo[iIndex].strItemName;
+					strMessage += TEXT(" 1개 획득");
+
+					GET_INSTANCE->ShowInformMessage(strMessage);
+					return S_OK;
+				}
+		}
+
+
+		if ((!m_vecItemInfo[iIndex].bStack) || (!bPlus))
+		{
+			for (auto& iter : m_vecInvenInfo)
+			{
+				if (iter.eIndex == ITEMINDEX::ITEM_END)
+				{
+					iter.bNew = true;
+					iter = m_vecItemInfo[iIndex];
+					wstring strMessage = m_vecItemInfo[iIndex].strItemName;
+					strMessage += TEXT(" 1개 획득");
+
+					GET_INSTANCE->ShowInformMessage(strMessage);
+					return S_OK;
+					return S_OK;
+				}
+			}
+			return E_FAIL;
+		}
+	}
+	
+
+	return S_OK;
+}
+
+HRESULT CItemManager::SpendItem_NoMouse(ITEMARRAY eArray, _int iIndex)
+{
+	if (eArray != ITEMARRAY::ARRAY_INVEN)
+		return E_FAIL;
+
+	if (iIndex == _int(ITEMINDEX::ITEM_END))
+		return E_FAIL;
+
+	if (eArray == ITEMARRAY::ARRAY_INVEN)
+	{
+		_bool bMinus = false;
+
+			for (auto& iter : m_vecInvenInfo)
+				if (iter.eIndex == ITEMINDEX(iIndex))
+				{
+					iter.iCount -= 1;
+					if (iter.iCount <= 0)
+						iter.eIndex = ITEMINDEX::ITEM_END;
+					bMinus = true;
+
+					wstring strMessage = m_vecItemInfo[iIndex].strItemName;
+					strMessage += TEXT(" 1개 사용");
+
+					GET_INSTANCE->ShowInformMessage(strMessage);
+					return S_OK;
+				}
+		
+			wstring strMessage = m_vecItemInfo[iIndex].strItemName;
+			strMessage += TEXT(" : 해당 아이템이 없습니다.");
+
+			GET_INSTANCE->ShowInformMessage(strMessage);
+			return E_FAIL;
 	}
 
 

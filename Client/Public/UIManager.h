@@ -3,6 +3,8 @@
 #include "Client_Defines.h"
 #include "UIObject.h"
 #include "../Default/UIPage_Defines.h"
+#include "Container_Turret.h"
+#include "Container_NPC.h"
 
 // [UIManager]
 // 1. 각종 UI창, 시스템 클래스를 보관하고 필요에 따라 사용할 수 있게 하는 매니저 
@@ -50,12 +52,38 @@ public: // 커서 관련 함수
 
 
 public: // 툴팁 관련 함수 
-	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_bShowTooltip = true;  m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
+	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) 
+	{ 
+		
+		m_bShowTooltip = true;  
+		m_pPage_ToolTip->ShowToolTip(fCellX, fCellY, eArray, iIndex);
+	}
 
+
+public: 
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"), _vector Adjust = { 0.f,1.f,0.f,0.f })
+	{
+		if (m_bActiveInteraction)
+			return false;
+
+		m_pPage_User->Show_Interaction_Function(mHost, InterName, Function_E, Function_F, Function_C, Adjust);
+		m_bActiveInteraction = true;
+		return true;
+	}
 
 public:
 	void MakeEnemyHpBar(CLongvinter_Container* pHost);
 	void MakeSymbol(CLongvinter_Container* pHost);
+	void MakeScript(CLongvinter_Container* pHost);
+
+public: // <- 상점 관련 함수 
+	void OpenShopPage(_int iShopNum);
+	void OpenHackPage(CContainer_Turret* pTurret);
+	void OpenTalkPage(CContainer_NPC* pNPC);
+
+	_bool GetOpenShop() { return m_bIsShopOpen; }
+	_bool GetOpenHack() { return m_bIsHackOpen; }
+	_bool GetOpenTalk() { return m_bIsTalkOpen; }
 
 private:
 	HRESULT Ready_Components();
@@ -71,6 +99,8 @@ public:
 private:
 	_uint m_iTextureIndex = 0;
 
+
+
 	list<CUIPage*> m_Pagelist;
 
 	CUIPage_Main* m_pPage_Main = { nullptr };
@@ -81,16 +111,24 @@ private:
 	CUIPage_Option* m_pPage_Option = { nullptr };
 	CUIPage_ToolTip* m_pPage_ToolTip = { nullptr };
 	CUIPage_User* m_pPage_User = { nullptr };
-
-
+	CUIPage_Shop* m_pPage_Shop = { nullptr };
+	CUIPage_Hack* m_pPage_Hack = { nullptr };
+	CUIPage_Talk* m_pPage_Talk = { nullptr };
 
 	list<CUIPart_TextBox*> m_Informlist;
 	list<CUIPart_Bar*> m_EnemyHplist;
 	list<CUIPart_Symbol*> m_Symbollist;
+	list<CUIPart_TextBox*> m_Scriptlist;
 
 	_int m_iMaxInform = 10;
 
 	_bool m_bShowTooltip = false;
+
+	_bool m_bActiveInteraction = false;
+
+	_bool m_bIsShopOpen = false;
+	_bool m_bIsHackOpen = false;
+	_bool m_bIsTalkOpen = false;
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

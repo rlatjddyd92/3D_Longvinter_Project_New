@@ -76,6 +76,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	HRESULT RenderSurface(SURFACE* pSurface);
+
 public:
 	void SaveMap(const _char* pPath);
 	void LoadMap(const _char* pPath);
@@ -85,6 +87,8 @@ public:
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0);
 
 	_float3 CheckPicking();
+
+	_bool CheckPicking(_float3 fLook);
 
 	void SetBedRock(_int iX, _int iY, _int iZ);
 	void HighLight_Surface(_bool bLinked); // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 

@@ -15,6 +15,18 @@ HRESULT CLight::Initialize(const LIGHT_DESC& LightDesc)
 
 HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
+	if (m_iFrame > 0)
+	{
+		--m_iFrame;
+		if (m_iFrame <= 0)
+		{
+			m_bDead = true;
+			return S_OK;
+		}
+	}
+
+
+
 	_uint		iPassIndex = { 0 };
 
 	if (LIGHT_DESC::TYPE_DIRECTIONAL == m_LightDesc.eType)

@@ -47,7 +47,7 @@ private:
 
 	_float m_fExplosionTime = 3.f;
 	
-
+	
 
 
 public:

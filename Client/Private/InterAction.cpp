@@ -98,6 +98,12 @@ void CInterAction::Collision_Reaction_InterAction(CGameObject* pPoint, INTERACTI
 
 void CInterAction::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex, INTER_INFO* pAction)
 {
+	if (pAction->pHost != nullptr)
+		if (pAction->pHost->GetContainerType() == eIndex)
+			return;
+
+
+	//pAction->bDead = true;
 }
 
 
@@ -120,6 +126,7 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 
 	pNew->pTransform->Set_Pushed_Power(fPushedDirec, fPushedPower);
 	pNew->pTransform->Set_Pushed_PowerDecrease(fDecreasePushedPower);
+	pNew->pTransform->Set_RotationPerSec(XMConvertToRadians(180.0f));
 
 	CBounding::BOUNDING_DESC* pBoundingDesc{};
 
@@ -156,7 +163,7 @@ void CInterAction::Add_InterActionObject(CLongvinter_Container* pHost, _float3 f
 	m_Actionlist.push_back(pNew);
 }
 
-void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle)
+void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle, _float fTime)
 {
 	INTERACTION_INFO* pNew = new INTERACTION_INFO;
 
@@ -169,7 +176,13 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 	pNew->pTransform = CTransform::Create(m_pDevice, m_pContext, nullptr);
 	//Safe_AddRef(pNew->pTransform);
 	pNew->pTransform->Set_State(CTransform::STATE_POSITION, { fPosition.x, fPosition.y,fPosition.z });
-	pNew->pTransform->Set_Scaled(m_fSpec_Scale, m_fSpec_Scale, m_fSpec_Scale);
+	
+	if (eInterType == INTERACTION::INTER_BULLET_MACHINEGUN)
+		pNew->pTransform->Set_Scaled(m_fSpec_Scale * 20.f, m_fSpec_Scale, m_fSpec_Scale);
+	else 
+		pNew->pTransform->Set_Scaled(m_fSpec_Scale, m_fSpec_Scale, m_fSpec_Scale);
+
+
 	pNew->pTransform->Set_Pushed_Power(fPushedDirec, m_fSpec_PushedPower);
 	pNew->pTransform->Set_Pushed_PowerDecrease(m_fSpec_PushedPower_Decrease);
 
@@ -210,7 +223,11 @@ void CInterAction::Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvin
 	pNew->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(fAngle));
 
 	pNew->pCollider->Update(pNew->pTransform->Get_WorldMatrix_Ptr());
-	pNew->fTime = m_fSpec_Time;
+
+	if (fTime == -1.f)
+		pNew->fTime = m_fSpec_Time;
+	else
+		pNew->fTime = fTime;
 
 	m_Actionlist.push_back(pNew);
 }

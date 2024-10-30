@@ -172,7 +172,8 @@ void CUIPage_Main::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pButton_Ingame);
+	Safe_Release(m_pButton_Editor);
+	Safe_Release(m_pPicture_BGA);
+	Safe_Release(m_pPicture_MainLogo);
 }

@@ -76,9 +76,6 @@
     <Filter Include="03.Container\02.Container_Enemy">
       <UniqueIdentifier>{bcf3b35d-58c2-4d75-a86c-1b0ef91465f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Container\03.Container_Animal">
-      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Container\02.Container_Enemy\00.AI_Enemy">
       <UniqueIdentifier>{c144e254-c3c5-418a-aa07-f212c983f894}</UniqueIdentifier>
     </Filter>
@@ -267,6 +264,39 @@
     </Filter>
     <Filter Include="02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim">
       <UniqueIdentifier>{5f6d5fe5-4386-43ef-b9cb-e9b35c0e8ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\01.Container_NPC\00.AI_NPC">
+      <UniqueIdentifier>{2ab0723a-3f63-49e5-902c-5b7ef36d97a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Container\03.Container_Turret">
+      <UniqueIdentifier>{a1c67c9c-2607-4b84-a52a-2ebddfa9a94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\06.Body\01.Body_Turret">
+      <UniqueIdentifier>{900994fe-8d3a-4b8d-8132-196063b135ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack">
+      <UniqueIdentifier>{4d1bed2f-887c-4b3c-8fcc-2d6a5cbc806c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96..Utillity">
+      <UniqueIdentifier>{4a94c030-73db-489b-bedb-eb55025c5e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\01.Hit">
+      <UniqueIdentifier>{3dd22043-2e02-4aeb-acc9-30c4341b5c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\02.Debris">
+      <UniqueIdentifier>{387a3280-3aa4-428c-ac64-1611502e0652}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\03.Flame">
+      <UniqueIdentifier>{0e68c2ba-faad-48e3-9220-4fd941a047b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\10.EffectManager\00.Particle\04.Trail">
+      <UniqueIdentifier>{98c5e590-93a1-4bbf-84cc-75b65c103434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk">
+      <UniqueIdentifier>{e0f21be5-ac9b-4a57-9306-7cf86bd5934b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.PartObject\07.Tool\08.Tool_Head">
+      <UniqueIdentifier>{fabe9f88-bd36-4f36-a793-270a707e866c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -543,9 +573,6 @@
     <ClInclude Include="..\Public\UIPart_Symbol.h">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AI_Boss.h">
-      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Tool_Machete.h">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClInclude>
@@ -560,6 +587,66 @@
     </ClInclude>
     <ClInclude Include="..\Public\LandObject_Anim.h">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Container_NPC.h">
+      <Filter>03.Container\01.Container_NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Enum_NPC.h">
+      <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AI_NPC.h">
+      <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Body_Turret.h">
+      <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Container_Turret.h">
+      <Filter>03.Container\03.Container_Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Hack.h">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>96..Utillity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Hit.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\01.Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Debris.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\02.Debris</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Flame.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\03.Flame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Trail.h">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\04.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Talk.h">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tool_Head.h">
+      <Filter>02.PartObject\07.Tool\08.Tool_Head</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -782,9 +869,6 @@
     <ClCompile Include="..\Private\UIPart_Symbol.cpp">
       <Filter>02.ClientInstance\05.UIManager\00.UI_Part\06.UI_Part_Symbol</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AI_Boss.cpp">
-      <Filter>03.Container\02.Container_Enemy\01.AI_Boss</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Tool_Machete.cpp">
       <Filter>02.PartObject\07.Tool\07.Tool_Machete</Filter>
     </ClCompile>
@@ -799,6 +883,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\LandObject_Anim.cpp">
       <Filter>02.ClientInstance\04.InterActionManager\00.InterAction\03.LandObject\01.Anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Container_NPC.cpp">
+      <Filter>03.Container\01.Container_NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AI_NPC.cpp">
+      <Filter>03.Container\01.Container_NPC\00.AI_NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Body_Turret.cpp">
+      <Filter>02.PartObject\06.Body\01.Body_Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Container_Turret.cpp">
+      <Filter>03.Container\03.Container_Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Hack.cpp">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\08.UI_Page_Hack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Hit.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\01.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Debris.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\02.Debris</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Flame.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\03.Flame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Trail.cpp">
+      <Filter>02.ClientInstance\10.EffectManager\00.Particle\04.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Talk.cpp">
+      <Filter>02.ClientInstance\05.UIManager\01.UI_Page\09.UI_Page_Talk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tool_Head.cpp">
+      <Filter>02.PartObject\07.Tool\08.Tool_Head</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -853,5 +970,30 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxFireSmoke.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmodL_vc.lib">
+      <Filter>96..Utillity</Filter>
+    </Library>
+    <Library Include="fmod_vc.lib">
+      <Filter>96..Utillity</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod.dll">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod_dsp.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmod_errors.cs">
+      <Filter>96..Utillity</Filter>
+    </None>
+    <None Include="fmodL.dll">
+      <Filter>96..Utillity</Filter>
+    </None>
   </ItemGroup>
 </Project>

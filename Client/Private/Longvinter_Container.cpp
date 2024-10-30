@@ -30,6 +30,9 @@ HRESULT CLongvinter_Container::Initialize(void* pArg)
 
 	m_vecCrowdControl.resize(_int(CROWDCONTROL::CC_END));
 	m_vecCrowdControl_Time.resize(_int(CROWDCONTROL::CC_END));
+
+	GET_INSTANCE->MakeScript(this);
+
 	return S_OK;
 }
 
@@ -59,7 +62,13 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 			m_fDeamegeDelay = 0.f;
 	}
 
-	
+	if (m_fChangeScript_Now < m_fChangeScript_Interval)
+	{
+		m_fChangeScript_Now += fTimeDelta;
+		if (m_fChangeScript_Now > m_fChangeScript_Interval)
+			m_fChangeScript_Now = m_fChangeScript_Interval;
+	}
+
 
 
 
@@ -81,11 +90,11 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 		m_vecCrowdControl_Time[i] -= fTimeDelta;
 		if (m_vecCrowdControl_Time[i] < 0.f)
 		{
+			if ((i == _int(CROWDCONTROL::CC_BURN)) && (m_vecCrowdControl[i]))
+				End_Panic();
+
 			m_vecCrowdControl_Time[i] = 0.f;
 			m_vecCrowdControl[i] = false;
-
-			if (i == _int(CROWDCONTROL::CC_BURN))
-				End_Panic();
 		}
 	}
 
@@ -96,7 +105,7 @@ void CLongvinter_Container::Priority_Update(_float fTimeDelta)
 
 void CLongvinter_Container::Update(_float fTimeDelta)
 {
-	
+	__super::Update(fTimeDelta);
 
 }
 
@@ -171,7 +180,7 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		if (m_fDistance_from_Player > m_fDetective_Length)
 		{
 			*bCanSee = false;
-			*fTurnAngle = 0.f;
+			//*fTurnAngle = 0.f;
 			return;
 		}
 
@@ -180,6 +189,9 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		fPoint.x -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[0];
 		fPoint.y -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[1];
 		fPoint.z -= m_pTransformCom->Get_State(CTransform::STATE_POSITION).m128_f32[2];
+
+		
+
 
 		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
@@ -190,7 +202,7 @@ void CLongvinter_Container::Look_Player(_float3* fPlayerPosition, _bool* bCanSee
 		if ((isnan(fAngle)) || (abs(fAngle) > m_fLook_Angle))
 		{
 			*bCanSee = false;
-			*fTurnAngle = 0.f;
+			//*fTurnAngle = 0.f;
 			return;
 		}
 
@@ -241,39 +253,45 @@ void CLongvinter_Container::Get_Sound(_float3* fSoundPosition, _float* fVolume, 
 
 void CLongvinter_Container::UsingWeapon(ITEMINDEX eWeapon, _float3 fPosition, _float3 fDirec)
 {
+	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPosition.m128_f32[1] += 0.5f;
+
 	if (eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
+		GET_INSTANCE->MakeGunFireLight({ vPosition.m128_f32[0], vPosition.m128_f32[1], vPosition.m128_f32[2], 1.f });
+
+		for (_int i = 0; i < 5; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec, 0.1f);
+		
 		m_fAttackDelay = 0.1f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_LANDMINE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_MINE, this, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_GRANADE)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_THORW_GRANADE, this, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
-	else if (eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+	else if (eWeapon == ITEMINDEX::ITEM_MACHETE)
 	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.f;
-	}
-	else if (eWeapon == ITEMINDEX::ITEM_ARROW)
-	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.5f;
-	}
-	else if (eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
-	{
-		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_BULLET_MACHINEGUN, this, fPosition, fDirec);
-		m_fAttackDelay = 0.1f;
+		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_NORMAL, this, fPosition, fDirec);
+		
+		m_fAttackDelay = 0.2f;
 	}
 	else if (eWeapon == ITEMINDEX::ITEM_SHOTGUN)
 	{
 		GET_INSTANCE->Add_InterActionObject_BySpec(INTERACTION::INTER_MELEE_SHOTGUN, this, fPosition, fDirec);
+		GET_INSTANCE->MakeGunFireLight({ vPosition.m128_f32[0], vPosition.m128_f32[1], vPosition.m128_f32[2], 1.f });
+
+		for (_int i = 0; i < 20; ++i)
+			GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FLAME, fPosition, fDirec);
+		
 		m_fAttackDelay = 1.f;
 	}
 	

@@ -42,7 +42,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void Input_Item(_int iItemIndex)
+	void Input_Item(_int iItemIndex, _int iItemCount = -1)
 	{
 		if (m_eType != CELL_INVEN)
 			return;
@@ -54,6 +54,7 @@ public:
 			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = false;
 		}
 		m_iItemIndex = iItemIndex;
+		m_iItemCount = iItemCount;
 	}
 
 	void Empty_Cell()
@@ -82,6 +83,23 @@ public:
 			m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = false;
 	}
 
+	void Set_New(_bool bIsNew)
+	{
+		if (m_iItemIndex == -1)
+			return;
+
+		m_bNew = bIsNew;
+	}
+
+public:
+	class CTexture* m_pTextureCom_Count = { nullptr };
+	class CTexture* m_pTextureCom_New = { nullptr };
+
+	class CShader* m_pShaderCom_Count = { nullptr };
+	class CShader* m_pShaderCom_New = { nullptr };
+
+	_bool m_bChangeColor_CountNew[3] = { true,true,true };
+
 protected:
 	UICELL_TYPE m_eType = UICELL_TYPE::CELL_END;
 
@@ -90,7 +108,9 @@ protected:
 private:
 	HRESULT Ready_Components();
 	_int m_iItemIndex = -1; // <- -1은 비어 있는 상태 
+	_int m_iItemCount = -1; // <- -1은 스택되지 않는 아이템 
 	_bool m_bPicked = false;
+	_bool m_bNew = false; // <- 신규 아이템 표시 
 
 public:
 	static CUIPart_Cell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

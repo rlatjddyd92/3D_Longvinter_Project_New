@@ -33,6 +33,15 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 
 void CFreeCamera::Priority_Update(_float fTimeDelta)
 {
+	if (m_fCameraShakeTime_Now > 0.f)
+	{
+		m_fCameraShakeTime_Now -= fTimeDelta;
+		if (m_fCameraShakeTime_Now < 0.f)
+			m_fCameraShakeTime_Now = 0.f;
+	}
+
+
+
 	if (m_eCameraMode == CAMERAMODE::CAMERA_FIRST)
 	{
 		_vector vPosition = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
@@ -42,18 +51,26 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_RIGHT));
 		m_pTransformCom->Set_State(CTransform::STATE_UP, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_UP));
 
-		m_lCamera_Y_move_First += m_pGameInstance->Get_DIMouseMove(DIMM_Y);
-		m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), 0.01f * m_lCamera_Y_move_First * m_fSensor);
-		
-
-
-
-
+		if (!GET_INSTANCE->Get_Player_Pointer()->GetCameraFix())
+		{
+			m_lCamera_Y_move_First += m_pGameInstance->Get_DIMouseMove(DIMM_Y);
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), 0.01f * m_lCamera_Y_move_First * m_fSensor);
+		}
 		
 
 		m_pTransformCom->Go_Right(0.03f);
 		m_pTransformCom->Go_Up(0.01f);
 		m_pTransformCom->Go_Backward(0.04f);
+
+		if (m_fCameraShakeTime_Now > 0.f)
+		{
+			_int iDirec = (m_fCameraShakeTime_Now / m_fCameraShakeInterval);
+
+			if (iDirec % 2 == 0)
+				m_pTransformCom->Go_Up(0.02f * fTimeDelta);
+			else 
+				m_pTransformCom->Go_Up(-0.02f * fTimeDelta);
+		}
 	}
 	else if (m_eCameraMode == CAMERAMODE::CAMERA_THIRD)
 	{
@@ -94,6 +111,14 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 			}
 		}
 	}
+
+
+
+
+
+
+
+
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -131,6 +156,7 @@ void CFreeCamera::SetCameraMode(CAMERAMODE eInput)
 
 void CFreeCamera::ShakeCamera(_float fDeltaTime)
 {
+	m_fCameraShakeTime_Now = m_fCameraShakeTime;
 }
 
 _bool CFreeCamera::IsBackOfCamera(_vector vPosition)
@@ -156,9 +182,13 @@ void CFreeCamera::SetFirstCamera()
 	m_lCamera_Y_move_First = 0.f;
 	vPosition += {0.f, m_fCameraUp_First, 0.f};
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_LOOK));
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_RIGHT));
-	m_pTransformCom->Set_State(CTransform::STATE_UP, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_UP));
+
+
+		m_pTransformCom->Set_State(CTransform::STATE_LOOK, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_LOOK));
+		m_pTransformCom->Set_State(CTransform::STATE_RIGHT, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_RIGHT));
+		m_pTransformCom->Set_State(CTransform::STATE_UP, GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_UP));
+	
+	
 
 	m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), 90.f);
 }

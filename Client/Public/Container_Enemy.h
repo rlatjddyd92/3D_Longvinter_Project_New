@@ -92,6 +92,11 @@ protected:
 
 	ENEMY_TYPE m_eEnemy_Type = ENEMY_TYPE::ENEMY_TYPE_END;
 
+	_bool m_bExplosionActive = false;
+	_float m_fExplosionWaitTime = 10.f;
+
+	_bool m_bCanSeeTransparent = false;
+
 public:
 	static CContainer_Enemy* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

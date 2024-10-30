@@ -38,7 +38,7 @@ HRESULT CUIPage_Equip::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_fX = 400.f;
+	m_fX = 800.f;
 	m_fY = 300.f;
 
 	m_fSizeX = 200.f;
@@ -74,8 +74,14 @@ void CUIPage_Equip::Late_Update(_float fTimeDelta)
 		if (tInfo.eIndex == ITEMINDEX::ITEM_END)
 			m_vecEquipCell[i]->Empty_Cell();
 		else
-			m_vecEquipCell[i]->Input_Item(_int(tInfo.eIndex));
+		{
+			_int iCount = -1;
+			if (tInfo.bStack)
+				iCount = tInfo.iCount;
 
+			m_vecEquipCell[i]->Input_Item(_int(tInfo.eIndex), iCount);
+		}
+		
 		m_vecEquipCell[i]->Set_Picked(tInfo.bPicked);
 	}
 
@@ -90,9 +96,9 @@ HRESULT CUIPage_Equip::Render()
 
 	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("머리"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 0),0.f,0.f }, 0.8f, false, {0.2f,0.2f,0.2f,1.f});
 	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("배낭"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 1),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("주무기"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 2),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("보조무기"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 3),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
-	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("투척무기"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 4),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("무기1"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 2),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("무기2"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 3),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
+	m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("무기3"), _vector{ fStartX,fStartY + (m_fInvenCellSize * 1.f * 4),0.f,0.f }, 0.8f, false, { 0.2f,0.2f,0.2f,1.f });
 	return S_OK;
 }
 
@@ -249,9 +255,9 @@ void CUIPage_Equip::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pButton_Close);
+	Safe_Release(m_pBack_Window);
+	Safe_Release(m_pBack_Window_Header);
 
 	for (auto& iter : m_vecEquipCell)
 		Safe_Release(iter);

@@ -1,28 +1,25 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Container_Enemy.h"
-
-//
-//
-//
-//
-
+#include "Longvinter_Container.h"
 
 BEGIN(Engine)
-
+class CCollider;
 END
 
 BEGIN(Client)
 
-
-
-class CAI_Boss : public CContainer_Enemy
+class CContainer_Turret : public CLongvinter_Container
 {
-private:
-	CAI_Boss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAI_Boss(const CAI_Boss& Prototype);
-	virtual ~CAI_Boss() = default;
+public:
+	
+
+
+
+protected:
+	CContainer_Turret(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CContainer_Turret(const CContainer_Turret& Prototype);
+	virtual ~CContainer_Turret() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -35,6 +32,9 @@ public:
 	virtual void Collision_Reaction_MadeInterAction(CGameObject* pPoint, INTERACTION eIndex) override;
 	virtual void Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex) override;
 
+	void SetHack(_int iFunc);
+	
+	_bool GetHack(_int iFunc) { return m_bHack[iFunc]; }
 
 protected:
 	virtual void Moving_Control(_float fTimeDelta) override;
@@ -46,23 +46,34 @@ protected:
 
 protected: // AI 관련 함수 
 	virtual void Set_AI_Status(_float fTimeDelta) override;
+	void Burning();
+
+
+
+protected:
+	_uint				m_iState = {  };
+	_bool				m_bHack[3] = { false,false,false };
+
+
 
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_PartObjects();
 
-	_int m_iWave = 5;
-	list<CLongvinter_Container*> m_SommonEnemylist;
-	
+protected:
+	CCollider* m_pColliderCom = { nullptr };
+
+	_bool m_bExplosionActive = false;
+	_float m_fExplosionWaitTime = 5.f;
+
+	_bool m_bCanSeeTransparent = false;
 
 public:
-	static CAI_Boss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CContainer_Turret* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 
-
-
-
 };
+
 
 END

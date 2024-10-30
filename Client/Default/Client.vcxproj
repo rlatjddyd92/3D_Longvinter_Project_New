@@ -169,17 +169,20 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Public\AI_Boss.h" />
     <ClInclude Include="..\Public\AI_Enemy.h" />
+    <ClInclude Include="..\Public\AI_NPC.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body.h" />
     <ClInclude Include="..\Public\Body_Human.h" />
+    <ClInclude Include="..\Public\Body_Turret.h" />
     <ClInclude Include="..\Public\Bullet_MachineGun.h" />
     <ClInclude Include="..\Public\Bullet_Straight.h" />
     <ClInclude Include="..\Public\ClientInstance.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Container_Enemy.h" />
+    <ClInclude Include="..\Public\Container_NPC.h" />
     <ClInclude Include="..\Public\Container_Player.h" />
+    <ClInclude Include="..\Public\Container_Turret.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\Effect.h" />
     <ClInclude Include="..\Public\EffectManager.h" />
@@ -208,7 +211,11 @@
     <ClInclude Include="..\Public\Melee_ShotGun.h" />
     <ClInclude Include="..\Public\Missile.h" />
     <ClInclude Include="..\Public\Effect_Particle.h" />
+    <ClInclude Include="..\Public\Particle_Debris.h" />
     <ClInclude Include="..\Public\Particle_FIre.h" />
+    <ClInclude Include="..\Public\Particle_Flame.h" />
+    <ClInclude Include="..\Public\Particle_Hit.h" />
+    <ClInclude Include="..\Public\Particle_Trail.h" />
     <ClInclude Include="..\Public\PhysicsManager.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundManager.h" />
@@ -223,6 +230,7 @@
     <ClInclude Include="..\Public\Tool_ChainSaw.h" />
     <ClInclude Include="..\Public\Tool_Empty.h" />
     <ClInclude Include="..\Public\Tool_FireThrower.h" />
+    <ClInclude Include="..\Public\Tool_Head.h" />
     <ClInclude Include="..\Public\Tool_LandMine.h" />
     <ClInclude Include="..\Public\Tool_Machete.h" />
     <ClInclude Include="..\Public\Tool_MachineGun.h" />
@@ -231,10 +239,12 @@
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Crfting.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
+    <ClInclude Include="..\Public\UIPage_Hack.h" />
     <ClInclude Include="..\public\UIPage_Inven.h" />
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
+    <ClInclude Include="..\Public\UIPage_Talk.h" />
     <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIPage_User.h" />
     <ClInclude Include="..\Public\UIPart.h" />
@@ -250,7 +260,16 @@
     <ClInclude Include="Client_Struct.h" />
     <ClInclude Include="Effect_Defines.h" />
     <ClInclude Include="Enum_Effect.h" />
+    <ClInclude Include="Enum_NPC.h" />
     <ClInclude Include="Enum_Sound.h" />
+    <ClInclude Include="fmod.h" />
+    <ClInclude Include="fmod.hpp" />
+    <ClInclude Include="fmod_codec.h" />
+    <ClInclude Include="fmod_common.h" />
+    <ClInclude Include="fmod_dsp.h" />
+    <ClInclude Include="fmod_dsp_effects.h" />
+    <ClInclude Include="fmod_errors.h" />
+    <ClInclude Include="fmod_output.h" />
     <ClInclude Include="Tool_Granade.h" />
     <ClInclude Include="Enum_Enemy.h" />
     <ClInclude Include="Enum_Human.h" />
@@ -268,16 +287,19 @@
     <ClInclude Include="UIPart_Defines.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Private\AI_Boss.cpp" />
     <ClCompile Include="..\Private\AI_Enemy.cpp" />
+    <ClCompile Include="..\Private\AI_NPC.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body.cpp" />
     <ClCompile Include="..\Private\Body_Human.cpp" />
+    <ClCompile Include="..\Private\Body_Turret.cpp" />
     <ClCompile Include="..\Private\Bullet_MachineGun.cpp" />
     <ClCompile Include="..\Private\Bullet_Straight.cpp" />
     <ClCompile Include="..\Private\ClientInstance.cpp" />
     <ClCompile Include="..\Private\Container_Enemy.cpp" />
+    <ClCompile Include="..\Private\Container_NPC.cpp" />
     <ClCompile Include="..\Private\Container_Player.cpp" />
+    <ClCompile Include="..\Private\Container_Turret.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
     <ClCompile Include="..\Private\EffectManager.cpp" />
@@ -306,7 +328,11 @@
     <ClCompile Include="..\Private\Melee_ShotGun.cpp" />
     <ClCompile Include="..\Private\Missile.cpp" />
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
+    <ClCompile Include="..\Private\Particle_Debris.cpp" />
     <ClCompile Include="..\Private\Particle_FIre.cpp" />
+    <ClCompile Include="..\Private\Particle_Flame.cpp" />
+    <ClCompile Include="..\Private\Particle_Hit.cpp" />
+    <ClCompile Include="..\Private\Particle_Trail.cpp" />
     <ClCompile Include="..\Private\PhysicsManager.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
@@ -321,6 +347,7 @@
     <ClCompile Include="..\Private\Tool_ChainSaw.cpp" />
     <ClCompile Include="..\Private\Tool_Empty.cpp" />
     <ClCompile Include="..\Private\Tool_FireThrower.cpp" />
+    <ClCompile Include="..\Private\Tool_Head.cpp" />
     <ClCompile Include="..\Private\Tool_LandMine.cpp" />
     <ClCompile Include="..\Private\Tool_Machete.cpp" />
     <ClCompile Include="..\Private\Tool_MachineGun.cpp" />
@@ -329,10 +356,12 @@
     <ClCompile Include="..\private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Crfting.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
+    <ClCompile Include="..\Private\UIPage_Hack.cpp" />
     <ClCompile Include="..\Private\UIPage_Inven.cpp" />
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
+    <ClCompile Include="..\Private\UIPage_Talk.cpp" />
     <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIPage_User.cpp" />
     <ClCompile Include="..\Private\UIPart.cpp" />
@@ -374,6 +403,17 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxSurFace.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxSurFace_Gray.hlsl" />
     <FxCompile Include="Shader_VtxModel_NonTexture.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="fmodL_vc.lib" />
+    <Library Include="fmod_vc.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.cs" />
+    <None Include="fmod.dll" />
+    <None Include="fmodL.dll" />
+    <None Include="fmod_dsp.cs" />
+    <None Include="fmod_errors.cs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

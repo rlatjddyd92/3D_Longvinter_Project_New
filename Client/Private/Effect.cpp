@@ -135,7 +135,7 @@ _float CEffect::BillBoard(CTransform* pTransform)
 	return fAngle;
 }
 
-void CEffect::AddEffectBySpec(_float3 fPosition)
+void CEffect::AddEffectBySpec(_float3 fPosition, _float3 fDirec, _float fTime)
 {
 	E_INFO* pNew = new E_INFO;
 
@@ -143,12 +143,23 @@ void CEffect::AddEffectBySpec(_float3 fPosition)
 
 	pNew->fPosition = fPosition;
 
-	if (m_bRandDirec[0])
-		pNew->fDirec.x = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
-	if (m_bRandDirec[1])
-		pNew->fDirec.y = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
-	if (m_bRandDirec[2])
-		pNew->fDirec.z = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
+	if (fDirec.x != -1.f)
+		pNew->fDirec = fDirec;
+	else
+	{
+		if (m_bRandDirec[0])
+			pNew->fDirec.x = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
+		if (m_bRandDirec[1])
+			pNew->fDirec.y = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
+		if (m_bRandDirec[2])
+			pNew->fDirec.z = _float((rand() % 1000) - (rand() % 1000)) / 1000.f;
+
+	}
+
+	if (fTime != -1.f)
+		pNew->fTime = fTime;
+	
+
 
 	m_EffectInfolist.push_back(pNew);
 }

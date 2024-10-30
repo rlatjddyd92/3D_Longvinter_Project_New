@@ -15,7 +15,7 @@ public:
 
 public:
 	HRESULT Initialize();
-	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+	HRESULT Add_Light(const LIGHT_DESC& LightDesc, _int iFrame = 0);
 	HRESULT Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 
 private:

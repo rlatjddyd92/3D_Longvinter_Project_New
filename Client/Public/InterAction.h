@@ -39,6 +39,8 @@ public:
 
 		_int iIndex = 0; // <- 인터랙션의 스펙에 따라 사용
 
+		_int iActCount = 0;
+
 		_float fBurning = 0.f;
 	}INTER_INFO;
 
@@ -64,13 +66,17 @@ public:
 public:
 	void Add_InterActionObject(CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fPushedPower, _float fExtent, _float fDecreasePushedPower, CCollider::TYPE eColliderType = CCollider::TYPE_SPHERE, TERRAIN_ACTION eAction = TERRAIN_ACTION::ACTION_END, _float fAngle = 0.f);
 	list<INTERACTION_INFO*>* Get_Actionlist() {return &m_Actionlist;}
-	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f);
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f, _float fTime = -1.f);
 	_int Get_ColliderType() { return m_iColliderType; }
 	_float Get_Sensor_Range() { return m_fSpec_Sensor; }
 
 	void Rotation(_float3 fAxis, _float fAngle) { m_pTransformCom->Rotation(XMLoadFloat3(&fAxis), XMConvertToRadians(fAngle)); }
 
-	void Delete_LastInterAction() { m_Actionlist.back()->bDead = true; }
+	void Delete_LastInterAction()
+	{
+		if (!m_Actionlist.empty())
+			m_Actionlist.back()->bDead = true;
+	}
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);

@@ -21,11 +21,21 @@ HRESULT CLight_Manager::Initialize()
 	return S_OK;
 }
 
-HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
+HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc, _int iFrame)
 {
 	CLight* pLight = CLight::Create(LightDesc);
+	pLight->SetFrame(iFrame);
 	if (nullptr == pLight)
 		return E_FAIL;
+
+	if (m_Lights.size() > 5)
+		for (list<CLight*>::iterator pLight = m_Lights.begin(); pLight != m_Lights.end(); ++pLight)
+			if ((*pLight)->GetFrame() > 0)
+			{
+				Safe_Release((*pLight));
+				m_Lights.erase(pLight);
+				break;
+			}
 
 	m_Lights.push_back(pLight);
 
@@ -34,8 +44,18 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
 
 HRESULT CLight_Manager::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
-	for (auto& pLight : m_Lights)
-		pLight->Render(pShader, pVIBuffer);
+	for (list<CLight*>::iterator pLight = m_Lights.begin(); pLight != m_Lights.end();)
+	{
+		(*pLight)->Render(pShader, pVIBuffer);
+
+		if ((*pLight)->GetDead())
+		{
+			Safe_Release((*pLight));
+			pLight = m_Lights.erase(pLight);
+		}
+		else
+			++pLight;
+	}
 
 	return S_OK;
 }

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LandObject_NonAnim.h"
 #include "ClientInstance.h"
-
+#include "Container_Turret.h"
 
 CLandObject_NonAnim::CLandObject_NonAnim(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject{ pDevice, pContext }
@@ -22,6 +22,8 @@ HRESULT CLandObject_NonAnim::Initialize(void* pArg)
 {
 	GAMEOBJECT_DESC* pTemp = static_cast<GAMEOBJECT_DESC*>(pArg);
 
+	
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -31,7 +33,7 @@ HRESULT CLandObject_NonAnim::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-
+	
 
 	return S_OK;
 }
@@ -47,6 +49,41 @@ void CLandObject_NonAnim::Priority_Update(_float fTimeDelta)
 void CLandObject_NonAnim::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+
+
+	
+	if (m_eType == INTERACTION::INTER_MONSTERMAKER)
+	if (!m_bActive)
+	{
+		m_bActive = GET_INSTANCE->GetMonsterMake();
+
+		if (m_bActive)
+		{
+			m_fWait -= fTimeDelta;
+
+			if (m_fWait > 0.f)
+			{
+				if (m_iMessageCount > m_fWait)
+				{
+					GET_INSTANCE->ShowInformMessage(TEXT("무료나눔 '받기' 전문가 도착까지"));
+
+					--m_iMessageCount;
+
+					_tchar* tTemp = new _tchar[5];
+
+					swprintf(tTemp, 5, L"%d", m_iMessageCount);
+
+					wstring wstrMaessage = tTemp;
+
+					GET_INSTANCE->ShowInformMessage(wstrMaessage);
+				}
+				m_bActive = false;
+			}
+			else
+				GET_INSTANCE->ShowInformMessage(TEXT("무료나눔 '받기' 전문가 도착."));
+		}
+	}
+
 
 	for (auto& iter : m_Actionlist)
 	{
@@ -74,7 +111,7 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			
 		}
 
-
+		
 		if ((!iter->bSetting) || (m_eType == INTERACTION::INTER_ITEM))
 		{
 			CPhysicsManager::P_RESULT tResult = {};
@@ -85,16 +122,41 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 			if (GET_INSTANCE->Check_OnGround(iter->pCollider->GetBoundingCenter(), iter->pCollider->GetBoundingExtents()))
 				iter->bSetting = true;
 		}
-		else
+	
+		if (m_eType == INTERACTION::INTER_DOOR)
 		{
-			
+			if (m_bOpen == true)
+			{
+				iter->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(90.f));
+				m_bClose = true;
+			}
+			else if (m_bClose == true)
+			{
+				m_bClose = false;
+				iter->pTransform->Rotation({ 0.f,1.f,0.f }, XMConvertToRadians(0.f));
+			}
+		
+			m_bOpen = false;
+
+
 		}
+		
+
+		
 
 
 		if (m_eType == INTERACTION::INTER_MONSTERMAKER)
 		{
+			if (!m_bActive)
+				continue;
+
+			
+
+			if (iter->iActCount >= m_iMonsterMake)
+				continue;
+			
 			if (m_fShowTime == 0.f)
-				m_fShowTime = 1.0f;
+				m_fShowTime = 4.0f;
 			else
 				continue;
 
@@ -103,13 +165,81 @@ void CLandObject_NonAnim::Update(_float fTimeDelta)
 
 			_float fDistance = sqrt(pow(vPlayer.m128_f32[0] - vThis.m128_f32[0], 2) + pow(vPlayer.m128_f32[1] - vThis.m128_f32[1], 2) + pow(vPlayer.m128_f32[2] - vThis.m128_f32[2], 2));
 
-			if (fDistance < 20.f)
-			{
+			_float3 fCheck{};
+			XMStoreFloat3(&fCheck, vThis);
 
+			if (fDistance < 30.f)
+			{
+				_int iDirec = _int(m_pGameInstance->Get_Random(0.f, 4.f));
+
+				if (iDirec == 0)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 1.0f, 0.5f, 0.f }, 1))
+					{
+						fCheck.x += 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+				
+				if (iDirec == 1)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { -1.0f, 0.5f, 0.f }, 1))
+					{
+						fCheck.x -= 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+
+				if (iDirec == 2)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 0.f, 0.5f, 1.f }, 1))
+					{
+						fCheck.z += 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						++iDirec;
+				}
+
+				if (iDirec == 3)
+				{
+					if (!GET_INSTANCE->Check_Wall(fCheck, { 0.f, 0.5f, -1.f }, 1))
+					{
+						fCheck.z -= 1.f;
+						fCheck.y += 0.5f;
+						++iter->iActCount;
+					}
+					else
+						fCheck.x = -1.f;
+				}
+
+				if (fCheck.x != -1.f)
+				{
+					_int iMon = _int(m_pGameInstance->Get_Random(0.f, 10.f));
+
+					if (iMon == 0)
+						GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_EXPLOSION, 0.f);
+					else 
+						GET_INSTANCE->Make_Container_Enemy(fCheck, ENEMY_TYPE::ENEMY_TYPE_END, 0.f);
+					
+					static_cast<CLongvinter_Container*>(m_pGameInstance->Find_Object(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_Container_Enemy"), -1))->SetMonsterMake(true);
+				}
+					
+						
 			}
 		}
 		
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
 
+		}
 
 	}
 
@@ -150,7 +280,7 @@ HRESULT CLandObject_NonAnim::Render()
 		_float3 fPosition{};
 		_vector vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION);
 
-		if (m_eType == INTERACTION::INTER_ITEM)
+		if ((m_eType == INTERACTION::INTER_ITEM) || (m_eType == INTERACTION::INTER_CONTROL))
 		{
 			vPosition += _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
 			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -189,7 +319,7 @@ HRESULT CLandObject_NonAnim::Render()
 		iter->pCollider->Render();
 #endif
 
-		if (m_eType == INTERACTION::INTER_ITEM)
+		if ((m_eType == INTERACTION::INTER_ITEM) || (m_eType == INTERACTION::INTER_CONTROL))
 		{
 			vPosition = iter->pTransform->Get_State(CTransform::STATE_POSITION) - _vector{ 0.f, iter->pCollider->GetBoundingExtents().y, 0.f, 0.f };
 			iter->pTransform->Set_State(CTransform::STATE_POSITION, vPosition);
@@ -206,6 +336,13 @@ void CLandObject_NonAnim::Collision_Reaction_InterAction(CGameObject* pPoint, IN
 
 	if (eIndex == INTERACTION::INTER_EXPLOSION_NORMAL)
 	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+		{
+			DestroyAction(pAction);
+			return;
+		}
+			
+
 		if (!GET_INSTANCE->Check_OnGround(pAction->pCollider->GetBoundingCenter(), pAction->pCollider->GetBoundingExtents()))
 			DestroyAction(pAction);
 		else if (pAction->fBurning == 0.f)
@@ -216,8 +353,8 @@ void CLandObject_NonAnim::Collision_Reaction_InterAction(CGameObject* pPoint, IN
 		if (pAction->fBurning == 0.f)
 			pAction->fBurning = 10.f;
 	}
-
-
+	else if (eIndex == INTERACTION::INTER_THORW_MINE)
+		m_bEnding = true;
 	
 
 }
@@ -228,8 +365,117 @@ void CLandObject_NonAnim::Collision_Reaction_Container(CGameObject* pPoint, CONT
 
 	if (eIndex == CONTAINER::CONTAINER_PLAYER)
 	{
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
+			
+
+			_vector vPlayer = GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION);
+			_vector vThis = pAction->pTransform->Get_State(CTransform::STATE_POSITION);
+
+			vPlayer -= vThis;
+		
+
+			_float fDistance = sqrt(pow(vPlayer.m128_f32[0], 2) + pow(vPlayer.m128_f32[1], 2) + pow(vPlayer.m128_f32[2], 2));
+
+			if (fDistance <= 1.f)
+			{
+				if ((pAction->pTrace == nullptr) || (pAction->pTrace->GetDead()))
+				{
+					_vector vAdjust = { 0.f,1.f,0.f,0.f };
+					_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("Error : 연결된 터렛이 nullptr입니다."), TEXT("없음"), TEXT("없음"), vAdjust);
+
+					
+					return;
+	
+				}
+					
+				_vector vAdjust = { 0.f,1.f,0.f,0.f };
+
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("터렛 콘솔"), TEXT("E키 : 위치 확인"), TEXT("F키 : 해킹"), TEXT("없음"), vAdjust);
+
+				if (bActive)
+				{
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("[TEST] 확인 기능 작동"));
+					else if (m_pGameInstance->Get_DIKeyState(DIK_F))
+					{
+						GET_INSTANCE->OpenHackPage(static_cast<CContainer_Turret*>(pAction->pTrace));
+					}
+				}
+			}
+
+
+		}
+		if (m_eType == INTERACTION::INTER_DOOR)
+		{
+			if (!m_bEnding)
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 문 두드리기"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+						GET_INSTANCE->ShowInformMessage(TEXT("문을 열어주지 않습니다."));
+			}
+			else
+			{
+				_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("출입문"), TEXT("E키 : 택배왔어요!"), TEXT("없음"), TEXT("없음"));
+
+				if (bActive)
+					if (m_pGameInstance->Get_DIKeyState(DIK_E))
+					{
+						GET_INSTANCE->SetLast();
+						GET_INSTANCE->ShowInformMessage(TEXT("진상이 나오고 있습니다."));
+					}
+						
+			}
+		}
+		if (m_eType == INTERACTION::INTER_ITEM)
+		{
+			_vector vAdjust = { 0.f,1.f,0.f,0.f };
+			_bool bActive = GET_INSTANCE->Show_Interaction_Function(XMLoadFloat4x4(&pAction->pTransform->Get_WorldMatrix()), TEXT("전리품"), TEXT("E키 : 줍기"), TEXT("없음"), TEXT("없음"), vAdjust);
+
+			if (bActive)
+				if (m_pGameInstance->Get_DIKeyState(DIK_E))
+				{
+
+					_int iItem = _int(m_pGameInstance->Get_Random(0.f, 5.f));
+
+					if (iItem == 0)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_AMMO));
+					if (iItem == 1)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_FISH));
+					if (iItem == 2)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_GRANADE));
+					if (iItem == 3)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_LANDMINE));
+					if (iItem == 4)
+						GET_INSTANCE->PutInItem_NoMouse(ITEMARRAY::ARRAY_INVEN, _int(ITEMINDEX::ITEM_GOLD_INGOT));
+					
+					pAction->bDead = true;
+				}
+		}
 		
 	}
+	else if (eIndex == CONTAINER::CONTAINER_TURRET)
+	{
+		if (m_eType == INTERACTION::INTER_CONTROL)
+		{
+			pAction->pTrace = static_cast<CLongvinter_Container*>(pPoint);
+		}
+	}
+
+
+	if (eIndex == CONTAINER::CONTAINER_NPC)
+	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+			m_bOpen = true;
+	}
+	/*if (eIndex == CONTAINER::CONTAINER_PLAYER)
+	{
+		if (m_eType == INTERACTION::INTER_DOOR)
+			m_bOpen = true;
+			
+	}*/
 }
 
 HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
@@ -362,9 +608,27 @@ HRESULT CLandObject_NonAnim::SetLandObject(INTERACTION eIndex)
 			return E_FAIL;
 
 		m_fSpec_Extent = { 0.5f,1.f,0.5f };
-		m_fSpec_Scale = 2.f;
+		m_fSpec_Scale = 1.f;
 		m_bTexture = false;
 	}
+	else if (eIndex == INTERACTION::INTER_CONTROL)
+	{
+		// 터렛 콘솔
+		m_vecModelCom.resize(1);
+
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Model_Turret_Control"), TEXT("Com_Model_17"), reinterpret_cast<CComponent**>(&m_vecModelCom[0]))))
+			return E_FAIL;
+		if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxModel"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+			return E_FAIL;
+
+		m_fSpec_Extent = { 0.2f,0.15f,0.2f };
+		m_fSpec_Scale = 1.5f;
+		m_fSpec_Sensor = 20.f;
+		m_bTexture = true;
+	}
+	
+
+
 	
 }
 

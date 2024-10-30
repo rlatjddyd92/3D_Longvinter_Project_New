@@ -40,7 +40,7 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPart_Picture* MakeUIPart_Picture(CUIPart_Picture::UIPICTURE_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Cell* MakeUIPart_Cell(CUIPart_Cell::UICELL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	CUIPart_Bar* MakeUIPart_Bar(CUIPart_Bar::UIBAR_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr);
-	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f);
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f, CLongvinter_Container* pHost = nullptr);
 	CUIPart_Symbol* MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr);
 #pragma endregion
 
@@ -53,6 +53,9 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 	CUIPage_Option* MakeUIPage_Option();
 	CUIPage_ToolTip* MakeUIPage_ToolTip();
 	CUIPage_User* MakeUIPage_User();
+	CUIPage_Shop* MakeUIPage_Shop();
+	CUIPage_Hack* MakeUIPage_Hack();
+	CUIPage_Talk* MakeUIPage_Talk();
 #pragma endregion
 
 
@@ -68,23 +71,13 @@ public: // <- 외부에서 Factory 사용을 위한 함수
 
 #pragma region Container_Enemy
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
-	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f);
+	void Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle = 0.f);
+	void Make_Container_Turret(_float3 Position, _float fAngle = 0.f);
 #pragma endregion
 
-#pragma region Container_Animal
 
-#pragma endregion
-
-#pragma region Container_Item
-
-#pragma endregion
-
-#pragma region Container_InterAction
-
-#pragma endregion
-
-#pragma region Container_Effect
-
+#pragma region Container_Etc
+	CPartObject* Make_Tool_Head(_int iHeadIndex, _uint* pParentState, const _float4x4* pMatrix, const _float4x4* pParent);
 #pragma endregion
 
 private: // <- 프로토타입 제작

@@ -25,6 +25,9 @@ HRESULT CUIPart_Symbol::Initialize(void* pArg)
 
 	m_eType = Desc->eType;
 	m_pHost = Desc->pHost;
+
+	Safe_AddRef(m_pHost);
+
 	Desc->fSpeedPerSec = 10.f;
 	Desc->fRotationPerSec = XMConvertToRadians(90.0f);
 
@@ -63,7 +66,7 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	if ((m_pHost == nullptr) && (m_pHost->GetDead()))
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
 	{
 		__super::SetDead();
 		return;
@@ -76,10 +79,22 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 
 	if (m_pHost->Get_AI_Status() == AI_STATUS::AI_ATTACK)
 		m_eType = SYMBOL_FIGHT;
-	else if (m_pHost->Get_AI_Status() == AI_STATUS::AI_SERACH)
+	else if ((m_pHost->Get_AI_Status() == AI_STATUS::AI_SERACH) && (m_pHost->GetContainerType() != CONTAINER::CONTAINER_NPC))
 		m_eType = SYMBOL_SEARCHING;
 	else if (m_pHost->Get_AI_Status() == AI_STATUS::AI_PANIC)
 		m_eType = SYMBOL_PANIC;
+	else if (m_pHost->GetContainerType() == CONTAINER::CONTAINER_NPC)
+	{
+		if (static_cast<CContainer_NPC*>(m_pHost)->Get_NPC_Type() == NPC_TYPE::NPC_LAST)
+		{
+			if ((GET_INSTANCE->IsStartQuest()) && (!GET_INSTANCE->IsFinishQuest()))
+				m_eType = SYMBOL_QUEST;
+			else
+				__super::SetRender(false);
+		}
+		else
+			__super::SetRender(false);
+	}
 	else
 		__super::SetRender(false);
 
@@ -87,17 +102,35 @@ void CUIPart_Symbol::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPart_Symbol::Render()
 {
-	_float3 fPosition{};
-	_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
-	XMStoreFloat3(&fPosition, vPosition);
-
-	if (!GET_INSTANCE->GetIsLender(fPosition))
+	if ((m_pHost == nullptr) || (m_pHost->GetDead()))
+	{
+		__super::SetDead();
 		return S_OK;
+	}
 
-	if (!SetPositionByObject(&m_fX, &m_fY, XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
+	if (m_eType != SYMBOL_QUEST)
+	{
+		_float3 fPosition{};
+		_vector vPosition = m_pHost->GetTransform(CTransform::STATE_POSITION);
+		XMStoreFloat3(&fPosition, vPosition);
+
+		if (!GET_INSTANCE->GetIsLender(fPosition))
+			return S_OK;
+
+		
+	}
+
+	if (!SetPositionByObject(XMLoadFloat4x4(&m_pHost->GetWorldMatrix())))
 		return S_OK;
-
-	if (m_eType == SYMBOL_SEARCHING)
+	
+	if (m_eType == SYMBOL_QUEST)
+	{
+		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
+		m_fRGB[0] = 0.f / 255.f;
+		m_fRGB[1] = 255.f / 255.f;
+		m_fRGB[2] = 0.f / 255.f;
+	}
+	else if (m_eType == SYMBOL_SEARCHING)
 	{
 		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
 		m_fRGB[0] = 255.f / 255.f;
@@ -125,18 +158,13 @@ HRESULT CUIPart_Symbol::Render()
 		m_fRGB[1] = 000.f / 255.f;
 		m_fRGB[2] = 000.f / 255.f;
 	}
-	else if (m_eType == SYMBOL_QUEST)
-	{
-		m_bChangeColor[0] = m_bChangeColor[1] = m_bChangeColor[2] = true;
-		m_fRGB[0] = 105.f / 255.f;
-		m_fRGB[1] = 105.f / 255.f;
-		m_fRGB[2] = 105.f / 255.f;
-	}
-
+	
 
 	__super::Render();
 
-	if (m_eType == SYMBOL_SEARCHING)
+	if (m_eType == SYMBOL_QUEST)
+		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Q"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
+	else if (m_eType == SYMBOL_SEARCHING)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("??"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
 	else if (m_eType == SYMBOL_STUN)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("ZZ"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 255.f,255.f,255.f,1.f });
@@ -144,8 +172,7 @@ HRESULT CUIPart_Symbol::Render()
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("!!!"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,1.f });
 	else if (m_eType == SYMBOL_PANIC)
 		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("!!!"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 255.f,255.f,255.f,1.f });
-	else if (m_eType == SYMBOL_QUEST)
-		m_pGameInstance->Render_Text(TEXT("Font_Test1"), TEXT("Q"), { m_fX,m_fY,0.f,0.f }, 1.f, true, { 0.f,0.f,0.f,0.f });
+
 
 
 	return S_OK;
@@ -198,8 +225,6 @@ void CUIPart_Symbol::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+
 	Safe_Release(m_pHost);
 }

@@ -21,6 +21,10 @@ public:
 		PART_CRAFTING_BUTTON,
 		PART_OPTION_BUTTON,
 		PART_HP_BAR,
+		PART_INTER_NAME,
+		PART_INTER_E,
+		PART_INTER_F,
+		PART_INTER_C,
 		PART_END
 	};
 
@@ -45,6 +49,9 @@ public:
 
 	virtual _bool Key_Action() override;
 
+public: // <- 페이지 조정용
+	void Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_E = TEXT("없음"), wstring Function_F = TEXT("없음"), wstring Function_C = TEXT("없음"), _vector Adjust = {0.f,1.f,0.f,0.f});
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
@@ -54,6 +61,8 @@ private:
 	HRESULT Ready_Components();
 
 	vector<CUIPart*> m_vecPart;
+	vector<CUIPart_Picture*> m_vecHp;
+
 private:
 	// 창 이동, 크기 조절 관련 변수 
 	_bool m_bMoving = false;

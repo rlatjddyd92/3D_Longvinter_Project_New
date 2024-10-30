@@ -87,6 +87,11 @@ void CParticle_Fire::Update(_float fTimeDelta)
 
 
 	__super::Update(fTimeDelta);
+
+
+	
+
+
 }
 
 void CParticle_Fire::Late_Update(_float fTimeDelta)

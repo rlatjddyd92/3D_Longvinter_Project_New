@@ -34,6 +34,8 @@ public:
 
 	void Change_Back_Color(_float fR = -1, _float fG = -1, _float fB = -1, _float fAlpah = -1);
 
+	_bool SetPositionByObject(_matrix mHost);
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
@@ -42,7 +44,7 @@ public:
 protected:
 	HRESULT Ready_Components();
 
-	_bool SetPositionByObject(_float* fX, _float* fY, _matrix mHost);
+	
 
 	_uint m_iTextureIndex = 0;
 

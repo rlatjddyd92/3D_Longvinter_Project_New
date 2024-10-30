@@ -118,7 +118,10 @@ void CUIPart::Change_Back_Color(_float fR, _float fG, _float fB, _float fAlpah)
 
 HRESULT CUIPart::Ready_Components()
 {
+
+	
 	/* FOR.Com_Shader */
+
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_Shader_VtxPosTex"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
@@ -126,6 +129,7 @@ HRESULT CUIPart::Ready_Components()
 	
 
 	/* FOR.Com_VIBuffer */
+
 	if (FAILED(__super::Add_Component(_int(LEVELID::LEVEL_STATIC), TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
@@ -133,7 +137,7 @@ HRESULT CUIPart::Ready_Components()
 	return S_OK;
 }
 
-_bool CUIPart::SetPositionByObject(_float* fX, _float* fY, _matrix mHost)
+_bool CUIPart::SetPositionByObject(_matrix mHost)
 {
 	_matrix mProj = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ));
 	_matrix mView = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW));

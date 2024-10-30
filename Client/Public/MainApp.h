@@ -28,6 +28,8 @@ private:
 
 	_float					m_fFPS = 0.f;
 
+	_bool					m_bClip = false;
+
 private:	
 	HRESULT Ready_Gara();
 	HRESULT Ready_Prototype_Component_Static();

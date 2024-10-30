@@ -91,6 +91,12 @@ void CFire::Update(_float fTimeDelta)
 					GET_INSTANCE->MakeEffect(EFFECT_TYPE::EFFECT_PARTICLE_FIRE, iter->pCollider->GetBoundingCenter());
 			}
 		
+			if (iter->iActCount == 0)
+				GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_FIRE, SOUND_CHANNEL::CH_INGAME_FIRE, 10.f, iter->pCollider->GetBoundingCenter());
+			else
+				GET_INSTANCE->SetChannelVolume(SOUND_NAME::SOUND_FIRE, SOUND_CHANNEL::CH_INGAME_FIRE, 10.f, iter->pCollider->GetBoundingCenter());
+
+			++iter->iActCount;
 	}
 
 	m_fMakeEffect -= fTimeDelta;

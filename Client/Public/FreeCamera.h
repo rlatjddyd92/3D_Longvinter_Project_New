@@ -51,6 +51,9 @@ private:
 
 	_long				m_lCamera_Y_move_First = 0.f;
 
+	_float				m_fCameraShakeTime_Now = 0.f;
+	_float				m_fCameraShakeTime = 0.5f;
+	_float				m_fCameraShakeInterval = 0.1f;
 
 public:
 	static CFreeCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

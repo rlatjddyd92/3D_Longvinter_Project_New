@@ -35,6 +35,8 @@ HRESULT CContainer_Enemy::Initialize(void* pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
+	eContainerType = CONTAINER::CONTAINER_ENEMY;
+
 	m_iState = 13; // <-IDLE
 	m_pTransformCom->Set_Pushed_PowerDecrease(1.f);
 	m_pTransformCom->Set_Scaled(0.95f, 0.95f, 0.95f);
@@ -103,6 +105,40 @@ void CContainer_Enemy::Late_Update(_float fTimeDelta)
 
 	if (m_bNonLoopAnimReset)
 		static_cast<CBody*>(m_Parts[PART_BODY])->Start_NonLoopAnim();
+	else if (static_cast<CBody*>(m_Parts[PART_BODY])->GetEnd())
+	{
+		if (bMove == false)
+		{
+			_bool bChange = false;
+
+			if ((m_iState == STATE_GRANADE) && (m_iState == STATE_HANDGUN))
+				if ((m_iState == STATE_GUN) && (m_iState == STATE_HIT))
+					bChange = true;
+
+
+			if (bChange)
+			{
+				if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+					m_iState = STATE_CHAINSAW;
+				else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+					m_iState = STATE_AIM;
+				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+					m_iState = STATE_THROW_WAIT;
+				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+					m_iState = STATE_HIT;
+				else
+					m_iState = STATE_IDEL;
+			}
+
+
+		}
+	}
 
 	for (auto& pPartObject : m_Parts)
 		pPartObject->Late_Update(fTimeDelta);
@@ -161,6 +197,26 @@ void CContainer_Enemy::Collision_Reaction_MadeInterAction(CGameObject* pPoint, I
 void CContainer_Enemy::Collision_Reaction_Container(CGameObject* pPoint, CONTAINER eIndex)
 {
 	__super::Collision_Reaction_Container(pPoint, eIndex);
+
+	/*if (eIndex == CONTAINER::CONTAINER_ENEMY)
+	{
+		_vector vDirec = XMLoadFloat3(&m_pTransformCom->Get_Pushed_Dir());
+		_float fPower = m_pTransformCom->Get_Pushed_Power();
+
+		_vector vNewDirec = static_cast<CLongvinter_Container*>(pPoint)->GetTransform(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float fNewPower = sqrt(pow(vNewDirec.m128_f32[0], 2) + pow(vNewDirec.m128_f32[1], 2) + pow(vNewDirec.m128_f32[2], 2));
+
+		vDirec += (vNewDirec / fNewPower);
+		fPower += fNewPower;
+
+		_float3 fResult{};
+		XMStoreFloat3(&fResult, vDirec);
+
+		m_pTransformCom->Set_Pushed_Power(fResult, fPower);
+
+	}*/
+		
+
 }
 
 void CContainer_Enemy::DeadAction()
@@ -180,23 +236,26 @@ void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 
 	if (abs(m_fMove_Angle) < 0.5f)
 	{
-		if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-			m_iState = STATE_CHAINSAW;
-		else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-			m_iState = STATE_HANDGUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
-			m_iState = STATE_GUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
-			m_iState = STATE_GUN;
-		else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
-			m_iState = STATE_AIM;
-		else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-			m_iState = STATE_GRANADE;
-		else if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
-			m_iState = STATE_HIT;
+		
+
+		m_bNonLoopAnimReset = false;
 
 		if (m_fAttackDelay == 0.f)
 		{
+			if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
+				m_iState = STATE_CHAINSAW;
+			else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
+				m_iState = STATE_HANDGUN;
+			else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+				m_iState = STATE_GUN;
+			else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+				m_iState = STATE_GUN;
+			else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
+				m_iState = STATE_AIM;
+			else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+				m_iState = STATE_GRANADE;
+			else if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
+				m_iState = STATE_HIT;
 
 			m_bNonLoopAnimReset = true;
 
@@ -220,10 +279,22 @@ void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 
 				_vector vPushedDirec = (GET_INSTANCE->Get_Player_Pointer()->GetTransform(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, 0.f }) - vStartPosition;
 				XMStoreFloat3(&fPushedDirec, vPushedDirec);
+				_float fDivide = sqrt(pow(fPushedDirec.x, 2) + pow(fPushedDirec.y, 2) + pow(fPushedDirec.z, 2));
+				fPushedDirec = { fPushedDirec.x / fDivide , fPushedDirec.y / fDivide ,fPushedDirec.z / fDivide };
 
 				
-				XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+				//XMStoreFloat3(&fPushedDirec, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
+				if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_MACHINEGUN, SOUND_CHANNEL::CH_MONSTER_GUN, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_LANDMINE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_MONSTER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_THROW_GRANADE, SOUND_CHANNEL::CH_MONSTER_ACT, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_MELEE, SOUND_CHANNEL::CH_MONSTER_MELEE, 10.f, m_pColliderCom->GetBoundingCenter());
+				else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
+					GET_INSTANCE->PlaySound(SOUND_NAME::SOUND_SHOT_SHOTGUN, SOUND_CHANNEL::CH_MONSTER_SHOTGUN, 10.f, m_pColliderCom->GetBoundingCenter());
 
 				__super::UsingWeapon(m_eWeapon, fStartPostion, fPushedDirec);
 			}
@@ -248,27 +319,7 @@ void CContainer_Enemy::Weapon_Control(_float fTimeDelta)
 
 			m_fPreAttackDelay = 0.f;
 		}
-	}
-
-	if (bMove == false)
-		if ((m_iState != STATE_GRANADE) && (m_iState != STATE_HANDGUN))
-			if ((m_iState != STATE_GUN) && (m_iState != STATE_HIT))
-			{
-				if (m_eWeapon == ITEMINDEX::ITEM_CHAINSAW)
-					m_iState = STATE_CHAINSAW;
-				else if (m_eWeapon == ITEMINDEX::ITEM_ARROW)
-					m_iState = STATE_AIM;
-				else if (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN)
-					m_iState = STATE_AIM;
-				else if (m_eWeapon == ITEMINDEX::ITEM_SHOTGUN)
-					m_iState = STATE_AIM;
-				else if (m_eWeapon == ITEMINDEX::ITEM_FIRETHROWER)
-					m_iState = STATE_AIM;
-				else if (m_eWeapon == ITEMINDEX::ITEM_GRANADE)
-					m_iState = STATE_THROW_WAIT;
-				else
-					m_iState = STATE_IDEL;
-			}
+	}		
 }
 
 void CContainer_Enemy::Camera_Control(_float fTimeDelta)
@@ -290,6 +341,27 @@ void CContainer_Enemy::Set_AI_Status(_float fTimeDelta)
 
 void CContainer_Enemy::Burning()
 {
+	if (m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] == false)
+	{
+		m_fChangeScript_Now = m_fChangeScript_Interval;
+
+		_int iScript = _int(m_pGameInstance->Get_Random(0.f, 4.f));
+
+		if (iScript == 0)
+			__super::Change_Script(TEXT("¾îÈæ! ¸¶ÀÌ±ö"));
+		if (iScript == 1)
+			__super::Change_Script(TEXT("¾Æºô¸³¾ÆÄµÇÃ¶óÀÌ!"));
+		if (iScript == 2)
+			__super::Change_Script(TEXT("¾û¾û¾û¾û ¾û¾û¾û¾û"));
+		if (iScript == 3)
+			__super::Change_Script(TEXT("³» ¸öÀÌ ºÒÅ¸°í ÀÖ¾î¿ä!"));
+		if (iScript == 4)
+			__super::Change_Script(TEXT("¾îÈæ! ¸¶ÀÌ±ö"));
+	}
+
+
+
+
 	m_vecCrowdControl[_int(CROWDCONTROL::CC_BURN)] = true;
 	m_vecCrowdControl_Time[_int(CROWDCONTROL::CC_BURN)] = BURN_TIME;
 
@@ -328,9 +400,36 @@ HRESULT CContainer_Enemy::Ready_PartObjects()
 
 
 
-	ToolDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+	CTool_Head::HEAD_DESC		HeadDesc{};
 
-	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Empty"), &ToolDesc)))
+	HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_1;
+
+	if (m_eWeapon == ITEMINDEX::ITEM_MACHETE)
+		HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_HEADGEAR;
+	else if ((m_eWeapon == ITEMINDEX::ITEM_SHOTGUN) || (m_eWeapon == ITEMINDEX::ITEM_MACHINEGUN))
+	{
+		_int Head = _int(m_pGameInstance->Get_Random(0.f, 3.f));
+		if (Head == 0)
+			HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_1;
+		if (Head == 1)
+			HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_2;
+		if (Head == 2)
+			HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_NORMAL_3;
+	}
+	else
+	{
+		_int Head = _int(m_pGameInstance->Get_Random(0.f, 2.f));
+		if (Head == 0)
+			HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_YELLOW;
+		if (Head == 1)
+			HeadDesc.eType = CTool_Head::HEAD_TYPE::TYPE_PINK;
+	}
+	
+	HeadDesc.pParentState = &m_iState;
+	HeadDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	HeadDesc.pSocketBoneMatrix = dynamic_cast<CBody_Human*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("head");
+
+	if (FAILED(__super::Add_PartObject(PART_HEAD, TEXT("Prototype_GameObject_Tool_Head"), &HeadDesc)))
 		return E_FAIL;
 
 

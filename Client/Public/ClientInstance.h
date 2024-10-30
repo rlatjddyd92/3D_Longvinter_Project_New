@@ -14,6 +14,7 @@
 #include "ItemManager.h"
 #include "InterActionManager.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
 #pragma endregion
 
 BEGIN(Engine)
@@ -75,8 +76,31 @@ public: // <- 싱글톤을 통한 외부 접근용
 	LEVELID GetNowLevel() { return m_eLevel; }
 	_bool GetPlayerDead() { return m_bPlayerDead; }
 	_bool GetMonsterMake() { return m_bMakeMonster; }
-	void SetMakeMonster(_bool bIsMake) { m_bMakeMonster = bIsMake; }
+	void SetMakeMonster(_bool bIsMake) 
+	{ 
+		m_bMakeMonster = bIsMake;
+		m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_BATTLE, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
+	}
 
+	void SetLast() { m_bLastScene = true; }
+	_bool GetLast() { return m_bLastScene; }
+
+	void StartQuest() 
+	{ 
+		m_bGetQuest = true;
+	}
+	void EndQuest()
+	{
+		m_bFinishQuest = true;
+		m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_NORMAL, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
+	}
+	_bool IsStartQuest() { return m_bGetQuest; }
+	_bool IsFinishQuest() { return m_bFinishQuest; }
+
+#pragma endregion
+
+#pragma region LIGHT
+	HRESULT MakeGunFireLight(_float4 fPosition);
 
 
 #pragma endregion
@@ -100,7 +124,12 @@ public: // <- 싱글톤을 통한 외부 접근용
 	// Container
 	void Make_Container_Player(_float3 Position, _float fAngle = 0.f) { m_pFactory->Make_Container_Player(Position, fAngle); }
 	void Make_Container_Enemy(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Enemy(Position, eType, fAngle); }
-	void Make_Container_Boss(_float3 Position, ENEMY_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_Boss(Position, eType, fAngle); }
+	void Make_Container_NPC(_float3 Position, NPC_TYPE eType, _float fAngle = 0.f) { m_pFactory->Make_Container_NPC(Position, eType, fAngle); }
+	void Make_Container_Turret(_float3 Position, _float fAngle = 0.f) { m_pFactory->Make_Container_Turret(Position, fAngle); }
+	CPartObject* Make_Tool_Head(_int iHeadIndex, _uint* pParentState, const _float4x4* pMatrix, const _float4x4* pParent)
+	{
+		m_pFactory->Make_Tool_Head(iHeadIndex, pParentState, pMatrix, pParent);
+	}
 
 	// UI_Part
 	CUIPart_Back* MakeUIPart_Back(CUIPart_Back::UIBACK_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY) { return m_pFactory->MakeUIPart_Back(eType, fX, fY, fSizeX, fSizeY); }
@@ -111,9 +140,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		return m_pFactory->MakeUIPart_Bar(eType, fX, fY, fSizeX, fSizeY, pHost);
 	}
-	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f)
+	CUIPart_TextBox* MakeUIPart_TextBox(CUIPart_TextBox::UITEXTBOX_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, _bool bCenter, _bool bAutoRemove = false, _float fShowTime = 0.f, CLongvinter_Container* pHost = nullptr)
 	{
-		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime);
+		return m_pFactory->MakeUIPart_TextBox(eType, fX, fY, fSizeX, fSizeY, bCenter, bAutoRemove, fShowTime, pHost);
 	}
 	CUIPart_Symbol* MakeUIPart_Symbol(CUIPart_Symbol::UISYMBOL_TYPE eType, _float fX, _float fY, _float fSizeX, _float fSizeY, CLongvinter_Container* pHost = nullptr) 
 	{ 
@@ -129,6 +158,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CUIPage_Option* MakeUIPage_Option() { return m_pFactory->MakeUIPage_Option(); }
 	CUIPage_ToolTip* MakeUIPage_ToolTip() { return m_pFactory->MakeUIPage_ToolTip(); }
 	CUIPage_User* MakeUIPage_User() { return m_pFactory->MakeUIPage_User(); }
+	CUIPage_Shop* MakeUIPage_Shop() { return m_pFactory->MakeUIPage_Shop(); }
+	CUIPage_Hack* MakeUIPage_Hack() { return m_pFactory->MakeUIPage_Hack(); }
+	CUIPage_Talk* MakeUIPage_Talk() { return m_pFactory->MakeUIPage_Talk(); }
 #pragma endregion
 
 #pragma region TERRAINMANAGER
@@ -137,6 +169,7 @@ public: // <- 싱글톤을 통한 외부 접근용
 
 	_float3 CheckPicking(_int iMode, _int iCX = -1, _int iCY = -1, _int iCZ = -1, _bool bTop = false, CONTAINER eType = CONTAINER::CONTAINER_END, INTERACTION eInter = INTERACTION::INTER_END, _int iRotate = 0, _int iIndex = 0) { return m_pTerrainManager->CheckPicking(iMode, iCX, iCY, iCZ, bTop, eType, eInter, iRotate,  iIndex); }
 	_float3 CheckPicking() { return m_pTerrainManager->CheckPicking(); }
+	_bool CheckPicking(_float3 fLook) { return m_pTerrainManager->CheckPicking(fLook); }
 
 	void SetBedRock(_int iX, _int iY, _int iZ) { m_pTerrainManager->SetBedRock(iX, iY, iZ); }
 	void HighLight_Surface(_bool bLinked) { m_pTerrainManager->HighLight_Surface(bLinked); } // <- bLinked가 true인 경우 한꺼번에 칠할 시, 변경이 적용되는 표면을 표시 
@@ -221,6 +254,19 @@ public: // <- 싱글톤을 통한 외부 접근용
 	void ShowToolTip(_float fCellX, _float fCellY, ITEMARRAY eArray, _int iIndex) { m_pUIManager->ShowToolTip(fCellX, fCellY, eArray, iIndex); }
 	void MakeEnemyHpBar(CLongvinter_Container* pHost) { m_pUIManager->MakeEnemyHpBar(pHost); }
 	void MakeSymbol(CLongvinter_Container* pHost) { m_pUIManager->MakeSymbol(pHost); }
+	_bool Show_Interaction_Function(_matrix mHost, wstring InterName, wstring Function_F = TEXT("없음"), wstring Function_G = TEXT("없음"), wstring Function_E = TEXT("없음"), _vector Adjust = { 0.f,1.f,0.f,0.f })
+	{
+		return m_pUIManager->Show_Interaction_Function(mHost, InterName, Function_F, Function_G, Function_E, Adjust);
+	}
+
+	void OpenShopPage(_int iShopNum) { m_pUIManager->OpenShopPage(iShopNum); }
+	void OpenHackPage(CContainer_Turret* pTurret) { m_pUIManager->OpenHackPage(pTurret); }
+	void OpenTalkPage(CContainer_NPC* pNPC) { m_pUIManager->OpenTalkPage(pNPC); }
+	void MakeScript(CLongvinter_Container* pHost) { m_pUIManager->MakeScript(pHost); }
+
+	_bool GetOpenShop() { return m_pUIManager->GetOpenShop(); }
+	_bool GetOpenHack() { return m_pUIManager->GetOpenHack(); }
+	_bool GetOpenTalk() { return m_pUIManager->GetOpenTalk(); }
 #pragma endregion
 
 
@@ -232,6 +278,10 @@ public: // <- 싱글톤을 통한 외부 접근용
 	CTexture* GetItemInvenTexture(ITEMINDEX eIndex) { return m_pItemManager->GetItemInvenTexture(eIndex); }
 
 	const CItemManager::TINFO PickItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PickItem(eArray, iIndex); }
+
+	HRESULT PutInItem_NoMouse(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem_NoMouse(eArray, iIndex); }
+	HRESULT SpendItem_NoMouse(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->SpendItem_NoMouse(eArray, iIndex); }
+
 	void CancelPick() { m_pItemManager->CancelPick(); }
 	HRESULT PutInItem(ITEMARRAY eArray, _int iIndex) { return m_pItemManager->PutInItem(eArray, iIndex); }
 
@@ -243,6 +293,13 @@ public: // <- 싱글톤을 통한 외부 접근용
 	wstring Get_TagName(ITEMTAG eType) { return m_pItemManager->Get_TagName(eType); }
 	_bool Get_TagState(ITEMINDEX iIndex, ITEMTAG eType) { return m_pItemManager->Get_TagState(iIndex, eType);}
 
+	void Set_AllNew(_bool bIsNew) {m_pItemManager->Set_AllNew(bIsNew);}
+	_int Get_PlayerCash() { return m_pItemManager->Get_PlayerCash(); }
+	_bool Add_PlayerCash(_int iCash) { return m_pItemManager->Add_PlayerCash(iCash); }
+	void Add_PlayerCash_Force(_int iCash) // <- 보유금액을 마이너스로 변경하는 것에 주의 
+	{
+		m_pItemManager->Add_PlayerCash_Force(iCash);
+	}
 #pragma endregion
 
 
@@ -255,9 +312,9 @@ public: // <- 싱글톤을 통한 외부 접근용
 	{
 		m_pInterActionManager->Input_ContainerColliderPointer(eContanerType, pHost, pCollider);
 	}
-	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f)
+	void Add_InterActionObject_BySpec(INTERACTION eInterType, CLongvinter_Container* pHost, _float3 fPosition, _float3 fPushedDirec, _float fAngle = 0.f, _float fTime = -1.f)
 	{ 
-		m_pInterActionManager->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle);
+		m_pInterActionManager->Add_InterActionObject_BySpec(eInterType, pHost, fPosition, fPushedDirec, fAngle, fTime);
 	}
 	void Delete_LastInterAction(INTERACTION eInterType) { m_pInterActionManager->Delete_LastInterAction(eInterType); }
 
@@ -265,8 +322,22 @@ public: // <- 싱글톤을 통한 외부 접근용
 #pragma endregion
 
 #pragma region EFFECT
-	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition) { m_pEffectManager->MakeEffect(eType, fPosition); }
+	void MakeEffect(EFFECT_TYPE eType, _float3 fPosition, _float3 fDirec = { -1.f,-1.f,-1.f }, _float fTime = -1.f) { m_pEffectManager->MakeEffect(eType, fPosition, fDirec, fTime); }
 
+
+#pragma endregion
+
+
+
+#pragma region SOUND
+	void PlaySound(SOUND_NAME eSound, SOUND_CHANNEL eChannel, _float fVolume, _float3 fPosition = _float3(-1.f, -1.f, -1.f))
+	{
+		m_pSoundManager->PlaySound(eSound, eChannel, fVolume, fPosition);
+	}
+	void SetChannelVolume(SOUND_NAME eSound, SOUND_CHANNEL eChannel, _float fVolume, _float3 fPosition = _float3(-1.f, -1.f, -1.f))
+	{
+		m_pSoundManager->SetChannelVolume(eSound, eChannel, fVolume, fPosition);
+	}
 
 #pragma endregion
 	
@@ -284,6 +355,7 @@ private: // <- 보유 중인 포인터 목록
 	CItemManager*			m_pItemManager = { nullptr };
 	CInterActionManager*	m_pInterActionManager = { nullptr };
 	CEffectManager*			m_pEffectManager = { nullptr };
+	CSoundManager*			m_pSoundManager = { nullptr };
 
 private: // <- 프로그램 상태관리
 	_bool					m_bLevelChanging = false;
@@ -293,6 +365,12 @@ private: // <- 프로그램 상태관리
 private: // <- 게임 플레이 조정 
 	_bool					m_bPlayerDead = false;
 	_bool					m_bMakeMonster = false; 
+	_bool					m_bLastScene = false;
+
+	_bool					m_bGetQuest = false;
+	_bool					m_bFinishQuest = false;
+
+	
 
 private: // <- 디바이스 
 	ID3D11Device* m_pDevice = { nullptr };

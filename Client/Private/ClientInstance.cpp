@@ -96,9 +96,15 @@ HRESULT CClientInstance::Setting_Program_Start(ID3D11Device** pDevice, ID3D11Dev
 		return E_FAIL;
 	m_pEffectManager = dynamic_cast<CEffectManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_EffectManager"), -1));
 
+	// SoundManager
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SoundManager"), CSoundManager::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_SoundManager"), TEXT("Prototype_GameObject_SoundManager"))))
+		return E_FAIL;
+	m_pSoundManager = dynamic_cast<CSoundManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_STATIC), TEXT("Layer_SoundManager"), -1));
 
-
+	m_pSoundManager->PlaySound(SOUND_NAME::SOUND_BGM_NORMAL, SOUND_CHANNEL::CH_SYSTEM_BGM, 3.f);
 
 	return S_OK;
 }
@@ -112,7 +118,7 @@ HRESULT CClientInstance::Setting_Ingame_Start()
 		return E_FAIL;
 	m_pTerrainManager = dynamic_cast<CTerrainManager*>(m_pGameInstance->Get_CloneObject_ByLayer(_uint(LEVELID::LEVEL_SINGLE), TEXT("Layer_TerrainManager"), -1));
 	m_pTerrainManager->LoadMap("../Bin/Resources/MapData/Map_1.dat");
-	m_pTerrainManager->Set_Render_Length(50.f);
+	m_pTerrainManager->Set_Render_Length(100.f);
 	m_pCamera->SetCameraMode(CAMERAMODE::CAMERA_FIRST);
 
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
@@ -250,6 +256,22 @@ HRESULT CClientInstance::ChangeLevel(LEVELID eLevel)
 {
 	m_eLevel = eLevel;
 	return m_pGameInstance->Change_Level(_uint(LEVELID::LEVEL_LOADING), CLevel_Loading::Create(m_pDevice, m_pContext, eLevel));
+}
+
+HRESULT CClientInstance::MakeGunFireLight(_float4 fPosition)
+{
+	LIGHT_DESC			LightDesc{};
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = fPosition;
+	LightDesc.fRange = 2.f;
+	LightDesc.vDiffuse = _float4(255.f / 255.f, 255.f / 255.f, 0.f, 1.f);
+	LightDesc.vAmbient = _float4(255.f / 255.f, 255.f / 255.f, 0.f, 1.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc, 3)))
+		return E_FAIL;
 }
 
 void CClientInstance::Free()

@@ -1,0 +1,16 @@
+#pragma once
+
+enum class NPC_TYPE
+{
+	NPC_SHOP,
+	NPC_INTERN,
+	NPC_LAST,
+	NPC_END
+};
+
+enum class NPC_DESTINATION
+{
+	NPC_DEST_RUN_0,
+	NPC_DEST_RUN_1,
+	NPC_DEST_END
+};
